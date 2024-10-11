@@ -1,0 +1,200 @@
+---
+layout: base
+---
+{% include ad/adsense.html type="top-leaderboard" %}
+
+<div class="container">
+    <div class="section">
+        <div class="content">
+            <div class="columns mt-5">
+                <div class="column is-9">
+                    <h1 class="title is-2 mb-3">{{ page.title }}</h1>
+                    <p class="subtitle is-6 mb-5">{{ page.description }}</p>
+                    {% if page.video_source == 'YouTube' %}
+                        <div class="video-container">
+                            <figure class="image is-16by9">
+                                <iframe
+                                    class="has-ratio"
+                                    src="https://www.youtube.com/embed/{{ page.video_id }}?rel=0&amp;autoplay=0"
+                                    frameborder="0"
+                                    allowfullscreen
+                                ></iframe>
+                            </figure>
+                        </div>
+                    {% else %}
+                        <div class="video-container">
+                            <video controls width="100%">
+                                <source src="{{ page.video_url }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    {% endif %}
+                    <script type="application/ld+json">
+                        {
+                            "@context": "http://schema.org",
+                            "@type": "VideoObject",
+                            "name": "{{ page.title }}",
+                            "description": "{{ page.description }}",
+                            "duration": "{{ page.video_duration }}",
+                            "thumbnailUrl": "https://img.youtube.com/vi/{{ page.video_id }}/maxresdefault.jpg",
+                            "embedUrl": "https://www.youtube.com/embed/{{ page.video_id }}",
+                            "uploadDate": "{{ page.date }}",
+                            "publisher": {
+                                "@type": "Organization",
+                                "name": "Your Organization"
+                            }
+                        }
+                    </script>
+                    <!-- FAQs Section -->
+                </div>
+                <div class="column is-3 is-12-mobile">
+                    <aside class="menu widget">
+                        <p class="menu-label">Timestamps</p>
+                        <ul class="menu-list">
+                            {% for ts in page.timestamps %}
+                                <li style="list-style:none;">
+                                    <a href="#" class="has-text-black">
+                                        <span class="icon"> <i class="fas fa-clock has-text-primary"></i> </span>
+                                        <span>
+                                            {{- ts.time }}
+                                        </span>
+                                        -
+                                        <span class="has-text-weight-medium ">{{ ts.title }}</span>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </aside>
+
+                    <!-- Include Adsense -->
+                    {% include ad/adsense.html type="square" %}
+                </div>
+            </div>
+
+            <div class="container is-centered">
+                {% include ad/adsense.html type="small-leaderboard" %}
+            </div>
+
+            <div class="columns is-multiline">
+                <div class="column is-9">
+                    {{ content }}
+                    <div class="section">
+                        <div class="container">
+                            <h2 class="title is-3 ">FAQs Of This Video</h2>
+                            <div class="columns is-centered">
+                                <div class="column is-12">
+                                    {% if page.faqs %}
+                                        {% for faq in page.faqs %}
+                                            <div class="box mb-5">
+                                                <article class="media">
+                                                    <figure class="media-left">
+                                                        <span class="icon is-medium">
+                                                            <i class="fas fa-question-circle"></i>
+                                                        </span>
+                                                    </figure>
+                                                    <div class="media-content">
+                                                        <div class="content">
+                                                            <p>
+                                                                <strong>{{ faq.question }}</strong>
+                                                                <br>
+                                                                {{ faq.answer }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </article>
+                                            </div>
+                                        {% endfor %}
+                                    {% else %}
+                                        <p>No FAQs available for this video.</p>
+                                    {% endif %}
+                                    <div class="has-text-centered">
+                                        <button class="button is-primary">Ask Me Now</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Best Comment Section -->
+                    <div class="best-comment-section mt-5 p-5">
+                        <h2 class="title is-2 has-text-centered">
+                            Best Comment
+                            <span class="icon is-large has-text-primary">
+                                <i class="fas fa-heart"></i>
+                            </span>
+                        </h2>
+                        <div class="columns is-centered">
+                            <div class="column is-three-quarters">
+                                <div class="box has-background-primary has-text-centered">
+                                    {% if page.best_comment %}
+                                        <div class="best-comment p-5">
+                                            <div class="comment-details ">
+                                                <p class="title is-3 has-text-light">{{ page.best_comment }}</p>
+                                                <div class="comment-author">
+                                                    <span class="has-text-light">- User123</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <p class="subtitle is-5 has-text-light">
+                                            No comments available for this video.
+                                        </p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="my-4">
+                        {% include disqus.html %}
+                    </div>
+                </div>
+
+                <div class="column is-3 mt-5 is-centered">
+                    <aside class="widget my-5">
+                        <h2 class="title is-5">Products I Use</h2>
+                        <div class="box">
+                            {% for product in site.products %}
+                                <div class="columns is-vcentered my-1">
+                                    <div class="column is-narrow">
+                                        <img
+                                            src="{{ product.image }}"
+                                            alt="{{ product.title }}"
+                                            class="image is-48x48"
+                                        >
+                                    </div>
+                                    <div class="column">
+                                        <p class="title is-6">{{ product.title }}</p>
+                                        <p class="subtitle is-7">{{ product.subtitle }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </aside>
+
+                    {% include ad/adsense.html type="square" %}
+
+                    <aside class="widget">
+                        <h2 class="title is-5">My Other Videos</h2>
+                        <div class="video-list">
+                            {% for video in site.videos limit: 3 %}
+                                <a href="{{ video.url }}" class="my-2">
+                                    <div class="column">
+                                        <figure class="image is-16by9">
+                                            <img
+                                                src="https://img.youtube.com/vi/{{ video.video_id }}/maxresdefault.jpg"
+                                                alt="{{ video.title }}"
+                                                class="video-thumbnail"
+                                            >
+                                        </figure>
+                                        <p class="title is-5 mt-2">{{ video.title }}</p>
+                                        <p class="subtitle is-7 mt-1">{{ video.description }}</p>
+                                    </div>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

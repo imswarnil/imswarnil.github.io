@@ -1,0 +1,115 @@
+---
+layout: base
+---
+<div class="section">
+    <div class="container">
+        <div class="columns is-multiline">
+            <div class="column is-half">
+                <h1 class="title is-1">{{ page.title }}</h1>
+                <p class="subtitle">{{ page.description | newline_to_br }}</p>
+                <div class="tags">
+                    {% for technology in page.technologies %}
+                        <span class="tag">{{ technology }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="column is-half">
+                <div class="columns">
+                    <div class="column is-narrow">
+                        <figure class="image is-48x48">
+                            <img class="is-rounded" src="/placeholder.svg" alt="Avatar">
+                        </figure>
+                        <p class="has-text-grey">Created by {{ page.author }}</p>
+                    </div>
+                    <div class="column">
+                        <p class="has-text-grey">Created on</p>
+                        <p class="has-text-grey">{{ page.date | date: '%B %d, %Y' }}</p>
+                    </div>
+                    <div class="column">
+                        <p class="has-text-grey">Duration</p>
+                        <p class="has-text-grey">{{ page.duration }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <div class="container">
+        <div class="columns">
+            <div class="column">
+                <figure class="image">
+                    <img src="{{ page.images[0] }}" alt="Project Image">
+                </figure>
+                <p class="has-text-grey">{{ page.description }}</p>
+            </div>
+            <div class="column is-narrow">
+                <div class="box">
+                    {% if page.live_preview_link %}
+                        <div class="level">
+                            <div class="level-left">
+                                <p class="has-text-grey">Live Preview</p>
+                            </div>
+                            <div class="level-right">
+                                <a href="{{ page.live_preview_link }}" class="button is-primary">Visit</a>
+                            </div>
+                        </div>
+                        <hr>
+                    {% endif %}
+                    {% if page.github_link %}
+                        <div class="level">
+                            <div class="level-left">
+                                <p class="has-text-grey">GitHub</p>
+                            </div>
+                            <div class="level-right">
+                                <a href="{{ page.github_link }}" class="button">View</a>
+                            </div>
+                        </div>
+                        <hr>
+                    {% endif %}
+                    <p class="has-text-grey">Technologies</p>
+                    <div class="tags">
+                        {% for technology in page.technologies %}
+                            <span class="tag">{{ technology }}</span>
+                        {% endfor %}
+                    </div>
+                    <hr>
+                    <p class="has-text-grey">Tools</p>
+                    <div class="tags">
+                        {% for tool in page.tools %}
+                            <span class="tag">{{ tool }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section has-background-light">
+    <div class="container">
+        <div class="columns">
+            <div class="column">
+                {% if content %}
+                    <h2 class="title is-2">Problem Statement</h2>
+                    <p class="has-text-grey">{{ content }}</p>
+                    <figure class="image">
+                        <img src="{{ page.images[1] }}" alt="Problem Statement">
+                    </figure>
+                {% endif %}
+            </div>
+            <div class="column">
+                <h2 class="title is-2">Our Approach</h2>
+                <p class="has-text-grey">
+                    We worked closely with the client to understand their requirements and pain points. We then designed
+                    and developed a custom web application using the latest technologies, ensuring a seamless user
+                    experience and efficient data management.
+                </p>
+                <figure class="image">
+                    <img src="/placeholder.svg" alt="Our Approach">
+                </figure>
+            </div>
+        </div>
+    </div>
+</div>

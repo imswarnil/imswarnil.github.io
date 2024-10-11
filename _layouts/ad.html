@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="{{ site.theme_color | default: '#ffffff' }}">
+        <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/app.css">
+        <link
+            rel="shortcut icon"
+            type="image/png"
+            {% if site.favicon %}
+                href="{{ site.favicon | relative_url }}"
+            {% else %}
+                href="{{ site.baseurl }}/favicon.png"
+            {% endif %}
+        >
+        <script defer src="https://unpkg.com/alpinejs@3.9.0/dist/cdn.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+        {% unless site.hide_share_buttons %}
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-social@1/bin/bulma-social.min.css">
+        {% endunless %}
+        {% seo %}
+        {% if site.feed %}
+            {% feed_meta %}
+        {% endif %}
+        {% if site.google_analytics %}
+            {% include google-analytics.html %}
+        {% endif %}
+        {% include head-scripts.html %}
+        <style>
+            .sticky-sidebar {
+                position: -webkit-sticky;
+                position: sticky;
+                top: 1rem;
+            }
+        </style>
+    </head>
+    <body>
+        {% include header.html %}
+        <section class="section">
+            <div class="container">
+                <div class="columns">
+                    <div class="column is-two-thirds">
+                        <div class="content">
+                            <h1 class="title">{{ page.title }}</h1>
+                            <p class="subtitle">{{ page.date | date: '%B %d, %Y' }}</p>
+                            {{ content }}
+                        </div>
+                        <!-- Dummy Widget: Search -->
+                        <div class="box">
+                            <h4 class="title is-4">Search Widget</h4>
+                            <div class="content">
+                                <!-- Replace with actual search widget code -->
+                                <input type="text" placeholder="Search...">
+                                <button class="button is-primary">Search</button>
+                            </div>
+                        </div>
+                        <!-- Article Ad -->
+                        <div class="box">
+                            <h4 class="title is-4">Article Ad</h4>
+                            {% include ad/adsense.html type="article" %}
+                        </div>
+                        <!-- Comments Section -->
+                        <div class="box">
+                            <h4 class="title is-4">Comments</h4>
+                            <!-- Replace with actual comments section -->
+                            <p>Comments section goes here...</p>
+                        </div>
+                        <!-- Multiplex Ad -->
+                        <div class="box">
+                            <h4 class="title is-4">Multiplex Ad</h4>
+                            {% include ad/adsense.html type="multiplex" %}
+                        </div>
+                    </div>
+                    <div class="column is-one-third">
+                        <div class="sticky-sidebar">
+                            <!-- Leaderboard Top Ad -->
+                            <div class="box">
+                                <h4 class="title is-4">Leaderboard Top Ad</h4>
+                                {% include ad/adsense.html type="top-leaderboard" %}
+                            </div>
+                            <!-- Small Leaderboard Ad -->
+                            <div class="box">
+                                <h4 class="title is-4">Small Leaderboard Ad</h4>
+                                {% include ad/adsense.html type="small-leaderboard" %}
+                            </div>
+                            <!-- Square Ad -->
+                            <div class="box">
+                                <h4 class="title is-4">Square Ad</h4>
+                                {% include ad/adsense.html type="square" %}
+                            </div>
+                            <!-- Skyscraper Ad -->
+                            <div class="box">
+                                <h4 class="title is-4">Skyscraper Ad</h4>
+                                {% include ad/adsense.html type="skyscraper" %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% include footer.html %}
+    </body>
+</html>

@@ -1,0 +1,40 @@
+<!-- youtube.html -->
+<figure class="image {% if include.aspect_ratio %} is-{{ include.aspect_ratio }}{% else %} is-16by9{% endif %}">
+    <iframe
+        class="has-ratio"
+        src="https://www.youtube.com/embed/{{ include.id }}?start={{ include.start_time | default: '0' }}&end={{ include.end_time | default: '0' }}&autoplay={{ include.autoplay | default: 'false' }}&controls={{ include.controls | default: 'true' }}&mute={{ include.muted | default: 'false' }}&showinfo={{ include.showinfo | default: 'true' }}&loop={{ include.loop | default: 'false' }}"
+        frameborder="0"
+        allowfullscreen
+    ></iframe>
+</figure>
+
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "VideoObject",
+        "name": "{{ include.title }}",
+        "description": "{{ include.description }}",
+        "thumbnailUrl": "https://img.youtube.com/vi/{{ include.id }}/hqdefault.jpg",
+        "uploadDate": "{{ page.date | date_to_xmlschema }}",
+        "publisher": {
+            "@type": "Organization",
+            "name": "{{ site.author }}"
+        },
+        "author": {
+            "@type": "Person",
+            "name": "{{ include.author }}"
+        },
+        "contentUrl": "https://www.youtube.com/watch?v={{ include.id }}",
+        "embedUrl": "https://www.youtube.com/embed/{{ include.id }}",
+        "hasPart": [
+            {
+                "@type": "Clip",
+                "name": "Full Video",
+                "startOffset": "{{ include.start_time }}",
+                "endOffset": "{{ include.end_time }}",
+                "url": "https://www.youtube.com/watch?v={{ include.id }}&start={{ include.start_time }}&end={{ include.end_time }}"
+            }
+        ]
+    }
+</script>

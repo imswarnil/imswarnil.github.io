@@ -1,0 +1,71 @@
+// Animation Keyframes for Background Movement
+@keyframes highlightMovementAnimation {
+    100% {
+      background-position: -100% 0; // Start from left
+    }
+    0% {
+      background-position: 100% 0; // End at right
+    }
+  }
+  
+  // Animation Keyframes for Background Color
+  @keyframes highlightColorAnimation {
+    0% {
+      background-color: rgba(255, 255, 0, 0.1); // Lightest yellow
+    }
+    10% {
+      background-color: rgba(255, 255, 0, 0.2);
+    }
+    20% {
+      background-color: rgba(255, 255, 0, 0.2);
+    }
+    30% {
+      background-color: rgba(255, 255, 0, 0.2);
+    }
+    40% {
+      background-color: rgba(255, 255, 0, 0.6);
+    }
+    50% {
+      background-color: rgba(255, 255, 0, 0.7);
+    }
+    60% {
+      background-color: rgba(255, 255, 0, 0.8);
+    }
+    70% {
+      background-color: rgba(255, 255, 0, 0.9);
+    }
+    80% {
+      background-color: rgba(255, 255, 0, 0.8);
+    }
+    90% {
+      background-color: rgba(255, 255, 0, 0.7);
+    }
+    100% {
+      background-color: rgba(255, 255, 0, 0.6); // Darkest yellow
+    }
+  }
+  
+  // Highlighted Text Style with Changing Background
+  .is-highlighted {
+    position: relative;
+    color: black; // Default text color
+    display: inline-block;
+    background: linear-gradient(to right, rgba(255, 255, 0, 0.1), rgba(255, 255, 0, 0.9)); // Initial gradient background
+    background-size: 200% 100%; // Double the width for movement animation
+    animation: highlightMovementAnimation 3s forwards, highlightColorAnimation 5s infinite 3s; // Animation loop duration
+    
+    &:before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 0, 0.2); // Initial background color
+      z-index: -1;
+      opacity: 0.3;
+      border-radius: 3px; // Add some border radius for a softer look
+    }
+  }
+  

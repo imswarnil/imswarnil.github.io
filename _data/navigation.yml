@@ -1,0 +1,43 @@
+navbar:
+  - name: Home
+    link: /
+    icon: fa-house-user
+  - name: About 
+    link: /about/
+    icon: fa-address-card
+  - name: Blog
+    link: /blog/
+    icon: fa-pen
+  - name: Videos
+    link: /videos/
+    icon: fa-play
+  - name: Contact Me
+    link: /contact/
+    icon: fa-phone
+  - name: More
+    link: /#
+    dropdown:
+      - name: Landing Page With Callouts
+        link: /landing/
+        icon: fa-rocket
+      - name: Sponsors Page
+        link: /sponsors/
+        icon: fa-hand-holding-heart
+      - name: Image Gallery
+        link: /gallery/
+        icon: fa-images
+      - name: Products
+        link: /products/
+        icon: fa-box-open
+      - name: Recipe Page
+        link: /example-recipe/
+        image : https://yt3.googleusercontent.com/bUPnDYABdzOveHZUSC-0745utTub-SQ76iuOjvYVUEeQrsA1fBMTgXbAsZ1SigmXd6BbtkqnwA=s900-c-k-c0x00ffffff-no-rj
+      - name: Showcase
+        link: /showcase/
+        icon: fa-star
+
+
+
+social_media:
+  - name: youtube
+    link: https://youtube.com/@swarnil

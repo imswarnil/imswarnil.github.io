@@ -1,0 +1,48 @@
+@use '../../node_modules/bulma/bulma.scss';
+
+// Default border style
+@mixin border {
+  border: initial-variables.$border-width solid initial-variables.$border-color;
+}
+
+// Bordered style with primary color
+@mixin border-primary {
+  border: initial-variables.$border-width solid initial-variables.$primary;
+}
+
+// Bordered style with different widths
+@mixin border-small {
+  border-width: 1px;
+}
+
+@mixin border-medium {
+  border-width: 2px;
+}
+
+@mixin border-large {
+  border-width: 3px;
+}
+
+// Dotted border style
+@mixin border-dotted {
+  border-style: dotted;
+}
+
+// Mixin to apply border styles
+@mixin apply-border-styles($options...) {
+  @each $option in $options {
+    @if $option == is-bordered {
+      @include border;
+    } @else if $option == is-bordered-primary {
+      @include border-primary;
+    } @else if $option == is-small {
+      @include border-small;
+    } @else if $option == is-medium {
+      @include border-medium;
+    } @else if $option == is-large {
+      @include border-large;
+    } @else if $option == is-dotted {
+      @include border-dotted;
+    }
+  }
+}

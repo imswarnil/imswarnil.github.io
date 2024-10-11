@@ -1,0 +1,8 @@
+{% case site.navbar_layout %}
+    {% when 'icons' %}
+        {% include navbars/icons.html %}
+    {% when 'course' %}
+        {% include navbars/course.html %}
+    {% else %}
+        {% include navbars/default.html %}
+{% endcase %}

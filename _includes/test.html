@@ -1,0 +1,88 @@
+<!-- Modal -->
+<div class="modal" id="myModal">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+        <div class="box">
+            <h2 class="title is-4">Welcome!</h2>
+            <p>Please enter your name:</p>
+            <input id="usernameInput" class="input" type="text" placeholder="Your Name">
+            <button id="saveNameBtn" class="button is-primary">Save</button>
+        </div>
+    </div>
+</div>
+
+<!-- Your content -->
+<h1 id="welcomeTitle" class="title">Welcome</h1>
+
+<!-- JavaScript -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const dbName = 'userData';
+        const dbVersion = 1;
+        const dbStore = 'user';
+        let db;
+
+        const request = indexedDB.open(dbName, dbVersion);
+
+        request.onerror = function (event) {
+            console.error('IndexedDB error:', event.target.errorCode);
+        };
+
+        request.onsuccess = function (event) {
+            db = event.target.result;
+            checkAndShowWelcome();
+        };
+
+        request.onupgradeneeded = function (event) {
+            db = event.target.result;
+            const store = db.createObjectStore(dbStore, { keyPath: 'id' });
+            store.createIndex('name', 'name', { unique: false });
+        };
+
+        function showModal() {
+            const modal = document.getElementById('myModal');
+            modal.classList.add('is-active');
+
+            const saveBtn = document.getElementById('saveNameBtn');
+            saveBtn.addEventListener('click', function () {
+                const usernameInput = document.getElementById('usernameInput');
+                const username = usernameInput.value.trim();
+                if (username) {
+                    saveUsername(username);
+                    modal.classList.remove('is-active');
+                    updateWelcomeMessage(username);
+                }
+            });
+        }
+
+        function saveUsername(username) {
+            const transaction = db.transaction(dbStore, 'readwrite');
+            const store = transaction.objectStore(dbStore);
+            store.clear();
+            store.add({ id: 1, name: username });
+        }
+
+        function checkAndShowWelcome() {
+            const transaction = db.transaction(dbStore, 'readonly');
+            const store = transaction.objectStore(dbStore);
+            const getReq = store.getAll();
+
+            getReq.onsuccess = function (event) {
+                const userData = event.target.result;
+                if (userData && userData.length > 0) {
+                    const username = userData[0].name;
+                    updateWelcomeMessage(username);
+                } else {
+                    showModal();
+                }
+            };
+        }
+
+        function updateWelcomeMessage(username) {
+            const welcomeTitle = document.getElementById('welcomeTitle');
+            if (welcomeTitle) {
+                welcomeTitle.textContent = `Welcome, ${username}!`;
+            }
+        }
+    });
+</script>

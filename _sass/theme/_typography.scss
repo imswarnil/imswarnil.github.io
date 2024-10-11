@@ -1,0 +1,8 @@
+// Typography
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+$family-sans-serif: "Roboto", "Oxygen", "Ubuntu","Inter", "SF Pro", "Segoe UI",
+  "Helvetica Neue", "Helvetica", "Arial", sans-serif !default;
+$family-monospace: "Roboto Mono", "Inconsolata", "Hack", "SF Mono", 
+  "Source Code Pro", "Ubuntu Mono", monospace !default;
+$render-mode: optimizeLegibility !default;

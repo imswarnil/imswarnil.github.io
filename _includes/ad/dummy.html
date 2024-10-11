@@ -1,0 +1,103 @@
+<!-- _includes/ad_component.html -->
+{% case include.type %}
+    {% when 'leaderboard' %}
+        <div class="ad-container leaderboard">
+            <div class="ad-content">
+                <p>Advertise Here</p>
+                <p>Leaderboard Ad (Full Width)</p>
+                <p>Size: 728x90px</p>
+            </div>
+        </div>
+
+    {% when 'small-leaderboard' %}
+        <div class="ad-container small-leaderboard">
+            <div class="ad-content">
+                <p>Advertise Here</p>
+                <p>Small Leaderboard Ad (Centered)</p>
+                <p>Size: 728x90px</p>
+            </div>
+        </div>
+
+    {% when 'square' %}
+        <div class="ad-container square">
+            <div class="ad-content">
+                <p>Advertise Here</p>
+                <p>Square Ad</p>
+                <p>Size: 250x250px</p>
+            </div>
+        </div>
+
+    {% when 'skyscraper' %}
+        <div class="ad-container skyscraper">
+            <div class="ad-content">
+                <p>Advertise Here</p>
+                <p>Skyscraper Ad</p>
+                <p>Size: Varies</p>
+            </div>
+        </div>
+
+    {% when 'in-article' %}
+        <div class="ad-container in-article">
+            <div class="ad-content">
+                <p>Advertise Here</p>
+                <p>In-Article Ad</p>
+                <p>Size: Varies</p>
+            </div>
+        </div>
+
+    {% else %}
+        <p>Invalid ad type</p>
+{% endcase %}
+<style>
+    /* _sass/ad_styles.scss */
+    .ad-container {
+        width: 100%;
+        background-color: #e53935;
+        color: #ffffff;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 2em auto;
+        border-radius: 10px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+        padding: 20px; /* Adjust padding as needed */
+    }
+
+    .ad-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .ad-content p {
+        margin-bottom: 2px;
+        font-size: medium;
+    }
+
+    /* Adjust the sizes as needed for different ad types */
+    .leaderboard {
+        width: 100%;
+        height: 90px;
+    }
+
+    .small-leaderboard {
+        width: 728px;
+        height: 90px;
+    }
+
+    .square {
+        width: 250px;
+        height: 250px;
+    }
+
+    .skyscraper {
+        width: 320px;
+        height: 480px; /* Adjust as needed */
+    }
+
+    .in-article {
+        width: 360px;
+        height: 450px;
+    }
+</style>

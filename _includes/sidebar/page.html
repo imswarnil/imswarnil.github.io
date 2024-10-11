@@ -1,0 +1,29 @@
+
+<div class="sidebar">
+    <!-- Default sidebar content -->
+    <p>This is the page sidebar.</p>
+</div>
+
+{% include latest-posts.html %}
+<div class="menu my-4 ">
+    <p class="menu-label">Archive</p>
+    <ul class="menu-list">
+        {% assign year = null %}
+        {% for post in site.posts %}
+            {% assign current_year = post.date | date: '%Y' %}
+            {% if current_year != year %}
+                {% unless year == null %}
+                    </ul>
+                {% endunless %}
+                <li>
+                    <a>{{ current_year }}</a>
+                    <ul>
+                        {% assign year = current_year %}
+            {% endif %}
+            <li>
+                <a href="{{ post.url }}">{{ post.title }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+</div>

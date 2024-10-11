@@ -1,0 +1,18 @@
+---
+---
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+$primary: {{ site.primary_color }};
+$link : $primary;
+$family-sans-serif: "Roboto", "Arial", sans-serif !default;
+$family-monospace: "Roboto Mono", monospace !default;
+$render-mode: optimizeLegibility !default;
+
+@import "syntax";
+
+// Import Main CSS file from theme
+{% if site.custom_theme %}
+  @import "theme/index";
+{% endif %}
+
+@import "main";

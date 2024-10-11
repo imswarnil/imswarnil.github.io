@@ -1,0 +1,31 @@
+<div class="sidebar">
+    <!-- Default sidebar content -->
+    <p>This is the blog sidebar.</p>
+</div>
+
+<div class="box my-5">
+    {% assign contentsTitle = page.toc_title | default: 'Contents' %}
+    {% include toc.html html=content class='menu-list' h_min=2 h_max=3 contents_title=contentsTitle %}
+</div>
+{% include latest-posts.html %}
+<div class="menu my-4 ">
+    <p class="menu-label">Archive</p>
+    <ul class="menu-list">
+        {% assign year = null %}
+        {% for post in site.posts %}
+            {% assign current_year = post.date | date: '%Y' %}
+            {% if current_year != year %}
+                {% unless year == null %}
+                    </ul>
+                {% endunless %}
+                <li>
+                    <a>{{ current_year }}</a>
+                    <ul>
+                        {% assign year = current_year %}
+            {% endif %}
+            <li>
+                <a href="{{ post.url }}">{{ post.title }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

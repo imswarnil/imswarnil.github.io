@@ -1,0 +1,197 @@
+<section class="section">
+    <div class="container">
+        <div class="box">
+            <div class="columns">
+                <!-- Course Title and Subtitle -->
+                <div class="column is-8">
+                    <h1 class="title">Course Title</h1>
+                    <h2 class="subtitle">Course Subtitle</h2>
+                </div>
+                <!-- Enroll Button -->
+                <div class="column is-4 has-text-centered">
+                    <button class="button is-primary is-large">Enroll in Course</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Image and Course Info Section -->
+<section class="section">
+    <div class="container">
+        <div class="columns">
+            <!-- Course Image -->
+            <div class="column is-8">
+                <div class="box">
+                    <figure class="image is-16by9">
+                        <div class="skeleton"></div>
+                    </figure>
+                </div>
+            </div>
+            <!-- Course Details Card -->
+            <div class="column is-4">
+                <div class="box">
+                    <div class="card">
+                        <div class="card-content">
+                            <p class="title">Course Progress</p>
+                            <progress class="progress is-primary" value="50" max="100">50%</progress>
+                            <p class="subtitle">Level: Beginner</p>
+                            <p class="subtitle">Hours: 10</p>
+                            <p class="subtitle">Created on: January 1, 2024</p>
+                            <div class="media">
+                                <div class="media-left">
+                                    <figure class="image is-48x48">
+                                        <div class="skeleton"></div>
+                                    </figure>
+                                </div>
+                                <div class="media-content">
+                                    <p class="title is-4">Author Name</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Tabs and Material Included Section -->
+<section class="section">
+    <div class="container">
+        <div class="columns">
+            <!-- Tabs for Course Description, Reviews, and Updates -->
+            <div class="column is-8">
+                <div class="box">
+                    <div class="tabs is-boxed">
+                        <ul>
+                            <li class="is-active" data-tab="description"><a>Course Description</a></li>
+                            <li data-tab="reviews"><a>Course Reviews</a></li>
+                            <li data-tab="updates"><a>Course Updates</a></li>
+                        </ul>
+                    </div>
+                    <div class="content">
+                        <div id="description">Content for Course Description</div>
+                        <div id="reviews" style="display: none;">Content for Course Reviews</div>
+                        <div id="updates" style="display: none;">Content for Course Updates</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Material Included Section -->
+            <div class="column is-4">
+                <div class="box">
+                    <h3 class="title">Material Included</h3>
+                    <ul>
+                        <li>Material 1</li>
+                        <li>Material 2</li>
+                        <li>Material 3</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- What You Will Learn and Audience Type Section -->
+<section class="section">
+    <div class="container">
+        <div class="box">
+            <h3 class="title">What You Will Learn</h3>
+            <div class="columns">
+                <div class="column is-6">
+                    <ul>
+                        <li>Learning Point 1</li>
+                        <li>Learning Point 2</li>
+                        <li>Learning Point 3</li>
+                    </ul>
+                </div>
+                <div class="column is-6">
+                    <ul>
+                        <li>Items Included</li>
+                        <li>Audience Type</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Curriculum Section -->
+<section class="section">
+    <div class="container">
+        <div class="box">
+            <h3 class="title">Curriculum</h3>
+            <div class="columns">
+                <div class="column is-8">
+                    <div class="card">
+                        <header class="card-header">
+                            <p class="card-header-title">Section 1</p>
+                            <button class="card-header-icon" aria-label="more options">
+                                <span class="icon">
+                                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                </span>
+                            </button>
+                        </header>
+                        <div class="card-content" style="display: none;">
+                            <ul>
+                                <li>Lesson 1.1</li>
+                                <li>Lesson 1.2</li>
+                                <li>Lesson 1.3</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <header class="card-header">
+                            <p class="card-header-title">Section 2</p>
+                            <button class="card-header-icon" aria-label="more options">
+                                <span class="icon">
+                                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                </span>
+                            </button>
+                        </header>
+                        <div class="card-content" style="display: none;">
+                            <ul>
+                                <li>Lesson 2.1</li>
+                                <li>Lesson 2.2</li>
+                                <li>Lesson 2.3</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Course Footer Section -->
+<section class="section">
+    <div class="container">
+        <div class="box">
+            <div class="content">
+                <h3 class="title">Course Footer</h3>
+                <p>Additional course details and information.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // JavaScript for Tabs
+    document.querySelectorAll('.tabs ul li').forEach((tab) => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.tabs ul li').forEach((item) => item.classList.remove('is-active'));
+            tab.classList.add('is-active');
+            document.querySelectorAll('.content > div').forEach((content) => (content.style.display = 'none'));
+            document.querySelector(`#${tab.getAttribute('data-tab')}`).style.display = 'block';
+        });
+    });
+
+    // JavaScript for Collapsible Curriculum Sections
+    document.querySelectorAll('.card-header').forEach((header) => {
+        header.addEventListener('click', () => {
+            const content = header.nextElementSibling;
+            content.style.display = content.style.display === 'block' ? 'none' : 'block';
+        });
+    });
+</script>

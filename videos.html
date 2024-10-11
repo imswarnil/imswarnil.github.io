@@ -1,0 +1,26 @@
+---
+layout: default
+title: Video Collection
+---
+<div class="container">
+    <div class="section">
+        <h1>Video Collection</h1>
+        <div class="columns is-multiline">
+            {% for video in site.videos %}
+                <div class="column is-one-third">
+                    <div class="card">
+                        <div class="card-content">
+                            <h2 class="title is-4">
+                                <a href="{{ video.url }}">{{ video.title }}</a>
+                            </h2>
+                            <p>{{ video.description }}</p>
+                            <p><strong>Duration:</strong> {{ video.video_duration }}</p>
+                            <p><strong>Category:</strong> {{ video.category }}</p>
+                            <a href="{{ video.url }}" class="button is-link">Watch Video</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

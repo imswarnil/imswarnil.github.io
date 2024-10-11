@@ -1,0 +1,32 @@
+blockquote {
+    position: relative;
+    font-size: 1.25rem; // Adjust font size as needed
+    color: $grey-dark; // Use Bulma's default dark grey color for text
+    overflow: hidden; // Ensure the typewriter animation stays within the blockquote
+  
+    &::before {
+      content: "\201C"; // Left double quotation mark
+      font-size: 3rem; // Adjust font size of quotation mark as needed
+      position: absolute;
+      top: -1rem; // Adjust vertical position of quotation mark as needed
+      left: -1.5rem; // Adjust horizontal position of quotation mark as needed
+      color: $primary; // Use Bulma's primary color for quotation mark
+      transition: transform 0.5s; // Add transition for hover effect
+    }
+  
+    border-left: 4px solid $primary; // Use Bulma's primary color for left border
+    padding: 0 1.25rem; // Adjust padding as needed
+    margin: 1.5rem 0; // Adjust margin as needed
+  
+    // Hover animation for double quotes
+    &:hover::before {
+      transform: translateY(-3px); // Move the quotation mark upwards on hover
+    }
+  }
+  
+  blockquote footer {
+    margin-top: 0.5rem; // Adjust margin between quote and attribution
+    font-size: 0.875rem; // Adjust font size for attribution as needed
+    color: $grey-dark; // Use Bulma's default dark grey color for attribution text
+  }
+  

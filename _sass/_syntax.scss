@@ -1,0 +1,169 @@
+/* Syntax highlighting variables */
+$syntax-bg: hsl(204, 71%, 9%);
+$syntax-border: hsl(2, 71%, 53%);
+$syntax-color: hsl(0, 0%, 82%);
+$syntax-error-bg: hsl(348, 100%, 85%);
+$syntax-error-color: hsl(348, 100%, 30%);
+$syntax-comment-color: hsl(0, 0%, 50%);
+$syntax-keyword-color: hsl(256, 60%, 65%);
+$syntax-string-color: hsl(141, 53%, 53%);
+$syntax-number-color: hsl(174, 62%, 47%);
+$syntax-attribute-color: hsl(204, 71%, 53%);
+$syntax-function-color: hsl(348, 100%, 30%);
+$syntax-class-color: hsl(256, 60%, 65%);
+$syntax-variable-color: hsl(204, 71%, 53%);
+$syntax-heading-color: hsl(204, 71%, 60%);
+$syntax-deleted-bg: hsl(0, 100%, 90%);
+$syntax-inserted-bg: hsl(141, 53%, 85%);
+$syntax-inserted-color: hsl(141, 53%, 30%);
+
+@import "../node_modules/bulma/sass/utilities/initial-variables.scss";
+
+.highlight
+{
+  margin: 20px 0;
+}
+
+/* Syntax highlighting */
+.content pre {
+  color: $syntax-color;
+  background-color: $syntax-bg;
+  border-left: 5px solid $syntax-border;
+  border-radius: $radius-medium;
+}
+
+.highlight .err {
+  color: $syntax-error-color;
+  background-color: $syntax-error-bg;
+}
+
+.highlight .c,
+.highlight .cd,
+.highlight .cm,
+.highlight .c1,
+.highlight .cs {
+  color: $syntax-comment-color;
+}
+
+.highlight .cp,
+.highlight .nt,
+.highlight .no {
+  color: $syntax-attribute-color;
+}
+
+.highlight .o,
+.highlight .ow {
+  color: $syntax-color;
+}
+
+.highlight .p,
+.highlight .pi {
+  color: $syntax-color;
+}
+
+.highlight .gi {
+  color: $syntax-inserted-color;
+  background-color: $syntax-inserted-bg;
+}
+
+.highlight .gd {
+  color: $syntax-error-color;
+  background-color: $syntax-deleted-bg;
+}
+
+.highlight .gh {
+  color: $syntax-heading-color;
+  background-color: $syntax-bg;
+  font-weight: bold;
+}
+
+.highlight .k,
+.highlight .kn,
+.highlight .kp,
+.highlight .kr,
+.highlight .kv {
+  color: $syntax-keyword-color;
+}
+
+.highlight .kc,
+.highlight .kt,
+.highlight .kd {
+  color: $syntax-keyword-color;
+}
+
+.highlight .s,
+.highlight .sb,
+.highlight .sc,
+.highlight .sd,
+.highlight .s2,
+.highlight .sh,
+.highlight .sx,
+.highlight .s1,
+.highlight .ss {
+  color: $syntax-string-color;
+}
+
+.highlight .sr {
+  color: $syntax-number-color;
+}
+
+.highlight .si,
+.highlight .se {
+  color: $syntax-number-color;
+}
+
+.highlight .nn,
+.highlight .nc {
+  color: $syntax-class-color;
+}
+
+.highlight .na {
+  color: $syntax-attribute-color;
+}
+
+.highlight .m,
+.highlight .mf,
+.highlight .mh,
+.highlight .mi,
+.highlight .il,
+.highlight .mo,
+.highlight .mb,
+.highlight .mx {
+  color: $syntax-number-color;
+}
+
+.copy-code-button {
+   margin-bottom: 10px; /* Adjust margin top as needed */
+  background-color: hsl(204, 71%, 9%);
+  color: #fff; /* Light color */
+  border: none;
+  border-radius: 3px;
+}
+
+.copy-code-button .icon {
+  margin-right: 5px;
+}
+
+/* Language tag */
+.language-tag {
+  background-color: #ff3860; /* Red color */
+  color: #fff;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  margin-top:  -40px;
+}
+
+/* Toast styles */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: none;
+  background-color: #23d160;
+  color: white;
+  border-radius: 5px;
+  padding: 10px;
+}
