@@ -1,4 +1,3 @@
-# Site Settings
 lang: en
 title: Imswarnil
 title_1 : Im
@@ -28,11 +27,9 @@ custom_theme: false
 disqus:
   # Leave shortname blank to disable comments site-wide.
   # Disable comments for any post by adding `comments: false` to that post's YAML Front Matter.
-  # shortname: my_disqus_shortname
   shortname: csrhymes
 
-# _Adsense Ads
-# config.yml
+# Adsense Ads
 adsense: true
 data-ad-client: ca-pub-1291242080282540
 
@@ -96,10 +93,8 @@ collections:
   products:
     output: true
     layout: product
-    image: https://placehold.co/800x600/E53935/FFF  # Default thumbnail for videos
+    image: https://placehold.co/800x600/E53935/FFF  # Default thumbnail for products
     sidebar: false
   projects:
     output: true
     permalink: /projects/:title
-
-
