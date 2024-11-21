@@ -1,13 +1,25 @@
 ---
 layout: default
 title: Video Collection
+permalink: /videos/
 ---
+
+{% assign items_per_page = 1 %}  {# Display 1 video per page #}
+{% assign current_page = page.page | default: 1 %} {# Default to 1 if no page is provided #}
+
+{%- comment -%}
+  Calculate total pages based on the number of videos
+{%- endcomment -%}
+{% assign total_videos = site.videos | size %}
+{% assign total_pages = total_videos | divided_by: items_per_page | ceil %}
+
 <div class="container">
     <div class="section">
-        <h1>Video Collection</h1>
+        <h1 class="title">Video Collection</h1>
         <div class="columns is-multiline">
-            {% for video in site.videos %}
-                <div class="column is-one-third">
+            {% assign offset = items_per_page | times: current_page | minus: items_per_page %}
+            {% for video in site.videos offset: offset limit: items_per_page %}
+                <div class="column is-full">
                     <div class="card">
                         <div class="card-content">
                             <h2 class="title is-4">
@@ -22,51 +34,21 @@ title: Video Collection
                 </div>
             {% endfor %}
         </div>
+
+        <div class="pagination">
+            <ul>
+                {% if current_page > 1 %}
+                    <li><a href="/videos?page={{ current_page | minus: 1 }}" class="button is-primary">Previous</a></li>
+                {% else %}
+                    <li><span class="button is-primary" disabled>Previous</span></li>
+                {% endif %}
+
+                {% if current_page < total_pages %}
+                    <li><a href="/videos?page={{ current_page | plus: 1 }}" class="button is-primary">Next</a></li>
+                {% else %}
+                    <li><span class="button is-primary" disabled>Next</span></li>
+                {% endif %}
+            </ul>
+        </div>
     </div>
-</div>
-
-
-{% assign items_per_page = 2 %}  {# Number of videos per page #}
-{% assign current_page = page.page | default: 1 %} {# Default to 1 if no page is provided #}
-
-{%- comment -%}
-  Calculate total pages based on the number of videos
-{%- endcomment -%}
-{% assign total_videos = site.videos | size %}
-{% assign total_pages = total_videos | divided_by: items_per_page | ceil %}
-
-<h1 class="title">Videos</h1>
-
-<div class="video-list">
-  {% assign offset = items_per_page | times: current_page | minus: items_per_page %}
-  {% for video in site.videos offset: offset limit: items_per_page %}
-    <div class="video-item">
-      <h2>{{ video.title }}</h2>
-      <p>{{ video.excerpt }}</p>
-      <a href="{{ video.url }}">Watch Video</a>
-    </div>
-  {% endfor %}
-</div>
-
-<div class="pagination">
-  {%- comment -%} Show pagination links {%- endcomment -%}
-  <ul>
-    {% if current_page > 1 %}
-      <li><a href="/videos?page={{ current_page | minus: 1 }}">Previous</a></li>
-    {% endif %}
-
-    {% for i in (1..total_pages) %}
-      <li>
-        {% if i == current_page %}
-          <span>{{ i }}</span>
-        {% else %}
-          <a href="/videos?page={{ i }}">{{ i }}</a>
-        {% endif %}
-      </li>
-    {% endfor %}
-
-    {% if current_page < total_pages %}
-      <li><a href="/videos?page={{ current_page | plus: 1 }}">Next</a></li>
-    {% endif %}
-  </ul>
 </div>
