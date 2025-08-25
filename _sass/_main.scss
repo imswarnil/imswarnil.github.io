@@ -1,177 +1,454 @@
-/* ===========================
-   enji.dev-style Bulma theme
-   Put this BEFORE Bulma import
-   =========================== */
+/* ========================================================================
+   SHADCN-INSPIRED BULMA THEME (Light/Dark) — Minimal, Symmetric, Systematic
+   Author: You + ChatGPT
+   A) Tokens (CSS variables) + map to Bulma vars
+   B) Bulma import
+   C) Component skins + utilities
+   ======================================================================== */
 
-/* --- Palette --- */
-$primary: #6d67e4;                 // Indigo accent (screenshot feel)
-$link:    $primary;
+/* --------------------------------
+   A) TOKENS (LIGHT / DARK)
+   -------------------------------- */
+:root {
+  /* Color system (HSL for easy theming) */
+  --background:        0 0% 100%;
+  --foreground:        222 47% 11%;
 
-$info:    #5ec2ff;                 // Sky
-$success: #41d29a;                 // Mint
-$warning: #ffcd4b;                 // Honey
-$danger:  #ff6b6b;                 // Coral
+  --muted:             210 16% 95%;
+  --muted-foreground:  222 10% 40%;
 
-/* Neutral scale (slate-ish) */
-$black:          #0f172a;          // slate-900
-$grey-darker:    #1f2937;          // slate-800
-$grey-dark:      #334155;          // slate-700
-$grey:           #64748b;          // slate-500
-$grey-light:     #94a3b8;          // slate-400
-$grey-lighter:   #cbd5e1;          // slate-300
-$grey-lightest:  #e2e8f0;          // slate-200
+  --popover:           0 0% 100%;
+  --popover-foreground:222 47% 11%;
 
-/* Surfaces */
-$scheme-main:           #ffffff;
-$body-background-color: #f8fafc;   // very light base
-$background:            #f9fafb;
-$border:                #e6eaf2;   // subtle card/divider border
-$border-strong:         #d7deea;
+  --card:              0 0% 100%;
+  --card-foreground:   222 47% 11%;
 
-/* --- Typography --- */
-$family-sans-serif: "Outfit", "Arial", sans-serif !default;
-$family-monospace:  "Roboto Mono", monospace !default;
+  --border:            214 15% 90%;
+  --input:             214 15% 90%;
+
+  --primary:           222 47% 11%; /* near black */
+  --primary-foreground:0 0% 100%;
+
+  --secondary:         210 16% 96%;
+  --secondary-foreground:222 47% 11%;
+
+  --accent:            221 83% 53%; /* blue accent */
+  --accent-foreground: 0 0% 100%;
+
+  --destructive:       0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+
+  --ring:              221 83% 53%;
+
+  /* Typography & sizing */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+               Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji",
+               "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  --font-mono: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+               Consolas, "Liberation Mono", monospace;
+
+  --radius-sm: .375rem;
+  --radius:    .5rem;   /* default radius ~ shadcn */
+  --radius-lg: .75rem;
+  --radius-full: 999px;
+
+  /* Elevations (subtle, material-lite) */
+  --shadow-1: 0 1px 2px rgba(0,0,0,.06), 0 1px 1px rgba(0,0,0,.04);
+  --shadow-2: 0 4px 12px rgba(0,0,0,.10);
+  --shadow-3: 0 8px 28px rgba(0,0,0,.14);
+
+  /* Spacing scale */
+  --space-1: .25rem;
+  --space-2: .5rem;
+  --space-3: .75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+
+  /* Container width */
+  --container: 1120px;
+
+  color-scheme: light;
+}
+
+/* Dark theme via class or system preference */
+.theme-dark {
+  --background:        222 47% 7%;
+  --foreground:        0 0% 100%;
+
+  --muted:             222 20% 12%;
+  --muted-foreground:  215 20% 65%;
+
+  --popover:           222 47% 7%;
+  --popover-foreground:0 0% 100%;
+
+  --card:              222 47% 8%;
+  --card-foreground:   0 0% 100%;
+
+  --border:            222 22% 17%;
+  --input:             222 22% 17%;
+
+  --primary:           0 0% 100%;
+  --primary-foreground:222 47% 7%;
+
+  --secondary:         222 22% 13%;
+  --secondary-foreground:0 0% 100%;
+
+  --accent:            221 83% 60%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive:       0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+
+  --ring:              221 83% 66%;
+  color-scheme: dark;
+}
+
+/* Respect OS dark if you want auto */
+@media (prefers-color-scheme: dark) {
+  :root:not(.theme-light):not(.theme-dark) { @extend .theme-dark; }
+}
+
+/* Map tokens → Bulma variables (Sass reads these CSS vars at runtime) */
+$primary: hsl(var(--accent));
+$link:    hsl(var(--accent));
+$info:    hsl(var(--accent));
+$success: hsl(142 71% 45%);
+$warning: hsl(38 92% 50%);
+$danger:  hsl(var(--destructive));
+
+$scheme-main:           hsl(var(--background));
+$body-background-color: hsl(var(--background));
+$background:            hsl(var(--card));
+
+$black:        hsl(var(--foreground));
+$grey-darker:  hsl(222 10% 20%);
+$grey-dark:    hsl(222 10% 35%);
+$grey:         hsl(var(--muted-foreground));
+$grey-light:   hsl(215 16% 70%);
+$grey-lighter: hsl(214 15% 90%);
+$border:       hsl(var(--border));
+$input-border-color: $border;
+
+$family-sans-serif: var(--font-sans) !default;
+$family-monospace:  var(--font-mono) !default;
 $family-primary:    $family-sans-serif;
 
-$size-1: 3rem;      // 48
-$size-2: 2.25rem;   // 36
-$size-3: 1.75rem;   // 28
-$size-4: 1.25rem;   // 20
-$size-5: 1.125rem;  // 18
-$size-6: 1rem;      // 16
-$size-7: .875rem;   // 14
+$body-size: 16px;
+$size-1: 2.75rem; $size-2: 2rem; $size-3: 1.5rem; $size-4: 1.25rem; $size-5: 1.125rem; $size-6: 1rem; $size-7: .875rem;
 
-$weight-normal:   500;
-$weight-semibold: 700;
-$weight-bold:     800;
-
-$title-family:    $family-primary;
-$title-weight:    $weight-bold;     // big bold headlines
+$title-weight:    800;
 $subtitle-weight: 600;
 $text-strong:     $black;
 
-/* --- Radii & Shadows --- */
-$radius-small: .5rem;
-$radius:       .75rem;     // 12px
-$radius-large: 1rem;       // 16px
-$radius-rounded: 9999px;
+$radius-small: var(--radius-sm);
+$radius:       var(--radius);
+$radius-large: var(--radius-lg);
+$radius-rounded: var(--radius-full);
 
-$shadow:             0 8px 24px rgba(15,23,42,.06);
-$card-shadow:        $shadow;
-$box-shadow:         $shadow;
-$dropdown-shadow:    0 12px 28px rgba(15,23,42,.10);
+$shadow:          var(--shadow-1);
+$card-shadow:     var(--shadow-1);
+$box-shadow:      var(--shadow-1);
+$dropdown-shadow: var(--shadow-3);
 
-/* --- Layout spacing --- */
-$section-padding: 5rem 1.25rem;
-$container-max-width: 1080px;
-$widescreen-enabled: true;
-$fullhd-enabled:     true;
-
-/* --- Navbar --- */
-$navbar-background-color: transparent;
-$navbar-height: 3.5rem;
-$navbar-padding-vertical: .75rem;
+$navbar-background-color: hsl(var(--background));
+$navbar-item-color:        hsl(var(--muted-foreground));
+$navbar-item-hover-background-color: hsla(0 0% 0% / .04);
+$navbar-item-active-color: hsl(var(--foreground));
+$navbar-box-shadow-size: 0 0 0 0;
+$navbar-padding-vertical: .6rem;
 $navbar-padding-horizontal: 1rem;
-$navbar-item-color: $grey-dark;
-$navbar-item-hover-color: $black;
-$navbar-item-hover-background-color: rgba($primary,.06);
-$navbar-item-active-color: $primary;
-$navbar-burger-color: $grey-dark;
-$navbar-box-shadow-size: 0 0 0 0;   // flat
 
-/* --- Cards / Boxes --- */
-$card-radius:           $radius-large;
-$card-background-color: #fff;
-$card-border-color:     $border;
-$card-header-shadow:    none;
-$card-content-padding:  1.25rem 1.25rem;
+$button-radius: var(--radius);
+$button-border-width: 1px;
+$button-text-weight: 700;
+$button-padding-vertical: .55rem;
+$button-padding-horizontal: 1rem;
+$button-focus-box-shadow-size: 0 0 0 .2rem;
+$button-focus-box-shadow-color: hsla(var(--ring) / .35);
 
-$box-radius:            $radius-large;
-$box-background-color:  #fff;
-$box-color:             $black;
+$control-radius: var(--radius);
+$input-background-color: hsl(var(--background));
+$input-color: hsl(var(--foreground));
+$input-hover-border-color: scale-color($border, $lightness: -8%);
+$input-focus-border-color: hsl(var(--accent));
+$input-focus-box-shadow-size: 0 0 0 .2rem;
+$input-focus-box-shadow-color: hsla(var(--ring) / .35);
 
-/* --- Buttons --- */
-$button-radius:              $radius-large;
-$button-border-width:        1px;
-$button-padding-vertical:    .625rem;
-$button-padding-horizontal:  1rem;
-$button-text-weight:         700;
-$button-hover-color:         $black;
-$button-focus-box-shadow-size: 0 0 0 .25rem;
-$button-focus-box-shadow-color: rgba($primary,.18);
+$card-background-color: hsl(var(--card));
+$card-color: hsl(var(--card-foreground));
+$card-radius: var(--radius);
+$card-content-padding: 1rem 1rem;
 
-/* --- Inputs / Controls --- */
-$control-radius:            $radius;
-$input-background-color:    #fff;
-$input-border-color:        $border;
-$input-hover-border-color:  darken($border,8%);
-$input-focus-border-color:  rgba($primary,.6);
-$input-focus-box-shadow-size: 0 0 0 .25rem;
-$input-focus-box-shadow-color: rgba($primary,.15);
+$box-background-color: hsl(var(--card));
+$box-radius: var(--radius);
+$box-color: hsl(var(--card-foreground));
 
-/* --- Tags / Badges --- */
-$tag-radius:           $radius-rounded;
-$tag-background-color: #f3f6ff;
-$tag-color:            $grey-dark;
+$section-padding: 4.5rem 1.25rem;
+$container-max-width: var(--container);
 
-/* Import Bulma with the overrides above */
+/* --------------------------------
+   B) IMPORT BULMA
+   -------------------------------- */
 @import "../node_modules/bulma/sass/index";
 
-/* Keep your icons (or other post-Bulma tweaks) after */
-@import "./theme/icon";
+/* --------------------------------
+   C) COMPONENT SKINS + UTILITIES
+   -------------------------------- */
 
-/* ===========================
-   Post-Bulma utilities (tiny)
-   =========================== */
+/* Base */
+html, body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-feature-settings: "cv02","cv03","cv04","cv11";
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+}
+::selection { background: hsla(var(--accent) / .2); }
 
-/* Subtle grid background like the screenshot.
-   Use globally or apply to a wrapper with .has-grid-bg */
-html.has-grid-bg, body.has-grid-bg, body {
-  background-color: $body-background-color;
-  background-image:
-    linear-gradient(0deg, rgba(15,23,42,.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(15,23,42,.04) 1px, transparent 1px);
-  background-size: 32px 32px, 32px 32px;
+/* Container */
+.container.is-content {
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--space-4);
 }
 
-/* Soft cards/pills */
-.card.is-soft,
-.box.is-soft {
-  border: 1px solid $border;
-  box-shadow: $shadow;
+/* Focus ring utility */
+:focus-visible {
+  outline: 2px solid hsl(var(--accent));
+  outline-offset: 2px;
 }
 
-.button.is-soft {
-  background: rgba($primary,.08);
-  color: $primary;
-  border-color: transparent;
-  &:hover { background: rgba($primary,.12); }
+/* Links */
+a { color: hsl(var(--accent)); text-decoration: none; }
+a:hover { color: color-mix(in oklab, hsl(var(--accent)), white 10%); }
+
+/* Navbar */
+.navbar.is-clean {
+  border-bottom: 1px solid hsl(var(--border));
+  backdrop-filter: saturate(120%) blur(6px);
+  .navbar-item { color: hsl(var(--muted-foreground)); }
+  .navbar-item.is-active { color: hsl(var(--foreground)); }
 }
 
-/* Accent underline for hero headings */
-.has-accent-underline {
-  box-shadow: inset 0 -0.4em 0 rgba($primary,.12);
+/* Buttons (variants align with shadcn: default / secondary / outline / ghost / destructive) */
+.button {
+  border-color: hsl(var(--border));
+  color: hsl(var(--foreground));
+  background: hsl(var(--secondary));
+  transition: filter .15s ease, box-shadow .2s ease, transform .02s ease;
+
+  &.is-primary {
+    background: hsl(var(--accent));
+    border-color: transparent;
+    color: hsl(var(--accent-foreground));
+  }
+  &.is-secondary {
+    background: hsl(var(--secondary));
+    border-color: hsl(var(--border));
+    color: hsl(var(--foreground));
+  }
+  &.is-outline, &.is-outlined {
+    background: transparent;
+    border-color: hsl(var(--border));
+    color: hsl(var(--foreground));
+  }
+  &.is-ghost, &.is-text {
+    background: transparent;
+    border-color: transparent;
+    color: hsl(var(--foreground));
+  }
+  &.is-danger, &.is-destructive {
+    background: hsl(var(--destructive));
+    border-color: transparent;
+    color: hsl(var(--destructive-foreground));
+  }
+
+  &:hover { filter: brightness(.98); }
+  &:active { transform: translateY(1px); }
 }
 
-/* Tiny status badge look */
-.tag.is-badge {
-  font-weight: 700;
-  letter-spacing: .02em;
-  background: rgba($primary,.1);
-  color: $primary;
-  border: 1px solid rgba($primary,.2);
+/* Inputs */
+.input, .textarea, .select select {
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  border-color: hsl(var(--input));
+  &:hover { border-color: $input-hover-border-color; }
+  &::placeholder { color: hsl(var(--muted-foreground)); opacity: .8; }
+  &:focus { box-shadow: 0 0 0 .2rem hsla(var(--ring) / .35); }
 }
 
-/* Compact navbar items like screenshot */
-.navbar.is-compact .navbar-item {
-  padding: .5rem .75rem;
+/* Checkbox / Radio */
+.control input[type="checkbox"],
+.control input[type="radio"] {
+  accent-color: hsl(var(--accent));
 }
 
-/* Optional: icon chips row under intro */
-.icon-chip {
-  display:inline-flex; align-items:center; gap:.4rem;
-  padding:.45rem .65rem; border:1px solid $border;
-  border-radius:$radius-rounded; background:#fff;
-  box-shadow: 0 2px 8px rgba(15,23,42,.04);
-  font-size:.85rem; color:$grey-dark;
+/* Cards / Boxes */
+.card, .box {
+  border: 1px solid hsl(var(--border));
+  box-shadow: var(--shadow-1);
 }
+.card .card-header { border-bottom: 1px solid hsl(var(--border)); }
+.card .card-footer { border-top: 1px solid hsl(var(--border)); }
+
+/* Tabs */
+.tabs.is-boxed, .tabs.is-toggle {
+  ul { border-bottom: 1px solid hsl(var(--border)); }
+  li a { border-radius: var(--radius); }
+  li.is-active a {
+    background: hsl(var(--secondary));
+    border-color: hsl(var(--border));
+    color: hsl(var(--foreground));
+  }
+}
+
+/* Table */
+.table.is-clean {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  overflow: hidden;
+  th { background: hsl(var(--muted)); color: hsl(var(--muted-foreground)); }
+  td, th { border-color: hsl(var(--border)); }
+}
+
+/* Dropdown & Modal */
+.dropdown-content, .modal-card, .dropdown-menu {
+  background: hsl(var(--popover));
+  color: hsl(var(--popover-foreground));
+  border: 1px solid hsl(var(--border));
+  box-shadow: var(--shadow-2);
+}
+.modal-card-head, .modal-card-foot { background: hsl(var(--popover)); border-color: hsl(var(--border)); }
+
+/* Tags / Chips */
+.tag {
+  background: hsl(var(--secondary));
+  color: hsl(var(--foreground));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius-full);
+  font-weight: 600;
+}
+
+/* Hero (clean) */
+.hero.is-clean {
+  background: hsl(var(--background));
+  .title { color: hsl(var(--foreground)); }
+  .subtitle { color: hsl(var(--muted-foreground)); }
+  .hero-body { padding-block: clamp(3rem, 6vw, 6rem); }
+}
+
+/* Breadcrumbs */
+.breadcrumb a { color: hsl(var(--muted-foreground)); }
+.breadcrumb li.is-active a { color: hsl(var(--foreground)); }
+
+/* Code / pre */
+pre, code, kbd, samp {
+  font-family: var(--font-mono);
+}
+pre {
+  background: hsl(var(--muted));
+  color: hsl(var(--foreground));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+}
+
+/* Forms: helper text & invalid */
+.help { color: hsl(var(--muted-foreground)); }
+.input.is-danger, .textarea.is-danger {
+  border-color: hsl(var(--destructive));
+  &:focus { box-shadow: 0 0 0 .2rem hsla(var(--destructive) / .3); }
+}
+
+/* Avatars */
+.avatar {
+  width: 2.25rem; height: 2.25rem; border-radius: var(--radius-full);
+  background: hsl(var(--muted));
+}
+
+/* Badges */
+.badge {
+  display:inline-flex; align-items:center; gap:.35rem;
+  padding: .25rem .5rem; border-radius: var(--radius-full);
+  background: hsl(var(--secondary)); color: hsl(var(--foreground));
+  border: 1px solid hsl(var(--border));
+  font-weight: 600; font-size: .85rem;
+}
+
+/* Alerts */
+.message.is-clean {
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--secondary));
+  .message-header { background: transparent; color: hsl(var(--foreground)); border-bottom: 1px solid hsl(var(--border)); }
+  .message-body { color: hsl(var(--foreground)); }
+}
+
+/* Progress */
+.progress { height: .5rem; border-radius: var(--radius-full); }
+
+/* Divider */
+.hr, .divider { height: 1px; background: hsl(var(--border)); border: 0; }
+
+/* -----------------------------------------------------------------
+   Utilities (small set to mimic Tailwind/ shadcn ergonomics)
+   ----------------------------------------------------------------- */
+/* Layout helpers */
+.u-stack > * + * { margin-top: var(--space-4); }
+.u-stack-sm > * + * { margin-top: var(--space-2); }
+.u-cluster { display:flex; align-items:center; gap: var(--space-3); flex-wrap: wrap; }
+.u-gap-2 { gap: var(--space-2); } .u-gap-3 { gap: var(--space-3); }
+.u-gap-4 { gap: var(--space-4); } .u-gap-6 { gap: var(--space-6); }
+
+.u-pad-2 { padding: var(--space-2); } .u-pad-3 { padding: var(--space-3); }
+.u-pad-4 { padding: var(--space-4); } .u-pad-6 { padding: var(--space-6); }
+.u-mt-4 { margin-top: var(--space-4); } .u-mb-4 { margin-bottom: var(--space-4); }
+
+.u-rounded   { border-radius: var(--radius); }
+.u-rounded-sm{ border-radius: var(--radius-sm); }
+.u-rounded-lg{ border-radius: var(--radius-lg); }
+.u-rounded-full{ border-radius: var(--radius-full); }
+
+.u-border { border: 1px solid hsl(var(--border)); }
+.u-shadow-1 { box-shadow: var(--shadow-1); } .u-shadow-2 { box-shadow: var(--shadow-2); }
+.u-shadow-3 { box-shadow: var(--shadow-3); }
+
+.u-ring { box-shadow: 0 0 0 .2rem hsla(var(--ring) / .35) !important; }
+.u-muted { color: hsl(var(--muted-foreground)); }
+.u-bg-card { background: hsl(var(--card)); color: hsl(var(--card-foreground)); }
+
+.max-w-prose { max-width: 68ch; }
+.max-w-screen { max-width: var(--container); }
+
+/* Responsive container */
+@media (min-width: 1024px) {
+  .container.is-content { padding-inline: var(--space-6); }
+}
+
+/* Cards grid (videos/posts) */
+.grid-cards {
+  display:grid; gap: var(--space-6);
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+/* Search pill */
+.search-pill {
+  display:flex; align-items:center; gap: var(--space-2);
+  background: hsl(var(--secondary)); border:1px solid hsl(var(--border));
+  border-radius: var(--radius-full); padding: .4rem .6rem .4rem .8rem;
+  .input { border:0; box-shadow:none; background:transparent; }
+}
+
+/* Toolbar */
+.toolbar {
+  display:flex; align-items:center; justify-content:space-between;
+  gap: var(--space-3); padding: var(--space-3) 0; border-bottom:1px solid hsl(var(--border));
+}
+
+/* Footer */
+.footer.is-clean {
+  background: hsl(var(--background)); color: hsl(var(--muted-foreground));
+  border-top: 1px solid hsl(var(--border)); padding: var(--space-6) 0;
+}
+
+/* End of theme */
