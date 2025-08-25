@@ -1,10 +1,177 @@
+/* ===========================
+   enji.dev-style Bulma theme
+   Put this BEFORE Bulma import
+   =========================== */
 
+/* --- Palette --- */
+$primary: #6d67e4;                 // Indigo accent (screenshot feel)
+$link:    $primary;
 
-$primary: #e53935;
-$link : $primary;
+$info:    #5ec2ff;                 // Sky
+$success: #41d29a;                 // Mint
+$warning: #ffcd4b;                 // Honey
+$danger:  #ff6b6b;                 // Coral
+
+/* Neutral scale (slate-ish) */
+$black:          #0f172a;          // slate-900
+$grey-darker:    #1f2937;          // slate-800
+$grey-dark:      #334155;          // slate-700
+$grey:           #64748b;          // slate-500
+$grey-light:     #94a3b8;          // slate-400
+$grey-lighter:   #cbd5e1;          // slate-300
+$grey-lightest:  #e2e8f0;          // slate-200
+
+/* Surfaces */
+$scheme-main:           #ffffff;
+$body-background-color: #f8fafc;   // very light base
+$background:            #f9fafb;
+$border:                #e6eaf2;   // subtle card/divider border
+$border-strong:         #d7deea;
+
+/* --- Typography --- */
 $family-sans-serif: "Outfit", "Arial", sans-serif !default;
-$family-monospace: "Roboto Mono", monospace !default;
+$family-monospace:  "Roboto Mono", monospace !default;
+$family-primary:    $family-sans-serif;
+
+$size-1: 3rem;      // 48
+$size-2: 2.25rem;   // 36
+$size-3: 1.75rem;   // 28
+$size-4: 1.25rem;   // 20
+$size-5: 1.125rem;  // 18
+$size-6: 1rem;      // 16
+$size-7: .875rem;   // 14
+
+$weight-normal:   500;
+$weight-semibold: 700;
+$weight-bold:     800;
+
+$title-family:    $family-primary;
+$title-weight:    $weight-bold;     // big bold headlines
+$subtitle-weight: 600;
+$text-strong:     $black;
+
+/* --- Radii & Shadows --- */
+$radius-small: .5rem;
+$radius:       .75rem;     // 12px
+$radius-large: 1rem;       // 16px
+$radius-rounded: 9999px;
+
+$shadow:             0 8px 24px rgba(15,23,42,.06);
+$card-shadow:        $shadow;
+$box-shadow:         $shadow;
+$dropdown-shadow:    0 12px 28px rgba(15,23,42,.10);
+
+/* --- Layout spacing --- */
+$section-padding: 5rem 1.25rem;
+$container-max-width: 1080px;
+$widescreen-enabled: true;
+$fullhd-enabled:     true;
+
+/* --- Navbar --- */
+$navbar-background-color: transparent;
+$navbar-height: 3.5rem;
+$navbar-padding-vertical: .75rem;
+$navbar-padding-horizontal: 1rem;
+$navbar-item-color: $grey-dark;
+$navbar-item-hover-color: $black;
+$navbar-item-hover-background-color: rgba($primary,.06);
+$navbar-item-active-color: $primary;
+$navbar-burger-color: $grey-dark;
+$navbar-box-shadow-size: 0 0 0 0;   // flat
+
+/* --- Cards / Boxes --- */
+$card-radius:           $radius-large;
+$card-background-color: #fff;
+$card-border-color:     $border;
+$card-header-shadow:    none;
+$card-content-padding:  1.25rem 1.25rem;
+
+$box-radius:            $radius-large;
+$box-background-color:  #fff;
+$box-color:             $black;
+
+/* --- Buttons --- */
+$button-radius:              $radius-large;
+$button-border-width:        1px;
+$button-padding-vertical:    .625rem;
+$button-padding-horizontal:  1rem;
+$button-text-weight:         700;
+$button-hover-color:         $black;
+$button-focus-box-shadow-size: 0 0 0 .25rem;
+$button-focus-box-shadow-color: rgba($primary,.18);
+
+/* --- Inputs / Controls --- */
+$control-radius:            $radius;
+$input-background-color:    #fff;
+$input-border-color:        $border;
+$input-hover-border-color:  darken($border,8%);
+$input-focus-border-color:  rgba($primary,.6);
+$input-focus-box-shadow-size: 0 0 0 .25rem;
+$input-focus-box-shadow-color: rgba($primary,.15);
+
+/* --- Tags / Badges --- */
+$tag-radius:           $radius-rounded;
+$tag-background-color: #f3f6ff;
+$tag-color:            $grey-dark;
+
+/* Import Bulma with the overrides above */
 @import "../node_modules/bulma/sass/index";
 
+/* Keep your icons (or other post-Bulma tweaks) after */
 @import "./theme/icon";
 
+/* ===========================
+   Post-Bulma utilities (tiny)
+   =========================== */
+
+/* Subtle grid background like the screenshot.
+   Use globally or apply to a wrapper with .has-grid-bg */
+html.has-grid-bg, body.has-grid-bg, body {
+  background-color: $body-background-color;
+  background-image:
+    linear-gradient(0deg, rgba(15,23,42,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15,23,42,.04) 1px, transparent 1px);
+  background-size: 32px 32px, 32px 32px;
+}
+
+/* Soft cards/pills */
+.card.is-soft,
+.box.is-soft {
+  border: 1px solid $border;
+  box-shadow: $shadow;
+}
+
+.button.is-soft {
+  background: rgba($primary,.08);
+  color: $primary;
+  border-color: transparent;
+  &:hover { background: rgba($primary,.12); }
+}
+
+/* Accent underline for hero headings */
+.has-accent-underline {
+  box-shadow: inset 0 -0.4em 0 rgba($primary,.12);
+}
+
+/* Tiny status badge look */
+.tag.is-badge {
+  font-weight: 700;
+  letter-spacing: .02em;
+  background: rgba($primary,.1);
+  color: $primary;
+  border: 1px solid rgba($primary,.2);
+}
+
+/* Compact navbar items like screenshot */
+.navbar.is-compact .navbar-item {
+  padding: .5rem .75rem;
+}
+
+/* Optional: icon chips row under intro */
+.icon-chip {
+  display:inline-flex; align-items:center; gap:.4rem;
+  padding:.45rem .65rem; border:1px solid $border;
+  border-radius:$radius-rounded; background:#fff;
+  box-shadow: 0 2px 8px rgba(15,23,42,.04);
+  font-size:.85rem; color:$grey-dark;
+}
