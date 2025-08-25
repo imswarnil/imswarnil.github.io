@@ -1,222 +1,110 @@
-/* ========================================================================
-   SHADCN-INSPIRED BULMA THEME (Light/Dark) — Minimal, Symmetric, Systematic
-   A) Tokens (CSS variables) + map to Bulma vars
-   B) Bulma import
-   C) Component skins + utilities
-   ======================================================================== */
+/* ============================================================================
+   SHADCN-STYLE BULMA THEME — BUILD-SAFE FOR GITHUB PAGES
+   Strategy:
+   - A) Bulma gets literal Sass colors (so its palette math works).
+   - B) Import Bulma.
+   - C) CSS-variable-powered overrides (light/dark) that restyle components.
+   ============================================================================ */
 
 /* --------------------------------
-   A) TOKENS (LIGHT / DARK)
+   A) SASS FALLBACK PALETTE (for Bulma)
    -------------------------------- */
-:root {
-  /* Color system (HSL for easy theming) */
-  --background:        0 0% 100%;
-  --foreground:        222 47% 11%;
+$fall-bg:        #ffffff;
+$fall-fg:        #0f172a; // slate-900-ish
+$fall-muted:     #f1f5f9; // slate-100
+$fall-muted-fg:  #475569; // slate-600
+$fall-card:      #ffffff;
+$fall-card-fg:   #0f172a;
+$fall-border:    #e5e7eb; // gray-200
+$fall-input:     #e5e7eb;
 
-  --muted:             210 16% 95%;
-  --muted-foreground:  222 10% 40%;
+$fall-accent:    #3b82f6; // blue-500
+$fall-accent-fg: #ffffff;
+$fall-danger:    #ef4444;
+$fall-danger-fg: #ffffff;
 
-  --popover:           0 0% 100%;
-  --popover-foreground:222 47% 11%;
+/* Map to Bulma compile-time variables (LITERAL COLORS ONLY) */
+$primary: $fall-accent;
+$link:    $fall-accent;
+$info:    $fall-accent;
+$success: #22c55e;
+$warning: #f59e0b;
+$danger:  $fall-danger;
 
-  --card:              0 0% 100%;
-  --card-foreground:   222 47% 11%;
+$scheme-main:           $fall-bg;
+$body-background-color: $fall-bg;
+$background:            $fall-card;
 
-  --border:            214 15% 90%;
-  --input:             214 15% 90%;
+$black:        $fall-fg;
+$grey-darker:  #1f2937;
+$grey-dark:    #334155;
+$grey:         $fall-muted-fg;
+$grey-light:   #94a3b8;
+$grey-lighter: #cbd5e1;
 
-  --primary:           222 47% 11%;
-  --primary-foreground:0 0% 100%;
+$border:               $fall-border;
+$input-border-color:   $fall-input;
 
-  --secondary:         210 16% 96%;
-  --secondary-foreground:222 47% 11%;
-
-  --accent:            221 83% 53%;
-  --accent-foreground: 0 0% 100%;
-
-  --destructive:       0 72% 51%;
-  --destructive-foreground: 0 0% 100%;
-
-  --ring:              221 83% 53%;
-
-  /* Typography & sizing */
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
-               Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji",
-               "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
-  --font-mono: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
-               Consolas, "Liberation Mono", monospace;
-
-  --radius-sm: .375rem;
-  --radius:    .5rem;
-  --radius-lg: .75rem;
-  --radius-full: 999px;
-
-  /* Elevations */
-  --shadow-1: 0 1px 2px rgba(0,0,0,.06), 0 1px 1px rgba(0,0,0,.04);
-  --shadow-2: 0 4px 12px rgba(0,0,0,.10);
-  --shadow-3: 0 8px 28px rgba(0,0,0,.14);
-
-  /* Spacing */
-  --space-1: .25rem;
-  --space-2: .5rem;
-  --space-3: .75rem;
-  --space-4: 1rem;
-  --space-5: 1.25rem;
-  --space-6: 1.5rem;
-  --space-8: 2rem;
-
-  --container: 1120px;
-
-  color-scheme: light;
-}
-
-/* Dark theme via class */
-.theme-dark {
-  --background:        222 47% 7%;
-  --foreground:        0 0% 100%;
-
-  --muted:             222 20% 12%;
-  --muted-foreground:  215 20% 65%;
-
-  --popover:           222 47% 7%;
-  --popover-foreground:0 0% 100%;
-
-  --card:              222 47% 8%;
-  --card-foreground:   0 0% 100%;
-
-  --border:            222 22% 17%;
-  --input:             222 22% 17%;
-
-  --primary:           0 0% 100%;
-  --primary-foreground:222 47% 7%;
-
-  --secondary:         222 22% 13%;
-  --secondary-foreground:0 0% 100%;
-
-  --accent:            221 83% 60%;
-  --accent-foreground: 0 0% 100%;
-
-  --destructive:       0 72% 51%;
-  --destructive-foreground: 0 0% 100%;
-
-  --ring:              221 83% 66%;
-  color-scheme: dark;
-}
-
-/* Respect OS dark if no explicit theme class.
-   (No @extend; we copy the same dark tokens here.) */
-@media (prefers-color-scheme: dark) {
-  :root:not(.theme-light):not(.theme-dark) {
-    --background:        222 47% 7%;
-    --foreground:        0 0% 100%;
-
-    --muted:             222 20% 12%;
-    --muted-foreground:  215 20% 65%;
-
-    --popover:           222 47% 7%;
-    --popover-foreground:0 0% 100%;
-
-    --card:              222 47% 8%;
-    --card-foreground:   0 0% 100%;
-
-    --border:            222 22% 17%;
-    --input:             222 22% 17%;
-
-    --primary:           0 0% 100%;
-    --primary-foreground:222 47% 7%;
-
-    --secondary:         222 22% 13%;
-    --secondary-foreground:0 0% 100%;
-
-    --accent:            221 83% 60%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive:       0 72% 51%;
-    --destructive-foreground: 0 0% 100%;
-
-    --ring:              221 83% 66%;
-    color-scheme: dark;
-  }
-}
-
-/* Map tokens → Bulma variables */
-$primary: hsl(var(--accent));
-$link:    hsl(var(--accent));
-$info:    hsl(var(--accent));
-$success: hsl(142 71% 45%);
-$warning: hsl(38 92% 50%);
-$danger:  hsl(var(--destructive));
-
-$scheme-main:           hsl(var(--background));
-$body-background-color: hsl(var(--background));
-$background:            hsl(var(--card));
-
-$black:        hsl(var(--foreground));
-$grey-darker:  hsl(222 10% 20%);
-$grey-dark:    hsl(222 10% 35%);
-$grey:         hsl(var(--muted-foreground));
-$grey-light:   hsl(215 16% 70%);
-$grey-lighter: hsl(214 15% 90%);
-$border:       hsl(var(--border));
-$input-border-color: $border;
-
-$family-sans-serif: var(--font-sans) !default;
-$family-monospace:  var(--font-mono) !default;
+$family-sans-serif: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+                    Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji",
+                    "Segoe UI Emoji", "Segoe UI Symbol", sans-serif !default;
+$family-monospace:  "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+                    Consolas, "Liberation Mono", monospace !default;
 $family-primary:    $family-sans-serif;
 
 $body-size: 16px;
 $size-1: 2.75rem; $size-2: 2rem; $size-3: 1.5rem; $size-4: 1.25rem; $size-5: 1.125rem; $size-6: 1rem; $size-7: .875rem;
 
-$title-weight:    800;
+$title-weight: 800;
 $subtitle-weight: 600;
-$text-strong:     $black;
+$text-strong: $black;
 
-$radius-small: var(--radius-sm);
-$radius:       var(--radius);
-$radius-large: var(--radius-lg);
-$radius-rounded: var(--radius-full);
+$radius-small: .375rem;
+$radius:       .5rem;
+$radius-large: .75rem;
+$radius-rounded: 999px;
 
-$shadow:          var(--shadow-1);
-$card-shadow:     var(--shadow-1);
-$box-shadow:      var(--shadow-1);
-$dropdown-shadow: var(--shadow-3);
+$shadow:          0 1px 2px rgba(0,0,0,.06), 0 1px 1px rgba(0,0,0,.04);
+$card-shadow:     $shadow;
+$box-shadow:      $shadow;
+$dropdown-shadow: 0 8px 28px rgba(0,0,0,.14);
 
-$navbar-background-color: hsl(var(--background));
-$navbar-item-color:        hsl(var(--muted-foreground));
-$navbar-item-hover-background-color: hsla(0 0% 0% / .04);
-$navbar-item-active-color: hsl(var(--foreground));
+/* Navbar / Buttons / Inputs */
+$navbar-background-color: $fall-bg;
+$navbar-item-color:        $fall-muted-fg;
+$navbar-item-hover-background-color: rgba(0,0,0,.04);
+$navbar-item-active-color: $fall-fg;
 $navbar-box-shadow-size: 0 0 0 0;
 $navbar-padding-vertical: .6rem;
 $navbar-padding-horizontal: 1rem;
 
-$button-radius: var(--radius);
+$button-radius: $radius;
 $button-border-width: 1px;
 $button-text-weight: 700;
 $button-padding-vertical: .55rem;
 $button-padding-horizontal: 1rem;
 $button-focus-box-shadow-size: 0 0 0 .2rem;
-$button-focus-box-shadow-color: hsla(var(--ring) / .35);
+$button-focus-box-shadow-color: rgba($fall-accent, .35);
 
-$control-radius: var(--radius);
-$input-background-color: hsl(var(--background));
-$input-color: hsl(var(--foreground));
-/* NOTE: can't use Sass color funcs on CSS vars. Keep baseline here… */
-$input-hover-border-color: hsl(var(--border));
-$input-focus-border-color: hsl(var(--accent));
+$control-radius: $radius;
+$input-background-color: $fall-bg;
+$input-color: $fall-fg;
+$input-hover-border-color: darken($fall-input, 8%);
+$input-focus-border-color: $fall-accent;
 $input-focus-box-shadow-size: 0 0 0 .2rem;
-$input-focus-box-shadow-color: hsla(var(--ring) / .35);
+$input-focus-box-shadow-color: rgba($fall-accent, .35);
 
-$card-background-color: hsl(var(--card));
-$card-color: hsl(var(--card-foreground));
-$card-radius: var(--radius);
+$card-background-color: $fall-card;
+$card-color: $fall-card-fg;
+$card-radius: $radius;
 $card-content-padding: 1rem 1rem;
 
-$box-background-color: hsl(var(--card));
-$box-radius: var(--radius);
-$box-color: hsl(var(--card-foreground));
+$box-background-color: $fall-card;
+$box-radius: $radius;
+$box-color: $fall-card-fg;
 
 $section-padding: 4.5rem 1.25rem;
-$container-max-width: var(--container);
+$container-max-width: 1120px;
 
 /* --------------------------------
    B) IMPORT BULMA
@@ -224,258 +112,317 @@ $container-max-width: var(--container);
 @import "../node_modules/bulma/sass/index";
 
 /* --------------------------------
-   C) COMPONENT SKINS + UTILITIES
+   C) RUNTIME THEME (CSS VARS) + OVERRIDES
+   (These restyle components using CSS variables, and support dark mode.)
    -------------------------------- */
 
-/* Base */
+/* Tokens as CSS variables */
+:root {
+  --background:        #ffffff;
+  --foreground:        #0f172a;
+
+  --muted:             #f1f5f9;
+  --muted-foreground:  #475569;
+
+  --popover:           #ffffff;
+  --popover-foreground:#0f172a;
+
+  --card:              #ffffff;
+  --card-foreground:   #0f172a;
+
+  --border:            #e5e7eb;
+  --input:             #e5e7eb;
+
+  --accent:            #3b82f6;
+  --accent-foreground: #ffffff;
+
+  --secondary:         #f8fafc;
+  --secondary-foreground:#0f172a;
+
+  --destructive:       #ef4444;
+  --destructive-foreground: #ffffff;
+
+  --ring:              #3b82f6;
+
+  --radius-sm: .375rem;
+  --radius:    .5rem;
+  --radius-lg: .75rem;
+  --radius-full: 999px;
+
+  --shadow-1: 0 1px 2px rgba(0,0,0,.06), 0 1px 1px rgba(0,0,0,.04);
+  --shadow-2: 0 4px 12px rgba(0,0,0,.10);
+  --shadow-3: 0 8px 28px rgba(0,0,0,.14);
+
+  --space-1: .25rem; --space-2: .5rem; --space-3: .75rem;
+  --space-4: 1rem;   --space-5: 1.25rem; --space-6: 1.5rem; --space-8: 2rem;
+
+  color-scheme: light;
+}
+
+/* Dark mode via class (no @extend) */
+.theme-dark {
+  --background:        #0b1220;
+  --foreground:        #eef2f7;
+
+  --muted:             #0f172a;
+  --muted-foreground:  #94a3b8;
+
+  --popover:           #0b1220;
+  --popover-foreground:#eef2f7;
+
+  --card:              #0c1426;
+  --card-foreground:   #eef2f7;
+
+  --border:            #1f2a3b;
+  --input:             #1f2a3b;
+
+  --accent:            #60a5fa;
+  --accent-foreground: #0b1220;
+
+  --secondary:         #0f192d;
+  --secondary-foreground:#eef2f7;
+
+  --destructive:       #f87171;
+  --destructive-foreground: #0b1220;
+
+  --ring:              #60a5fa;
+  color-scheme: dark;
+}
+
+/* Auto-dark if no explicit theme class */
+@media (prefers-color-scheme: dark) {
+  :root:not(.theme-light):not(.theme-dark) {
+    --background:        #0b1220;
+    --foreground:        #eef2f7;
+    --muted:             #0f172a;
+    --muted-foreground:  #94a3b8;
+    --popover:           #0b1220;
+    --popover-foreground:#eef2f7;
+    --card:              #0c1426;
+    --card-foreground:   #eef2f7;
+    --border:            #1f2a3b;
+    --input:             #1f2a3b;
+    --accent:            #60a5fa;
+    --accent-foreground: #0b1220;
+    --secondary:         #0f192d;
+    --secondary-foreground:#eef2f7;
+    --destructive:       #f87171;
+    --destructive-foreground: #0b1220;
+    --ring:              #60a5fa;
+    color-scheme: dark;
+  }
+}
+
+/* ---- Base & layout ---- */
 html, body {
-  background-color: hsl(var(--background));
-  color: hsl(var(--foreground));
-  font-feature-settings: "cv02","cv03","cv04","cv11";
+  background: var(--background);
+  color: var(--foreground);
   -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
 }
-::selection { background: hsla(var(--accent) / .2); }
+::selection { background: rgba(96,165,250,.2); }
 
-/* Container */
 .container.is-content {
-  max-width: var(--container);
+  max-width: 1120px;
   margin-inline: auto;
   padding-inline: var(--space-4);
 }
 
-/* Focus ring utility */
-:focus-visible {
-  outline: 2px solid hsl(var(--accent));
-  outline-offset: 2px;
-}
+/* Focus ring */
+:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 
 /* Links */
-a { color: hsl(var(--accent)); text-decoration: none; }
-a:hover { color: color-mix(in oklab, hsl(var(--accent)), white 10%); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { filter: brightness(1.08); }
 
-/* Navbar */
+/* Navbar (clean) */
 .navbar.is-clean {
-  border-bottom: 1px solid hsl(var(--border));
+  background: var(--background);
+  border-bottom: 1px solid var(--border);
   backdrop-filter: saturate(120%) blur(6px);
-  .navbar-item { color: hsl(var(--muted-foreground)); }
-  .navbar-item.is-active { color: hsl(var(--foreground)); }
+  .navbar-item { color: var(--muted-foreground); }
+  .navbar-item.is-active { color: var(--foreground); }
 }
 
-/* Buttons (shadcn-like variants) */
+/* Buttons (shadcn-like) */
 .button {
-  border-color: hsl(var(--border));
-  color: hsl(var(--foreground));
-  background: hsl(var(--secondary));
+  background: var(--secondary);
+  color: var(--foreground);
+  border-color: var(--border);
+  border-width: 1px;
+  border-radius: var(--radius);
   transition: filter .15s ease, box-shadow .2s ease, transform .02s ease;
-
-  &.is-primary {
-    background: hsl(var(--accent));
-    border-color: transparent;
-    color: hsl(var(--accent-foreground));
-  }
-  &.is-secondary {
-    background: hsl(var(--secondary));
-    border-color: hsl(var(--border));
-    color: hsl(var(--foreground));
-  }
-  &.is-outline, &.is-outlined {
-    background: transparent;
-    border-color: hsl(var(--border));
-    color: hsl(var(--foreground));
-  }
-  &.is-ghost, &.is-text {
-    background: transparent;
-    border-color: transparent;
-    color: hsl(var(--foreground));
-  }
-  &.is-danger, &.is-destructive {
-    background: hsl(var(--destructive));
-    border-color: transparent;
-    color: hsl(var(--destructive-foreground));
-  }
 
   &:hover { filter: brightness(.98); }
   &:active { transform: translateY(1px); }
+
+  &.is-primary {
+    background: var(--accent);
+    border-color: transparent;
+    color: var(--accent-foreground);
+    &:focus { box-shadow: 0 0 0 .2rem rgba(96,165,250,.35); }
+  }
+  &.is-secondary {
+    background: var(--secondary);
+    border-color: var(--border);
+    color: var(--foreground);
+  }
+  &.is-outline, &.is-outlined {
+    background: transparent;
+    border-color: var(--border);
+    color: var(--foreground);
+  }
+  &.is-ghost, &.is-text {
+    background: transparent; border-color: transparent; color: var(--foreground);
+  }
+  &.is-destructive, &.is-danger {
+    background: var(--destructive);
+    color: var(--destructive-foreground);
+    border-color: transparent;
+    &:focus { box-shadow: 0 0 0 .2rem rgba(248,113,113,.35); }
+  }
 }
 
 /* Inputs */
 .input, .textarea, .select select {
-  background: hsl(var(--background));
-  color: hsl(var(--foreground));
-  border-color: hsl(var(--input));
-  /* Hover color computed in plain CSS to avoid Sass color ops on CSS vars */
-  &:hover { border-color: color-mix(in srgb, hsl(var(--input)), hsl(var(--foreground)) 15%); }
-  &::placeholder { color: hsl(var(--muted-foreground)); opacity: .8; }
-  &:focus { box-shadow: 0 0 0 .2rem hsla(var(--ring) / .35); }
+  background: var(--background);
+  color: var(--foreground);
+  border: 1px solid var(--input);
+  border-radius: var(--radius);
+  &::placeholder { color: var(--muted-foreground); opacity: .8; }
+  &:hover { border-color: var(--border); }
+  &:focus { box-shadow: 0 0 0 .2rem rgba(96,165,250,.35); }
 }
 
-/* Checkbox / Radio */
+/* Check/radio */
 .control input[type="checkbox"],
-.control input[type="radio"] {
-  accent-color: hsl(var(--accent));
-}
+.control input[type="radio"] { accent-color: var(--accent); }
 
 /* Cards / Boxes */
 .card, .box {
-  border: 1px solid hsl(var(--border));
+  background: var(--card);
+  color: var(--card-foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
   box-shadow: var(--shadow-1);
 }
-.card .card-header { border-bottom: 1px solid hsl(var(--border)); }
-.card .card-footer { border-top: 1px solid hsl(var(--border)); }
+.card .card-header { border-bottom: 1px solid var(--border); }
+.card .card-footer { border-top: 1px solid var(--border); }
 
 /* Tabs */
 .tabs.is-boxed, .tabs.is-toggle {
-  ul { border-bottom: 1px solid hsl(var(--border)); }
+  ul { border-bottom: 1px solid var(--border); }
   li a { border-radius: var(--radius); }
   li.is-active a {
-    background: hsl(var(--secondary));
-    border-color: hsl(var(--border));
-    color: hsl(var(--foreground));
+    background: var(--secondary);
+    border-color: var(--border);
+    color: var(--foreground);
   }
 }
 
 /* Table */
 .table.is-clean {
-  background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
+  background: var(--card);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
-  th { background: hsl(var(--muted)); color: hsl(var(--muted-foreground)); }
-  td, th { border-color: hsl(var(--border)); }
+  th { background: var(--muted); color: var(--muted-foreground); }
+  td, th { border-color: var(--border); }
 }
 
 /* Dropdown & Modal */
 .dropdown-content, .modal-card, .dropdown-menu {
-  background: hsl(var(--popover));
-  color: hsl(var(--popover-foreground));
-  border: 1px solid hsl(var(--border));
+  background: var(--popover);
+  color: var(--popover-foreground);
+  border: 1px solid var(--border);
   box-shadow: var(--shadow-2);
 }
-.modal-card-head, .modal-card-foot { background: hsl(var(--popover)); border-color: hsl(var(--border)); }
+.modal-card-head, .modal-card-foot {
+  background: var(--popover);
+  border-color: var(--border);
+}
 
 /* Tags / Chips */
 .tag {
-  background: hsl(var(--secondary));
-  color: hsl(var(--foreground));
-  border: 1px solid hsl(var(--border));
+  background: var(--secondary);
+  color: var(--foreground);
+  border: 1px solid var(--border);
   border-radius: var(--radius-full);
   font-weight: 600;
 }
 
-/* Hero (clean) */
+/* Hero */
 .hero.is-clean {
-  background: hsl(var(--background));
-  .title { color: hsl(var(--foreground)); }
-  .subtitle { color: hsl(var(--muted-foreground)); }
+  background: var(--background);
+  .title { color: var(--foreground); }
+  .subtitle { color: var(--muted-foreground); }
   .hero-body { padding-block: clamp(3rem, 6vw, 6rem); }
 }
 
-/* Breadcrumbs */
-.breadcrumb a { color: hsl(var(--muted-foreground)); }
-.breadcrumb li.is-active a { color: hsl(var(--foreground)); }
-
-/* Code / pre */
-pre, code, kbd, samp { font-family: var(--font-mono); }
+/* Code */
+pre, code, kbd, samp { font-family: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
 pre {
-  background: hsl(var(--muted));
-  color: hsl(var(--foreground));
-  border: 1px solid hsl(var(--border));
+  background: var(--muted);
+  color: var(--foreground);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
-}
-
-/* Forms: helper text & invalid */
-.help { color: hsl(var(--muted-foreground)); }
-.input.is-danger, .textarea.is-danger {
-  border-color: hsl(var(--destructive));
-  &:focus { box-shadow: 0 0 0 .2rem hsla(var(--destructive) / .3); }
-}
-
-/* Avatars */
-.avatar {
-  width: 2.25rem; height: 2.25rem; border-radius: var(--radius-full);
-  background: hsl(var(--muted));
-}
-
-/* Badges */
-.badge {
-  display:inline-flex; align-items:center; gap:.35rem;
-  padding: .25rem .5rem; border-radius: var(--radius-full);
-  background: hsl(var(--secondary)); color: hsl(var(--foreground));
-  border: 1px solid hsl(var(--border));
-  font-weight: 600; font-size: .85rem;
 }
 
 /* Alerts */
 .message.is-clean {
-  border: 1px solid hsl(var(--border));
-  background: hsl(var(--secondary));
-  .message-header { background: transparent; color: hsl(var(--foreground)); border-bottom: 1px solid hsl(var(--border)); }
-  .message-body { color: hsl(var(--foreground)); }
+  border: 1px solid var(--border);
+  background: var(--secondary);
+  .message-header { background: transparent; color: var(--foreground); border-bottom: 1px solid var(--border); }
+  .message-body { color: var(--foreground); }
 }
 
 /* Progress */
 .progress { height: .5rem; border-radius: var(--radius-full); }
 
 /* Divider */
-.hr, .divider { height: 1px; background: hsl(var(--border)); border: 0; }
+.hr, .divider { height: 1px; background: var(--border); border: 0; }
 
-/* -----------------------------------------------------------------
-   Utilities
-   ----------------------------------------------------------------- */
+/* Utilities */
 .u-stack > * + * { margin-top: var(--space-4); }
 .u-stack-sm > * + * { margin-top: var(--space-2); }
 .u-cluster { display:flex; align-items:center; gap: var(--space-3); flex-wrap: wrap; }
 .u-gap-2 { gap: var(--space-2); } .u-gap-3 { gap: var(--space-3); }
 .u-gap-4 { gap: var(--space-4); } .u-gap-6 { gap: var(--space-6); }
-
 .u-pad-2 { padding: var(--space-2); } .u-pad-3 { padding: var(--space-3); }
 .u-pad-4 { padding: var(--space-4); } .u-pad-6 { padding: var(--space-6); }
 .u-mt-4 { margin-top: var(--space-4); } .u-mb-4 { margin-bottom: var(--space-4); }
-
-.u-rounded   { border-radius: var(--radius); }
-.u-rounded-sm{ border-radius: var(--radius-sm); }
-.u-rounded-lg{ border-radius: var(--radius-lg); }
-.u-rounded-full{ border-radius: var(--radius-full); }
-
-.u-border { border: 1px solid hsl(var(--border)); }
+.u-rounded { border-radius: var(--radius); }
+.u-rounded-sm { border-radius: var(--radius-sm); }
+.u-rounded-lg { border-radius: var(--radius-lg); }
+.u-rounded-full { border-radius: var(--radius-full); }
+.u-border { border: 1px solid var(--border); }
 .u-shadow-1 { box-shadow: var(--shadow-1); } .u-shadow-2 { box-shadow: var(--shadow-2); }
 .u-shadow-3 { box-shadow: var(--shadow-3); }
-
-.u-ring { box-shadow: 0 0 0 .2rem hsla(var(--ring) / .35) !important; }
-.u-muted { color: hsl(var(--muted-foreground)); }
-.u-bg-card { background: hsl(var(--card)); color: hsl(var(--card-foreground)); }
-
+.u-ring { box-shadow: 0 0 0 .2rem rgba(96,165,250,.35) !important; }
+.u-muted { color: var(--muted-foreground); }
+.u-bg-card { background: var(--card); color: var(--card-foreground); }
 .max-w-prose { max-width: 68ch; }
-.max-w-screen { max-width: var(--container); }
+.max-w-screen { max-width: 1120px; }
 
 @media (min-width: 1024px) {
   .container.is-content { padding-inline: var(--space-6); }
 }
 
-/* Cards grid */
+/* Grid & widgets */
 .grid-cards {
   display:grid; gap: var(--space-6);
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
 }
-
-/* Search pill */
 .search-pill {
   display:flex; align-items:center; gap: var(--space-2);
-  background: hsl(var(--secondary)); border:1px solid hsl(var(--border));
+  background: var(--secondary); border:1px solid var(--border);
   border-radius: var(--radius-full); padding: .4rem .6rem .4rem .8rem;
   .input { border:0; box-shadow:none; background:transparent; }
 }
-
-/* Toolbar */
 .toolbar {
   display:flex; align-items:center; justify-content:space-between;
-  gap: var(--space-3); padding: var(--space-3) 0; border-bottom:1px solid hsl(var(--border));
+  gap: var(--space-3); padding: var(--space-3) 0; border-bottom:1px solid var(--border);
 }
-
-/* Footer */
 .footer.is-clean {
-  background: hsl(var(--background)); color: hsl(var(--muted-foreground));
-  border-top: 1px solid hsl(var(--border)); padding: var(--space-6) 0;
+  background: var(--background); color: var(--muted-foreground);
+  border-top: 1px solid var(--border); padding: var(--space-6) 0;
 }
-
-/* End of theme */
