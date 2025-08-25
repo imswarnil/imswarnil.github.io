@@ -1,428 +1,177 @@
-/* ============================================================================
-   SHADCN-STYLE BULMA THEME — BUILD-SAFE FOR GITHUB PAGES
-   Strategy:
-   - A) Bulma gets literal Sass colors (so its palette math works).
-   - B) Import Bulma.
-   - C) CSS-variable-powered overrides (light/dark) that restyle components.
-   ============================================================================ */
+/* ===========================
+   enji.dev-style Bulma theme
+   Put this BEFORE Bulma import
+   =========================== */
 
-/* --------------------------------
-   A) SASS FALLBACK PALETTE (for Bulma)
-   -------------------------------- */
-$fall-bg:        #ffffff;
-$fall-fg:        #0f172a; // slate-900-ish
-$fall-muted:     #f1f5f9; // slate-100
-$fall-muted-fg:  #475569; // slate-600
-$fall-card:      #ffffff;
-$fall-card-fg:   #0f172a;
-$fall-border:    #e5e7eb; // gray-200
-$fall-input:     #e5e7eb;
+/* --- Palette --- */
+$primary: #6d67e4;                 // Indigo accent (screenshot feel)
+$link:    $primary;
 
-$fall-accent:    #3b82f6; // blue-500
-$fall-accent-fg: #ffffff;
-$fall-danger:    #ef4444;
-$fall-danger-fg: #ffffff;
+$info:    #5ec2ff;                 // Sky
+$success: #41d29a;                 // Mint
+$warning: #ffcd4b;                 // Honey
+$danger:  #ff6b6b;                 // Coral
 
-/* Map to Bulma compile-time variables (LITERAL COLORS ONLY) */
-$primary: $fall-accent;
-$link:    $fall-accent;
-$info:    $fall-accent;
-$success: #22c55e;
-$warning: #f59e0b;
-$danger:  $fall-danger;
+/* Neutral scale (slate-ish) */
+$black:          #0f172a;          // slate-900
+$grey-darker:    #1f2937;          // slate-800
+$grey-dark:      #334155;          // slate-700
+$grey:           #64748b;          // slate-500
+$grey-light:     #94a3b8;          // slate-400
+$grey-lighter:   #cbd5e1;          // slate-300
+$grey-lightest:  #e2e8f0;          // slate-200
 
-$scheme-main:           $fall-bg;
-$body-background-color: $fall-bg;
-$background:            $fall-card;
+/* Surfaces */
+$scheme-main:           #ffffff;
+$body-background-color: #f8fafc;   // very light base
+$background:            #f9fafb;
+$border:                #e6eaf2;   // subtle card/divider border
+$border-strong:         #d7deea;
 
-$black:        $fall-fg;
-$grey-darker:  #1f2937;
-$grey-dark:    #334155;
-$grey:         $fall-muted-fg;
-$grey-light:   #94a3b8;
-$grey-lighter: #cbd5e1;
-
-$border:               $fall-border;
-$input-border-color:   $fall-input;
-
-$family-sans-serif: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
-                    Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji",
-                    "Segoe UI Emoji", "Segoe UI Symbol", sans-serif !default;
-$family-monospace:  "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
-                    Consolas, "Liberation Mono", monospace !default;
+/* --- Typography --- */
+$family-sans-serif: "Outfit", "Arial", sans-serif !default;
+$family-monospace:  "Roboto Mono", monospace !default;
 $family-primary:    $family-sans-serif;
 
-$body-size: 16px;
-$size-1: 2.75rem; $size-2: 2rem; $size-3: 1.5rem; $size-4: 1.25rem; $size-5: 1.125rem; $size-6: 1rem; $size-7: .875rem;
+$size-1: 3rem;      // 48
+$size-2: 2.25rem;   // 36
+$size-3: 1.75rem;   // 28
+$size-4: 1.25rem;   // 20
+$size-5: 1.125rem;  // 18
+$size-6: 1rem;      // 16
+$size-7: .875rem;   // 14
 
-$title-weight: 800;
+$weight-normal:   500;
+$weight-semibold: 700;
+$weight-bold:     800;
+
+$title-family:    $family-primary;
+$title-weight:    $weight-bold;     // big bold headlines
 $subtitle-weight: 600;
-$text-strong: $black;
+$text-strong:     $black;
 
-$radius-small: .375rem;
-$radius:       .5rem;
-$radius-large: .75rem;
-$radius-rounded: 999px;
+/* --- Radii & Shadows --- */
+$radius-small: .5rem;
+$radius:       .75rem;     // 12px
+$radius-large: 1rem;       // 16px
+$radius-rounded: 9999px;
 
-$shadow:          0 1px 2px rgba(0,0,0,.06), 0 1px 1px rgba(0,0,0,.04);
-$card-shadow:     $shadow;
-$box-shadow:      $shadow;
-$dropdown-shadow: 0 8px 28px rgba(0,0,0,.14);
+$shadow:             0 8px 24px rgba(15,23,42,.06);
+$card-shadow:        $shadow;
+$box-shadow:         $shadow;
+$dropdown-shadow:    0 12px 28px rgba(15,23,42,.10);
 
-/* Navbar / Buttons / Inputs */
-$navbar-background-color: $fall-bg;
-$navbar-item-color:        $fall-muted-fg;
-$navbar-item-hover-background-color: rgba(0,0,0,.04);
-$navbar-item-active-color: $fall-fg;
-$navbar-box-shadow-size: 0 0 0 0;
-$navbar-padding-vertical: .6rem;
+/* --- Layout spacing --- */
+$section-padding: 5rem 1.25rem;
+$container-max-width: 1080px;
+$widescreen-enabled: true;
+$fullhd-enabled:     true;
+
+/* --- Navbar --- */
+$navbar-background-color: transparent;
+$navbar-height: 3.5rem;
+$navbar-padding-vertical: .75rem;
 $navbar-padding-horizontal: 1rem;
+$navbar-item-color: $grey-dark;
+$navbar-item-hover-color: $black;
+$navbar-item-hover-background-color: rgba($primary,.06);
+$navbar-item-active-color: $primary;
+$navbar-burger-color: $grey-dark;
+$navbar-box-shadow-size: 0 0 0 0;   // flat
 
-$button-radius: $radius;
-$button-border-width: 1px;
-$button-text-weight: 700;
-$button-padding-vertical: .55rem;
-$button-padding-horizontal: 1rem;
-$button-focus-box-shadow-size: 0 0 0 .2rem;
-$button-focus-box-shadow-color: rgba($fall-accent, .35);
+/* --- Cards / Boxes --- */
+$card-radius:           $radius-large;
+$card-background-color: #fff;
+$card-border-color:     $border;
+$card-header-shadow:    none;
+$card-content-padding:  1.25rem 1.25rem;
 
-$control-radius: $radius;
-$input-background-color: $fall-bg;
-$input-color: $fall-fg;
-$input-hover-border-color: darken($fall-input, 8%);
-$input-focus-border-color: $fall-accent;
-$input-focus-box-shadow-size: 0 0 0 .2rem;
-$input-focus-box-shadow-color: rgba($fall-accent, .35);
+$box-radius:            $radius-large;
+$box-background-color:  #fff;
+$box-color:             $black;
 
-$card-background-color: $fall-card;
-$card-color: $fall-card-fg;
-$card-radius: $radius;
-$card-content-padding: 1rem 1rem;
+/* --- Buttons --- */
+$button-radius:              $radius-large;
+$button-border-width:        1px;
+$button-padding-vertical:    .625rem;
+$button-padding-horizontal:  1rem;
+$button-text-weight:         700;
+$button-hover-color:         $black;
+$button-focus-box-shadow-size: 0 0 0 .25rem;
+$button-focus-box-shadow-color: rgba($primary,.18);
 
-$box-background-color: $fall-card;
-$box-radius: $radius;
-$box-color: $fall-card-fg;
+/* --- Inputs / Controls --- */
+$control-radius:            $radius;
+$input-background-color:    #fff;
+$input-border-color:        $border;
+$input-hover-border-color:  darken($border,8%);
+$input-focus-border-color:  rgba($primary,.6);
+$input-focus-box-shadow-size: 0 0 0 .25rem;
+$input-focus-box-shadow-color: rgba($primary,.15);
 
-$section-padding: 4.5rem 1.25rem;
-$container-max-width: 1120px;
+/* --- Tags / Badges --- */
+$tag-radius:           $radius-rounded;
+$tag-background-color: #f3f6ff;
+$tag-color:            $grey-dark;
 
-/* --------------------------------
-   B) IMPORT BULMA
-   -------------------------------- */
+/* Import Bulma with the overrides above */
 @import "../node_modules/bulma/sass/index";
 
-/* --------------------------------
-   C) RUNTIME THEME (CSS VARS) + OVERRIDES
-   (These restyle components using CSS variables, and support dark mode.)
-   -------------------------------- */
+/* Keep your icons (or other post-Bulma tweaks) after */
+@import "./theme/icon";
 
-/* Tokens as CSS variables */
-:root {
-  --background:        #ffffff;
-  --foreground:        #0f172a;
+/* ===========================
+   Post-Bulma utilities (tiny)
+   =========================== */
 
-  --muted:             #f1f5f9;
-  --muted-foreground:  #475569;
-
-  --popover:           #ffffff;
-  --popover-foreground:#0f172a;
-
-  --card:              #ffffff;
-  --card-foreground:   #0f172a;
-
-  --border:            #e5e7eb;
-  --input:             #e5e7eb;
-
-  --accent:            #3b82f6;
-  --accent-foreground: #ffffff;
-
-  --secondary:         #f8fafc;
-  --secondary-foreground:#0f172a;
-
-  --destructive:       #ef4444;
-  --destructive-foreground: #ffffff;
-
-  --ring:              #3b82f6;
-
-  --radius-sm: .375rem;
-  --radius:    .5rem;
-  --radius-lg: .75rem;
-  --radius-full: 999px;
-
-  --shadow-1: 0 1px 2px rgba(0,0,0,.06), 0 1px 1px rgba(0,0,0,.04);
-  --shadow-2: 0 4px 12px rgba(0,0,0,.10);
-  --shadow-3: 0 8px 28px rgba(0,0,0,.14);
-
-  --space-1: .25rem; --space-2: .5rem; --space-3: .75rem;
-  --space-4: 1rem;   --space-5: 1.25rem; --space-6: 1.5rem; --space-8: 2rem;
-
-  color-scheme: light;
+/* Subtle grid background like the screenshot.
+   Use globally or apply to a wrapper with .has-grid-bg */
+html.has-grid-bg, body.has-grid-bg, body {
+  background-color: $body-background-color;
+  background-image:
+    linear-gradient(0deg, rgba(15,23,42,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15,23,42,.04) 1px, transparent 1px);
+  background-size: 32px 32px, 32px 32px;
 }
 
-/* Dark mode via class (no @extend) */
-.theme-dark {
-  --background:        #0b1220;
-  --foreground:        #eef2f7;
-
-  --muted:             #0f172a;
-  --muted-foreground:  #94a3b8;
-
-  --popover:           #0b1220;
-  --popover-foreground:#eef2f7;
-
-  --card:              #0c1426;
-  --card-foreground:   #eef2f7;
-
-  --border:            #1f2a3b;
-  --input:             #1f2a3b;
-
-  --accent:            #60a5fa;
-  --accent-foreground: #0b1220;
-
-  --secondary:         #0f192d;
-  --secondary-foreground:#eef2f7;
-
-  --destructive:       #f87171;
-  --destructive-foreground: #0b1220;
-
-  --ring:              #60a5fa;
-  color-scheme: dark;
+/* Soft cards/pills */
+.card.is-soft,
+.box.is-soft {
+  border: 1px solid $border;
+  box-shadow: $shadow;
 }
 
-/* Auto-dark if no explicit theme class */
-@media (prefers-color-scheme: dark) {
-  :root:not(.theme-light):not(.theme-dark) {
-    --background:        #0b1220;
-    --foreground:        #eef2f7;
-    --muted:             #0f172a;
-    --muted-foreground:  #94a3b8;
-    --popover:           #0b1220;
-    --popover-foreground:#eef2f7;
-    --card:              #0c1426;
-    --card-foreground:   #eef2f7;
-    --border:            #1f2a3b;
-    --input:             #1f2a3b;
-    --accent:            #60a5fa;
-    --accent-foreground: #0b1220;
-    --secondary:         #0f192d;
-    --secondary-foreground:#eef2f7;
-    --destructive:       #f87171;
-    --destructive-foreground: #0b1220;
-    --ring:              #60a5fa;
-    color-scheme: dark;
-  }
+.button.is-soft {
+  background: rgba($primary,.08);
+  color: $primary;
+  border-color: transparent;
+  &:hover { background: rgba($primary,.12); }
 }
 
-/* ---- Base & layout ---- */
-html, body {
-  background: var(--background);
-  color: var(--foreground);
-  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
-}
-::selection { background: rgba(96,165,250,.2); }
-
-.container.is-content {
-  max-width: 1120px;
-  margin-inline: auto;
-  padding-inline: var(--space-4);
+/* Accent underline for hero headings */
+.has-accent-underline {
+  box-shadow: inset 0 -0.4em 0 rgba($primary,.12);
 }
 
-/* Focus ring */
-:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
-
-/* Links */
-a { color: var(--accent); text-decoration: none; }
-a:hover { filter: brightness(1.08); }
-
-/* Navbar (clean) */
-.navbar.is-clean {
-  background: var(--background);
-  border-bottom: 1px solid var(--border);
-  backdrop-filter: saturate(120%) blur(6px);
-  .navbar-item { color: var(--muted-foreground); }
-  .navbar-item.is-active { color: var(--foreground); }
+/* Tiny status badge look */
+.tag.is-badge {
+  font-weight: 700;
+  letter-spacing: .02em;
+  background: rgba($primary,.1);
+  color: $primary;
+  border: 1px solid rgba($primary,.2);
 }
 
-/* Buttons (shadcn-like) */
-.button {
-  background: var(--secondary);
-  color: var(--foreground);
-  border-color: var(--border);
-  border-width: 1px;
-  border-radius: var(--radius);
-  transition: filter .15s ease, box-shadow .2s ease, transform .02s ease;
-
-  &:hover { filter: brightness(.98); }
-  &:active { transform: translateY(1px); }
-
-  &.is-primary {
-    background: var(--accent);
-    border-color: transparent;
-    color: var(--accent-foreground);
-    &:focus { box-shadow: 0 0 0 .2rem rgba(96,165,250,.35); }
-  }
-  &.is-secondary {
-    background: var(--secondary);
-    border-color: var(--border);
-    color: var(--foreground);
-  }
-  &.is-outline, &.is-outlined {
-    background: transparent;
-    border-color: var(--border);
-    color: var(--foreground);
-  }
-  &.is-ghost, &.is-text {
-    background: transparent; border-color: transparent; color: var(--foreground);
-  }
-  &.is-destructive, &.is-danger {
-    background: var(--destructive);
-    color: var(--destructive-foreground);
-    border-color: transparent;
-    &:focus { box-shadow: 0 0 0 .2rem rgba(248,113,113,.35); }
-  }
+/* Compact navbar items like screenshot */
+.navbar.is-compact .navbar-item {
+  padding: .5rem .75rem;
 }
 
-/* Inputs */
-.input, .textarea, .select select {
-  background: var(--background);
-  color: var(--foreground);
-  border: 1px solid var(--input);
-  border-radius: var(--radius);
-  &::placeholder { color: var(--muted-foreground); opacity: .8; }
-  &:hover { border-color: var(--border); }
-  &:focus { box-shadow: 0 0 0 .2rem rgba(96,165,250,.35); }
-}
-
-/* Check/radio */
-.control input[type="checkbox"],
-.control input[type="radio"] { accent-color: var(--accent); }
-
-/* Cards / Boxes */
-.card, .box {
-  background: var(--card);
-  color: var(--card-foreground);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-1);
-}
-.card .card-header { border-bottom: 1px solid var(--border); }
-.card .card-footer { border-top: 1px solid var(--border); }
-
-/* Tabs */
-.tabs.is-boxed, .tabs.is-toggle {
-  ul { border-bottom: 1px solid var(--border); }
-  li a { border-radius: var(--radius); }
-  li.is-active a {
-    background: var(--secondary);
-    border-color: var(--border);
-    color: var(--foreground);
-  }
-}
-
-/* Table */
-.table.is-clean {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-  th { background: var(--muted); color: var(--muted-foreground); }
-  td, th { border-color: var(--border); }
-}
-
-/* Dropdown & Modal */
-.dropdown-content, .modal-card, .dropdown-menu {
-  background: var(--popover);
-  color: var(--popover-foreground);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-2);
-}
-.modal-card-head, .modal-card-foot {
-  background: var(--popover);
-  border-color: var(--border);
-}
-
-/* Tags / Chips */
-.tag {
-  background: var(--secondary);
-  color: var(--foreground);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-full);
-  font-weight: 600;
-}
-
-/* Hero */
-.hero.is-clean {
-  background: var(--background);
-  .title { color: var(--foreground); }
-  .subtitle { color: var(--muted-foreground); }
-  .hero-body { padding-block: clamp(3rem, 6vw, 6rem); }
-}
-
-/* Code */
-pre, code, kbd, samp { font-family: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
-pre {
-  background: var(--muted);
-  color: var(--foreground);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-}
-
-/* Alerts */
-.message.is-clean {
-  border: 1px solid var(--border);
-  background: var(--secondary);
-  .message-header { background: transparent; color: var(--foreground); border-bottom: 1px solid var(--border); }
-  .message-body { color: var(--foreground); }
-}
-
-/* Progress */
-.progress { height: .5rem; border-radius: var(--radius-full); }
-
-/* Divider */
-.hr, .divider { height: 1px; background: var(--border); border: 0; }
-
-/* Utilities */
-.u-stack > * + * { margin-top: var(--space-4); }
-.u-stack-sm > * + * { margin-top: var(--space-2); }
-.u-cluster { display:flex; align-items:center; gap: var(--space-3); flex-wrap: wrap; }
-.u-gap-2 { gap: var(--space-2); } .u-gap-3 { gap: var(--space-3); }
-.u-gap-4 { gap: var(--space-4); } .u-gap-6 { gap: var(--space-6); }
-.u-pad-2 { padding: var(--space-2); } .u-pad-3 { padding: var(--space-3); }
-.u-pad-4 { padding: var(--space-4); } .u-pad-6 { padding: var(--space-6); }
-.u-mt-4 { margin-top: var(--space-4); } .u-mb-4 { margin-bottom: var(--space-4); }
-.u-rounded { border-radius: var(--radius); }
-.u-rounded-sm { border-radius: var(--radius-sm); }
-.u-rounded-lg { border-radius: var(--radius-lg); }
-.u-rounded-full { border-radius: var(--radius-full); }
-.u-border { border: 1px solid var(--border); }
-.u-shadow-1 { box-shadow: var(--shadow-1); } .u-shadow-2 { box-shadow: var(--shadow-2); }
-.u-shadow-3 { box-shadow: var(--shadow-3); }
-.u-ring { box-shadow: 0 0 0 .2rem rgba(96,165,250,.35) !important; }
-.u-muted { color: var(--muted-foreground); }
-.u-bg-card { background: var(--card); color: var(--card-foreground); }
-.max-w-prose { max-width: 68ch; }
-.max-w-screen { max-width: 1120px; }
-
-@media (min-width: 1024px) {
-  .container.is-content { padding-inline: var(--space-6); }
-}
-
-/* Grid & widgets */
-.grid-cards {
-  display:grid; gap: var(--space-6);
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-}
-.search-pill {
-  display:flex; align-items:center; gap: var(--space-2);
-  background: var(--secondary); border:1px solid var(--border);
-  border-radius: var(--radius-full); padding: .4rem .6rem .4rem .8rem;
-  .input { border:0; box-shadow:none; background:transparent; }
-}
-.toolbar {
-  display:flex; align-items:center; justify-content:space-between;
-  gap: var(--space-3); padding: var(--space-3) 0; border-bottom:1px solid var(--border);
-}
-.footer.is-clean {
-  background: var(--background); color: var(--muted-foreground);
-  border-top: 1px solid var(--border); padding: var(--space-6) 0;
+/* Optional: icon chips row under intro */
+.icon-chip {
+  display:inline-flex; align-items:center; gap:.4rem;
+  padding:.45rem .65rem; border:1px solid $border;
+  border-radius:$radius-rounded; background:#fff;
+  box-shadow: 0 2px 8px rgba(15,23,42,.04);
+  font-size:.85rem; color:$grey-dark;
 }
