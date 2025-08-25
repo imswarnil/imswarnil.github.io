@@ -1,6 +1,5 @@
 /* ========================================================================
    SHADCN-INSPIRED BULMA THEME (Light/Dark) — Minimal, Symmetric, Systematic
-   Author: You + ChatGPT
    A) Tokens (CSS variables) + map to Bulma vars
    B) Bulma import
    C) Component skins + utilities
@@ -26,13 +25,13 @@
   --border:            214 15% 90%;
   --input:             214 15% 90%;
 
-  --primary:           222 47% 11%; /* near black */
+  --primary:           222 47% 11%;
   --primary-foreground:0 0% 100%;
 
   --secondary:         210 16% 96%;
   --secondary-foreground:222 47% 11%;
 
-  --accent:            221 83% 53%; /* blue accent */
+  --accent:            221 83% 53%;
   --accent-foreground: 0 0% 100%;
 
   --destructive:       0 72% 51%;
@@ -48,16 +47,16 @@
                Consolas, "Liberation Mono", monospace;
 
   --radius-sm: .375rem;
-  --radius:    .5rem;   /* default radius ~ shadcn */
+  --radius:    .5rem;
   --radius-lg: .75rem;
   --radius-full: 999px;
 
-  /* Elevations (subtle, material-lite) */
+  /* Elevations */
   --shadow-1: 0 1px 2px rgba(0,0,0,.06), 0 1px 1px rgba(0,0,0,.04);
   --shadow-2: 0 4px 12px rgba(0,0,0,.10);
   --shadow-3: 0 8px 28px rgba(0,0,0,.14);
 
-  /* Spacing scale */
+  /* Spacing */
   --space-1: .25rem;
   --space-2: .5rem;
   --space-3: .75rem;
@@ -66,13 +65,12 @@
   --space-6: 1.5rem;
   --space-8: 2rem;
 
-  /* Container width */
   --container: 1120px;
 
   color-scheme: light;
 }
 
-/* Dark theme via class or system preference */
+/* Dark theme via class */
 .theme-dark {
   --background:        222 47% 7%;
   --foreground:        0 0% 100%;
@@ -105,12 +103,43 @@
   color-scheme: dark;
 }
 
-/* Respect OS dark if you want auto */
+/* Respect OS dark if no explicit theme class.
+   (No @extend; we copy the same dark tokens here.) */
 @media (prefers-color-scheme: dark) {
-  :root:not(.theme-light):not(.theme-dark) { @extend .theme-dark; }
+  :root:not(.theme-light):not(.theme-dark) {
+    --background:        222 47% 7%;
+    --foreground:        0 0% 100%;
+
+    --muted:             222 20% 12%;
+    --muted-foreground:  215 20% 65%;
+
+    --popover:           222 47% 7%;
+    --popover-foreground:0 0% 100%;
+
+    --card:              222 47% 8%;
+    --card-foreground:   0 0% 100%;
+
+    --border:            222 22% 17%;
+    --input:             222 22% 17%;
+
+    --primary:           0 0% 100%;
+    --primary-foreground:222 47% 7%;
+
+    --secondary:         222 22% 13%;
+    --secondary-foreground:0 0% 100%;
+
+    --accent:            221 83% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive:       0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --ring:              221 83% 66%;
+    color-scheme: dark;
+  }
 }
 
-/* Map tokens → Bulma variables (Sass reads these CSS vars at runtime) */
+/* Map tokens → Bulma variables */
 $primary: hsl(var(--accent));
 $link:    hsl(var(--accent));
 $info:    hsl(var(--accent));
@@ -171,7 +200,8 @@ $button-focus-box-shadow-color: hsla(var(--ring) / .35);
 $control-radius: var(--radius);
 $input-background-color: hsl(var(--background));
 $input-color: hsl(var(--foreground));
-$input-hover-border-color: scale-color($border, $lightness: -8%);
+/* NOTE: can't use Sass color funcs on CSS vars. Keep baseline here… */
+$input-hover-border-color: hsl(var(--border));
 $input-focus-border-color: hsl(var(--accent));
 $input-focus-box-shadow-size: 0 0 0 .2rem;
 $input-focus-box-shadow-color: hsla(var(--ring) / .35);
@@ -231,7 +261,7 @@ a:hover { color: color-mix(in oklab, hsl(var(--accent)), white 10%); }
   .navbar-item.is-active { color: hsl(var(--foreground)); }
 }
 
-/* Buttons (variants align with shadcn: default / secondary / outline / ghost / destructive) */
+/* Buttons (shadcn-like variants) */
 .button {
   border-color: hsl(var(--border));
   color: hsl(var(--foreground));
@@ -273,7 +303,8 @@ a:hover { color: color-mix(in oklab, hsl(var(--accent)), white 10%); }
   background: hsl(var(--background));
   color: hsl(var(--foreground));
   border-color: hsl(var(--input));
-  &:hover { border-color: $input-hover-border-color; }
+  /* Hover color computed in plain CSS to avoid Sass color ops on CSS vars */
+  &:hover { border-color: color-mix(in srgb, hsl(var(--input)), hsl(var(--foreground)) 15%); }
   &::placeholder { color: hsl(var(--muted-foreground)); opacity: .8; }
   &:focus { box-shadow: 0 0 0 .2rem hsla(var(--ring) / .35); }
 }
@@ -344,9 +375,7 @@ a:hover { color: color-mix(in oklab, hsl(var(--accent)), white 10%); }
 .breadcrumb li.is-active a { color: hsl(var(--foreground)); }
 
 /* Code / pre */
-pre, code, kbd, samp {
-  font-family: var(--font-mono);
-}
+pre, code, kbd, samp { font-family: var(--font-mono); }
 pre {
   background: hsl(var(--muted));
   color: hsl(var(--foreground));
@@ -391,9 +420,8 @@ pre {
 .hr, .divider { height: 1px; background: hsl(var(--border)); border: 0; }
 
 /* -----------------------------------------------------------------
-   Utilities (small set to mimic Tailwind/ shadcn ergonomics)
+   Utilities
    ----------------------------------------------------------------- */
-/* Layout helpers */
 .u-stack > * + * { margin-top: var(--space-4); }
 .u-stack-sm > * + * { margin-top: var(--space-2); }
 .u-cluster { display:flex; align-items:center; gap: var(--space-3); flex-wrap: wrap; }
@@ -420,12 +448,11 @@ pre {
 .max-w-prose { max-width: 68ch; }
 .max-w-screen { max-width: var(--container); }
 
-/* Responsive container */
 @media (min-width: 1024px) {
   .container.is-content { padding-inline: var(--space-6); }
 }
 
-/* Cards grid (videos/posts) */
+/* Cards grid */
 .grid-cards {
   display:grid; gap: var(--space-6);
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
