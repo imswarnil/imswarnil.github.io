@@ -1,199 +1,177 @@
-/* =========================================================
-   Bulma → Neo-Brutal Theme
-   Put BEFORE: @import "../node_modules/bulma/sass/index";
-   ========================================================= */
+/* ===========================
+   enji.dev-style Bulma theme
+   Put this BEFORE Bulma import
+   =========================== */
 
-/* ---- Ink & Pop ---- */
-$nb-ink:    #111111;        // heavy black outlines
-$nb-paper:  #ffffff;        // surface
-$nb-bg:     #fdfcf7;        // site background (off-white)
+/* --- Palette --- */
+$primary: #6d67e4;                 // Indigo accent (screenshot feel)
+$link:    $primary;
 
-$nb-yellow: #ffdd33;        // primaries = loud
-$nb-pink:   #ff4499;
-$nb-blue:   #2563eb;
-$nb-green:  #22c55e;
-$nb-orange: #ff8a00;
+$info:    #5ec2ff;                 // Sky
+$success: #41d29a;                 // Mint
+$warning: #ffcd4b;                 // Honey
+$danger:  #ff6b6b;                 // Coral
 
-/* Map to Bulma tokens */
-$primary: $nb-yellow;
-$link:    $nb-blue;
-$info:    #00d5ff;
-$success: $nb-green;
-$warning: #ffb224;
-$danger:  #ff3b3b;
+/* Neutral scale (slate-ish) */
+$black:          #0f172a;          // slate-900
+$grey-darker:    #1f2937;          // slate-800
+$grey-dark:      #334155;          // slate-700
+$grey:           #64748b;          // slate-500
+$grey-light:     #94a3b8;          // slate-400
+$grey-lighter:   #cbd5e1;          // slate-300
+$grey-lightest:  #e2e8f0;          // slate-200
 
-$scheme-main:           $nb-paper;
-$background:            $nb-paper;
-$body-background-color: $nb-bg;
+/* Surfaces */
+$scheme-main:           #ffffff;
+$body-background-color: #f8fafc;   // very light base
+$background:            #f9fafb;
+$border:                #e6eaf2;   // subtle card/divider border
+$border-strong:         #d7deea;
 
-$black:        $nb-ink;
-$grey-darker:  #171717;
-$grey-dark:    #2f2f2f;
-$grey:         #6b7280;
-$grey-light:   #a3a3a3;
-$grey-lighter: #d4d4d8;
-$border:       #e3e3e3;     // default hairline; brutal bits override it.
-
-/* ---- Type (bold, geometric) ---- */
-$family-sans-serif: "Space Grotesk", "Outfit", system-ui, -apple-system, "Segoe UI",
-                    Roboto, "Helvetica Neue", Arial, sans-serif !default;
-$family-monospace:  "IBM Plex Mono", "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !default;
+/* --- Typography --- */
+$family-sans-serif: "Outfit", "Arial", sans-serif !default;
+$family-monospace:  "Roboto Mono", monospace !default;
 $family-primary:    $family-sans-serif;
 
-$body-size: 16px;
-$size-1: clamp(2.5rem, 5vw, 4rem);
-$size-2: 2.5rem;
-$size-3: 1.75rem;
-$size-4: 1.25rem;
-$size-5: 1.125rem;
-$size-6: 1rem;
+$size-1: 3rem;      // 48
+$size-2: 2.25rem;   // 36
+$size-3: 1.75rem;   // 28
+$size-4: 1.25rem;   // 20
+$size-5: 1.125rem;  // 18
+$size-6: 1rem;      // 16
+$size-7: .875rem;   // 14
 
-$title-weight: 900;
-$subtitle-weight: 800;
-$text-strong: $nb-ink;
+$weight-normal:   500;
+$weight-semibold: 700;
+$weight-bold:     800;
 
-/* ---- Brutal geometry ---- */
-$radius-small: 0;
-$radius:       0;
-$radius-large: 0;
-$radius-rounded: 0;
+$title-family:    $family-primary;
+$title-weight:    $weight-bold;     // big bold headlines
+$subtitle-weight: 600;
+$text-strong:     $black;
 
-/* Shadows = offset blocks (no blur) */
-$nb-shadow-4: 4px 4px 0 $nb-ink;
-$nb-shadow-6: 6px 6px 0 $nb-ink;
-$shadow:      none;
-$box-shadow:  none;
-$card-shadow: none;
+/* --- Radii & Shadows --- */
+$radius-small: .5rem;
+$radius:       .75rem;     // 12px
+$radius-large: 1rem;       // 16px
+$radius-rounded: 9999px;
 
-/* Layout & navbar */
-$container-max-width: 1120px;
+$shadow:             0 8px 24px rgba(15,23,42,.06);
+$card-shadow:        $shadow;
+$box-shadow:         $shadow;
+$dropdown-shadow:    0 12px 28px rgba(15,23,42,.10);
+
+/* --- Layout spacing --- */
 $section-padding: 5rem 1.25rem;
+$container-max-width: 1080px;
+$widescreen-enabled: true;
+$fullhd-enabled:     true;
 
-$navbar-background-color: $nb-paper;
-$navbar-item-color: $nb-ink;
-$navbar-item-hover-background-color: rgba(0,0,0,.05);
-$navbar-item-active-color: $nb-ink;
-$navbar-box-shadow-size: 0 0 0 0;
-$navbar-padding-vertical: .6rem;
+/* --- Navbar --- */
+$navbar-background-color: transparent;
+$navbar-height: 3.5rem;
+$navbar-padding-vertical: .75rem;
 $navbar-padding-horizontal: 1rem;
+$navbar-item-color: $grey-dark;
+$navbar-item-hover-color: $black;
+$navbar-item-hover-background-color: rgba($primary,.06);
+$navbar-item-active-color: $primary;
+$navbar-burger-color: $grey-dark;
+$navbar-box-shadow-size: 0 0 0 0;   // flat
 
-/* Buttons: chunky + 3px borders */
-$button-radius: 0;
-$button-border-width: 3px;
-$button-text-weight: 900;
-$button-padding-vertical: .7rem;
-$button-padding-horizontal: 1.1rem;
-$button-focus-box-shadow-size: 0 0 0 0; // we use outlines manually
+/* --- Cards / Boxes --- */
+$card-radius:           $radius-large;
+$card-background-color: #fff;
+$card-border-color:     $border;
+$card-header-shadow:    none;
+$card-content-padding:  1.25rem 1.25rem;
 
-/* Inputs */
-$control-radius: 0;
-$input-border-color: $nb-ink;
-$input-border-width: 3px;
-$input-background-color: #fff;
-$input-color: $nb-ink;
-$input-focus-border-color: $nb-ink;
-$input-focus-box-shadow-size: 0 0 0 0;
+$box-radius:            $radius-large;
+$box-background-color:  #fff;
+$box-color:             $black;
 
-/* Tags/Chips */
-$tag-radius: 0;
-$tag-background-color: #fff;
-$tag-color: $nb-ink;
+/* --- Buttons --- */
+$button-radius:              $radius-large;
+$button-border-width:        1px;
+$button-padding-vertical:    .625rem;
+$button-padding-horizontal:  1rem;
+$button-text-weight:         700;
+$button-hover-color:         $black;
+$button-focus-box-shadow-size: 0 0 0 .25rem;
+$button-focus-box-shadow-color: rgba($primary,.18);
 
-/* Import Bulma now */
+/* --- Inputs / Controls --- */
+$control-radius:            $radius;
+$input-background-color:    #fff;
+$input-border-color:        $border;
+$input-hover-border-color:  darken($border,8%);
+$input-focus-border-color:  rgba($primary,.6);
+$input-focus-box-shadow-size: 0 0 0 .25rem;
+$input-focus-box-shadow-color: rgba($primary,.15);
+
+/* --- Tags / Badges --- */
+$tag-radius:           $radius-rounded;
+$tag-background-color: #f3f6ff;
+$tag-color:            $grey-dark;
+
+/* Import Bulma with the overrides above */
 @import "../node_modules/bulma/sass/index";
 
-/* Your extras after Bulma */
+/* Keep your icons (or other post-Bulma tweaks) after */
 @import "./theme/icon";
 
-/* =========================================================
-   Post-Bulma: Neo-Brutal utilities & component skins
-   ========================================================= */
+/* ===========================
+   Post-Bulma utilities (tiny)
+   =========================== */
 
-/* Offset shadow mixin */
-@mixin brutal-surface($bg: #fff, $ink: $nb-ink, $offset: 6px) {
-  background: $bg;
-  border: 3px solid $ink;
-  box-shadow: $offset $offset 0 $ink;
+/* Subtle grid background like the screenshot.
+   Use globally or apply to a wrapper with .has-grid-bg */
+html.has-grid-bg, body.has-grid-bg, body {
+  background-color: $body-background-color;
+  background-image:
+    linear-gradient(0deg, rgba(15,23,42,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15,23,42,.04) 1px, transparent 1px);
+  background-size: 32px 32px, 32px 32px;
 }
 
-/* Loud palettes for surfaces */
-.nb--yellow  { @include brutal-surface($nb-yellow); color: $nb-ink; }
-.nb--pink    { @include brutal-surface($nb-pink);   color: #fff; }
-.nb--blue    { @include brutal-surface($nb-blue);   color: #fff; }
-.nb--green   { @include brutal-surface($nb-green);  color: #0a0a0a; }
-.nb--orange  { @include brutal-surface($nb-orange); color: #0a0a0a; }
-
-/* Global bg: dotted grid (optional) */
-body.nb-grid {
-  background:
-    radial-gradient(circle at 1px 1px, rgba(0,0,0,.12) 1px, transparent 1px) 0 0/24px 24px,
-    $nb-bg;
+/* Soft cards/pills */
+.card.is-soft,
+.box.is-soft {
+  border: 1px solid $border;
+  box-shadow: $shadow;
 }
 
-/* Navbar skin */
-.navbar.is-nb {
-  border-bottom: 3px solid $nb-ink;
-  box-shadow: $nb-shadow-6;
-  .navbar-item, .navbar-link {
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: .015em;
-  }
+.button.is-soft {
+  background: rgba($primary,.08);
+  color: $primary;
+  border-color: transparent;
+  &:hover { background: rgba($primary,.12); }
 }
 
-/* Cards / Boxes */
-.card.is-nb, .box.is-nb { @include brutal-surface(#fff, $nb-ink, 6px); }
-.card.is-nb .card-header { border-bottom: 3px solid $nb-ink; }
-
-/* Buttons */
-.button.is-nb {
-  @include brutal-surface($primary, $nb-ink, 6px);
-  color: $nb-ink;
-  transition: transform .06s ease, box-shadow .06s ease, background .06s ease;
-  &:hover   { transform: translate(-2px,-2px); box-shadow: 8px 8px 0 $nb-ink; }
-  &:active  { transform: translate(0,0);       box-shadow: 4px 4px 0 $nb-ink; }
-}
-.button.is-nb.is-dark  { @include brutal-surface($nb-ink, $nb-ink, 6px); color:#fff; }
-.button.is-nb.is-ghost { background:#fff; border-color:$nb-ink; box-shadow:$nb-shadow-6; color:$nb-ink; }
-
-/* Inputs / selects */
-.input.is-nb, .textarea.is-nb, .select.is-nb select {
-  @include brutal-surface(#fff, $nb-ink, 4px);
-  &:focus { outline: 3px solid $nb-ink; outline-offset: 2px; }
+/* Accent underline for hero headings */
+.has-accent-underline {
+  box-shadow: inset 0 -0.4em 0 rgba($primary,.12);
 }
 
-/* Tags */
-.tag.is-nb { @include brutal-surface(#fff, $nb-ink, 4px); font-weight:900; }
-
-/* Image/thumbnail frames */
-.nb-frame {
-  @include brutal-surface(#fff, $nb-ink, 8px);
-  overflow:hidden;
+/* Tiny status badge look */
+.tag.is-badge {
+  font-weight: 700;
+  letter-spacing: .02em;
+  background: rgba($primary,.1);
+  color: $primary;
+  border: 1px solid rgba($primary,.2);
 }
 
-/* Section header: sticker style */
-.nb-sticker {
-  display:inline-block; padding:.35rem .6rem;
-  background:$nb-yellow; border:3px solid $nb-ink; box-shadow:$nb-shadow-4;
-  font-weight:900; text-transform:uppercase;
-  transform: rotate(-2deg);
+/* Compact navbar items like screenshot */
+.navbar.is-compact .navbar-item {
+  padding: .5rem .75rem;
 }
 
-/* Big hero */
-.nb-hero {
-  @include brutal-surface(#fff, $nb-ink, 10px);
-  padding: 2rem;
-  .title   { font-weight: 900; letter-spacing: .01em; }
-  .subtitle{ font-weight: 800; color: $grey-dark; }
+/* Optional: icon chips row under intro */
+.icon-chip {
+  display:inline-flex; align-items:center; gap:.4rem;
+  padding:.45rem .65rem; border:1px solid $border;
+  border-radius:$radius-rounded; background:#fff;
+  box-shadow: 0 2px 8px rgba(15,23,42,.04);
+  font-size:.85rem; color:$grey-dark;
 }
-
-/* Links: underline block */
-a { color:$nb-ink; text-decoration:none; box-shadow: inset 0 -4px 0 $nb-yellow;
-    &:hover { box-shadow: inset 0 -6px 0 $nb-pink; } }
-
-/* Utility helpers */
-.u-brutal    { @include brutal-surface(#fff, $nb-ink, 6px); }
-.u-shadow-4  { box-shadow: $nb-shadow-4 !important; }
-.u-shadow-6  { box-shadow: $nb-shadow-6 !important; }
-.u-ink       { color: $nb-ink !important; }
-.u-uppercase { text-transform: uppercase !important; font-weight: 900 !important; }
