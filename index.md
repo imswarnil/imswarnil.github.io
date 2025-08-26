@@ -8,9 +8,11 @@ permalink: /
 hero_video_url: "https://www.youtube.com/embed/VIDEO_ID?rel=0&modestbranding=1"
 ---
 
-<!-- If you use Phosphor icons, include this in your base layout head:
+<!-- Include Phosphor icons in your base layout head:
 <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
 -->
+
+<!-- Make sure to include /assets/home-hero.css AFTER Bulma + your theme CSS -->
 
 <section class="hero twilio-hero home-hero">
   <div class="hero-body">
@@ -20,17 +22,15 @@ hero_video_url: "https://www.youtube.com/embed/VIDEO_ID?rel=0&modestbranding=1"
         <div class="home-hero__photo">
           <img src="{{ site.author.image | default: '/assets/images/profile.jpg' }}" alt="{{ site.author.name | default: 'Profile photo' }}">
         </div>
-
-        <!-- Floating chips (things I do) -->
-        <div class="hero-float home-hero__float" aria-hidden="true">
+        <!-- Floating chips -->
+        <div class="home-hero__float" aria-hidden="true">
           <span class="chip chip--a"><i class="ph ph-video-camera"></i> I make videos</span>
           <span class="chip chip--b"><i class="ph ph-code"></i> Sometimes I write code</span>
           <span class="chip chip--c"><i class="ph ph-microphone"></i> I talk & teach</span>
           <span class="chip chip--d"><i class="ph ph-lightning"></i> Creative experiments</span>
         </div>
-
-        <!-- Social icons stack -->
-        <div class="hero-social home-hero__social" aria-label="Social links">
+        <!-- Social stack -->
+        <div class="home-hero__social" aria-label="Social links">
           {% assign socials = site.social_media | default: empty %}
           {% for s in socials %}
             {% assign icon = s.icon | downcase %}
@@ -48,18 +48,15 @@ hero_video_url: "https://www.youtube.com/embed/VIDEO_ID?rel=0&modestbranding=1"
           {% endfor %}
         </div>
       </div>
-
       <!-- CONTENT -->
       <div class="home-hero__content">
-        <span class="kicker home-hero__kicker">
+        <span class="home-hero__kicker">
           <span class="dot" aria-hidden="true"></span>
           {{ site.author.tagline | default: "Cinematic chaos meets code." }}
         </span>
-
         <h1 class="home-hero__headline title is-1">
           Hi, I’m <span class="underline">{{ site.author.name | default: site.short_name | default: "Your Name" }}</span>.
         </h1>
-
         {% assign current_job = site.work_experience.jobs | where: "current", true | first %}
         <div class="home-hero__role subtitle is-5">
           {% if current_job %}
@@ -68,13 +65,11 @@ hero_video_url: "https://www.youtube.com/embed/VIDEO_ID?rel=0&modestbranding=1"
             {{ site.keywords | join: ", " }}
           {% endif %}
         </div>
-
         <p class="home-hero__bio">
           {{ site.author.bio | default: site.description }}
         </p>
-
         <!-- Meta chips -->
-        <div class="hero-meta home-hero__meta">
+        <div class="home-hero__meta">
           {% if site.author.city or site.author.state %}
             <span class="meta-chip"><i class="ph ph-map-pin"></i>
               {{ site.author.city | default: "" }}{% if site.author.city and site.author.state %}, {% endif %}{{ site.author.state | default: "" }}
@@ -95,9 +90,8 @@ hero_video_url: "https://www.youtube.com/embed/VIDEO_ID?rel=0&modestbranding=1"
             <a class="meta-chip" href="mailto:{{ site.author.email }}"><i class="ph ph-envelope"></i> Email</a>
           {% endif %}
         </div>
-
         <!-- CTAs -->
-        <div class="hero-cta home-hero__cta u-cluster">
+        <div class="home-hero__cta">
           <a class="button is-primary" href="#story-modal">
             <span class="icon"><i class="ph ph-play"></i></span>
             <span>My Story</span>
@@ -107,7 +101,6 @@ hero_video_url: "https://www.youtube.com/embed/VIDEO_ID?rel=0&modestbranding=1"
             <span>About / Résumé</span>
           </a>
         </div>
-
         <!-- Optional pills -->
         <nav class="home-hero__pills" aria-label="Sections">
           <a class="pill is-active" href="#films">Films</a>
@@ -124,10 +117,10 @@ hero_video_url: "https://www.youtube.com/embed/VIDEO_ID?rel=0&modestbranding=1"
 
 <!-- STORY MODAL (no JS, opens via #story-modal) -->
 <div id="story-modal" aria-labelledby="story-title" aria-modal="true" role="dialog">
-  <a href="#" class="hero-video-close home-hero__video-close" aria-label="Close video">
+  <a href="#" class="home-hero__video-close" aria-label="Close video">
     <i class="ph ph-x"></i>
   </a>
-  <div class="hero-video home-hero__video">
+  <div class="home-hero__video">
     {% if page.hero_video_url %}
       <iframe
         src="{{ page.hero_video_url | escape }}"
@@ -142,35 +135,3 @@ hero_video_url: "https://www.youtube.com/embed/VIDEO_ID?rel=0&modestbranding=1"
     {% endif %}
   </div>
 </div>
-
-<!-- Sample section after hero -->
-<section class="section">
-  <div class="container">
-    <div class="columns is-variable is-6">
-      <div class="column">
-        <div class="card is-hover">
-          <div class="card-content">
-            <p class="title is-4">Latest Film</p>
-            <p class="subtitle is-6">A quick story about bold choices.</p>
-          </div>
-        </div>
-      </div>
-      <div class="column">
-        <div class="card is-hover">
-          <div class="card-content">
-            <p class="title is-4">Recent Post</p>
-            <p class="subtitle is-6">How I script cinematic B-roll.</p>
-          </div>
-        </div>
-      </div>
-      <div class="column">
-        <div class="card is-hover">
-          <div class="card-content">
-            <p class="title is-4">Pinned Project</p>
-            <p class="subtitle is-6">CRM Analytics dashboard revamp.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
