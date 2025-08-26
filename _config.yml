@@ -377,10 +377,34 @@ fun_facts:
     - "Half my YouTube videos start with: ‘So, here’s what happened…’"
 
 
+
+
+social_media:
+  - name: "twitter"
+    icon : x-logo # (or fab fa-x-twitter)
+    url: "https://twitter.com/imswarnil"
+    cta: "Follow me on X"
+  - name: "linkedin"
+    icon : linkedin-logo # (or fab fa-linkedin)
+    url: "https://linkedin.com/in/imswarnil" # General LinkedIn profile
+    cta: "Connect on LinkedIn"
+  - name: "github"
+    icon: fab fa-github # Assuming Font Awesome
+    url: "https://github.com/imswarnil"
+    cta: "Follow on GitHub"
+  - name: "youtube"
+    icon: fab fa-youtube # Assuming Font Awesome
+    url: "https://youtube.com/@imswarnil" # Or /imswarnil
+    cta: "Subscribe on YouTube"
+  - name: "instagram"
+    icon: fab fa-instagram # Assuming Font Awesome
+    url: "https://instagram.com/imswarnil"
+    cta: "Follow on Instagram"
+
 # --------------------------------------------
  # 1.2. Site Url, Links & Github Repo
  #----------------------------------------------------------------------------------------------
-baseurl : ''
+baseurl : '/'
 url: 'https://imswarnil.github.io' # Site URL
 permalink: /:title  # Permalink style
 repo: "https://github.com/imswarnil/" # Your main GitHub profile
