@@ -10,6 +10,7 @@ hero_video_url: "https://www.youtube.com/embed/VIDEO_ID?rel=0&modestbranding=1"
 <!-- Ensure Phosphor icons are loaded in your base layout head:
 <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
 -->
+
 <section class="hero is-medium twilio-hero home-hero">
   <div class="hero-body">
     <div class="container home-hero__inner">
@@ -105,12 +106,12 @@ hero_video_url: "https://www.youtube.com/embed/VIDEO_ID?rel=0&modestbranding=1"
           <a class="pill" href="#blog">Blog</a>
           <a class="pill" href="#gear">Gear</a>
         </nav>
+
         <hr class="hr-accent">
       </div>
     </div>
   </div>
 </section>
-
 <!-- STORY MODAL (no JS, opens via #story-modal) -->
 <div id="story-modal" aria-labelledby="story-title" aria-modal="true" role="dialog">
   <a href="#" class="home-hero__video-close" aria-label="Close video">

@@ -383,8 +383,6 @@ a:focus-visible,
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 
 
-
-
 /* ============================================================================
    _hero.scss — Medium Bulma hero using your existing tokens only
    - Uses: $primary, $twilio-red, $twilio-ink, $border, $shadow, $dropdown-shadow,
@@ -656,3 +654,5 @@ a:focus-visible,
 @media (min-width: 1024px) {
   .twilio-hero .hero-body .columns { align-items: center; }
 }
+
+
