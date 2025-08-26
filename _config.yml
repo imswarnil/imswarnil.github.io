@@ -389,7 +389,7 @@ description_separator: <!-- more -->
 
 # 1.3. CSS, Site Colors & Typography
 #------------------------------------------------------------------------------------------------
-css_inline: true
+css_inline: false
 sass:
   style: compressed
 icon_style: duotone # Options: regular, thin, light, bold, fill, duotone  
