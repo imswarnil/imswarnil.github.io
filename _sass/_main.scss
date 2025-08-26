@@ -1,8 +1,8 @@
 /* ============================================================================
-   enji.dev-style Bulma Theme — Indigo, Soft Cards, Grid BG
+   ImSwarnil Bulma Theme — Indigo core + Twilio accent
    A) BEFORE Bulma: tokens/variables (literal colors only)
    B) IMPORT Bulma
-   C) AFTER Bulma: component polish + utilities (no Sass color math on CSS vars)
+   C) AFTER Bulma: component polish + utilities (incl. Twilio hero)
    ============================================================================ */
 
 /* --------------------------------
@@ -15,6 +15,11 @@ $info:    #5ec2ff; // Sky
 $success: #41d29a; // Mint
 $warning: #ffcd4b; // Honey
 $danger:  #ff6b6b; // Coral
+
+/* Twilio accents (non-destructive: used as secondary accent) */
+$twilio-red:   #F22F46; // Twilio brand red
+$twilio-ink:   #0B1221; // Deep ink for headings
+$twilio-cloud: #F7F8FA; // Soft bg tint
 
 /* Neutrals (slate-ish) */
 $black:         #0f172a; // slate-900
@@ -33,17 +38,17 @@ $border:                #e6eaf2;
 $border-strong:         #d7deea;
 
 /* Typography */
-$family-sans-serif: "Outfit", "Arial", sans-serif !default;
-$family-monospace:  "Roboto Mono", monospace !default;
+$family-sans-serif: "Outfit", "Inter", "Segoe UI", "Arial", sans-serif !default;
+$family-monospace:  "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, monospace !default;
 $family-primary:    $family-sans-serif;
 
-$size-1: 3rem;  // 48
-$size-2: 2.25rem; // 36
-$size-3: 1.75rem; // 28
-$size-4: 1.25rem; // 20
-$size-5: 1.125rem; // 18
-$size-6: 1rem;   // 16
-$size-7: .875rem; // 14
+$size-1: 3rem;      // 48
+$size-2: 2.25rem;   // 36
+$size-3: 1.75rem;   // 28
+$size-4: 1.25rem;   // 20
+$size-5: 1.125rem;  // 18
+$size-6: 1rem;      // 16
+$size-7: .875rem;   // 14
 
 $weight-normal:   500;
 $weight-semibold: 700;
@@ -53,6 +58,8 @@ $title-family:    $family-primary;
 $title-weight:    $weight-bold;
 $subtitle-weight: 600;
 $text-strong:     $black;
+/* Slightly darker headings (Twilio Ink vibe) */
+$title-color:     $twilio-ink;
 
 /* Radii & Shadows */
 $radius-small:  .5rem;
@@ -118,33 +125,30 @@ $tag-radius:            $radius-rounded;
 $tag-background-color:  #f3f6ff;
 $tag-color:             $grey-dark;
 
-/* Extra: tune common component vars */
-$breadcrumb-item-color:           $grey;
-$breadcrumb-item-active-color:    $black;
-$tabs-border-bottom-color:        $border;
-$tabs-link-color:                 $grey-dark;
-$tabs-link-hover-border-bottom-color: $primary;
-$tabs-link-active-color:          $black;
-$tabs-link-active-border-bottom-color: $primary;
-$table-head-background-color:     $grey-lightest;
-$table-head-cell-color:           $grey-dark;
-$table-row-hover-background-color: rgba($primary,.03);
-$menu-item-hover-background-color: rgba($primary,.06);
-$menu-item-active-background-color: rgba($primary,.1);
-$menu-item-active-color:          $black;
-$modal-background-background-color: rgba(15,23,42,.5);
-$dropdown-content-background-color: #fff;
-$dropdown-item-hover-background-color: rgba($primary,.06);
-$pagination-border-color:         $border;
-$pagination-hover-border-color:   $primary;
+/* Extras */
+$breadcrumb-item-color:                    $grey;
+$breadcrumb-item-active-color:             $black;
+$tabs-border-bottom-color:                 $border;
+$tabs-link-color:                          $grey-dark;
+$tabs-link-hover-border-bottom-color:      $primary;
+$tabs-link-active-color:                   $black;
+$tabs-link-active-border-bottom-color:     $primary;
+$table-head-background-color:              $grey-lightest;
+$table-head-cell-color:                    $grey-dark;
+$table-row-hover-background-color:         rgba($primary,.03);
+$menu-item-hover-background-color:         rgba($primary,.06);
+$menu-item-active-background-color:        rgba($primary,.1);
+$menu-item-active-color:                   $black;
+$modal-background-background-color:        rgba(15,23,42,.5);
+$dropdown-content-background-color:        #fff;
+$dropdown-item-hover-background-color:     rgba($primary,.06);
+$pagination-border-color:                  $border;
+$pagination-hover-border-color:            $primary;
 
 /* --------------------------------
    B) IMPORT BULMA
    -------------------------------- */
 @import "../node_modules/bulma/sass/index";
-
-/* Keep icons (or other post-Bulma tweaks) after */
-@import "./theme/icon";
 
 /* --------------------------------
    C) POST-BULMA POLISH + UTILITIES
@@ -168,11 +172,19 @@ a:focus-visible,
 .button:focus-visible,
 .input:focus-visible,
 .textarea:focus-visible,
-.select select:focus-visible { outline: 2px solid rgba($primary,.55); outline-offset: 2px; box-shadow: 0 0 0 .25rem rgba($primary,.18); }
+.select select:focus-visible {
+  outline: 2px solid rgba($primary,.55);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 .25rem rgba($primary,.18);
+}
 
 /* Navbar variants */
 .navbar.is-compact .navbar-item { padding: .5rem .75rem; }
-.navbar.is-glass { backdrop-filter: saturate(130%) blur(8px); background: rgba(#fff,.6); border-bottom: 1px solid rgba($border,.8); }
+.navbar.is-glass {
+  backdrop-filter: saturate(130%) blur(8px);
+  background: rgba(#fff,.6);
+  border-bottom: 1px solid rgba($border,.8);
+}
 
 /* Buttons (extra variants) */
 .button.is-soft { background: rgba($primary,.08); color: $primary; border-color: transparent; }
@@ -181,6 +193,15 @@ a:focus-visible,
 .button.is-outline:hover, .button.is-outlined:hover { border-color: $primary; background: rgba($primary,.06); color: $primary; }
 .button.is-ghost, .button.is-text { background: transparent; border-color: transparent; color: $grey-dark; }
 .button.is-ghost:hover, .button.is-text:hover { background: rgba($primary,.06); color: $primary; }
+
+/* Twilio-flavored buttons */
+.button.is-twilio {
+  background: $twilio-red; color: #fff; border-color: transparent;
+  box-shadow: 0 8px 20px rgba($twilio-red,.25);
+}
+.button.is-twilio:hover { filter: brightness(1.03); box-shadow: 0 10px 26px rgba($twilio-red,.30); }
+.button.is-outline-twilio { background: transparent; color: $twilio-ink; border-color: rgba($twilio-red,.5); }
+.button.is-outline-twilio:hover { background: rgba($twilio-red,.06); color: $twilio-red; border-color: $twilio-red; }
 
 /* Inputs group (search pill) */
 .input-addon {
@@ -243,6 +264,7 @@ a:focus-visible,
   font-weight: 700; letter-spacing: .02em;
   background: rgba($primary,.1); color: $primary; border: 1px solid rgba($primary,.2);
 }
+.tag.is-twilio { background: rgba($twilio-red,.1); color: $twilio-red; border: 1px solid rgba($twilio-red,.25); box-shadow: $shadow; }
 
 /* Messages / notifications */
 .message.is-soft {
@@ -278,8 +300,84 @@ a:focus-visible,
 .u-shadow-1{ box-shadow: $shadow; }
 .grid-cards { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
 
+/* --------------------------------
+   Twilio-inspired hero
+   -------------------------------- */
+.hr-accent { height: 3px; background: linear-gradient(90deg, $twilio-red, rgba($twilio-red,.2)); border: 0; border-radius: 4px; }
+
+.hero.twilio-hero {
+  position: relative;
+  background: linear-gradient(135deg, rgba($twilio-red,.06), rgba($primary,.06)), $body-background-color;
+  overflow: hidden;
+}
+.hero.twilio-hero .hero-body { padding: clamp(2.5rem, 4vw, 5rem) 1.25rem; }
+
+/* dotted grid overlay */
+.hero.twilio-hero::before {
+  content: ""; position: absolute; inset: -10% -10% auto -10%; height: 70%; z-index: 0;
+  background-image: radial-gradient(rgba($twilio-ink,.08) 1px, transparent 1.5px);
+  background-size: 18px 18px;
+  mask-image: radial-gradient(60% 60% at 20% 30%, #000 60%, transparent 100%);
+}
+
+/* loopy ring behind the photo */
+.hero.twilio-hero::after {
+  content: ""; position: absolute; right: -160px; bottom: -160px; width: 560px; height: 560px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 36px rgba($twilio-red,.12), inset 0 0 0 86px rgba($primary,.08);
+  filter: blur(0.5px); z-index: 0;
+}
+
+/* content layout */
+.twilio-hero .hero-meta { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
+.twilio-hero .hero-cta  { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; margin-top: 1rem; }
+
+/* kicker pill */
+.kicker {
+  display: inline-flex; align-items: center; gap: .4rem; font-weight: 700; letter-spacing: .02em;
+  padding: .35rem .6rem; border-radius: 999px; background: #fff; border: 1px solid $border; box-shadow: $shadow; color: $twilio-ink;
+}
+.kicker .dot { width: .5rem; height: .5rem; border-radius: 999px; background: $twilio-red; box-shadow: 0 0 0 6px rgba($twilio-red,.12); }
+
+/* name/title */
+.twilio-hero .title { font-weight: $weight-bold; letter-spacing: -.01em; color: $twilio-ink; }
+.twilio-hero .subtitle { color: $grey-dark; max-width: 60ch; }
+
+/* metric chips */
+.metric-chip {
+  display: inline-flex; gap: .5rem; align-items: center; padding: .5rem .75rem; border-radius: $radius-rounded;
+  background: #fff; border: 1px solid $border; box-shadow: $shadow; font-weight: 600; color: $grey-dark;
+}
+.metric-chip .num { font-weight: 800; color: $twilio-ink; }
+
+/* profile photo card */
+.profile-card { position: relative; z-index: 1; display: grid; place-items: center; }
+.profile-card .frame {
+  position: relative; border-radius: 24px; overflow: hidden; box-shadow: 0 16px 40px rgba(15,23,42,.18);
+  border: 1px solid $border; background: #fff;
+}
+.profile-card .frame::after {
+  content: ""; position: absolute; inset: -10px; border-radius: 28px; pointer-events: none;
+  box-shadow: inset 0 0 0 2px rgba($twilio-red,.25), inset 0 0 0 12px rgba($primary,.08);
+}
+.profile-card img { display: block; width: clamp(240px, 28vw, 360px); height: auto; }
+.badge-float { position: absolute; left: -10px; top: -10px; }
+.badge-float .tag { box-shadow: $shadow; }
+
+/* responsive */
+@media (min-width: 1024px) {
+  .twilio-hero .hero-body .columns { align-items: center; }
+}
+
+/* Optional: soften grid over hero */
+.twilio-hero.has-soft-grid {
+  background-image:
+    linear-gradient(0deg, rgba(15,23,42,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15,23,42,.03) 1px, transparent 1px),
+    linear-gradient(135deg, rgba($twilio-red,.06), rgba($primary,.06));
+  background-size: 28px 28px, 28px 28px, auto;
+}
+
 /* Responsiveness & motion */
 @media (min-width: 768px) { .navbar .navbar-menu { justify-content: space-between; } }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
-
-
