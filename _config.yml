@@ -380,7 +380,7 @@ fun_facts:
 # --------------------------------------------
  # 1.2. Site Url, Links & Github Repo
  #----------------------------------------------------------------------------------------------
-baseurl : '/'
+baseurl : ''
 url: 'https://imswarnil.github.io' # Site URL
 permalink: /:title  # Permalink style
 repo: "https://github.com/imswarnil/" # Your main GitHub profile
