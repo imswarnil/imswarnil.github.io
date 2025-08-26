@@ -4,23 +4,20 @@ description: "An open-source Jekyll theme crafted using the Bulma CSS framework.
 image: /assets/logos/logo.svg
 layout: base
 permalink: /
-# Optional: set a video URL to open in the modal (YouTube embed, Loom, etc.)
 hero_video_url: "https://www.youtube.com/embed/VIDEO_ID?rel=0&modestbranding=1"
 ---
 
-<!-- Include Phosphor icons in your base layout head:
+<!-- Ensure Phosphor icons are loaded in your base layout head:
 <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
 -->
-
-<!-- Make sure to include /assets/home-hero.css AFTER Bulma + your theme CSS -->
-
-<section class="hero twilio-hero home-hero">
+<section class="hero is-medium twilio-hero home-hero">
   <div class="hero-body">
     <div class="container home-hero__inner">
       <!-- MEDIA (mobile-first) -->
       <div class="home-hero__media">
         <div class="home-hero__photo">
-          <img src="{{ site.author.image | default: '/assets/images/profile.jpg' }}" alt="{{ site.author.name | default: 'Profile photo' }}">
+          <img src="{{ site.author.image | default: '/assets/images/profile.jpg' }}"
+               alt="{{ site.author.name | default: 'Profile photo' }}">
         </div>
         <!-- Floating chips -->
         <div class="home-hero__float" aria-hidden="true">
@@ -108,7 +105,6 @@ hero_video_url: "https://www.youtube.com/embed/VIDEO_ID?rel=0&modestbranding=1"
           <a class="pill" href="#blog">Blog</a>
           <a class="pill" href="#gear">Gear</a>
         </nav>
-
         <hr class="hr-accent">
       </div>
     </div>
