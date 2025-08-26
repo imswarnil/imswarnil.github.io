@@ -4,7 +4,6 @@ description: "An open-source Jekyll theme crafted using the Bulma CSS framework.
 image: /assets/logos/logo.svg
 layout: base
 ---
-
   <section class="has-grid-bg hero twilio-hero has-soft-grid">
     <div class="hero-body">
       <div class="container">
