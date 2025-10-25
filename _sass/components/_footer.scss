@@ -1,0 +1,166 @@
+// ======================================================================
+// Footer — 4-column grid + footer strip
+// Matches island style & dark mode
+// ======================================================================
+
+.site-footer {
+  margin-top: $sp-12;
+  border-top: 1px solid;
+  border-radius: $radius-6 $radius-6 0 0;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+
+  @include theme-block      { background: rgba(255,255,255,.72); border-color: tone(border, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: rgba(20,20,22,.74);    border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
+}
+
+.footer__inner {
+  display: grid;
+  gap: $sp-8;
+  padding: clamp(#{$sp-8}, 5vw, #{$sp-12});
+
+  @include mq-up($bp-md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @include mq-up($bp-lg) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Columns */
+.footer__col {
+  display: flex;
+  flex-direction: column;
+  gap: $sp-4;
+}
+
+.footer__title {
+  font-size: $fs-4;
+  font-weight: $fw-semibold;
+  letter-spacing: -0.01em;
+
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  }
+
+  position: relative;
+  &::after {
+    content: "";
+    display: block;
+    width: 24px; height: 2px;
+    margin-top: $sp-2;
+    border-radius: 2px;
+    @include theme-block      { background: tone(contrast, light); }
+    @include theme-block-dark { background: tone(contrast, dark);  }
+  }
+}
+
+.footer__text {
+  font-size: $fs-3;
+  line-height: 1.6;
+
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+}
+
+/* Lists */
+.footer__list {
+  list-style: none;
+  margin: 0; padding: 0;
+  display: grid; gap: $sp-2;
+
+  li a {
+    text-decoration: none;
+    font-size: $fs-3;
+    transition: color $dur-1 ease;
+    @include theme-block      { color: tone(secondary, light); &:hover { color: tone(contrast, light); } }
+    @include theme-block-dark { color: tone(secondary, dark);  &:hover { color: tone(contrast, dark);  } }
+  }
+}
+
+/* Social icons */
+.footer__social {
+  display: flex; align-items: center; gap: $sp-3;
+
+  a {
+    display: inline-grid; place-items: center;
+    width: 2rem; height: 2rem; border-radius: 50%;
+    border: 1px solid;
+    font-size: $fs-4;
+    transition: all $dur-1 $ease-in-out;
+
+    @include theme-block      { color: tone(secondary, light); border-color: tone(border, light); &:hover { background: tone(background-100, light); color: tone(contrast, light); } }
+    @include theme-block-dark { color: tone(secondary, dark);  border-color: tone(border, dark);  &:hover { background: tone(background-100, dark);  color: tone(contrast, dark);  } }
+  }
+}
+
+/* Newsletter */
+.footer__form {
+  display: flex; align-items: center; gap: $sp-3;
+
+  input {
+    flex: 1;
+    border: 1px solid;
+    border-radius: $radius-pill;
+    padding: .5rem .8rem;
+    font-size: $fs-3;
+    background: transparent;
+    outline: none;
+    transition: border-color $dur-1 $ease-in-out;
+
+    @include theme-block      { color: tone(contrast, light); border-color: tone(border, light); }
+    @include theme-block-dark { color: tone(contrast, dark);  border-color: tone(border, dark);  }
+
+    &:focus {
+      @include theme-block      { border-color: tone(contrast, light); }
+      @include theme-block-dark { border-color: tone(contrast, dark);  }
+    }
+  }
+
+  button {
+    width: 2.5rem; height: 2.5rem;
+    border-radius: 50%;
+    border: none;
+    display: inline-grid; place-items: center;
+    cursor: pointer;
+    font-size: $fs-4;
+
+    @include theme-block      { background: tone(contrast, light); color: tone(white, light); }
+    @include theme-block-dark { background: tone(white, dark);    color: tone(black, dark);  }
+
+    transition: transform $dur-1 $ease-in-out;
+    &:hover { transform: translateY(-2px); }
+  }
+}
+
+/* Footer strip */
+.footer__strip {
+  border-top: 1px solid;
+  padding: $sp-5 clamp($sp-5, 5vw, $sp-8);
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+  gap: $sp-4;
+
+  @include theme-block      { border-color: tone(border, light); color: tone(secondary, light); background: tone(surface, light); }
+  @include theme-block-dark { border-color: tone(border, dark);  color: tone(secondary, dark);  background: tone(background-100, dark); }
+
+  a {
+    text-decoration: none;
+    font-weight: $fw-medium;
+    @include theme-block      { color: tone(contrast, light); &:hover { text-decoration: underline; } }
+    @include theme-block-dark { color: tone(contrast, dark);  &:hover { text-decoration: underline; } }
+  }
+
+  p {
+    margin: 0;
+    font-size: $fs-3;
+    line-height: 1.4;
+  }
+}
+
+/* Mobile adjustments */
+@media (max-width: $bp-sm) {
+  .footer__inner { grid-template-columns: 1fr; gap: $sp-8; text-align: center; }
+  .footer__social { justify-content: center; }
+  .footer__form { flex-direction: column; align-items: stretch; }
+  .footer__strip { flex-direction: column; text-align: center; }
+}

@@ -1,9 +1,58 @@
-<footer class="footer">
-  <div class="container">
-    <div class="copyright  typeset">
-      <small class="small">&copy; {{ site.title }} {{ site.time | date: '%Y' }}</small>
+<footer class="site-footer">
+  <div class="footer__inner">
+
+    <!-- Column 1: About -->
+    <div class="footer__col footer__about">
+      <h4 class="footer__title">About</h4>
+      <p class="footer__text">
+        I’m <strong>ImSwarnil</strong> — a filmmaker, software engineer, and storyteller.
+        I blend code with cinema, crafting stories that hit both your screen and your soul.
+      </p>
+      <div class="footer__social">
+        <a href="https://youtube.com/imswarnil" target="_blank" rel="noopener" aria-label="YouTube"><i class="ph-bold ph-youtube-logo"></i></a>
+        <a href="https://instagram.com/imswarnil" target="_blank" rel="noopener" aria-label="Instagram"><i class="ph-bold ph-instagram-logo"></i></a>
+        <a href="https://github.com/imswarnil" target="_blank" rel="noopener" aria-label="GitHub"><i class="ph-bold ph-github-logo"></i></a>
+        <a href="mailto:hello@imswarnil.com" aria-label="Email"><i class="ph-bold ph-envelope"></i></a>
+      </div>
     </div>
 
-    {% include nav-footer.html %}
+    <!-- Column 2: Explore -->
+    <div class="footer__col">
+      <h4 class="footer__title">Explore</h4>
+      <ul class="footer__list">
+        <li><a href="{{ '/#about' | relative_url }}">About Me</a></li>
+        <li><a href="{{ '/#projects' | relative_url }}">Projects</a></li>
+        <li><a href="{{ '/blog/' | relative_url }}">Blog</a></li>
+        <li><a href="{{ '/#contact' | relative_url }}">Contact</a></li>
+      </ul>
+    </div>
+
+    <!-- Column 3: Resources -->
+    <div class="footer__col">
+      <h4 class="footer__title">Resources</h4>
+      <ul class="footer__list">
+        <li><a href="{{ '/videos/' | relative_url }}">Videos</a></li>
+        <li><a href="{{ '/webseries/' | relative_url }}">Web Series</a></li>
+        <li><a href="{{ '/projects/' | relative_url }}">Open Source</a></li>
+        <li><a href="{{ '/privacy/' | relative_url }}">Privacy Policy</a></li>
+      </ul>
+    </div>
+
+    <!-- Column 4: Newsletter -->
+    <div class="footer__col">
+      <h4 class="footer__title">Newsletter</h4>
+      <p class="footer__text">Join the crew — get new stories, updates & creative chaos once a month.</p>
+      <form class="footer__form" action="#" method="post">
+        <input type="email" name="email" placeholder="Your email" required />
+        <button type="submit" aria-label="Subscribe"><i class="ph-bold ph-paper-plane-tilt"></i></button>
+      </form>
+    </div>
+
+  </div>
+
+  <!-- Footer Strip -->
+  <div class="footer__strip">
+    <p>© {{ site.time | date: "%Y" }} <strong>ImSwarnil</strong>. Crafted with ❤️ and caffeine.</p>
+    <p class="footer__credit">Built with <a href="https://jekyllrb.com/" target="_blank" rel="noopener">Jekyll</a> • Hosted on <a href="https://vercel.com" target="_blank" rel="noopener">Vercel</a></p>
   </div>
 </footer>
