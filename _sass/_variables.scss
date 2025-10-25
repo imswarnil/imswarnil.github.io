@@ -1,99 +1,297 @@
-// ===============================
-// Tokens (pure SCSS) + helpers
-// ===============================
+// ======================================================================
+// VARIABLES (Pure SCSS design tokens + helpers for the whole theme)
+// ======================================================================
 
+// ------------------------------
 // Breakpoints
+// ------------------------------
+$bp-xs: 420px;
 $bp-sm: 540px;
 $bp-md: 768px;
 $bp-lg: 992px;
 $bp-xl: 1200px;
+$bp-2xl: 1440px;
 
+// ------------------------------
+// Layout / Containers
+// ------------------------------
+$container-max: 1100px;         // main content width (cards/sections/header)
+$container-gap: 1rem;           // side padding on small screens
+$section-radius: 24px;
+$navbar-height: 58px;
+$footer-height: 72px;
+
+// Container helper mixin (no vw)
+@mixin container {
+  width: $container-max;
+  max-width: calc(100% - 2 * #{$container-gap});
+  margin-left: auto; margin-right: auto;
+}
+
+// ------------------------------
+// Z-index scale
+// ------------------------------
+$z-base: 1;
+$z-header: 1000;
+$z-overlay: 1100;
+$z-modal: 1200;
+$z-tooltip: 1300;
+
+// ------------------------------
 // Spacing scale (rem)
+// ------------------------------
+$sp-1: 0.125rem;
 $sp-2: 0.25rem;
+$sp-3: 0.375rem;
 $sp-4: 0.5rem;
+$sp-5: 0.625rem;
 $sp-6: 0.75rem;
 $sp-7: 1rem;
 $sp-8: 1.25rem;
+$sp-9: 1.375rem;
 $sp-10: 1.5rem;
 $sp-12: 2rem;
+$sp-14: 2.25rem;
 $sp-16: 2.5rem;
+$sp-20: 3rem;
+$sp-24: 4rem;
 
+// ------------------------------
 // Radii
+// ------------------------------
+$radius-2: 8px;
 $radius-3: 10px;
 $radius-4: 14px;
+$radius-6: 18px;
+$radius-8: 22px;
+$radius-10: 28px;
 $radius-pill: 999px;
 
+// ------------------------------
 // Typography
+// ------------------------------
 $ff-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, system-ui, sans-serif;
 $ff-head: $ff-body;
-$fs-small: 0.875rem;
-$fs-large: 1.125rem;
+$ff-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Liberation Mono", Consolas, monospace;
+
+$fw-regular: 400;
 $fw-medium: 500;
 $fw-semibold: 600;
+$fw-bold: 700;
 
-// Layout
-$navbar-height: 58px;
-$island-width: 1100px;
+$fs-0: 0.75rem;     // xs
+$fs-1: 0.8125rem;   // sm
+$fs-2: 0.875rem;    // body small
+$fs-3: 1rem;        // body
+$fs-4: 1.125rem;    // body large
+$fs-5: 1.25rem;     // h6 / subhead
+$fs-6: 1.5rem;      // h5
+$fs-7: 1.75rem;     // h4
+$fs-8: 2rem;        // h3
+$fs-9: 2.25rem;     // h2
+$fs-10: 2.75rem;    // h1
+$fs-11: 3.25rem;    // display
 
-// Shadows
-$shadow-light: 0 10px 30px -10px rgba(0, 0, 0, 0.2), 0 4px 10px -6px rgba(0, 0, 0, 0.16);
-$shadow-dark:  0 20px 60px -10px rgba(0, 0, 0, 0.4), 0 4px 20px -8px rgba(0, 0, 0, 0.4);
+// ------------------------------
+// Motion
+// ------------------------------
+$ease-in-out: cubic-bezier(.25, 1, .5, 1);
+$ease-out: cubic-bezier(.16, 1, .3, 1);
+$ease-in: cubic-bezier(.32, 0, .67, 0);
 
-// Color maps
+$dur-0: 120ms;
+$dur-1: 180ms;
+$dur-2: 240ms;
+$dur-3: 360ms;
+$dur-4: 500ms;
+
+// ------------------------------
+// Shadows / Elevations
+// ------------------------------
+$shadow-0: 0 0 0 rgba(0,0,0,0);
+$shadow-1-light: 0 10px 30px -10px rgba(0,0,0,0.18), 0 4px 10px -6px rgba(0,0,0,0.14);
+$shadow-2-light: 0 16px 40px -12px rgba(0,0,0,0.20), 0 8px 22px -8px rgba(0,0,0,0.12);
+
+$shadow-1-dark: 0 20px 60px -10px rgba(0,0,0,0.40), 0 4px 20px -8px rgba(0,0,0,0.40);
+$shadow-2-dark: 0 26px 80px -16px rgba(0,0,0,0.46), 0 10px 34px -12px rgba(0,0,0,0.42);
+
+// ------------------------------
+// Theme palettes (light / dark)
+// ------------------------------
 $theme-light: (
-  accent: #000,
-  contrast: #000,
-  background: #fff,
+  accent: #000000,
+  contrast: #000000,
+  background: #ffffff,
   background-100: #f3f3f3,
   background-200: #ededed,
   foreground: #4d4d4d,
   secondary: #757575,
   border: rgba(0,0,0,0.2),
-  white: #fff,
-  black: #000
+  muted: rgba(0,0,0,0.06),
+  white: #ffffff,
+  black: #000000,
+
+  // semantic
+  success: #10b981,
+  warning: #f59e0b,
+  danger:  #ef4444,
+  info:    #3b82f6
 );
 
 $theme-dark: (
-  accent: #fff,
-  contrast: #fff,
+  accent: #ffffff,
+  contrast: #ffffff,
   background: #111113,
   background-100: #1a1a1c,
   background-200: #2c2c2f,
   foreground: #c9c9c9,
   secondary: #9a9a9a,
   border: rgba(255,255,255,0.12),
-  white: #fff,
-  black: #000
+  muted: rgba(255,255,255,0.08),
+  white: #ffffff,
+  black: #000000,
+
+  // semantic
+  success: #34d399,
+  warning: #fbbf24,
+  danger:  #f87171,
+  info:    #60a5fa
 );
 
-// Helpers to read tokens
+// ------------------------------
+// Token access helpers
+// ------------------------------
 @function tone($key, $mode: light) {
-  @if $mode == dark {
-    @return map-get($theme-dark, $key);
-  } @else {
-    @return map-get($theme-light, $key);
+  @if $mode == dark { @return map-get($theme-dark, $key); }
+  @return map-get($theme-light, $key);
+}
+
+// Theming mixins: print rules inside the proper mode
+@mixin theme-light { html[data-color-scheme="light"] & { @content; } }
+@mixin theme-dark  { html[data-color-scheme="dark"] &  { @content; } }
+
+// Focus ring helper
+@mixin focus-ring($c: #5b9dff) {
+  outline: 2px solid transparent;
+  box-shadow: 0 0 0 3px rgba($c, .35);
+}
+
+// Button base (reusable)
+@mixin button-base {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5em;
+  min-height: 2.5rem; padding: $sp-4 $sp-8; font-size: $fs-2; font-weight: $fw-semibold;
+  border: 1px solid transparent; border-radius: $radius-pill; cursor: pointer;
+  transition: transform $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out, background-color $dur-1, color $dur-1, border-color $dur-1;
+}
+
+// Card base
+@mixin card-base {
+  border-radius: $section-radius;
+  border: 1px solid tone(border, light);
+  background: tone(background, light);
+  box-shadow: $shadow-1-light;
+
+  @include theme-dark {
+    border-color: tone(border, dark);
+    background: tone(background-100, dark);
+    box-shadow: $shadow-1-dark;
   }
 }
 
-// Theming mixins (prints both light and dark blocks)
-@mixin theme-block {
-  html[data-color-scheme="light"] & { @content; }
-}
-@mixin theme-block-dark {
-  html[data-color-scheme="dark"] & { @content; }
+// Input base
+@mixin input-base {
+  width: 100%;
+  padding: $sp-6 $sp-7;
+  border-radius: $radius-4;
+  border: 1px solid tone(border, light);
+  background: tone(background, light);
+  color: tone(foreground, light);
+  transition: border-color $dur-1, box-shadow $dur-1;
+
+  @include theme-dark {
+    border-color: tone(border, dark);
+    background: tone(background, dark);
+    color: tone(foreground, dark);
+  }
+
+  &:focus { @include focus-ring(#6aa6ff); }
 }
 
-// Container helper
-@mixin container {
-  width: $island-width;
-  max-width: calc(100% - 2 * 1rem);
-  margin-inline: auto;
+// ------------------------------
+// Component-specific tokens
+// ------------------------------
+
+// Header
+$header-radius: 24px;
+$header-pad-y: $sp-4;
+$header-pad-x: $sp-6;
+$header-shadow-light: $shadow-1-light;
+$header-shadow-dark:  $shadow-1-dark;
+
+// Footer
+$footer-pad-y: $sp-10;
+$footer-pad-x: 0;
+$footer-border: 1px solid tone(border, light);
+
+// Buttons
+$btn-height: 2.5rem;
+$btn-height-sm: 2.25rem;
+$btn-pad-x: $sp-8;
+$btn-pad-x-sm: 1rem;
+
+// Cards
+$card-pad: 14px;
+$card-radius: 16px;
+
+// Badge / Tag
+$badge-radius: $radius-pill;
+$badge-pad-y: .25rem;
+$badge-pad-x: .5rem;
+$badge-font: $fs-1;
+
+// Alerts
+$alert-radius: $radius-4;
+$alert-pad: $sp-7;
+
+// Table
+$table-pad-y: .625rem;
+$table-pad-x: .75rem;
+$table-border: 1px solid tone(border, light);
+
+// Tooltip
+$tooltip-radius: $radius-3;
+$tooltip-pad: .375rem .5rem;
+
+// Modal / Drawer
+$modal-radius: $radius-8;
+$modal-shadow-light: $shadow-2-light;
+$modal-shadow-dark:  $shadow-2-dark;
+
+// Code block
+$code-radius: $radius-4;
+$code-pad: $sp-6;
+
+// ------------------------------
+// Utility helpers
+// ------------------------------
+
+// Text truncation
+@mixin truncate($lines: 1) {
+  overflow: hidden; display: -webkit-box; -webkit-line-clamp: $lines; -webkit-box-orient: vertical;
 }
 
-// Button base
-@mixin button-base {
-  display: inline-flex; align-items: center; justify-content: center; gap: .5em;
-  min-height: 2.5rem; padding: $sp-4 $sp-8; font-size: $fs-small; font-weight: $fw-semibold;
-  border: 1px solid transparent; border-radius: $radius-pill; cursor: pointer;
-  transition: transform .15s ease, box-shadow .2s ease, background-color .2s ease, color .2s ease;
+// Visually hidden (a11y)
+%visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+// Responsive show/hide
+@mixin hide-above($bp) { @media (min-width: $bp) { display: none !important; } }
+@mixin hide-below($bp) { @media (max-width: $bp) { display: none !important; } }
+
+// Icon baseline alignment
+@mixin icon-inline($size: 1.125em) {
+  i { font-size: $size; line-height: 1; vertical-align: -2px; }
 }
