@@ -1,23 +1,23 @@
 // ======================================================================
-// _header.scss — island header with desktop icons, fixed mobile bar,
-// floating bento panel, animated theme switcher
-// (uses tokens/mixins from _variables.scss)
+// _header.scss — island navbar with in-place mobile expando + search mode
+// uses: _variables.scss tokens & mixins (no button styles here)
 // ======================================================================
 
-// ---------- Navbar ----------
 .island-navbar {
   @include container;
   position: sticky;
   top: $container-gutter;
   z-index: $z-header;
 
-  margin: 0 auto $sp-6;
-  display: flex; align-items: center; justify-content: space-between; gap: $sp-6;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: $sp-5;
 
-  padding: $sp-3 $sp-6; // compact
-  border-radius: $radius-6;
+  margin: 0 auto $sp-6;
+  padding: $sp-3 $sp-6;
   border: 1px solid;
-  -webkit-backdrop-filter: blur(12px);
+  border-radius: $radius-6;
   backdrop-filter: blur(12px);
 
   transition:
@@ -37,86 +37,43 @@
     box-shadow: $shadow-dark;
   }
 
-  &.is-open { border-bottom-left-radius: $radius-4; border-bottom-right-radius: $radius-4; }
-}
+  &.is-open {
+    border-bottom-left-radius: $radius-4;
+    border-bottom-right-radius: $radius-4;
+  }
 
-// Mobile: fixed full-width
-/* --- Make the navbar FLOAT & CENTER on mobile too (not full-width) --- */
-@media (max-width: $bp-lg) {
-  .island-navbar {
-    /* center like desktop */
-    @include container;
+  // fixed on mobile for “floating” feel
+  @media (max-width: $bp-lg) {
     position: fixed;
-    top: $container-gutter;                /* same breathing room as desktop */
-    left: $container-gutter;
-    right: $container-gutter;
-    width: auto;
-    margin: 0 auto;
-    border-radius: $radius-6;              /* keep the rounded island */
-  }
-
-  /* give the page room below the fixed, centered island */
-  body.has-fixed-nav {
-    padding-top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-8});
+    top: 0; left: 0; right: 0;
+    width: 100%;
+    border-radius: 0;
+    margin: 0;
+    padding-left: $container-gutter;
+    padding-right: $container-gutter;
   }
 }
 
-/* --- Float the panel directly UNDER the centered island --- */
-.island-panel {
-  /* already fixed; just ensure it mirrors the island width/centering */
-  left: $container-gutter;
-  right: $container-gutter;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: $island-width;
-
-  /* sit just below the header island (keep a small gap) */
-  top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-3});
-
-  /* keep the same rounded look on ALL corners */
-  border-top-left-radius: $radius-6;
-  border-top-right-radius: $radius-6;
-  border-bottom-left-radius: $radius-6;
-  border-bottom-right-radius: $radius-6;
-
-  /* keep the border on top so it looks like a separate floating card */
-  border-top: 1px solid;
-
-  /* stronger glassy look while floating */
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
+body.has-fixed-nav {
+  padding-top: var(--nav-h, #{$navbar-height});
 }
 
-/* when open, allow full viewport remainder with scroll INSIDE the panel */
-.island-panel.is-open {
-  max-height: calc(100vh - (var(--nav-h, #{$navbar-height}) + #{$sp-3} + #{$sp-3}));
-}
-
-.island-panel .island-panel__inner {
-  max-height: calc(100vh - (var(--nav-h, #{$navbar-height}) + #{$sp-3} + #{$sp-3}));
-  overflow: auto;
-}
-
-/* bento grid can show 3 columns on wider phones, but stays centered */
-.bento-grid {
-  grid-template-columns: repeat(2, 1fr);
-  @include mq-up($bp-sm) { grid-template-columns: repeat(3, 1fr); }
-}
-
-// ---------- Brand ----------
+/* ---------- Brand ---------- */
 .navbar-brand {
-  display: flex; align-items: center; gap: $sp-5; text-decoration: none;
+  display: inline-flex; align-items: center; gap: $sp-5; text-decoration: none;
 
   .navbar-avatar {
-    width: 2rem; height: 2rem; border-radius: 50%; object-fit: cover;
-    border: 2px solid;
+    width: 2rem; height: 2rem;
+    border-radius: 50%; object-fit: cover; border: 2px solid;
     @include theme-block      { border-color: tone(border, light); }
     @include theme-block-dark { border-color: tone(border, dark); }
   }
 
   .brand-text { display: grid; line-height: 1.1; }
   .logo {
-    font-size: $fs-4; font-weight: $fw-semibold; letter-spacing: -0.01em;
+    font-size: $fs-4;
+    font-weight: $fw-semibold;
+    letter-spacing: -0.01em;
     @include theme-block      { color: tone(contrast, light); }
     @include theme-block-dark { color: tone(contrast, dark); }
   }
@@ -127,14 +84,17 @@
   }
 }
 
-// ---------- Desktop menu (icons + compact labels) ----------
+/* ---------- Desktop menu ---------- */
 .navbar-menu {
+  justify-self: center;
+
   ul { display: flex; align-items: center; gap: $sp-2; margin: 0; padding: 0; list-style: none; }
 
   a {
     display: inline-flex; align-items: center; gap: .5em;
     padding: $sp-3 $sp-5;
-    font-size: $fs-3; font-weight: $fw-medium;
+    font-size: $fs-3; // compact
+    font-weight: $fw-medium;
     border-radius: $radius-pill;
     transition: background-color $dur-1, color $dur-1;
 
@@ -153,57 +113,30 @@
   @media (max-width: $bp-lg) { display: none; }
 }
 
-// ---------- Right-side actions (header-scoped controls only) ----------
+/* ---------- Actions (icon sizes only; your button.scss can style further) ---------- */
 .navbar-actions {
-  display: flex; align-items: center; gap: $sp-3;
+  display: inline-flex; align-items: center; gap: $sp-3; justify-self: end;
 
-  // Small circular icon button used for search, etc.
   .nav-icon {
+    width: $btn-height-sm; height: $btn-height-sm;
     display: inline-grid; place-items: center;
-    width: $btn-height-sm; height: $btn-height-sm; border-radius: 50%;
-    border: 1px solid; padding: 0;
-    font-size: $fs-4; line-height: 1;
-    cursor: pointer; user-select: none;
-    background: transparent;
-    transition: background-color $dur-1, color $dur-1, border-color $dur-1;
-
-    @include theme-block {
-      color: tone(secondary, light); border-color: tone(border, light);
-      &:hover { color: tone(contrast, light); background: tone(background-200, light); }
+    border: 1px solid; border-radius: 50%; background: transparent; cursor: pointer;
+    @include theme-block      { color: tone(secondary, light); border-color: tone(border, light); }
+    @include theme-block-dark { color: tone(secondary, dark);  border-color: tone(border, dark); }
+    &:hover {
+      @include theme-block      { background: tone(background-200, light); color: tone(contrast, light); }
+      @include theme-block-dark { background: tone(background-200, dark);  color: tone(contrast, dark);  }
     }
-    @include theme-block-dark {
-      color: tone(secondary, dark); border-color: tone(border, dark);
-      &:hover { color: tone(contrast, dark); background: tone(background-200, dark); }
-    }
+    i { font-size: $fs-4; }
   }
 
-  // Theme toggle (animated icon swap)
-  .theme-toggle-button {
-    @extend .nav-icon;
-    position: relative; overflow: hidden;
-
-    i {
-      position: absolute; inset: 0; display: grid; place-items: center;
-      opacity: 0; transform: rotate(-90deg) scale(.8);
-      transition: opacity $dur-2 ease, transform $dur-2 $ease-in-out;
-    }
-    @include theme-block { .icon-sun  { opacity: 1; transform: rotate(0) scale(1); } }
-    @include theme-block-dark { .icon-moon { opacity: 1; transform: rotate(0) scale(1); } }
-  }
-
-  // GitHub CTA (text on md+, icon-only on mobile)
-  .nav-cta {
+  .cta-github {
     display: inline-flex; align-items: center; gap: .5em;
-    min-height: $btn-height-sm; padding: 0.35rem $btn-pad-x-sm;
-    border-radius: $radius-pill; border: 1px solid transparent;
-    font-size: $fs-2; font-weight: $fw-semibold; cursor: pointer; user-select: none;
-    transition: transform $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out, background-color $dur-1, color $dur-1;
-
+    padding: $sp-3 $sp-5; border-radius: $radius-pill; border: 1px solid transparent; text-decoration: none;
+    font-size: $fs-3; font-weight: $fw-semibold;
     @include theme-block      { background: tone(contrast, light); color: tone(white, light); }
     @include theme-block-dark { background: tone(white, dark);    color: tone(black, dark);  }
-
-    &:hover { transform: translateY(-2px); }
-
+    &:hover { transform: translateY(-1px); }
     span { display: none; }
     @include mq-up($bp-md) { span { display: inline; } }
   }
@@ -212,79 +145,131 @@
   @media (max-width: $bp-lg) { .mobile-menu-toggle { display: inline-grid; } }
 }
 
-// ---------- Mobile island panel (floating + scrollable) ----------
-.island-panel {
-  position: fixed;
-  left: $container-gutter; right: $container-gutter;
-  top: var(--nav-h, #{$navbar-height});
-  z-index: $z-overlay;
-  margin: 0 auto; max-width: $island-width;
+/* ---------- IN-HEADER Expando (mobile) ---------- */
+.navbar-expando {
+  grid-column: 1 / -1;
+  border-top: 0;
+  margin: 0;
+  overflow: clip;
 
-  border: 1px solid; border-top: 0;
-  border-bottom-left-radius: $radius-6;
-  border-bottom-right-radius: $radius-6;
+  // start collapsed
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: max-height 500ms $ease-in-out, opacity 300ms ease, transform 350ms $ease-in-out;
 
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
-  transform: translateY(-6px);
-  transition: max-height 500ms $ease-in-out, opacity 300ms ease, transform 350ms $ease-in-out, box-shadow $dur-2 $ease-in-out;
-
-  max-height: 0; opacity: 0; overflow: clip; pointer-events: none;
-
-  @include theme-block      { background: rgba(255,255,255,0.92); border-color: tone(border, light); box-shadow: $shadow-light; }
-  @include theme-block-dark { background: rgba(18,18,20,0.96);    border-color: tone(border, dark);  box-shadow: $shadow-dark; }
-
-  &.is-open {
-    opacity: 1; transform: translateY(0); pointer-events: auto;
-    max-height: calc(100vh - var(--nav-h, #{$navbar-height}));
+  .expando-divider {
+    height: 1px; margin: $sp-3 (-$sp-6) $sp-6;
+    @include theme-block      { background: rgba(0,0,0,.08); }
+    @include theme-block-dark { background: rgba(255,255,255,.10); }
   }
 
-  .island-panel__inner {
-    padding: $sp-8; display: grid; gap: $sp-6;
-    max-height: calc(100vh - var(--nav-h, #{$navbar-height}));
-    overflow: auto;
+  .bento-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $sp-5;
+    padding-bottom: $sp-4;
+
+    @include mq-up($bp-sm) { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .bento-card {
+    display: flex; align-items: center; gap: $sp-4;
+    padding: $sp-5; border-radius: $radius-4; border: 1px solid;
+    text-decoration: none;
+    transition: transform $dur-1 ease, background $dur-1 ease;
+
+    @include theme-block      { background: tone(surface, light);       border-color: tone(border, light); color: tone(contrast, light); }
+    @include theme-block-dark { background: tone(background-100, dark); border-color: tone(border, dark);  color: tone(contrast, dark);  }
+    &:hover {
+      transform: translateY(-2px);
+      @include theme-block      { background: tone(background-100, light); }
+      @include theme-block-dark { background: tone(background-100, dark);  }
+    }
+
+    .bento-icon {
+      width: 2.25rem; height: 2.25rem; display: grid; place-items: center;
+      border-radius: $radius-3; border: 1px solid;
+      @include theme-block      { border-color: tone(border, light); }
+      @include theme-block-dark { border-color: tone(border, dark);  }
+      i { font-size: $fs-4; }
+    }
+    .bento-title { font-weight: $fw-semibold; font-size: $fs-3; }
+    .bento-sub   { font-size: $fs-2; @include theme-block { color: tone(secondary, light); } @include theme-block-dark { color: tone(secondary, dark); } }
+  }
+
+  // open state (mobile only)
+  &.is-open {
+    max-height: 70vh;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
   }
 
   @include mq-up($bp-lg) { display: none; }
 }
 
-// ---------- Mobile bento grid ----------
-.bento-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: $sp-5;
-  @include mq-up($bp-sm) { grid-template-columns: repeat(3, 1fr); }
+/* ---------- Search mode (transforms header into a search bar) ---------- */
+.navbar-search {
+  display: none; // revealed by .is-searching
+  grid-column: 1 / -1;
+
+  .search-field {
+    display: grid; grid-template-columns: auto 1fr; align-items: center; gap: $sp-4;
+    padding: $sp-4 $sp-5; border: 1px solid; border-radius: $radius-4;
+
+    @include theme-block      { background: tone(surface, light);       border-color: tone(border, light); }
+    @include theme-block-dark { background: tone(background-100, dark); border-color: tone(border, dark);  }
+
+    i { font-size: $fs-4; @include theme-block { color: tone(secondary, light); } @include theme-block-dark { color: tone(secondary, dark); } }
+    input {
+      background: transparent; border: 0; outline: none; font: inherit; line-height: $lh-base;
+      @include theme-block      { color: tone(contrast, light); }
+      @include theme-block-dark { color: tone(contrast, dark);    }
+    }
+  }
+
+  .search-actions {
+    display: inline-flex; gap: $sp-3; margin-top: $sp-4;
+    .search-btn, .cancel-btn {
+      padding: $sp-3 $sp-5; border-radius: $radius-pill; border: 1px solid; cursor: pointer; background: transparent; font-weight: $fw-semibold;
+    }
+    .search-btn {
+      @include theme-block      { background: tone(contrast, light); color: tone(white, light); border-color: transparent; }
+      @include theme-block-dark { background: tone(white, dark);    color: tone(black, dark);  border-color: transparent; }
+    }
+    .cancel-btn {
+      @include theme-block      { color: tone(secondary, light); border-color: tone(border, light); }
+      @include theme-block-dark { color: tone(secondary, dark);  border-color: tone(border, dark);  }
+      &:hover {
+        @include theme-block      { background: tone(background-200, light); color: tone(contrast, light); }
+        @include theme-block-dark { background: tone(background-200, dark);  color: tone(contrast, dark);  }
+      }
+    }
+  }
+
+  .search-suggestions {
+    margin-top: $sp-4; display: none;
+    &.has-results { display: block; }
+    ul { list-style: none; margin: 0; padding: 0; display: grid; gap: $sp-2; }
+    a {
+      display: block; padding: $sp-3 $sp-4; border-radius: $radius-3; border: 1px solid; text-decoration: none;
+      @include theme-block      { color: tone(contrast, light); border-color: tone(border, light); background: tone(surface, light); }
+      @include theme-block-dark { color: tone(contrast, dark);   border-color: tone(border, dark);  background: tone(background-100, dark); }
+      &:hover {
+        @include theme-block      { background: tone(background-100, light); }
+        @include theme-block-dark { background: tone(background-100, dark);  }
+      }
+    }
+  }
 }
 
-.bento-card {
-  display: flex; align-items: center; gap: $sp-4;
-  padding: $sp-5; border-radius: $radius-4; border: 1px solid;
-  transition: transform $dur-1 ease, background $dur-1 ease;
-
-  @include theme-block      { background: tone(surface, light);       border-color: tone(border, light); }
-  @include theme-block-dark { background: tone(background-100, dark); border-color: tone(border, dark);  }
-
-  &:hover {
-    transform: translateY(-2px);
-    @include theme-block      { background: tone(background-100, light); }
-    @include theme-block-dark { background: tone(background-100, dark);  }
-  }
-
-  .bento-icon {
-    width: 2.25rem; height: 2.25rem; display: grid; place-items: center;
-    border-radius: $radius-3; border: 1px solid;
-    @include theme-block      { border-color: tone(border, light); }
-    @include theme-block-dark { border-color: tone(border, dark); }
-    i { font-size: $fs-4; }
-  }
-  .bento-title {
-    font-weight: $fw-semibold; font-size: $fs-3;
-    @include theme-block      { color: tone(contrast, light); }
-    @include theme-block-dark { color: tone(contrast, dark); }
-  }
-  .bento-sub {
-    font-size: $fs-2;
-    @include theme-block      { color: tone(secondary, light); }
-    @include theme-block-dark { color: tone(secondary, dark); }
-  }
+/* Toggle layout pieces during search */
+.island-navbar.is-searching {
+  grid-template-columns: 1fr; // full-width search
 }
+.island-navbar.is-searching .navbar-brand,
+.island-navbar.is-searching .navbar-menu,
+.island-navbar.is-searching .navbar-actions { display: none; }
+.island-navbar.is-searching .navbar-search { display: block; }
