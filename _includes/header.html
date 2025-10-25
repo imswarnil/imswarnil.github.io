@@ -68,37 +68,6 @@
   </div>
 </section>
 
-<!-- JSON-LD: Person + WebSite -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "name": {{ site.title | jsonify }},
-  "jobTitle": {{ site.job_title | default: site.description | jsonify }},
-  "url": {{ site.url | append: site.baseurl | jsonify }}{% if site.logo %},
-  "image": {{ site.url | append: site.logo | jsonify }}{% endif %},
-  "sameAs": [{% assign links = site.social_links %}{% assign first = true %}
-    {% if links.Twitter %}{% unless first %}, {% endunless %}{{ links.Twitter | jsonify }}{% assign first = false %}{% endif %}
-    {% if links.LinkedIn %}{% unless first %}, {% endunless %}{{ links.LinkedIn | jsonify }}{% assign first = false %}{% endif %}
-    {% if links.GitHub %}{% unless first %}, {% endunless %}{{ links.GitHub | jsonify }}{% assign first = false %}{% endif %}
-    {% if links.link %}{% unless first %}, {% endunless %}{{ links.link | jsonify }}{% assign first = false %}{% endif %}
-    {% if links.RSS %}{% unless first %}, {% endunless %}{{ site.url | append: links.RSS | jsonify }}{% assign first = false %}{% endif %}
-  ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"WebSite",
-  "name": {{ site.title | jsonify }},
-  "url": {{ site.url | append: site.baseurl | jsonify }},
-  "potentialAction":{
-    "@type":"SearchAction",
-    "target": {{ site.url | append: site.baseurl | append: "/search/?q={search_term_string}" | jsonify }},
-    "query-input":"required name=search_term_string"
-  }
-}
-</script>
 
 <script>
   // ---- FOUC guard: decide theme before first paint ----
