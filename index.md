@@ -1,5 +1,6 @@
 ---
 title: About Alembic
+layout : home
 feature_text: |
   ## Alembic
   A Jekyll boilerplate theme designed to be a starting point for any Jekyll website
