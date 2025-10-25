@@ -10,6 +10,29 @@ narrow: true
 offset_nav: true
 ---
 
+
+<section class="main-section">
+  <div class="main-prose">
+    <h1>Hey, I’m {{ site.title }}</h1>
+    <p class="main-badge">Compact UI · Big stories</p>
+  </div>
+</section>
+
+<section class="main-section">
+  <div class="main-actions">
+    <button class="main-icon-btn"><i class="ph-bold ph-share-fat"></i></button>
+    <button class="main-icon-btn"><i class="ph-bold ph-copy"></i></button>
+  </div>
+</section>
+
+<section class="main-section">
+  <div class="main-grid main-grid--3">
+    <div class="main-card">Card A</div>
+    <div class="main-card">Card B</div>
+    <div class="main-card">Card C</div>
+  </div>
+</section>
+
 # Heading 1
 
 ## Heading 2
