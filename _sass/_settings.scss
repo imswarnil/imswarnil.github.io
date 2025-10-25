@@ -1,38 +1,72 @@
-// Background colours
-$backgroundColour: #ffffff !default;
-$codeBackgroundColour: #fafafa !default;
-$featureBackgroundColour: #f9fafa !default;
-$accentColour: #05bf85 !default;
+// _scss/_variables.scss
 
-// Text colours
-$headingColour: #242e2b !default;
-$bodyColour: #384743 !default;
-$linkColour: #05bf85 !default;
-$hoverColour: #008000 !default;
-$focusColour: #fa407a !default;
-$captionColour: #a8adac !default;
-$white: #ffffff !default;
+:root {
+  --ghost-accent-color: #000;
+  --color-contrast: #000;
+  --color-background: #fff;
+  --color-background-100: #f3f3f3;
+  --color-background-200: #ededed;
+  --color-border: hsla(0, 0%, 50%, 0.2);
+  --color-foreground: #4d4d4d;
+  --color-secondary: #757575;
+  --color-white: #fff;
+  --color-black: #000;
 
-// Typography
-$bodytype: (
-  font-family: "Georgia, serif",
-  regular: 400,
-  bold: 700,
-  italic: italic,
-  cap-height: 0.75
-) !default;
+  --font-family-headings: "Geist", system-ui, -apple-system, Segoe UI, Roboto,
+    sans-serif;
+  --font-family-body: "Geist", system-ui, -apple-system, Segoe UI, Roboto,
+    sans-serif;
+  --font-family-button: "Geist", sans-serif;
 
-$headingtype: (
-  font-family: '"Merriweather", serif',
-  regular: 400,
-  bold: 700,
-  cap-height: 0.75
-) !default;
+  --font-small: 0.875rem;
+  --font-large: 1.125rem;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
 
-$monospacetype: (
-  font-family: "Menlo, monospace",
-  regular: 400,
-  cap-height: 0.68
-) !default;
+  --spacing-2: 0.25rem;
+  --spacing-4: 0.5rem;
+  --spacing-6: 0.75rem;
+  --spacing-7: 1rem;
+  --spacing-8: 1.25rem;
+  --spacing-9: 1.875rem;
+  --spacing-10: 1.5rem;
+  --spacing-12: 2rem;
+  --spacing-16: 2.5rem;
 
-// TIP: Load custom fonts in _config.yaml
+  --radius-3: 12px;
+  --radius-4: 16px;
+  --radius-pill: 999px;
+
+  --layout--padding: clamp(16px, 11.25px + 1.25vw, 30px);
+  --navbar-height: 58px;
+
+  --button-padding-v: var(--spacing-4);
+  --button-padding-h: var(--spacing-8);
+  --button-min-height: 2.5rem;
+  --button-font-size: var(--font-small);
+  --button-font-weight: var(--font-weight-semibold);
+  --button-border-radius: calc(var(--button-min-height) * 0.5);
+  --button-color: var(--color-white);
+  --button-background-color: var(--ghost-accent-color);
+  --button-hover-color: var(--color-background);
+  --button-hover-background-color: var(--color-contrast);
+
+  --shadow: 0 10px 30px -10px hsla(0, 4%, 68%, 0.15),
+    0 4px 10px -5px rgba(0, 0, 0, 0.05);
+
+  color-scheme: light;
+}
+
+:root[data-color-scheme="dark"] {
+  --ghost-accent-color: #fff;
+  --color-contrast: #fff;
+  --color-background: #111113;
+  --color-background-100: #1a1a1c;
+  --color-background-200: #2c2c2f;
+  --color-foreground: #c9c9c9;
+  --color-secondary: #9a9a9a;
+  --color-border: hsla(0, 0%, 100%, 0.1);
+  --shadow: 0 20px 60px -10px rgba(0, 0, 0, 0.4),
+    0 4px 20px -8px rgba(0, 0, 0, 0.4);
+  color-scheme: dark;
+}
