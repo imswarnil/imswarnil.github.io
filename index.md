@@ -15,6 +15,5 @@ cta_href: /contact/
 cta_label: Book me
 cta2_href: /projects/
 cta2_label: Projects
-
 ---
 
