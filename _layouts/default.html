@@ -2,62 +2,14 @@
 <html lang="{{ site.lang | default: "en-US" }}">
 
 {% include head.html %}
+  <body class="layout-{{ page.layout }}{% if page.title %}  {{ page.title | slugify }}{% endif %}">
+    {% include header.html %}
+    <main class="main">
+      {{ content }}
+    </main>
+    {% if site.service_worker != false %}{% include site-sw.html %}{% endif %}
+    {% include site-before-end.html %}
 
-<body class="layout-{{ page.layout }}{% if page.title %}  {{ page.title | slugify }}{% endif %}">
-  <main class="container">
-    <div class="layout {% if page.aside %}has-aside{% endif %}">
-      {% if page.aside %}
-      <aside class="sidebar" aria-label="Sidebar">
-        {% if page.sidebar %}
-          <div class="s-card island">
-            {{ page.sidebar | markdownify }}
-          </div>
-        {% else %}
-          <nav class="s-card island toc" aria-label="On this page">
-            <div class="s-head">On this page</div>
-            <ol class="toc-list"></ol>
-          </nav>
-          <div class="s-card island about">
-            <div class="s-head">About</div>
-            <p class="s-text">I’m {{ site.title }} — {{ site.job_title }}.</p>
-            <div class="s-actions">
-              <a class="btn-ghost" href="{{ site.github_url | default: 'https://github.com' }}">GitHub</a>
-              <a class="btn-ghost" href="{{ '/contact/' | relative_url }}">Contact</a>
-            </div>
-          </div>
-        {% endif %}
-      </aside>
-      {% endif %}
+  </body>
 
-      <section class="content island" role="region">
-        {{ content }}
-      </section>
-    </div>
-  </main>
-
-  {% if site.service_worker != false %}{% include site-sw.html %}{% endif %}
-  {% include site-before-end.html %}
-
-  <script>
-    // Lightweight TOC (only if .toc exists)
-    (function () {
-      var toc = document.querySelector(".toc .toc-list");
-      if (!toc) return;
-      var scope = document.querySelector(".content");
-      if (!scope) return;
-      var hs = scope.querySelectorAll("h2, h3");
-      var count = 0;
-      hs.forEach(function (h, i) {
-        var id = h.id || ("h-" + (i + 1));
-        h.id = id;
-        var li = document.createElement("li");
-        li.className = h.tagName === "H3" ? "toc-h3" : "toc-h2";
-        var a = document.createElement("a");
-        a.href = "#" + id; a.textContent = h.textContent;
-        li.appendChild(a); toc.appendChild(li); count++;
-      });
-      if (!count) toc.parentElement.style.display = "none";
-    }());
-  </script>
-</body>
 </html>
