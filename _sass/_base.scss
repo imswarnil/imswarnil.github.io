@@ -1,15 +1,6 @@
 // _scss/_base.scss
 
-/* Geist Font */
-@font-face {
-  font-family: "Geist";
-  font-display: swap;
-  src: url(https://assets.vercel.com/raw/upload/v1699971935/fonts/geist/Geist-Variable.woff2)
-    format("woff2-variations");
-  font-weight: 100 900;
-}
-
-/* Base Reset & Globals */
+// ========== BASE RESET & GLOBALS ==========
 *,
 *::before,
 *::after {
@@ -18,33 +9,33 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: calc(var(--navbar-height) + var(--layout--padding) * 2);
+  scroll-padding-top: calc($navbar-height + $layout-padding * 2);
 }
 
 body {
   background-color: var(--color-background);
   color: var(--color-foreground);
-  font-family: var(--font-family-body);
+  font-family: $font-family-body;
   font-size: 16px;
   line-height: 1.6;
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  &.panel-open {
+    overflow: hidden;
+  }
 }
 
-body.panel-open {
-  overflow: hidden;
-}
-
-/* Base Typography */
+// ========== BASE TYPOGRAPHY ==========
 a {
   color: var(--color-contrast);
   text-decoration: none;
   transition: color 0.2s ease;
-}
 
-a:hover {
-  color: var(--ghost-accent-color);
+  &:hover {
+    color: var(--ghost-accent-color);
+  }
 }
 
 h1,
@@ -52,8 +43,8 @@ h2,
 h3 {
   color: var(--color-contrast);
   margin: 0;
-  font-family: var(--font-family-headings);
-  font-weight: var(--font-weight-semibold);
+  font-family: $font-family-headings;
+  font-weight: $font-weight-semibold;
   line-height: 1.2;
 }
 
@@ -61,37 +52,37 @@ h1 {
   font-size: clamp(2rem, 1.6rem + 1.5vw, 2.8rem);
 }
 
-/* Base Button Styles */
+// ========== BASE BUTTON STYLES ==========
 .button {
   align-items: center;
   background-color: var(--button-background-color);
   border: 1px solid transparent;
-  border-radius: var(--button-border-radius);
+  border-radius: $button-border-radius;
   color: var(--button-color);
   cursor: pointer;
   display: inline-flex;
-  font-weight: var(--button-font-weight);
+  font-weight: $button-font-weight;
   gap: 0.5em;
   justify-content: center;
-  min-height: var(--button-min-height);
+  min-height: $button-min-height;
   padding: var(--button-padding-v) var(--button-padding-h);
   text-decoration: none;
   transition: all 0.2s ease;
   user-select: none;
-}
 
-.button:hover {
-  background-color: var(--button-hover-color);
-  color: var(--button-hover-background-color);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  border-color: var(--color-contrast);
+  &:hover {
+    background-color: var(--button-hover-color);
+    color: var(--button-hover-background-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-color: var(--color-contrast);
+  }
 }
 
 .button-icon {
   border-radius: 50%;
-  width: var(--button-min-height);
-  height: var(--button-min-height);
+  width: $button-min-height;
+  height: $button-min-height;
   padding: var(--spacing-4);
 }
 
@@ -105,18 +96,10 @@ h1 {
   background-color: transparent;
   color: var(--color-secondary);
   border-color: var(--color-border);
-}
 
-.button-transparent:hover {
-  background-color: var(--color-background-100);
-  color: var(--color-contrast);
-  box-shadow: none;
-}
-
-/* Placeholder for main content area */
-.content-placeholder {
-  min-height: 200vh;
-  padding-top: calc(var(--navbar-height) + var(--layout--padding) * 2 + 10px);
-  text-align: center;
-  padding-inline: var(--layout--padding);
+  &:hover {
+    background-color: var(--color-background-100);
+    color: var(--color-contrast);
+    box-shadow: none;
+  }
 }
