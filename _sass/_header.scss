@@ -1,5 +1,5 @@
 // ======================================================================
-// _header.scss — island navbar + mobile fixed header + bento panel
+// _header.scss — island navbar + fixed mobile header + bento panel
 // ======================================================================
 
 
@@ -7,7 +7,7 @@
 .island-navbar {
   @include container;
   position: sticky;
-  top: $container-gutter; // desktop offset
+  top: $container-gutter; // desktop offset (sticky “island”)
   z-index: $z-header;
   margin: 0 auto $sp-6;
   display: flex;
@@ -41,33 +41,25 @@
   }
 }
 
-// ----- Mobile: make header fixed at top -----
+// ----- Mobile: fixed header -----
 @media (max-width: $bp-lg) {
   .island-navbar {
     position: fixed;
-    top: 0;
-    left: 0; right: 0;
+    top: 0; left: 0; right: 0;
     margin: 0;
     width: 100%;
     border-radius: 0;
   }
-  body.has-fixed-nav {
-    padding-top: var(--nav-h, #{$navbar-height}); // set by JS
-  }
+  body.has-fixed-nav { padding-top: var(--nav-h, #{$navbar-height}); }
 }
 
 // ---------- Brand ----------
 .navbar-brand {
-  display: flex;
-  align-items: center;
-  gap: $sp-6;
-  text-decoration: none;
+  display: flex; align-items: center; gap: $sp-6; text-decoration: none;
 
   .navbar-avatar {
     width: 2.25rem; height: 2.25rem;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid;
+    border-radius: 50%; object-fit: cover; border: 2px solid;
     @include theme-block      { border-color: tone(border, light); }
     @include theme-block-dark { border-color: tone(border, dark); }
   }
@@ -85,20 +77,19 @@
   }
 }
 
-// ---------- Desktop menu (with icons) ----------
+// ---------- Desktop menu (icons + slightly larger text) ----------
 .navbar-menu {
-  ul {
-    display: flex; align-items: center; gap: $sp-2;
-    margin: 0; padding: 0; list-style: none;
-  }
+  ul { display: flex; align-items: center; gap: $sp-2; margin: 0; padding: 0; list-style: none; }
+
   a {
     display: inline-flex; align-items: center; gap: .6em;
     padding: $sp-4 $sp-6;
-    font-size: $fs-3; font-weight: $fw-medium;
+    font-size: $fs-4; // slightly larger
+    font-weight: $fw-medium;
     border-radius: $radius-pill;
     transition: background-color $dur-1, color $dur-1;
 
-    i { font-size: $fs-4; line-height: 1; } // icon beside label
+    i { font-size: $fs-5; line-height: 1; }
 
     @include theme-block {
       color: tone(secondary, light);
@@ -113,7 +104,7 @@
   @media (max-width: $bp-lg) { display: none; }
 }
 
-// ---------- Actions (search, theme, CTA, hamburger) ----------
+// ---------- Actions ----------
 .navbar-actions {
   display: flex; align-items: center; gap: $sp-4;
 
@@ -121,21 +112,18 @@
     @extend .button-icon;
     background: transparent; border: 1px solid; position: relative; overflow: hidden;
 
-    // icon morph animation (sun/moon)
+    // animated sun/moon
     i {
       position: absolute; inset: 0; display: grid; place-items: center;
       opacity: 0; transform: rotate(-90deg) scale(0.8);
       transition: opacity $dur-2 ease, transform $dur-2 $ease-in-out;
-      font-size: $fs-4;
+      font-size: $fs-5;
     }
-
-    // show sun in light
     @include theme-block {
       color: tone(secondary, light); border-color: tone(border, light);
       &:hover { background: tone(background-200, light); color: tone(contrast, light); }
       .icon-sun { opacity: 1; transform: rotate(0deg) scale(1); }
     }
-    // show moon in dark
     @include theme-block-dark {
       color: tone(secondary, dark); border-color: tone(border, dark);
       &:hover { background: tone(background-200, dark); color: tone(contrast, dark); }
@@ -143,41 +131,63 @@
     }
   }
 
-  .cta-github { @extend .button; @extend .button-sm; }
+  // GitHub CTA: text on desktop, icon-only on mobile
+  .cta-github {
+    @extend .button; @extend .button-sm;
+    span { display: none; }
+    @media (min-width: $bp-md) { span { display: inline; } }
+  }
 
   .mobile-menu-toggle { display: none; }
   @media (max-width: $bp-lg) { .mobile-menu-toggle { display: inline-flex; } }
 }
 
-// ---------- Mobile bento panel (collapsible under fixed header) ----------
+// ---------- Mobile island panel ----------
 .island-panel {
   position: fixed;
-  left: 0; right: 0;
-  top: var(--nav-h, #{$navbar-height}); // sits right below fixed nav
+  left: $container-gutter; right: $container-gutter;
+  top: var(--nav-h, #{$navbar-height}); // starts under fixed nav
   z-index: $z-overlay;
   margin: 0 auto;
-  width: 100%;
-
-  // container feel without calc()
   max-width: $island-width;
-  transform: translateY(-6px);
-  transition: max-height 500ms $ease-in-out, opacity 300ms ease, transform 350ms $ease-in-out;
 
   border: 1px solid; border-top: 0;
   border-bottom-left-radius: $radius-6;
   border-bottom-right-radius: $radius-6;
-  overflow: hidden; max-height: 0; opacity: 0; pointer-events: none;
 
-  @include theme-block      { background: rgba(255,255,255,0.82); border-color: tone(border, light); box-shadow: $shadow-light; }
-  @include theme-block-dark { background: rgba(20,20,22,0.86);  border-color: tone(border, dark);  box-shadow: $shadow-dark; }
+  // “floating” glass island feel
+  backdrop-filter: blur(14px);
+  transform: translateY(-6px);
+  transition: max-height 500ms $ease-in-out, opacity 300ms ease, transform 350ms $ease-in-out, box-shadow $dur-2 $ease-in-out;
 
-  &.is-open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  // collapsed state
+  max-height: 0;
+  opacity: 0;
+  overflow: clip;
+  pointer-events: none;
 
-  .island-panel__inner { padding: $sp-10; display: grid; gap: $sp-8; }
+  @include theme-block      { background: rgba(255,255,255,0.86); border-color: tone(border, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: rgba(20,20,22,0.90);  border-color: tone(border, dark);  box-shadow: $shadow-dark; }
+
+  &.is-open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    // Instead of measuring scrollHeight, we use a generous cap and let the inner scroll
+    max-height: 90vh;
+  }
+
+  .island-panel__inner {
+    padding: $sp-10;
+    display: grid; gap: $sp-8;
+    max-height: 90vh; // ensure all cards are accessible
+    overflow: auto;   // scroll inside when content exceeds
+  }
+
   @media (min-width: $bp-lg) { display: none; }
 }
 
-// ---------- Bento cards ----------
+// ---------- Bento grid & cards (slightly larger type) ----------
 .bento-grid {
   display: grid; gap: $sp-6; grid-template-columns: repeat(2, 1fr);
   @media (min-width: $bp-sm) { grid-template-columns: repeat(3, 1fr); }
@@ -197,14 +207,14 @@
   }
 
   .bento-icon {
-    width: 2.25rem; height: 2.25rem; display: grid; place-items: center;
+    width: 2.5rem; height: 2.5rem; display: grid; place-items: center;
     border-radius: $radius-3; border: 1px solid;
     @include theme-block      { border-color: tone(border, light); }
     @include theme-block-dark { border-color: tone(border, dark); }
-    i { font-size: $fs-4; }
+    i { font-size: $fs-6; }
   }
   .bento-title {
-    font-weight: $fw-semibold; font-size: $fs-3;
+    font-weight: $fw-semibold; font-size: $fs-4;
     @include theme-block      { color: tone(contrast, light); }
     @include theme-block-dark { color: tone(contrast, dark); }
   }

@@ -1,4 +1,4 @@
-<!-- header.html — fixed mobile navbar + icons + bento + theme switcher -->
+<!-- header.html — fixed mobile navbar + icons + bento + theme switcher + JSON-LD -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/style.css">
 
 <header class="island-navbar" role="navigation" aria-label="Primary" id="site-navbar">
@@ -34,7 +34,7 @@
       <i class="ph-bold ph-magnifying-glass" style="font-size: 1.25em;"></i>
     </a>
 
-    <!-- Theme switcher (animated) -->
+    <!-- Theme switcher -->
     <button class="theme-toggle-button button-icon button-sm" aria-label="Toggle theme" id="theme-toggle" aria-pressed="false">
       <i class="ph-bold ph-sun icon-sun" aria-hidden="true"></i>
       <i class="ph-bold ph-moon icon-moon" aria-hidden="true"></i>
@@ -42,7 +42,7 @@
 
     {% if site.repo %}
       <a href="{{ site.repo }}" target="_blank" rel="noopener" class="button button-sm cta-github">
-        <i class="ph-bold ph-star"></i><span>Star</span>
+        <i class="ph-bold ph-star"></i><span>Star on GitHub</span>
       </a>
     {% endif %}
 
@@ -68,8 +68,40 @@
   </div>
 </section>
 
+<!-- JSON-LD: Person + WebSite -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": {{ site.title | jsonify }},
+  "jobTitle": {{ site.job_title | default: site.description | jsonify }},
+  "url": {{ site.url | append: site.baseurl | jsonify }}{% if site.logo %},
+  "image": {{ site.url | append: site.logo | jsonify }}{% endif %},
+  "sameAs": [{% assign links = site.social_links %}{% assign first = true %}
+    {% if links.Twitter %}{% unless first %}, {% endunless %}{{ links.Twitter | jsonify }}{% assign first = false %}{% endif %}
+    {% if links.LinkedIn %}{% unless first %}, {% endunless %}{{ links.LinkedIn | jsonify }}{% assign first = false %}{% endif %}
+    {% if links.GitHub %}{% unless first %}, {% endunless %}{{ links.GitHub | jsonify }}{% assign first = false %}{% endif %}
+    {% if links.link %}{% unless first %}, {% endunless %}{{ links.link | jsonify }}{% assign first = false %}{% endif %}
+    {% if links.RSS %}{% unless first %}, {% endunless %}{{ site.url | append: links.RSS | jsonify }}{% assign first = false %}{% endif %}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"WebSite",
+  "name": {{ site.title | jsonify }},
+  "url": {{ site.url | append: site.baseurl | jsonify }},
+  "potentialAction":{
+    "@type":"SearchAction",
+    "target": {{ site.url | append: site.baseurl | append: "/search/?q={search_term_string}" | jsonify }},
+    "query-input":"required name=search_term_string"
+  }
+}
+</script>
+
 <script>
-  // FOUC guard: decide theme before first paint
+  // ---- FOUC guard: decide theme before first paint ----
   (function () {
     var KEY = "color-scheme";
     var saved = localStorage.getItem(KEY);
@@ -96,34 +128,24 @@
     setNavHeightVar();
     window.addEventListener("resize", setNavHeightVar);
 
-    // THEME SWITCHER (smooth)
+    // THEME SWITCH (animated)
     function getTheme(){ return root.getAttribute("data-color-scheme") || "light"; }
     function setTheme(t){
       root.setAttribute("data-color-scheme", t);
       localStorage.setItem(KEY, t);
-      if (btn) btn.setAttribute("aria-pressed", t === "dark");
+      if (btn) btn.setAttribute("aria-pressed", String(t === "dark"));
     }
     setTheme(localStorage.getItem(KEY) || getTheme());
-    if (btn) btn.addEventListener("click", function(){ setTheme(getTheme()==="light" ? "dark" : "light"); });
+    if (btn) btn.addEventListener("click", function(){ setTheme(getTheme() === "light" ? "dark" : "light"); });
 
-    // BENTO PANEL (collapsible)
-    function setPanelHeight(open){
-      if (!menu) return;
-      if (open){
-        menu.style.maxHeight = "0px";
-        requestAnimationFrame(function(){ menu.style.maxHeight = menu.scrollHeight + "px"; });
-      } else {
-        menu.style.maxHeight = menu.scrollHeight + "px";
-        requestAnimationFrame(function(){ menu.style.maxHeight = "0px"; });
-      }
-    }
+    // BENTO PANEL (use max-height cap so content never hides; inner scrolls)
     function openPanel(){
       if (!menu || !toggle || !bar) return;
       bar.classList.add("is-open");
       menu.classList.add("is-open");
       menu.setAttribute("aria-hidden","false");
       toggle.setAttribute("aria-expanded","true");
-      setPanelHeight(true);
+      menu.style.maxHeight = "90vh";
     }
     function closePanel(){
       if (!menu || !toggle || !bar) return;
@@ -131,16 +153,16 @@
       menu.classList.remove("is-open");
       menu.setAttribute("aria-hidden","true");
       toggle.setAttribute("aria-expanded","false");
-      setPanelHeight(false);
+      menu.style.maxHeight = "0px";
     }
-    function togglePanel(){ menu.classList.contains("is-open") ? closePanel() : openPanel(); }
+    function togglePanel(){ (menu && menu.classList.contains("is-open")) ? closePanel() : openPanel(); }
 
     if (toggle) toggle.addEventListener("click", togglePanel);
     if (menu)   menu.addEventListener("click", function(e){ if (e.target.closest("a")) closePanel(); });
     document.addEventListener("keydown", function(e){ if (e.key === "Escape" && menu && menu.classList.contains("is-open")) closePanel(); });
 
-    // close when jumping to desktop
-    var mq = window.matchMedia("(min-width: {{  site.bp_lg | default: '992px' }})");
+    // close panel when switching to desktop width
+    var mq = window.matchMedia("(min-width: {{ site.bp_lg | default: '992px' }})");
     if (mq && mq.addEventListener) mq.addEventListener("change", function(){ if (mq.matches) closePanel(); });
   });
 </script>
