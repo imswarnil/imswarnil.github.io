@@ -41,12 +41,66 @@
 }
 
 // Mobile: fixed full-width
+/* --- Make the navbar FLOAT & CENTER on mobile too (not full-width) --- */
 @media (max-width: $bp-lg) {
   .island-navbar {
-    position: fixed; top: 0; left: 0; right: 0; width: 100%;
-    margin: 0; border-radius: 0;
+    /* center like desktop */
+    @include container;
+    position: fixed;
+    top: $container-gutter;                /* same breathing room as desktop */
+    left: $container-gutter;
+    right: $container-gutter;
+    width: auto;
+    margin: 0 auto;
+    border-radius: $radius-6;              /* keep the rounded island */
   }
-  body.has-fixed-nav { padding-top: var(--nav-h, #{$navbar-height}); }
+
+  /* give the page room below the fixed, centered island */
+  body.has-fixed-nav {
+    padding-top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-8});
+  }
+}
+
+/* --- Float the panel directly UNDER the centered island --- */
+.island-panel {
+  /* already fixed; just ensure it mirrors the island width/centering */
+  left: $container-gutter;
+  right: $container-gutter;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: $island-width;
+
+  /* sit just below the header island (keep a small gap) */
+  top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-3});
+
+  /* keep the same rounded look on ALL corners */
+  border-top-left-radius: $radius-6;
+  border-top-right-radius: $radius-6;
+  border-bottom-left-radius: $radius-6;
+  border-bottom-right-radius: $radius-6;
+
+  /* keep the border on top so it looks like a separate floating card */
+  border-top: 1px solid;
+
+  /* stronger glassy look while floating */
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+/* when open, allow full viewport remainder with scroll INSIDE the panel */
+.island-panel.is-open {
+  max-height: calc(100vh - (var(--nav-h, #{$navbar-height}) + #{$sp-3} + #{$sp-3}));
+}
+
+.island-panel .island-panel__inner {
+  max-height: calc(100vh - (var(--nav-h, #{$navbar-height}) + #{$sp-3} + #{$sp-3}));
+  overflow: auto;
+}
+
+/* bento grid can show 3 columns on wider phones, but stays centered */
+.bento-grid {
+  grid-template-columns: repeat(2, 1fr);
+  @include mq-up($bp-sm) { grid-template-columns: repeat(3, 1fr); }
 }
 
 // ---------- Brand ----------
