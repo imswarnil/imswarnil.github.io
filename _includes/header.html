@@ -1,4 +1,4 @@
-<header class="island-navbar" role="navigation" aria-label="Primary" id="site-navbar">
+<!-- <header class="island-navbar" role="navigation" aria-label="Primary" id="site-navbar">
   <a href="#home" class="navbar-brand">
     <img src="https://i.pravatar.cc/40?u=johndoe" alt="John Doe" class="navbar-avatar" />
     <span class="brand-text">
@@ -31,4 +31,271 @@
       <i class="ph-bold ph-list"></i>
     </button>
   </div>
+</header> -->
+
+<!-- =============================================
+header.html — Dynamic Island Header (Jekyll)
+- Uses site.* + navigation_header from _config.yml
+- Theme Switcher (start/end) included
+- Mobile "island panel" menu included
+- Styles use CSS vars from _base.scss (no mixed-unit Sass math)
+============================================= -->
+<header class="island-navbar" role="navigation" aria-label="Primary" id="site-navbar">
+<a href="{{ site.baseurl }}/" class="navbar-brand">
+{% if site.logo %}
+ <img src="{{ site.logo | relative_url }}" alt="{{ site.title }}" class="navbar-avatar">
+{% endif %}
+<span class="brand-text">
+ <span class="logo">{{ site.title }}</span>
+ <span class="logo-sub">{{ site.description | default: " " }}</span>
+</span>
+</a>
+
+<!-- Desktop nav -->
+<nav class="navbar-menu" aria-label="Desktop Navigation">
+<ul>
+ {% for item in site.navigation_header %}
+   <li>
+     <a href="{{ item.url | relative_url }}" class="{% if page.url == item.url %}active{% endif %}">
+       {% if item.icon %}{% include icon.html id=item.icon %}{% endif %}
+       {{ item.title }}
+     </a>
+   </li>
+ {% endfor %}
+</ul>
+</nav>
+
+<!-- Actions -->
+<div class="navbar-actions">
+<a href="{{ '/search/' | relative_url }}" class="button-icon button-sm button-transparent" aria-label="Search">
+ <i class="ph-bold ph-magnifying-glass" style="font-size:1.25em;"></i>
+</a>
+
+<!-- THEME SWITCHER: start -->
+<button class="theme-toggle-button button-icon button-sm" aria-label="Toggle theme" id="theme-toggle">
+ <i class="ph-bold ph-sun icon-sun" aria-hidden="true"></i>
+ <i class="ph-bold ph-moon icon-moon" aria-hidden="true"></i>
+</button>
+<!-- THEME SWITCHER: end -->
+
+{% if site.repo %}
+ <a href="{{ site.repo }}" target="_blank" rel="noopener noreferrer" class="button button-sm cta-github">
+   <i class="ph-bold ph-star"></i><span>Star on GitHub</span>
+ </a>
+{% endif %}
+
+<button class="mobile-menu-toggle button button-sm button-transparent button-icon"
+       id="mobile-menu-toggle"
+       aria-label="Open menu"
+       aria-controls="mobile-panel"
+       aria-expanded="false">
+ <i class="ph-bold ph-list"></i>
+</button>
+</div>
 </header>
+
+<!-- EXPANDING MOBILE PANEL (Island style) -->
+<section id="mobile-panel" class="island-panel" aria-hidden="true">
+<div class="island-panel__inner">
+<div class="bento-grid">
+ {% for item in site.navigation_header %}
+   <a class="bento-card" href="{{ item.url | relative_url }}">
+     <span class="bento-icon">
+       {% if item.icon %}
+         {% include icon.html id=item.icon %}
+       {% else %}
+         <i class="ph-bold ph-caret-right"></i>
+       {% endif %}
+     </span>
+     <span>
+       <div class="bento-title">{{ item.title }}</div>
+       <div class="bento-sub">{{ item.sub | default: "Open" }}</div>
+     </span>
+   </a>
+ {% endfor %}
+ {% if site.repo %}
+   <a class="bento-card" href="{{ site.repo }}" target="_blank" rel="noopener">
+     <span class="bento-icon"><i class="ph-bold ph-github-logo"></i></span>
+     <span>
+       <div class="bento-title">GitHub</div>
+       <div class="bento-sub">Open-source</div>
+     </span>
+   </a>
+ {% endif %}
+</div>
+</div>
+</section>
+
+<!-- Header local styles (uses _base.scss CSS variables) -->
+<style>
+/* ========== HEADER (island) ========== */
+.island-navbar{
+position: sticky; top: var(--page-pad); z-index: 1000;
+margin: 0 auto var(--spacing-6, 0.75rem);
+display:flex; align-items:center; justify-content:space-between; gap: .75rem;
+padding: .5rem .75rem;
+background-color: hsla(0, 0%, 100%, 0.72);
+-webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+border-radius: 24px; border: 1px solid var(--color-border); box-shadow: var(--shadow-1);
+width: {{ site.container_w | default: "1100px" }}; max-width: calc(100% - 2 * var(--page-pad));
+transition: background-color .2s, border-radius .25s ease;
+}
+:root[data-color-scheme="dark"] .island-navbar{ background-color: hsla(240, 3%, 12%, 0.72); }
+.island-navbar.is-open{ border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; }
+
+.navbar-brand{ display:flex; align-items:center; gap:.75rem; text-decoration:none; }
+.navbar-avatar{ width:36px; height:36px; border-radius:50%; object-fit:cover; border:2px solid var(--color-border); }
+.brand-text{ display:grid; line-height:1.05; }
+.logo{ font-size: var(--font-large, 1.125rem); font-weight: 600; color: var(--color-ink); }
+.logo-sub{ font-size: .8rem; color: var(--color-fg-weak); }
+
+/* desktop nav */
+.navbar-menu ul{ display:flex; align-items:center; list-style:none; margin:0; padding:0; gap:.25rem; }
+.navbar-menu a{
+font-size: var(--font-small, .875rem); font-weight: 500;
+color: var(--color-fg-weak); padding: .5rem .75rem;
+border-radius: 999px; display:flex; align-items:center; gap:.5em;
+transition: color .2s, background-color .2s;
+}
+.navbar-menu a:hover, .navbar-menu a.active{ color: var(--color-ink); background: var(--color-bg-elev); }
+
+/* actions */
+.navbar-actions{ display:flex; align-items:center; gap:.5rem; }
+.button{ align-items:center; gap:.5em; }
+.button-icon{
+border: 1px solid var(--color-border); border-radius: 999px; background: transparent;
+display:inline-grid; place-items:center; width: 2.25rem; height: 2.25rem;
+}
+.button-sm{ min-height: 2.25rem; padding: .4rem .9rem; font-size: .82rem; }
+.button-transparent{ background: transparent; color: var(--color-fg-weak); }
+.cta-github{ background: var(--brand); color: #fff; border: 1px solid transparent; }
+.cta-github:hover{ background: var(--color-ink); color: var(--color-bg); }
+
+/* theme toggle */
+.theme-toggle-button{
+position: relative; overflow: hidden;
+background: var(--color-bg-elev); color: var(--color-fg-weak);
+}
+.theme-toggle-button:hover{ color: var(--color-ink); }
+.theme-toggle-button i{
+font-size:1.25em; position:absolute; inset:0; margin:auto; height:1em; width:1em;
+transform: scale(.9); opacity:0; transition: transform .35s var(--ease, cubic-bezier(.25,1,.5,1)), opacity .25s ease;
+}
+:root[data-color-scheme="light"] .theme-toggle-button .icon-sun{ opacity:1; transform: scale(1); }
+:root[data-color-scheme="dark"]  .theme-toggle-button .icon-moon{ opacity:1; transform: scale(1); }
+
+/* mobile visibility */
+.mobile-menu-toggle{ display:none; }
+@media (max-width: 991px){ .navbar-menu{ display:none; } .mobile-menu-toggle{ display:inline-grid; } .island-navbar{ width:auto; } }
+@media (max-width: 767px){
+.island-navbar{ width: calc(100% - 2 * var(--page-pad)); }
+.cta-github > span{ display:none; }
+.cta-github{ padding: .4rem; }
+}
+
+/* ========== MOBILE PANEL (island) ========== */
+.island-panel{
+position: relative; z-index: 950;
+margin: -12px auto var(--page-pad);
+width: {{ site.container_w | default: "1100px" }}; max-width: calc(100% - 2 * var(--page-pad));
+border-radius: 24px; border: 1px solid var(--color-border); border-top: 0;
+background: hsla(0,0%,100%,.75); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+box-shadow: var(--shadow-1); overflow: hidden; max-height: 0; opacity: 0; transform: translateY(-6px) scale(.992);
+pointer-events: none;
+transition: max-height .5s cubic-bezier(.25,1,.5,1), opacity .3s ease, transform .4s cubic-bezier(.25,1,.5,1);
+}
+:root[data-color-scheme="dark"] .island-panel{ background: hsla(240,3%,12%,.75); }
+.island-panel.is-open{ opacity:1; transform: translateY(0) scale(1); pointer-events:auto; border-top-left-radius:0; border-top-right-radius:0; }
+.island-panel.is-open::before{
+content:""; position:absolute; inset:0 0 auto 0; height:1px; top:0;
+background: linear-gradient(90deg, transparent, rgba(0,0,0,.08), transparent);
+}
+:root[data-color-scheme="dark"] .island-panel.is-open::before{
+background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
+}
+.island-panel__inner{ padding: 2rem 1.5rem; display:grid; gap: 1rem; }
+
+/* bento grid */
+.bento-grid{ display:grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+@media (min-width: 540px){ .bento-grid{ grid-template-columns: repeat(3, 1fr); } }
+.bento-card{
+display:flex; align-items:center; gap: 12px; padding: 14px;
+border-radius: 14px; border: 1px solid var(--color-border);
+background: var(--color-bg); transition: transform .15s ease, background .2s ease;
+}
+.bento-card:hover{ transform: translateY(-2px); background: var(--color-bg-elev); }
+.bento-icon{
+width: 38px; height: 38px; display:grid; place-items:center;
+border-radius: 12px; border: 1px solid var(--color-border);
+}
+.bento-title{ color: var(--color-ink); font-weight: 600; font-size: .95rem; }
+.bento-sub{ color: var(--color-fg-weak); font-size: .8rem; }
+
+/* only show mobile panel on sub-992px */
+@media (min-width: 992px){ .island-panel{ display:none; } }
+
+/* Ensure main content never hides behind the nav */
+body > main:first-of-type, .site-main{ padding-top: calc(var(--nav-height, 58px) + var(--page-pad)); }
+</style>
+
+<!-- Header behavior -->
+<script>
+/* ========== HEADER BEHAVIOR (island) ========== */
+document.addEventListener("DOMContentLoaded", function () {
+const root = document.documentElement;
+
+// THEME SWITCHER: start
+const KEY = "color-scheme";
+const themeToggleBtn = document.getElementById("theme-toggle");
+function getTheme(){ return root.getAttribute("data-color-scheme") || "light"; }
+function setTheme(theme){
+root.setAttribute("data-color-scheme", theme);
+try { localStorage.setItem(KEY, theme); } catch(e){}
+themeToggleBtn && themeToggleBtn.setAttribute("aria-pressed", theme === "dark");
+}
+setTheme(localStorage.getItem(KEY) || getTheme());
+themeToggleBtn && themeToggleBtn.addEventListener("click", () => setTheme(getTheme()==="light" ? "dark" : "light"));
+// THEME SWITCHER: end
+
+// Mobile island panel
+const mobileMenuToggle = document.getElementById("mobile-menu-toggle");
+const mobilePanel = document.getElementById("mobile-panel");
+const navbar = document.getElementById("site-navbar");
+
+function setPanelHeight(open){
+if(!mobilePanel) return;
+if(open){
+ mobilePanel.style.maxHeight = "0px";
+ requestAnimationFrame(()=>{ mobilePanel.style.maxHeight = mobilePanel.scrollHeight + "px"; });
+} else {
+ mobilePanel.style.maxHeight = mobilePanel.scrollHeight + "px";
+ requestAnimationFrame(()=>{ mobilePanel.style.maxHeight = "0px"; });
+}
+}
+function openPanel(){
+navbar && navbar.classList.add("is-open");
+mobilePanel && mobilePanel.classList.add("is-open");
+mobilePanel && mobilePanel.setAttribute("aria-hidden","false");
+document.body.classList.add("panel-open");
+mobileMenuToggle && mobileMenuToggle.setAttribute("aria-expanded","true");
+setPanelHeight(true);
+}
+function closePanel(){
+navbar && navbar.classList.remove("is-open");
+mobilePanel && mobilePanel.classList.remove("is-open");
+mobilePanel && mobilePanel.setAttribute("aria-hidden","true");
+document.body.classList.remove("panel-open");
+mobileMenuToggle && mobileMenuToggle.setAttribute("aria-expanded","false");
+setPanelHeight(false);
+}
+function togglePanel(){ (mobilePanel && mobilePanel.classList.contains("is-open")) ? closePanel() : openPanel(); }
+
+mobileMenuToggle && mobileMenuToggle.addEventListener("click", togglePanel);
+mobilePanel && mobilePanel.addEventListener("click", (e)=>{ if(e.target.closest("a")) closePanel(); });
+document.addEventListener("keydown", (e)=>{ if(e.key==="Escape" && mobilePanel && mobilePanel.classList.contains("is-open")) closePanel(); });
+
+// Close panel when crossing desktop breakpoint
+const mq = window.matchMedia("(min-width: 992px)");
+mq.addEventListener("change", ()=>{ if(mq.matches) closePanel(); });
+});
+</script>
