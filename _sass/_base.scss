@@ -1,17 +1,13 @@
 // ======================================================================
-// BASE (site-wide reset, typography, elements, utilities, layout helpers)
-// Depends on: _variables.scss
+// _base.scss  — site-wide reset, typography, elements, layout helpers
+// Depends on: _variables.scss (your tokens + mixins)
 // ======================================================================
 
 // ------------------------------
-// Reset-ish
+// Reset
 // ------------------------------
 *, *::before, *::after { box-sizing: border-box; }
-* { min-width: 0; } // fix flex overflow
-
-html { -webkit-text-size-adjust: 100%; }
-html { scroll-behavior: smooth; }
-
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 body {
   margin: 0;
   font-family: $ff-body;
@@ -19,37 +15,27 @@ body {
   font-size: 16px;
   line-height: 1.6;
 
-  @include theme-light {
-    background-color: tone(background, light);
-    color: tone(foreground, light);
-  }
-  @include theme-dark {
-    background-color: tone(background, dark);
-    color: tone(foreground, dark);
-  }
+  @include theme-block  { background-color: tone(background, light); color: tone(foreground, light); }
+  @include theme-block-dark { background-color: tone(background, dark); color: tone(foreground, dark); }
 }
-
 body.panel-open { overflow: hidden; }
 
 // ------------------------------
-// Media & basic elements
+// Media
 // ------------------------------
-img, svg, video, canvas, audio, iframe {
-  display: block;
-  max-width: 100%;
-}
-
+img, svg, video, canvas, audio, iframe { display: block; max-width: 100%; }
 img { height: auto; border-style: none; }
 figure { margin: 0 0 $sp-8 0; }
 figcaption {
-  margin-top: $sp-4; font-size: $fs-2; color: tone(secondary, light);
-  @include theme-dark { color: tone(secondary, dark); }
+  margin-top: $sp-4; font-size: $fs-2;
+  @include theme-block  { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark); }
 }
 
 hr {
   height: 1px; border: 0; margin: $sp-12 0;
-  background: linear-gradient(to right, transparent, tone(border, light), transparent);
-  @include theme-dark { background: linear-gradient(to right, transparent, tone(border, dark), transparent); }
+  @include theme-block      { background: linear-gradient(to right, transparent, tone(border, light), transparent); }
+  @include theme-block-dark { background: linear-gradient(to right, transparent, tone(border, dark),  transparent); }
 }
 
 // ------------------------------
@@ -59,29 +45,33 @@ a {
   text-decoration: none;
   transition: color $dur-1 $ease-in-out, background-color $dur-1 $ease-in-out, border-color $dur-1 $ease-in-out;
 
-  @include theme-light { color: tone(contrast, light); }
-  @include theme-dark  { color: tone(contrast, dark); }
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark); }
 
-  &:hover, &:focus {
-    @include theme-light { color: tone(accent, light); }
-    @include theme-dark  { color: tone(accent, dark); }
+  &:hover,
+  &:focus {
+    @include theme-block      { color: tone(accent, light); }
+    @include theme-block-dark { color: tone(accent, dark); }
   }
 
-  &:focus-visible { @include focus-ring(#6aa6ff); }
+  &:focus-visible {
+    outline: $focus-ring-width solid rgba(106, 166, 255, 0.4);
+    outline-offset: 2px;
+  }
 }
 
 // ------------------------------
 // Typography
 // ------------------------------
 h1, h2, h3, h4, h5, h6 {
-  margin: 0 0 $sp-6 0; line-height: 1.2; font-family: $ff-head; font-weight: $fw-semibold;
-  @include theme-light { color: tone(constrast, light); } // typo-safe fallback below
-}
-h1, h2, h3, h4, h5, h6 {
-  @include theme-light { color: tone(contrast, light); }
-  @include theme-dark  { color: tone(contrast, dark); }
-}
+  margin: 0 0 $sp-6 0;
+  line-height: 1.2;
+  font-family: $ff-head;
+  font-weight: $fw-semibold;
 
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark); }
+}
 h1 { font-size: 2.25rem; }
 h2 { font-size: 1.75rem; }
 h3 { font-size: 1.5rem; }
@@ -97,24 +87,23 @@ h6 { font-size: 1rem; }
 
 p { margin: 0 0 $sp-6 0; }
 small, .small {
-  font-size: $fs-1; color: tone(secondary, light);
-  @include theme-dark { color: tone(secondary, dark); }
+  font-size: $fs-1;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark); }
 }
 strong { font-weight: $fw-bold; }
 em { font-style: italic; }
 
 blockquote {
-  margin: 0 0 $sp-8 0; padding: $sp-8 $sp-10;
-  border-left: 4px solid tone(border, light);
-  background: tone(background-100, light);
-  @include theme-dark {
-    border-left-color: tone(border, dark);
-    background: tone(background-100, dark);
-  }
+  margin: 0 0 $sp-8 0;
+  padding: $sp-8 $sp-10;
+  border-left: 4px solid;
+  @include theme-block      { border-left-color: tone(border, light); background: tone(background-100, light); }
+  @include theme-block-dark { border-left-color: tone(border, dark);  background: tone(background-100, dark); }
   p:last-child { margin-bottom: 0; }
 }
 
-// “typeset” wrapper for article prose
+// Prose wrapper
 .typeset {
   h2, h3 { margin-top: $sp-12; }
   ul, ol { margin-bottom: $sp-8; }
@@ -135,16 +124,22 @@ dd { margin: 0 0 $sp-4 0; }
 code, kbd, samp {
   font-family: $ff-mono;
   font-size: 0.95em;
-  @include theme-light { background: tone(muted, light); color: tone(contrast, light); }
-  @include theme-dark  { background: tone(muted, dark);  color: tone(contrast, dark); }
-  padding: 0 .3em; border-radius: $radius-2;
-}
+  border-radius: $radius-2;
+  padding: 0 .3em;
 
+  @include theme-block      { background: tone(muted, light); color: tone(contrast, light); }
+  @include theme-block-dark { background: tone(muted, dark);  color: tone(contrast, dark); }
+}
 pre {
-  margin: 0 0 $sp-8 0; padding: $code-pad;
-  border-radius: $code-radius; overflow-x: auto; font-family: $ff-mono;
-  border: 1px solid tone(border, light); background: tone(background-100, light);
-  @include theme-dark { border-color: tone(border, dark); background: tone(background-100, dark); }
+  margin: 0 0 $sp-8 0;
+  padding: $code-pad;
+  border-radius: $code-radius;
+  overflow-x: auto;
+  border: 1px solid;
+  font-family: $ff-mono;
+
+  @include theme-block      { border-color: tone(border, light); background: tone(background-100, light); }
+  @include theme-block-dark { border-color: tone(border, dark);  background: tone(background-100, dark); }
 }
 pre code { background: transparent; padding: 0; }
 
@@ -152,27 +147,35 @@ pre code { background: transparent; padding: 0; }
 // Tables
 // ------------------------------
 table {
-  width: 100%; border-collapse: collapse; margin: 0 0 $sp-10 0; font-size: $fs-3;
-  th, td {
-    padding: $table-pad-y $table-pad-x; text-align: left; vertical-align: top;
-    border-bottom: $table-border;
-    @include theme-dark { border-bottom: 1px solid tone(border, dark); }
-  }
-  thead th {
-    font-weight: $fw-semibold;
-    @include theme-light { color: tone(contrast, light); }
-    @include theme-dark  { color: tone(contrast, dark); }
-  }
-  tbody tr:hover {
-    @include theme-light { background: tone(background-100, light); }
-    @include theme-dark  { background: tone(background-100, dark); }
-  }
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 $sp-10 0;
+  font-size: $fs-3;
+}
+th, td {
+  padding: $table-pad-y $table-pad-x;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid;
+
+  @include theme-block      { border-bottom-color: tone(border, light); }
+  @include theme-block-dark { border-bottom-color: tone(border, dark); }
+}
+thead th {
+  font-weight: $fw-semibold;
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark); }
+}
+tbody tr:hover {
+  @include theme-block      { background: tone(background-100, light); }
+  @include theme-block-dark { background: tone(background-100, dark); }
 }
 
 // ------------------------------
 // Forms
 // ------------------------------
 label { display: inline-block; margin-bottom: $sp-4; font-weight: $fw-medium; }
+
 input[type="text"],
 input[type="email"],
 input[type="url"],
@@ -181,46 +184,40 @@ input[type="password"],
 input[type="number"],
 input[type="tel"],
 textarea,
-select { @include input-base; }
+select {
+  @include input-base;
+}
 
 textarea { min-height: 8rem; resize: vertical; }
 select { appearance: none; background-image: none; }
 
-// Checkboxes / radios (simple)
-input[type="checkbox"], input[type="radio"] { accent-color: tone(contrast, light); }
-@include theme-dark {
-  input[type="checkbox"], input[type="radio"] { accent-color: tone(contrast, dark); }
+input[type="checkbox"],
+input[type="radio"] {
+  /* native accent color follows theme automatically in most browsers */
 }
 
+// ------------------------------
 // Buttons (generic + variants)
+// ------------------------------
 .button { @include button-base; }
+
 .button--primary {
-  @include theme-light { background: tone(accent, light); color: tone(white, light); }
-  @include theme-dark  { background: tone(white, dark); color: tone(black, dark); }
-  &:hover { transform: translateY(-2px); }
+  @include theme-block      { background: tone(accent, light); color: tone(white, light); }
+  @include theme-block-dark { background: tone(white, dark);  color: tone(black, dark); }
 }
 .button--ghost {
-  @include theme-light { background: transparent; color: tone(secondary, light); border-color: tone(border, light); }
-  @include theme-dark  { background: transparent; color: tone(secondary, dark);  border-color: tone(border, dark); }
-  &:hover {
-    @include theme-light { background: tone(background-100, light); color: tone(contrast, light); }
-    @include theme-dark  { background: tone(background-100, dark);  color: tone(contrast, dark); }
-  }
+  background: transparent; border: 1px solid;
+  @include theme-block      { color: tone(secondary, light); border-color: tone(border, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  border-color: tone(border, dark); }
 }
 .button--outline {
-  border-color: tone(border, light);
-  @include theme-dark { border-color: tone(border, dark); }
-  background: transparent;
-  @include theme-light { color: tone(contrast, light); }
-  @include theme-dark  { color: tone(contrast, dark); }
+  background: transparent; border: 1px solid;
+  @include theme-block      { color: tone(contrast, light); border-color: tone(border, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  border-color: tone(border, dark); }
 }
 
-// Sizes
 .button--sm { min-height: $btn-height-sm; padding: .35rem $btn-pad-x-sm; font-size: $fs-2; }
 .button--lg { min-height: calc(#{$btn-height} + .25rem); padding: $sp-6 calc(#{$btn-pad-x} + .25rem); font-size: $fs-4; }
-
-// Icon alignment
-.button i { font-size: 1.1em; }
 
 // ------------------------------
 // Layout helpers
@@ -229,23 +226,27 @@ input[type="checkbox"], input[type="radio"] { accent-color: tone(contrast, light
 
 .main {
   @include container;
-  padding-top: $sp-12; // room under navbar
+  padding-top: $sp-12;
 }
 
 .section {
   @include container;
   margin: 0 auto $sp-12;
   padding: $sp-12;
-  @include card-base;
+  border-radius: 24px;
+  border: 1px solid;
+  box-shadow: $shadow-light;
+
+  @include theme-block      { border-color: tone(border, light); background: tone(background, light); }
+  @include theme-block-dark { border-color: tone(border, dark);  background: tone(background-100, dark); box-shadow: $shadow-dark; }
 }
 
-.section-header {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: $sp-8;
-}
-.section-title { margin: 0; font-size: 1.75rem; }
+.section-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: $sp-8; }
+.section-title  { margin: 0; font-size: 1.75rem; }
 .section-sub {
-  font-size: 0.95rem; color: tone(secondary, light);
-  @include theme-dark { color: tone(secondary, dark); }
+  font-size: 0.95rem;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark); }
 }
 
 // Simple grid helpers
@@ -259,78 +260,90 @@ input[type="checkbox"], input[type="radio"] { accent-color: tone(contrast, light
 }
 
 // ------------------------------
-// Blog-specific base (from your includes)
+// Blog list + meta (from your includes)
 // ------------------------------
-.list--posts {
-  list-style: none; padding: 0; margin: 0;
-  .item--post { margin-bottom: $sp-12; }
-  .article--post h2 { margin-bottom: $sp-4; }
-}
+.list--posts { list-style: none; padding: 0; margin: 0; }
+.list--posts .item--post { margin-bottom: $sp-12; }
+.article--post h2 { margin-bottom: $sp-4; }
 
 .post-meta {
   display: inline-block; margin-bottom: $sp-6;
-  color: tone(secondary, light);
-  @include theme-dark { color: tone(secondary, dark); }
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark); }
 }
 
 .label {
-  display: inline-block; padding: .15rem .5rem; border-radius: $badge-radius; font-size: $badge-font;
-  @include theme-light { background: tone(muted, light); color: tone(contrast, light); }
-  @include theme-dark  { background: tone(muted, dark);  color: tone(contrast, dark); }
+  display: inline-block; padding: .2rem .55rem; border-radius: $badge-radius; font-size: $badge-font;
+  @include theme-block      { background: tone(muted, light); color: tone(contrast, light); }
+  @include theme-block-dark { background: tone(muted, dark);  color: tone(contrast, dark); }
 }
 .label--category a {
-  @include theme-light { color: tone(contrast, light); }
-  @include theme-dark  { color: tone(contrast, dark); }
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark); }
 }
 
 // Paginator
 .nav--paginator {
   display: flex; align-items: center; justify-content: space-between; gap: $sp-8; margin-top: $sp-10;
-  .pagination {
-    @include theme-light { color: tone(contrast, light); }
-    @include theme-dark  { color: tone(contrast, dark); }
-    &.pagination--previous,
-    &.pagination--next {
-      @extend .button;
-      @extend .button--outline;
-      font-size: $fs-2;
-    }
-    &.pagination--counter {
-      font-size: $fs-2; color: tone(secondary, light);
-      @include theme-dark { color: tone(secondary, dark); }
-    }
-  }
+}
+.nav--paginator .pagination {
+  font-size: $fs-2;
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark); }
+}
+.pagination--previous,
+.pagination--next {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5em;
+  min-height: $btn-height; padding: $btn-pad-y $btn-pad-x; font-size: $fs-2; font-weight: $fw-medium;
+  border: 1px solid; border-radius: $radius-pill; background: transparent;
+
+  @include theme-block      { color: tone(contrast, light); border-color: tone(border, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  border-color: tone(border, dark); }
+}
+.pagination--counter {
+  font-size: $fs-2;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark); }
 }
 
-// Aside (sidebar)
-.aside {
-  flex: 0 0 280px; max-width: 280px;
-  &.aside--right { margin-left: $sp-12; }
-  &.aside--left  { margin-right: $sp-12; }
-  @media (max-width: $bp-lg) { flex-basis: 100%; max-width: 100%; margin: $sp-12 0 0; }
+// ------------------------------
+// Aside
+// ------------------------------
+.aside { flex: 0 0 280px; max-width: 280px; }
+.aside.aside--right { margin-left: $sp-12; }
+.aside.aside--left  { margin-right: $sp-12; }
+@media (max-width: $bp-lg) {
+  .aside { flex-basis: 100%; max-width: 100%; margin: $sp-12 0 0; }
 }
-.section--related-posts h3,
-.section--description h3,
-.section--category-index h3 { margin-bottom: $sp-6; }
 
+// ------------------------------
 // Footer
+// ------------------------------
 .footer {
   margin-top: $sp-16; padding: $footer-pad-y 0;
-  border-top: 1px solid tone(border, light);
-  @include theme-dark { border-top-color: tone(border, dark); }
-
-  .container { @include container; display: flex; align-items: center; justify-content: space-between; gap: $sp-8; }
-  .copyright .small {
-    color: tone(secondary, light);
-    @include theme-dark { color: tone(secondary, dark); }
-  }
+  border-top: 1px solid;
+  @include theme-block      { border-top-color: tone(border, light); }
+  @include theme-block-dark { border-top-color: tone(border, dark); }
+}
+.footer .container { @include container; display: flex; align-items: center; justify-content: space-between; gap: $sp-8; }
+.footer .copyright .small {
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark); }
 }
 
 // ------------------------------
-// Helpers / Utilities
+// Utilities
 // ------------------------------
 .hidden { display: none !important; }
-.sr-only { @extend %visually-hidden; }
+
+// screen-reader only (no &: where illegal)
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0);
+  border: 0;
+}
 
 .mt-0 { margin-top: 0 !important; }
 .mb-0 { margin-bottom: 0 !important; }
@@ -339,46 +352,9 @@ input[type="checkbox"], input[type="radio"] { accent-color: tone(contrast, light
 .mt-12 { margin-top: $sp-12 !important; }
 .mb-12 { margin-bottom: $sp-12 !important; }
 
-.pad-inline { padding-left: $container-gap; padding-right: $container-gap; }
-
 .text-center { text-align: center !important; }
 .text-right  { text-align: right !important; }
 .text-muted  {
-  color: tone(secondary, light) !important;
-  @include theme-dark { color: tone(secondary, dark) !important; }
-}
-
-.badge {
-  display: inline-block; padding: $badge-pad-y $badge-pad-x; border-radius: $badge-radius; font-size: $badge-font;
-  @include theme-light { background: tone(muted, light); color: tone(contrast, light); }
-  @include theme-dark  { background: tone(muted, dark);  color: tone(contrast, dark); }
-}
-
-// Alerts (semantic)
-.alert {
-  padding: $alert-pad; border-radius: $alert-radius; margin-bottom: $sp-8; border: 1px solid transparent;
-  &--success {
-    background: rgba(map-get($theme-light, success), .08); border-color: rgba(map-get($theme-light, success), .25); color: map-get($theme-light, success);
-    @include theme-dark {
-      background: rgba(map-get($theme-dark, success), .12); border-color: rgba(map-get($theme-dark, success), .28); color: map-get($theme-dark, success);
-    }
-  }
-  &--warning {
-    background: rgba(map-get($theme-light, warning), .08); border-color: rgba(map-get($theme-light, warning), .25); color: map-get($theme-light, warning);
-    @include theme-dark {
-      background: rgba(map-get($theme-dark, warning), .12); border-color: rgba(map-get($theme-dark, warning), .28); color: map-get($theme-dark, warning);
-    }
-  }
-  &--danger {
-    background: rgba(map-get($theme-light, danger), .08); border-color: rgba(map-get($theme-light, danger), .25); color: map-get($theme-light, danger);
-    @include theme-dark {
-      background: rgba(map-get($theme-dark, danger), .12); border-color: rgba(map-get($theme-dark, danger), .28); color: map-get($theme-dark, danger);
-    }
-  }
-  &--info {
-    background: rgba(map-get($theme-light, info), .08); border-color: rgba(map-get($theme-light, info), .25); color: map-get($theme-light, info);
-    @include theme-dark {
-      background: rgba(map-get($theme-dark, info), .12); border-color: rgba(map-get($theme-dark, info), .28); color: map-get($theme-dark, info);
-    }
-  }
+  @include theme-block      { color: tone(secondary, light) !important; }
+  @include theme-block-dark { color: tone(secondary, dark)  !important; }
 }
