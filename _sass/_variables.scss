@@ -1,74 +1,40 @@
-// ===========================================
-// Imswarnil • SCSS Tokens (GitHub Pages safe)
-// ===========================================
+// ===== TOKENS =====
+$brand: #0176d3;
+$ink:   #0b0b0d;
+$paper: #ffffff;
 
-// Brand
-$brand-primary: #0176d3;
-$brand-accent:  #f22f46;
-$ink:           #0b0b0d;
-$paper:         #ffffff;
+$fg:        #4d4d52;
+$fg-weak:   #7a7a80;
+$border-lt: rgba(0,0,0,.12);
+$bg-elev:   #f5f5f5;
 
-// Neutrals
-$gray-50:  #fafafa;
-$gray-100: #f5f5f5;
-$gray-200: #ececec;
-$gray-300: #e1e1e1;
-$gray-400: #cccccc;
-$gray-500: #9e9e9e;
-$gray-600: #6f6f6f;
-$gray-700: #4a4a4a;
-$gray-800: #2f2f2f;
-$gray-900: #171717;
+$fg-dark:        #c9c9cf;
+$fg-weak-dark:   #9a9aa1;
+$border-dk:      rgba(255,255,255,.12);
+$bg-dark:        #111113;
+$bg-elev-dark:   #1a1a1c;
 
-// Theme (light/dark)
-$light-bg:        $paper;
-$light-bg-elev:   $gray-50;
-$light-bg-elev-2: $gray-100;
-$light-fg:        #4d4d52;
-$light-fg-weak:   #787880;
-$light-ink:       $ink;
-$light-border:    rgba(0,0,0,.12);
+$font-sans: "Geist", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+$font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Courier New", monospace;
 
-$dark-bg:        #111113;
-$dark-bg-elev:   #1a1a1c;
-$dark-bg-elev-2: #232327;
-$dark-fg:        #c9c9cf;
-$dark-fg-weak:   #9a9aa1;
-$dark-ink:       #ffffff;
-$dark-border:    rgba(255,255,255,.12);
+$fs-root: 16px;
+$fs-sm: .875rem;
+$fs-md: 1rem;
+$fs-lg: 1.125rem;
 
-// Typography
-$font-sans: "Geist", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-$font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-
-$font-size-root: 16px;
-$fs-xxs: 0.75rem;
-$fs-xs:  0.8125rem;
-$fs-sm:  0.875rem;
-$fs-md:  1rem;
-$fs-lg:  1.125rem;
-$fs-xl:  1.25rem;
-$fs-2xl: 1.5rem;
-
+$lh: 1.6;
 $lh-tight: 1.2;
-$lh-normal: 1.6;
 
-$w-regular: 400;
-$w-medium:  500;
-$w-semibold:600;
-$w-bold:    700;
+$radius: 14px;
 
-// Spacing scale (rem only)
-$space-scale: (
-  0: 0, 1: .125rem, 2: .25rem, 3: .375rem, 4: .5rem, 5: .625rem, 6: .75rem,
-  7: .875rem, 8: 1rem, 10: 1.25rem, 12: 1.5rem, 16: 2rem, 20: 2.5rem, 24: 3rem, 32: 4rem
-);
-@function space($k) { @return map-get($space-scale, $k); }
+$space-4:  .5rem;
+$space-6:  .75rem;
+$space-8:  1rem;
+$space-12: 1.5rem;
+$space-16: 2rem;
 
-// Radii / Shadows
-$radius-2: 8px; $radius-3: 12px; $radius-4: 16px; $radius-5: 20px; $radius-pill: 999px;
-$shadow-1: 0 10px 30px -10px rgba(0,0,0,.12), 0 4px 10px -6px rgba(0,0,0,.08);
-$shadow-2: 0 20px 60px -20px rgba(0,0,0,.22), 0 6px 18px -8px rgba(0,0,0,.18);
+$container-w: 1100px;
 
-// Breakpoints (px only)
-$bp-sm: 48
+// ===== MIXINS =====
+@mixin container { width: $container-w; max-width: calc(100% - 2 * var(--page-pad)); margin-inline: auto; }
+@mixin media-md { @media (max-width: 992px){ @content; } }

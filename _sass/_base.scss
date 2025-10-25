@@ -1,129 +1,98 @@
 
-/* CSS Vars (clamp/vw kept as pure CSS to avoid Sass unit math) */
+/* CSS vars that need clamp/vw live here (no Sass math) */
 :root{
   --page-pad: clamp(16px, 12px + 1vw, 32px);
-  --island-width: 1100px;
   --nav-height: 58px;
+
+  /* Light theme */
+  --color-bg: #{$paper};
+  --color-fg: #{$fg};
+  --color-fg-weak: #{$fg-weak};
+  --color-ink: #{$ink};
+  --color-border: #{$border-lt};
+  --color-bg-elev: #{$bg-elev};
 
   --fs-3xl: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
   --fs-4xl: clamp(2rem, 1.6rem + 2vw, 3rem);
 
-  --brand-primary: #{$brand-primary};
-  --brand-accent:  #{$brand-accent};
-
-  --color-bg:        #{$light-bg};
-  --color-bg-elev:   #{$light-bg-elev};
-  --color-bg-elev-2: #{$light-bg-elev-2};
-  --color-fg:        #{$light-fg};
-  --color-fg-weak:   #{$light-fg-weak};
-  --color-ink:       #{$light-ink};
-  --color-border:    #{$light-border};
-
-  --shadow-1: #{$shadow-1};
-  --shadow-2: #{$shadow-2};
-
   color-scheme: light;
 }
 :root[data-color-scheme="dark"]{
-  --color-bg:        #{$dark-bg};
-  --color-bg-elev:   #{$dark-bg-elev};
-  --color-bg-elev-2: #{$dark-bg-elev-2};
-  --color-fg:        #{$dark-fg};
-  --color-fg-weak:   #{$dark-fg-weak};
-  --color-ink:       #{$dark-ink};
-  --color-border:    #{$dark-border};
-
-  --shadow-1: 0 20px 60px -18px rgba(0,0,0,.45), 0 6px 18px -10px rgba(0,0,0,.35);
-  --shadow-2: 0 40px 90px -28px rgba(0,0,0,.6);
-
+  --color-bg: #{$bg-dark};
+  --color-fg: #{$fg-dark};
+  --color-fg-weak: #{$fg-weak-dark};
+  --color-ink: #ffffff;
+  --color-border: #{$border-dk};
+  --color-bg-elev: #{$bg-elev-dark};
   color-scheme: dark;
 }
 
-/* Reset / Base */
+/* ===== Reset & Base HTML ===== */
 *,
 *::before,
 *::after { box-sizing: border-box; }
-
-html { font-size: $font-size-root; scroll-behavior: smooth; }
+html { font-size: $fs-root; scroll-behavior: smooth; }
 body {
-  margin: 0;
-  font-family: $font-sans;
-  font-size: $fs-md;
-  line-height: $lh-normal;
-  color: var(--color-fg);
-  background: var(--color-bg);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  margin: 0; font-family: $font-sans; font-size: $fs-md; line-height: $lh;
+  color: var(--color-fg); background: var(--color-bg);
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
 }
 img, svg, video, canvas { display: block; max-width: 100%; }
 img { height: auto; }
 
-a { color: var(--color-ink); text-decoration: none; transition: color $dur-2 $ease-out; }
-a:hover { color: var(--brand-primary); }
-:focus-visible { outline: 2px solid rgba($brand-primary,.65); outline-offset: 2px; }
+a { color: var(--color-ink); text-decoration: none; }
+a:hover { color: $brand; }
+:focus-visible { outline: 2px solid rgba(1,118,211,.6); outline-offset: 2px; }
 
-p { margin: 0 0 #{space(8)}; }
-
-h1 { color: var(--color-ink); font-weight: $w-semibold; line-height: $lh-tight; font-size: var(--fs-4xl); margin: 0 0 #{space(12)}; }
-h2 { color: var(--color-ink); font-weight: $w-semibold; line-height: $lh-tight; font-size: var(--fs-3xl); margin: 0 0 #{space(8)}; }
-h3 { color: var(--color-ink); font-weight: $w-semibold; line-height: $lh-tight; font-size: $fs-2xl; margin: 0 0 #{space(6)}; }
-h4 { color: var(--color-ink); font-weight: $w-semibold; line-height: $lh-tight; font-size: $fs-xl;  margin: 0 0 #{space(6)}; }
+/* Headings & text */
+h1{ color: var(--color-ink); font-weight: 600; line-height: $lh-tight; font-size: var(--fs-4xl); margin: 0 0 $space-12; }
+h2{ color: var(--color-ink); font-weight: 600; line-height: $lh-tight; font-size: var(--fs-3xl); margin: 0 0 $space-8; }
+h3{ color: var(--color-ink); font-weight: 600; line-height: $lh-tight; font-size: $fs-lg;     margin: 0 0 $space-6; }
+p { margin: 0 0 $space-8; }
 small, .text-sm { font-size: $fs-sm; }
 .mono { font-family: $font-mono; }
 
-ul, ol { margin: 0 0 #{space(8)} #{space(8)}; padding: 0; }
-li + li { margin-top: #{space(4)}; }
+/* Lists */
+ul, ol { margin: 0 0 $space-8 $space-8; padding: 0; }
+li + li { margin-top: .5em; }
 
-code, pre { font-family: $font-mono; background: var(--color-bg-elev-2); color: var(--color-ink); }
-code { padding: 2px 6px; border: 1px solid var(--color-border); border-radius: $radius-2; }
-pre  { padding: #{space(8)}; border: 1px solid var(--color-border); border-radius: $radius-3; overflow: auto; }
+/* Code */
+code, pre { font-family: $font-mono; background: var(--color-bg-elev); color: var(--color-ink); }
+code { padding: 2px 6px; border: 1px solid var(--color-border); border-radius: 8px; }
+pre  { padding: $space-8; border: 1px solid var(--color-border); border-radius: $radius; overflow: auto; }
 
-blockquote {
-  margin: 0 0 #{space(12)}; padding: #{space(8)};
-  border-left: 4px solid var(--brand-primary);
-  background: var(--color-bg-elev); color: var(--color-ink); border-radius: $radius-2;
-}
-
+/* Tables */
 table { width: 100%; border-collapse: collapse; font-size: $fs-sm; }
-th, td { padding: #{space(6)} #{space(8)}; border-bottom: 1px solid var(--color-border); }
-th { text-align: left; color: var(--color-ink); font-weight: $w-semibold; }
+th, td { padding: $space-6 $space-8; border-bottom: 1px solid var(--color-border); }
+th { text-align: left; color: var(--color-ink); font-weight: 600; }
 
-label { display: inline-block; margin-bottom: #{space(4)}; font-size: $fs-sm; color: var(--color-fg-weak); }
+/* Forms */
+label { display: inline-block; margin-bottom: .5rem; font-size: $fs-sm; color: var(--color-fg-weak); }
 input, select, textarea {
   width: 100%; font: inherit; color: var(--color-ink); background: var(--color-bg);
-  border: 1px solid var(--color-border); border-radius: $radius-3; padding: #{space(6)} #{space(8)};
+  border: 1px solid var(--color-border); border-radius: 10px; padding: $space-6 $space-8;
 }
 input::placeholder, textarea::placeholder { color: var(--color-fg-weak); }
 
-/* Layout primitives */
-.container { @include container; padding-left: var(--page-pad); padding-right: var(--page-pad); }
-.section   { @include container; margin-block: #{space(16)}; padding: #{space(16)}; background: var(--color-bg-elev); border: $border-default; border-radius: $radius-5; box-shadow: var(--shadow-1); }
-.section--tight { padding: #{space(12)}; border-radius: $radius-4; }
-.section--flat  { background: transparent; box-shadow: none; }
+/* ===== Layout primitives ===== */
+.container { @include container; padding-inline: var(--page-pad); }
+.section   { @include container; margin-block: $space-16; padding: $space-16; background: var(--color-bg-elev); border: 1px solid var(--color-border); border-radius: $radius; }
+.section--flat { background: transparent; border-color: transparent; }
 
-.row { display: grid; grid-template-columns: repeat(var(--cols, 12), minmax(0,1fr)); gap: var(--gap, #{space(8)}); }
+.site-main { padding-top: calc(var(--nav-height) + var(--page-pad)); } /* keep content below sticky header */
+
+/* Simple grid */
+.row { display: grid; grid-template-columns: repeat(var(--cols,12), minmax(0,1fr)); gap: var(--gap, 1rem); }
 .col { min-width: 0; }
 .cols-1{ --cols:1; } .cols-2{ --cols:2; } .cols-3{ --cols:3; } .cols-4{ --cols:4; } .cols-6{ --cols:6; } .cols-12{ --cols:12; }
-.gap-4{ --gap: #{space(4)}; } .gap-6{ --gap: #{space(6)}; } .gap-8{ --gap: #{space(8)}; } .gap-12{ --gap: #{space(12)}; } .gap-16{ --gap: #{space(16)}; }
+.gap-6{ --gap: .75rem; } .gap-8{ --gap: 1rem; } .gap-12{ --gap: 1.5rem; }
+@include media-md{ .cols-3, .cols-4, .cols-6, .cols-12 { --cols: 2; } }
+@media (max-width: 768px){ .cols-2, .cols-3, .cols-4, .cols-6, .cols-12 { --cols: 1; } }
 
-@include responsive(lg){ .cols-3, .cols-4, .cols-6, .cols-12 { --cols: 2; } }
-@include responsive(md){ .cols-2, .cols-3, .cols-4, .cols-6, .cols-12 { --cols: 1; } }
-
-/* Main spacing so content never hides “behind” the island navbar */
-.site-main { padding-top: calc(var(--nav-height) + var(--page-pad)); }
-
-/* Utilities */
-@each $k, $v in $space-scale {
-  .m-#{$k}{ margin:$v!important; } .mt-#{$k}{ margin-top:$v!important; } .mr-#{$k}{ margin-right:$v!important; }
-  .mb-#{$k}{ margin-bottom:$v!important; } .ml-#{$k}{ margin-left:$v!important; } .mx-#{$k}{ margin-left:$v!important; margin-right:$v!important; } .my-#{$k}{ margin-top:$v!important; margin-bottom:$v!important; }
-  .p-#{$k}{ padding:$v!important; } .pt-#{$k}{ padding-top:$v!important; } .pr-#{$k}{ padding-right:$v!important; }
-  .pb-#{$k}{ padding-bottom:$v!important; } .pl-#{$k}{ padding-left:$v!important; } .px-#{$k}{ padding-left:$v!important; padding-right:$v!important; } .py-#{$k}{ padding-top:$v!important; padding-bottom:$v!important; }
-}
-.text-center{ text-align:center!important; } .text-right{ text-align:right!important; } .text-left{ text-align:left!important; }
-.bold{ font-weight:$w-bold; } .semibold{ font-weight:$w-semibold; } .muted{ color:var(--color-fg-weak); }
-.d-flex{ display:flex!important; } .d-grid{ display:grid!important; } .d-block{ display:block!important; }
+/* Utilities (just the essentials) */
+.text-center{ text-align:center!important; } .muted{ color: var(--color-fg-weak); }
+.mt-0{ margin-top:0!important; } .mb-0{ margin-bottom:0!important; }
+.mt-8{ margin-top:$space-8!important; } .mb-8{ margin-bottom:$space-8!important; }
+.pt-8{ padding-top:$space-8!important; } .pb-8{ padding-bottom:$space-8!important; }
 .hidden{ display:none!important; }
 .visually-hidden{ position:absolute!important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce){ *{ animation:none!important; transition:none!important; } }

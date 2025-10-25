@@ -26,16 +26,7 @@
         <link rel="preconnect" href="{{ url }}" crossorigin />
       {% endfor %}
     {% endif %}
-    <!-- Prepaint theme guard (inline, before CSS) -->
-    <script>
-      (function () {
-        const KEY = "color-scheme";
-        const saved = localStorage.getItem(KEY);
-        const system = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-        const theme = saved || system || "light";
-        document.documentElement.setAttribute("data-color-scheme", theme);
-      })();
-    </script>
+
     <link rel="manifest" href="{{ "/manifest.json" | relative_url }}">
     <meta name="theme-color" content="{{ site.manifest.theme_color | default: '#242e2b' }}"/>
 
@@ -62,7 +53,43 @@
     {% if site.service_worker != false %}{% include site-sw.html %}{% endif %}
 
     {% include site-before-end.html %}
-    <script src="{{ '/assets/scripts/header.js' | relative_url }}" defer></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const root = document.documentElement;
+  
+        // ---- THEME ----
+        const KEY = "color-scheme";
+        const themeToggleBtn = document.getElementById("theme-toggle");
+        function getTheme(){ return root.getAttribute("data-color-scheme") || "light"; }
+        function setTheme(theme){ root.setAttribute("data-color-scheme", theme); localStorage.setItem(KEY, theme); themeToggleBtn?.setAttribute("aria-pressed", theme === "dark"); }
+        setTheme(localStorage.getItem(KEY) || getTheme());
+        themeToggleBtn?.addEventListener("click", () => setTheme(getTheme()==="light"?"dark":"light"));
+  
+        // ---- EXPANDING ISLAND PANEL ----
+        const mobileMenuToggle = document.getElementById("mobile-menu-toggle");
+        const mobilePanel = document.getElementById("mobile-panel");
+        const navbar = document.getElementById("site-navbar");
+  
+        function setPanelHeight(open){
+          if(open){
+            mobilePanel.style.maxHeight = "0px";
+            requestAnimationFrame(()=>{ mobilePanel.style.maxHeight = mobilePanel.scrollHeight + "px"; });
+          } else {
+            mobilePanel.style.maxHeight = mobilePanel.scrollHeight + "px";
+            requestAnimationFrame(()=>{ mobilePanel.style.maxHeight = "0px"; });
+          }
+        }
+        function openPanel(){ navbar.classList.add("is-open"); mobilePanel.classList.add("is-open"); mobilePanel.setAttribute("aria-hidden","false"); document.body.classList.add("panel-open"); mobileMenuToggle.setAttribute("aria-expanded","true"); setPanelHeight(true); }
+        function closePanel(){ navbar.classList.remove("is-open"); mobilePanel.classList.remove("is-open"); mobilePanel.setAttribute("aria-hidden","true"); document.body.classList.remove("panel-open"); mobileMenuToggle.setAttribute("aria-expanded","false"); setPanelHeight(false); }
+        function togglePanel(){ mobilePanel.classList.contains("is-open")?closePanel():openPanel(); }
+  
+        mobileMenuToggle?.addEventListener("click", togglePanel);
+        mobilePanel.addEventListener("click", (e)=>{ if(e.target.closest("a")) closePanel(); });
+        document.addEventListener("keydown", (e)=>{ if(e.key==="Escape" && mobilePanel.classList.contains("is-open")) closePanel(); });
+        window.addEventListener("resize", ()=>{ if(mobilePanel.classList.contains("is-open")) mobilePanel.style.maxHeight = mobilePanel.scrollHeight + "px"; });
+        const mq = window.matchMedia("(min-width: 992px)"); mq.addEventListener("change", ()=>{ if(mq.matches) closePanel(); });
+      });
+    </script>
   </body>
 
 </html>
