@@ -1,8 +1,7 @@
 // ======================================================================
 // _header.scss — compact island header with mobile hamburger + bento panel
-// (uses your _variables.scss tokens + mixins)
+// (uses your _variables.scss tokens + maps + helpers + mixins)
 // ======================================================================
-
 
 // ---------- Base button helpers (use your global .button / .button-icon if already present) ----------
 .button { @include button-base; }
@@ -29,6 +28,7 @@
   padding: $sp-3 $sp-6; // compact
   border-radius: $radius-6;
   border: 1px solid;
+  -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
 
   transition:
@@ -57,7 +57,7 @@
 // Mobile: make the navbar fixed full-width at the top
 @media (max-width: $bp-lg) {
   .island-navbar {
-    @include container; // keeps side gutters equal to page
+    // keep horizontal gutters consistent with page container
     position: fixed;
     top: 0; left: 0; right: 0;
     width: 100%;
@@ -171,6 +171,7 @@
   border-bottom-right-radius: $radius-6;
 
   // glass island
+  -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
   transform: translateY(-6px);
   transition: max-height 500ms $ease-in-out, opacity 300ms ease, transform 350ms $ease-in-out, box-shadow $dur-2 $ease-in-out;
