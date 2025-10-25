@@ -1,0 +1,81 @@
+// _scss/_hero.scss
+
+.section-hero {
+  padding-top: var(--layout--gap);
+  padding-bottom: var(--layout--gap);
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--layout--gap);
+  align-items: center;
+}
+
+.hero-content {
+  h1 {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: $font-weight-bold;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--color-contrast);
+  }
+
+  .profession {
+    font-size: $font-large;
+    color: var(--color-secondary);
+    margin-top: $spacing-6;
+  }
+
+  .location {
+    font-size: $font-small;
+    color: var(--color-secondary);
+    margin-top: $spacing-4;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    background-color: var(--color-background-100);
+    padding: 4px 12px;
+    border-radius: $radius-pill;
+  }
+}
+
+.hero-buttons {
+  display: flex;
+  gap: $spacing-6;
+  margin-top: $spacing-9;
+}
+
+.hero-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  img {
+    border-radius: $radius-4;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    aspect-ratio: 1/1;
+    max-width: 300px;
+    box-shadow: var(--shadow);
+  }
+}
+
+// Responsive adjustments for the hero
+@include breakpoint(md) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .hero-image {
+    grid-row: 1;
+    margin: 0 auto;
+    max-width: 200px;
+  }
+
+  .hero-buttons {
+    justify-content: center;
+  }
+}
