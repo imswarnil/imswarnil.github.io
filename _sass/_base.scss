@@ -153,9 +153,6 @@ input, select, textarea {
 // Content wrapper (use im- prefix)
 .main {
   padding-inline: $container-gutter;
-
-  // Mobile-first: keep content clear of the fixed header
-  // Safe units only (rem) — no rem+vw mixing
   padding-top: calc(#{$navbar-height} + #{$sp-6});
 }
 
