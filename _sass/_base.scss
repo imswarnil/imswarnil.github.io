@@ -150,7 +150,22 @@ input, select, textarea {
 
 // Layout helpers
 .container { @include container; }
-.main { padding-inline: $container-gutter; padding-top: $sp-12; }
+// Content wrapper (use im- prefix)
+.main {
+  padding-inline: $container-gutter;
+
+  // Mobile-first: keep content clear of the fixed header
+  // Safe units only (rem) — no rem+vw mixing
+  padding-top: calc(#{$navbar-height} + #{$sp-6});
+}
+
+// On large screens (desktop header is sticky island, not fixed),
+// we can reduce the top padding to normal page rhythm.
+@include mq-up($bp-lg) {
+  .main {
+    padding-top: $sp-8; // or keep $sp-12 if you want more air
+  }
+}
 .section {
   @include container;
   margin: 0 auto $sp-12;

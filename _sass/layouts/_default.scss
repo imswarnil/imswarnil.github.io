@@ -1,67 +1,80 @@
 // ======================================================================
-// default.scss — Horizontal-scroll fixes + responsive container
-// Targeted to the default layout only.
+// default.scss — responsive wrapper system + safe default layout styles
 // Depends on: _variables.scss
 // ======================================================================
 
 
-// 0) Scope fixes to *default* layout only
-body.layout-default {
-  max-width: 100%;
-  overflow-x: clip; // modern + perf-friendly vs hidden
-}
+// Guard: prevent horizontal scroll for this layout
+body.layout-default { max-width: 100%; overflow-x: clip; }
 
-// 1) Main container (centered island)
-.main {
-  @include container; // width: $island-width; gutter-safe
+// ---------------------------------------------
+// Responsive shells (full-bleed sections)
+// ---------------------------------------------
+.r-shell {
+  // full-bleed region background/padding; content sits in .r-container
   padding-block: clamp($sp-8, 3vw, $sp-16);
-  display: grid;
-  gap: $sp-7;
-
-  // Prevent children from causing overflow (grids/flex/items)
-  > * { min-width: 0; }
 }
 
-// Optional: add top offset if your mobile header is fixed
-.main--offset { padding-top: calc(#{$navbar-height} + #{$sp-6}); }
+.r-shell--header {
+  position: relative;
+  z-index: $z-header;
+}
 
-// Optional: narrower reading width helper
-.main--narrow {
-  width: ($island-width - 11.25rem); // hero-ish width, pure rem
-  max-width: 100%;
+// When you want the container to stretch to 100% (fluid section)
+.r-shell--fluid .r-container {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: $container-gutter; // maintain safe side gutters
+}
+
+// ---------------------------------------------
+// Containers (centered columns at island width)
+// ---------------------------------------------
+.r-container {
+  @include container; // width: $island-width; safe max with gutters
+}
+
+.r-container--narrow {
+  width: ($island-width - 11.25rem); // “hero/reading” width
+  max-width: calc(100% - 2 * #{$container-gutter});
   margin-inline: auto;
 }
 
-// 2) Header/panel safety (works even if header.html is included)
-.m-header, .d-header { max-width: 100%; overflow-x: clip; }
+// ---------------------------------------------
+// Main area (page body)
+// ---------------------------------------------
+.main {
+  display: grid;
+  gap: $sp-7;
 
-.m-panel {
-  // Keep attached panel inside viewport & container
-  left: 0; right: 0; margin-inline: auto;
-  width: $island-width;
-  max-width: calc(100% - 2 * #{$container-gutter});
-  // If your JS toggles .panel-open on body, height anim is safe:
-  // max-height/opacity/transform live in the header stylesheet.
+  // prevent children from pushing width
+  > * { min-width: 0; }
 }
 
-// 3) Media & embeds inside main (usual overflow culprits)
-.main :where(img, video, canvas, svg) {
+// Add offset if your mobile header is fixed
+.main--offset { padding-top: calc(#{$navbar-height} + #{$sp-6}); }
+
+// Optional: you can further narrow a specific block using .r-container--narrow
+// around it; keeping .main generic avoids opinionated constraints.
+
+// ---------------------------------------------
+// Safe media & long content inside main/container
+// ---------------------------------------------
+.r-container :where(img, video, canvas, svg) {
   max-width: 100%;
   height: auto;
   display: block;
 }
 
-// 4) Tables — allow horizontal scroll *inside* table block, not page
-.main table {
+.r-container table {
   width: 100%;
   border-collapse: collapse;
-  display: block;
+  display: block;        // allow inner horizontal scroll without page widening
   overflow-x: auto;
 }
-.main th, .main td { padding: $table-pad-y $table-pad-x; }
 
-// 5) Code blocks — don’t widen page
-.main pre {
+.r-container pre {
   overflow: auto;
   font-family: $ff-mono;
   font-size: $fs-2;
@@ -80,40 +93,20 @@ body.layout-default {
   }
 }
 
-// 6) Long words/URLs safety (opt-in utility)
-.main .u-wrap {
-  overflow-wrap: break-word;
-  word-break: break-word;
-}
+// Utilities: wrap long words/URLs and safe full-bleed inside a container
+.u-wrap { overflow-wrap: break-word; word-break: break-word; }
+.u-bleed { margin-inline: calc(-1 * #{$container-gutter}); }
+@include mq-up($bp-lg) { .u-bleed-lg { margin-inline: calc(-1 * #{$container-gutter}); } }
 
-// 7) Full-bleed utility (safe, won’t trigger horizontal page scroll)
-.main .u-bleed {
-  margin-inline: calc(-1 * #{$container-gutter});
-}
-@include mq-up($bp-lg) {
-  .main .u-bleed-lg { margin-inline: calc(-1 * #{$container-gutter}); }
-}
+// ---------------------------------------------
+// Header overflow safety (if your header has fixed/attached parts)
+// ---------------------------------------------
+.m-header, .d-header { max-width: 100%; overflow-x: clip; }
 
-// 8) Viewport-width replacement (avoid 100vw overflow issues)
-.main .u-w-viewport { width: 100%; }
-
-// 9) Compact island block (opt-in, for quick sections)
-.main-section {
-  border-radius: $radius-6;
-  padding: clamp($sp-8, 1.6vw, $sp-16);
-  backdrop-filter: blur(10px);
-
-  @include theme-block {
-    background-color: tone(surface, light);
-    border: 1px solid tone(border, light);
-    box-shadow: $shadow-light;
-    color: tone(foreground, light);
-  }
-  @include theme-block-dark {
-    background-color: tone(surface, dark);
-    border: 1px solid tone(border, dark);
-    box-shadow: $shadow-dark;
-    color: tone(foreground, dark);
-  }
+.m-panel {
+  // keep attached mobile panel within viewport & container
+  left: 0; right: 0; margin-inline: auto;
+  width: $island-width;
+  max-width: calc(100% - 2 * #{$container-gutter});
+  z-index: $z-overlay;
 }
-.main-section--tight { padding: clamp($sp-7, 1.2vw, $sp-12); border-radius: $radius-5; }
