@@ -1,0 +1,96 @@
+{% assign layout_key = page.layout | default: 'default' %}
+{% assign is_home   = layout_key == 'home' or page.url == '/' %}
+{% assign is_post   = layout_key == 'post' or page.collection == 'posts' %}
+{% assign is_page   = layout_key == 'page' and not is_post and not is_home %}
+{% assign cover_img = page.image | default: page.cover | default: site.cover | default: '' %}
+{% assign hero_kicker = page.kicker | default: site.kicker %}
+{% assign hero_title  = page.title  | default: site.title | default: 'Hello there.' %}
+{% assign hero_desc   = page.excerpt | default: page.description | default: site.description %}
+{% assign avatar_url  = site.avatarurl | default: site.logo | default: 'https://i.pravatar.cc/128?u=imswarnil' %}
+{% assign author_name = page.author | default: site.author | default: site.title | default: 'Imswarnil' %}
+{% assign read_mins   = page.reading_time | default: page.read_time | default: '' %}
+
+<section class="hero{% if cover_img %} hero--has-cover{% endif %}{% if is_post %} hero--post{% elsif is_home %} hero--home{% elsif is_page %} hero--page{% else %} hero--default{% endif %}">
+  {% if cover_img %}
+    <div class="hero__bg" style="--hero-bg:url('{{ cover_img | relative_url }}')"></div>
+    <div class="hero__scrim"></div>
+  {% endif %}
+
+  <div class="hero__inner">
+    {% if is_home %}
+      <div class="hero__head">
+        {% if hero_kicker %}<span class="hero__kicker">{{ hero_kicker }}</span>{% endif %}
+        <h1 class="hero__title">{{ hero_title }}</h1>
+        {% if hero_desc %}<p class="hero__desc">{{ hero_desc }}</p>{% endif %}
+      </div>
+
+      <div class="hero__meta hero__meta--home">
+        <div class="chip chip--avatar">
+          <img src="{{ avatar_url | relative_url }}" alt="{{ author_name | escape }}" loading="lazy" />
+          <span>{{ author_name }}</span>
+        </div>
+        <div class="stat"><i class="ph-bold ph-users"></i><span>{{ site.subscribers | default: '17k+' }} subscribers</span></div>
+        <div class="stat"><i class="ph-bold ph-camera"></i><span>{{ site.videos_count | default: '120+' }} videos</span></div>
+        <div class="stat"><i class="ph-bold ph-rocket-launch"></i><span>New films every week</span></div>
+      </div>
+
+      <div class="hero__cta">
+        <a class="btn" href="{{ '/#projects' | relative_url }}"><i class="ph-bold ph-folder"></i> View Projects</a>
+        <a class="btn btn--soft" href="{{ '/blog/' | relative_url }}"><i class="ph-bold ph-article"></i> Read the Blog</a>
+        <a class="btn btn--ghost" href="{{ '/#contact' | relative_url }}"><i class="ph-bold ph-paper-plane-tilt"></i> Contact</a>
+      </div>
+
+    {% elsif is_post %}
+      {% if hero_kicker %}<span class="hero__kicker">{{ hero_kicker }}</span>{% endif %}
+      <h1 class="hero__title">{{ hero_title }}</h1>
+      {% if hero_desc %}<p class="hero__desc">{{ hero_desc }}</p>{% endif %}
+
+      <div class="hero__meta">
+        <div class="chip chip--avatar">
+          <img src="{{ avatar_url | relative_url }}" alt="{{ author_name | escape }}" loading="lazy" />
+          <span>{{ author_name }}</span>
+        </div>
+        <div class="dot"></div>
+        <time datetime="{{ page.date | date_to_xmlschema }}">
+          {{ page.date | date: "%b %d, %Y" }}
+        </time>
+        {% if read_mins %}
+          <div class="dot"></div>
+          <span>{{ read_mins }} min read</span>
+        {% endif %}
+        {% if page.tags and page.tags.size > 0 %}
+          <div class="dot"></div>
+          <ul class="tags">
+            {% for tag in page.tags limit:3 %}
+              <li><a href="{{ '/tags/#' | append: tag | relative_url }}">{{ tag }}</a></li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+
+    {% elsif is_page %}
+      {% if hero_kicker %}<span class="hero__kicker">{{ hero_kicker }}</span>{% endif %}
+      <h1 class="hero__title">{{ hero_title }}</h1>
+      {% if hero_desc %}<p class="hero__desc">{{ hero_desc }}</p>{% endif %}
+      <div class="hero__cta">
+        {% if page.cta_href %}
+          <a class="btn" href="{{ page.cta_href | relative_url }}"><i class="ph-bold ph-arrow-right"></i> {{ page.cta_label | default: 'Get Started' }}</a>
+        {% endif %}
+        {% if page.cta2_href %}
+          <a class="btn btn--soft" href="{{ page.cta2_href | relative_url }}">{{ page.cta2_label | default: 'Learn more' }}</a>
+        {% endif %}
+      </div>
+
+    {% else %}
+      <h1 class="hero__title">{{ hero_title }}</h1>
+      {% if hero_desc %}<p class="hero__desc">{{ hero_desc }}</p>{% endif %}
+    {% endif %}
+  </div>
+
+  <!-- Decorative or fallback media (shows if no cover but you still want flair) -->
+  <div class="hero__decor" aria-hidden="true">
+    <span class="orb orb--1"></span>
+    <span class="orb orb--2"></span>
+    <span class="orb orb--3"></span>
+  </div>
+</section>
