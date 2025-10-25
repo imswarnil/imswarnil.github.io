@@ -1,33 +1,32 @@
-/* ===============================
-   Header (Island Navbar) + Mobile Panel
-   =============================== */
+// ======================================================================
+// _header.scss — island navbar + mobile bento panel
+// ======================================================================
 
-/* Brand & menu */
+
+// Navbar container
 .island-navbar {
   @include container;
   position: sticky;
   top: $container-gutter;
-  z-index: $z-nav;
+  z-index: $z-header;
   margin: 0 auto $sp-6;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: $sp-6;
-
   padding: $sp-4 $sp-6;
   border-radius: $radius-6;
   border: 1px solid;
-  box-shadow: $shadow-light;
   backdrop-filter: blur(12px);
-  transition: background-color .2s, border-radius .25s $ease-in-out;
+  transition: background-color $dur-2 $ease-in-out, border-radius $dur-2 $ease-in-out, box-shadow $dur-2 $ease-in-out;
 
   @include theme-block {
     background-color: rgba(255,255,255,0.7);
     border-color: tone(border, light);
+    box-shadow: $shadow-light;
   }
   @include theme-block-dark {
-    background-color: rgba(24,24,28,0.7);
+    background-color: rgba(20,20,22,0.75);
     border-color: tone(border, dark);
     box-shadow: $shadow-dark;
   }
@@ -38,6 +37,7 @@
   }
 }
 
+// Brand
 .navbar-brand {
   display: flex;
   align-items: center;
@@ -45,167 +45,179 @@
   text-decoration: none;
 
   .navbar-avatar {
-    width: 2.25rem;  // 36px
+    width: 2.25rem;
     height: 2.25rem;
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid;
+
     @include theme-block      { border-color: tone(border, light); }
     @include theme-block-dark { border-color: tone(border, dark); }
   }
 
   .brand-text { display: grid; line-height: 1.1; }
-  .logo { font-size: $fs-large; font-weight: $fw-semibold; @include theme-block { color: tone(contrast, light); } @include theme-block-dark { color: tone(contrast, dark); } }
-  .logo-sub { font-size: .8rem; @include theme-block { color: tone(secondary, light); } @include theme-block-dark { color: tone(secondary, dark); } }
+
+  .logo {
+    font-size: $fs-5;
+    font-weight: $fw-semibold;
+
+    @include theme-block      { color: tone(contrast, light); }
+    @include theme-block-dark { color: tone(contrast, dark); }
+  }
+
+  .logo-sub {
+    font-size: $fs-2;
+
+    @include theme-block      { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark); }
+  }
 }
 
-/* Desktop nav */
+// Desktop menu
 .navbar-menu {
   ul {
     display: flex;
     align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
     gap: $sp-2;
-    margin: 0; padding: 0; list-style: none;
   }
 
   a {
-    display: inline-flex; align-items: center; gap: .5em;
+    display: inline-flex;
+    align-items: center;
+    gap: .5em;
     padding: $sp-4 $sp-6;
-    font-size: $fs-small; font-weight: $fw-medium;
+    font-size: $fs-3;
+    font-weight: $fw-medium;
     border-radius: $radius-pill;
-    transition: color .2s, background-color .2s;
+    transition: background-color $dur-1, color $dur-1;
 
     @include theme-block {
       color: tone(secondary, light);
-      &:hover, &.active { color: tone(contrast, light); background-color: tone(background-100, light); }
+      &:hover, &.active { color: tone(contrast, light); background: tone(background-100, light); }
     }
     @include theme-block-dark {
       color: tone(secondary, dark);
-      &:hover, &.active { color: tone(contrast, dark); background-color: tone(background-100, dark); }
+      &:hover, &.active { color: tone(contrast, dark); background: tone(background-100, dark); }
     }
-
-    i { font-size: 1.25em; }
   }
 
   @media (max-width: $bp-lg) { display: none; }
 }
 
-/* Actions */
+// Actions
 .navbar-actions {
-  display: flex; align-items: center; gap: $sp-4;
+  display: flex;
+  align-items: center;
+  gap: $sp-4;
 
   .theme-toggle-button {
-    position: relative; overflow: hidden;
+    @extend .button-icon;
+    background: transparent;
     border: 1px solid;
+
     @include theme-block {
-      background-color: tone(background-100, light);
-      border-color: tone(border, light);
       color: tone(secondary, light);
-      &:hover { background-color: tone(background-200, light); color: tone(contrast, light); }
+      border-color: tone(border, light);
+      &:hover { background: tone(background-200, light); color: tone(contrast, light); }
     }
     @include theme-block-dark {
-      background-color: tone(background-100, dark);
-      border-color: tone(border, dark);
       color: tone(secondary, dark);
-      &:hover { background-color: tone(background-200, dark); color: tone(contrast, dark); }
+      border-color: tone(border, dark);
+      &:hover { background: tone(background-200, dark); color: tone(contrast, dark); }
     }
-    i {
-      position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%, -50%) scale(0.85);
-      opacity: 0; transition: transform .35s $ease-in-out, opacity .25s ease;
-      font-size: 1.25em;
-    }
-    .icon-sun { @include theme-block { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
-    .icon-moon { @include theme-block-dark { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
   }
 
   .cta-github {
-    @include theme-block-dark {
-      background: tone(white, dark);
-      color: tone(black, dark);
-      &:hover { background: tone(background-200, dark); color: tone(white, dark); border-color: tone(border, dark); }
-    }
-    span { @media (max-width: $bp-md) { display: none; } }
+    @extend .button;
+    @extend .button-sm;
+    @include theme-block-dark { background: tone(white, dark); color: tone(black, dark); }
   }
 
   .mobile-menu-toggle { display: none; }
   @media (max-width: $bp-lg) { .mobile-menu-toggle { display: inline-flex; } }
 }
 
-/* Mobile panel (expanding island) */
+// Mobile panel (bento)
 .island-panel {
   @include container;
   position: relative;
   z-index: $z-overlay;
-
-  margin: -$sp-4 auto $sp-10; // all rem, no px
+  margin: -$sp-4 auto $sp-10;
   border-radius: $radius-6;
   border: 1px solid;
   overflow: hidden;
   max-height: 0;
   opacity: 0;
-  transform: translateY(-6px) scale(0.995);
   pointer-events: none;
-  transition: max-height 500ms $ease-in-out, opacity 260ms ease, transform 360ms $ease-in-out;
+  transform: translateY(-4px);
+  transition: max-height 500ms $ease-in-out, opacity 300ms ease, transform 300ms ease;
 
-  @include theme-block      { border-color: tone(border, light); background: rgba(255,255,255,0.75); backdrop-filter: blur(14px); }
-  @include theme-block-dark { border-color: tone(border, dark);  background: rgba(21,21,24,0.75);  backdrop-filter: blur(14px); }
+  @include theme-block      { border-color: tone(border, light); background: rgba(255,255,255,0.75); }
+  @include theme-block-dark { border-color: tone(border, dark);  background: rgba(20,20,22,0.75); }
 
   &.is-open {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
     pointer-events: auto;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-
-    &::before {
-      content: "";
-      position: absolute; inset: 0 0 auto 0; height: 1px; top: 0;
-      @include theme-block      { background: linear-gradient(90deg, transparent, rgba(0,0,0,.08), transparent); }
-      @include theme-block-dark { background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent); }
-    }
   }
 
   .island-panel__inner {
-    padding: $sp-12 $sp-10;
+    padding: $sp-10;
     display: grid;
-    gap: $sp-10;
+    gap: $sp-8;
   }
 
   @media (min-width: $bp-lg) { display: none; }
 }
 
-/* Bento grid */
+// Bento grid/cards
 .bento-grid {
-  display: grid; gap: $sp-4;
+  display: grid;
   grid-template-columns: repeat(2, 1fr);
+  gap: $sp-6;
   @media (min-width: $bp-sm) { grid-template-columns: repeat(3, 1fr); }
 }
 
 .bento-card {
-  display: flex; align-items: center; gap: $sp-4;
-  padding: $sp-4 + 2px; // still rem math
+  display: flex;
+  align-items: center;
+  gap: $sp-4;
+  padding: $sp-6;
   border-radius: $radius-4;
   border: 1px solid;
-  transition: transform .15s ease, background .2s ease;
+  transition: transform $dur-1 ease, background $dur-1 ease;
 
-  @include theme-block      { background: tone(background, light); border-color: tone(border, light); }
-  @include theme-block-dark { background: tone(background-100, dark); border-color: tone(border, dark); }
+  @include theme-block      { background: tone(surface, light);       border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(background-100, dark); border-color: tone(border, dark);  }
 
   &:hover {
     transform: translateY(-2px);
     @include theme-block      { background: tone(background-100, light); }
-    @include theme-block-dark { background: tone(background-100, dark); }
+    @include theme-block-dark { background: tone(background-100, dark);  }
   }
 
   .bento-icon {
-    width: 2.375rem; height: 2.375rem; // 38px
-    border-radius: 12px;
+    width: 2.25rem; height: 2.25rem;
     display: grid; place-items: center;
+    border-radius: $radius-3;
     border: 1px solid;
+
     @include theme-block      { border-color: tone(border, light); }
     @include theme-block-dark { border-color: tone(border, dark); }
   }
-  .bento-title { font-weight: $fw-semibold; font-size: .95rem; @include theme-block { color: tone(contrast, light); } @include theme-block-dark { color: tone(contrast, dark); } }
-  .bento-sub   { font-size: .8rem;         @include theme-block { color: tone(secondary, light); } @include theme-block-dark { color: tone(secondary, dark); } }
+
+  .bento-title {
+    font-weight: $fw-semibold; font-size: $fs-3;
+    @include theme-block      { color: tone(contrast, light); }
+    @include theme-block-dark { color: tone(contrast, dark); }
+  }
+
+  .bento-sub {
+    font-size: $fs-2;
+    @include theme-block      { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark); }
+  }
 }

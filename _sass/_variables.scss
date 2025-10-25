@@ -1,9 +1,9 @@
 // ======================================================================
-// _variables.scss  — pure SCSS tokens + maps + helpers + mixins
+// _variables.scss — pure SCSS tokens + maps + helpers + mixins
 // ======================================================================
 
 // ------------------------------
-// Breakpoints
+// Breakpoints (px)
 // ------------------------------
 $bp-sm: 540px;
 $bp-md: 768px;
@@ -44,7 +44,8 @@ $radius-1: 6px;
 $radius-2: 8px;
 $radius-3: 10px;
 $radius-4: 14px;
-$radius-6: 20px;
+$radius-5: 18px;
+$radius-6: 24px;
 $radius-pill: 999px;
 
 // ------------------------------
@@ -69,21 +70,22 @@ $fs-6: 1.5rem;
 $fs-7: 1.75rem;
 $fs-8: 2rem;
 $fs-9: 2.25rem;
-$fs-10: 2.75rem; // large h1 on md+
+$fs-10: 2.75rem;  // large h1 on md+
 
-$fs-large: $fs-5;
+// Aliases
 $fs-small: $fs-2;
+$fs-large: $fs-5;
 
 // Line-heights
 $lh-tight: 1.2;
 $lh-base: 1.6;
 
 // ------------------------------
-// Layout
+// Layout (use consistent units)
 // ------------------------------
-$navbar-height: 58px;
-$island-width: 1100px;
-$container-gutter: 16px; // used in calc(), keep px to avoid unit clashes
+$navbar-height: 3.625rem;      // 58px -> 3.625rem
+$island-width: 68.75rem;       // 1100px -> 68.75rem
+$container-gutter: 1rem;       // used in calc with rem — safe
 
 // ------------------------------
 // Shadows
@@ -125,7 +127,8 @@ $table-pad-x: 0.75rem;
 // ------------------------------
 // Code blocks
 // ------------------------------
-$code-pad: 0.875rem 1rem;
+$code-pad-y: 0.875rem;
+$code-pad-x: 1rem;
 $code-radius: $radius-4;
 
 // ------------------------------
@@ -134,28 +137,8 @@ $code-radius: $radius-4;
 $badge-radius: $radius-pill;
 $badge-font: $fs-2;
 
-// Layout
-$container-gutter: 1rem;        // unified units in rem
-$island-width: 68.75rem;        // 1100px -> 68.75rem (16px base)
-
-// Radii (you already have 3 & 4)
-$radius-5: 18px;
-$radius-6: 24px;
-
-// Z-index
-$z-nav: 1000;
-$z-overlay: 1050;
-
-// Easing
-$ease-in-out: cubic-bezier(.25,1,.5,1);
-
-// Shadows (already similar — keep or adjust)
-$shadow-light: 0 10px 30px -10px rgba(0, 0, 0, 0.2), 0 4px 10px -6px rgba(0, 0, 0, 0.16);
-$shadow-dark:  0 20px 60px -10px rgba(0, 0, 0, 0.4), 0 4px 20px -8px rgba(0, 0, 0, 0.4);
-
 // ------------------------------
-// Light/Dark themes
-// Keys you can call via tone(<key>)
+// Light/Dark themes (tone keys)
 // ------------------------------
 $theme-light: (
   accent: #000000,
@@ -174,10 +157,9 @@ $theme-light: (
   white: #ffffff,
   black: #000000,
 
-  // semantic
   success: #16a34a,
   warning: #d97706,
-  danger:  #dc2626,
+  danger:  #dc2626
 );
 
 $theme-dark: (
@@ -197,14 +179,10 @@ $theme-dark: (
   white: #ffffff,
   black: #000000,
 
-  // semantic
   success: #22c55e,
   warning: #f59e0b,
-  danger:  #ef4444,
+  danger:  #ef4444
 );
-
-
-
 
 // ------------------------------
 // Helper: theme color fetcher
@@ -231,7 +209,7 @@ $theme-dark: (
   html[data-color-scheme="dark"] & { @content; }
 }
 
-// Container helper (wide center column with side gutters)
+// Container helper (center column with side gutters)
 @mixin container {
   width: $island-width;
   max-width: calc(100% - 2 * #{$container-gutter});
@@ -253,10 +231,14 @@ $theme-dark: (
   border-radius: $radius-pill;
   cursor: pointer;
   user-select: none;
-  transition: transform $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out, background-color $dur-1 $ease-in-out, color $dur-1 $ease-in-out;
+  transition:
+    transform $dur-1 $ease-in-out,
+    box-shadow $dur-1 $ease-in-out,
+    background-color $dur-1 $ease-in-out,
+    color $dur-1 $ease-in-out;
 }
 
-// Input base (styles per theme inside)
+// Input base
 @mixin input-base {
   display: block;
   width: 100%;

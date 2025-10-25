@@ -1,173 +1,152 @@
-<!-- _includes/header.html -->
-<header class="island-navbar" id="site-navbar" role="navigation" aria-label="Primary">
-  <a class="navbar-brand" href="{{ site.baseurl }}/">
-    {% if site.logo %}
-      <img class="navbar-avatar" src="{{ site.logo | relative_url }}" alt="{{ site.title }}">
-    {% else %}
-      <img class="navbar-avatar" src="https://i.pravatar.cc/40?u={{ site.title | uri_escape }}" alt="{{ site.title }}">
-    {% endif %}
-    <span class="brand-text">
-      <span class="logo">{{ site.title }}</span>
-      <span class="logo-sub">{{ site.job_title | default: "Creator & Engineer" }}</span>
-    </span>
-  </a>
+<!-- ===================================================================
+header.html — dynamic island header + mobile bento + theme switcher
+=================================================================== -->
 
-  <nav class="navbar-menu" aria-label="Desktop Navigation">
-    <ul>
-      {% for item in site.navigation_header %}
-        <li>
-          <a href="{{ item.url | relative_url }}"
-             class="{% if page.url == item.url %}active{% endif %}">
-            <i class="ph-bold
-              {% case item.title | downcase %}
-                {% when 'home' %} ph-house
-                {% when 'blog' %} ph-article
-                {% when 'categories' %} ph-tag
-                {% when 'search' %} ph-magnifying-glass
-                {% when 'elements' %} ph-squares-four
-                {% else %} ph-link-simple
-              {% endcase %}"></i>
-            {{ item.title }}
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
-  </nav>
+<header class="island-navbar" role="navigation" aria-label="Primary" id="site-navbar">
+<a href="{{ '/' | relative_url }}" class="navbar-brand">
+{% if site.logo %}
+ <img src="{{ site.logo | relative_url }}" alt="{{ site.title }}" class="navbar-avatar" />
+{% else %}
+ <img src="https://i.pravatar.cc/40?u={{ site.title | uri_escape }}" alt="{{ site.title }}" class="navbar-avatar" />
+{% endif %}
+<span class="brand-text">
+ <span class="logo">{{ site.title }}</span>
+ <span class="logo-sub">
+   {% if site.job_title %}{{ site.job_title }}{% elsif site.description %}{{ site.description }}{% else %}Website{% endif %}
+ </span>
+</span>
+</a>
 
-  <div class="navbar-actions">
-    <a href="{{ '/search/' | relative_url }}" class="button-icon button-sm button-transparent" aria-label="Search">
-      <i class="ph-bold ph-magnifying-glass" aria-hidden="true"></i>
-    </a>
+<nav class="navbar-menu" aria-label="Desktop Navigation">
+<ul>
+ {% for item in site.navigation_header %}
+   <li>
+     <a href="{{ item.url | relative_url }}">{% if item.title %}{{ item.title }}{% else %}Link{% endif %}</a>
+   </li>
+ {% endfor %}
+</ul>
+</nav>
 
-    <!-- Theme switcher -->
-    <button class="theme-toggle-button button-icon button-sm" id="theme-toggle" aria-label="Toggle theme" aria-pressed="false">
-      <i class="ph-bold ph-sun icon-sun" aria-hidden="true"></i>
-      <i class="ph-bold ph-moon icon-moon" aria-hidden="true"></i>
-    </button>
+<div class="navbar-actions">
+<a href="{{ '/search/' | relative_url }}" class="button-icon button-sm button-transparent" aria-label="Search">
+ <i class="ph-bold ph-magnifying-glass" style="font-size: 1.25em;"></i>
+</a>
 
-    {% if site.repo %}
-      <a href="{{ site.repo }}" target="_blank" rel="noopener" class="button button-sm cta-github">
-        <i class="ph-bold ph-star" aria-hidden="true"></i><span>Star on GitHub</span>
-      </a>
-    {% endif %}
+<!-- Theme switcher -->
+<button class="theme-toggle-button button-icon button-sm" aria-label="Toggle theme" id="theme-toggle" aria-pressed="false">
+ <i class="ph-bold ph-sun" aria-hidden="true"></i>
+</button>
 
-    <button class="mobile-menu-toggle button button-sm button-transparent button-icon"
-            id="mobile-menu-toggle"
-            aria-label="Open menu" aria-controls="mobile-panel" aria-expanded="false">
-      <i class="ph-bold ph-list" aria-hidden="true"></i>
-    </button>
-  </div>
+{% if site.repo %}
+ <a href="{{ site.repo }}" target="_blank" rel="noopener noreferrer" class="button button-sm cta-github">
+   <i class="ph-bold ph-star"></i><span>Star</span>
+ </a>
+{% endif %}
+
+<!-- Mobile menu toggle -->
+<button class="mobile-menu-toggle button button-sm button-transparent button-icon" id="mobile-menu-toggle" aria-label="Open menu" aria-controls="mobile-panel" aria-expanded="false">
+ <i class="ph-bold ph-list"></i>
+</button>
+</div>
 </header>
 
-<!-- Mobile expanding panel -->
+<!-- Mobile bento panel -->
 <section id="mobile-panel" class="island-panel" aria-hidden="true">
-  <div class="island-panel__inner">
-    <div class="bento-grid">
-      {% for item in site.navigation_header %}
-        <a class="bento-card" href="{{ item.url | relative_url }}">
-          <span class="bento-icon">
-            <i class="ph-bold
-              {% case item.title | downcase %}
-                {% when 'home' %} ph-house
-                {% when 'blog' %} ph-article
-                {% when 'categories' %} ph-tag
-                {% when 'search' %} ph-magnifying-glass
-                {% when 'elements' %} ph-squares-four
-                {% else %} ph-link-simple
-              {% endcase %}"></i>
-          </span>
-          <span>
-            <div class="bento-title">{{ item.title }}</div>
-            <div class="bento-sub">
-              {% if item.title == 'Blog' %}Latest posts
-              {% elsif item.title == 'Home' %}Go to start
-              {% elsif item.title == 'Categories' %}Browse topics
-              {% elsif item.title == 'Elements' %}UI samples
-              {% elsif item.title == 'Search' %}Find stuff
-              {% else %}Open
-              {% endif %}
-            </div>
-          </span>
-        </a>
-      {% endfor %}
-
-      {% if site.repo %}
-        <a class="bento-card" href="{{ site.repo }}" target="_blank" rel="noopener">
-          <span class="bento-icon"><i class="ph-bold ph-github-logo"></i></span>
-          <span>
-            <div class="bento-title">GitHub</div>
-            <div class="bento-sub">Open-source</div>
-          </span>
-        </a>
-      {% endif %}
-    </div>
-  </div>
+<div class="island-panel__inner">
+<div class="bento-grid">
+ {% for item in site.navigation_header %}
+   <a class="bento-card" href="{{ item.url | relative_url }}">
+     <span class="bento-icon"><i class="ph-bold ph-caret-right"></i></span>
+     <span>
+       <div class="bento-title">{{ item.title }}</div>
+       <div class="bento-sub">{{ item.subtitle | default: 'Open section' }}</div>
+     </span>
+   </a>
+ {% endfor %}
+</div>
+</div>
 </section>
 
-<!-- ===== Theme switcher + mobile menu (inline module) ===== -->
+<!-- ===================================================================
+Theme switcher + mobile panel JS (no external deps)
+=================================================================== -->
 <script>
-  (function () {
-    // FOUC guard: set theme ASAP if not already set by head script
-    var KEY = "color-scheme";
-    var root = document.documentElement;
-    if (!root.getAttribute("data-color-scheme")) {
-      var saved = localStorage.getItem(KEY);
-      var systemDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-      root.setAttribute("data-color-scheme", saved || (systemDark ? "dark" : "light"));
-    }
-  })();
+// ----- FOUC guard (decide theme before first paint) -----
+(function () {
+var KEY = "color-scheme";
+var saved = localStorage.getItem(KEY);
+var system = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+var theme = saved || system || "light";
+document.documentElement.setAttribute("data-color-scheme", theme);
+})();
 
-  document.addEventListener("DOMContentLoaded", function () {
-    // ---- THEME SWITCHER ----
-    var root = document.documentElement;
-    var KEY = "color-scheme";
-    var btn = document.getElementById("theme-toggle");
-    function getTheme() { return root.getAttribute("data-color-scheme") || "light"; }
-    function setTheme(next) {
-      root.setAttribute("data-color-scheme", next);
-      try { localStorage.setItem(KEY, next); } catch(e){}
-      if (btn) btn.setAttribute("aria-pressed", String(next === "dark"));
-    }
-    setTheme(localStorage.getItem(KEY) || getTheme());
-    if (btn) btn.addEventListener("click", function(){ setTheme(getTheme()==="light" ? "dark" : "light"); });
+// ----- Interactive behaviors -----
+document.addEventListener("DOMContentLoaded", function () {
+var root = document.documentElement;
 
-    // ---- MOBILE PANEL ----
-    var toggle = document.getElementById("mobile-menu-toggle");
-    var panel  = document.getElementById("mobile-panel");
-    var navbar = document.getElementById("site-navbar");
+// THEME SWITCHER (start)
+var KEY = "color-scheme";
+var btnTheme = document.getElementById("theme-toggle");
+function getTheme() { return root.getAttribute("data-color-scheme") || "light"; }
+function setTheme(t) {
+ root.setAttribute("data-color-scheme", t);
+ localStorage.setItem(KEY, t);
+ if (btnTheme) btnTheme.setAttribute("aria-pressed", t === "dark");
+}
+setTheme(localStorage.getItem(KEY) || getTheme());
+if (btnTheme) btnTheme.addEventListener("click", function () {
+ setTheme(getTheme() === "light" ? "dark" : "light");
+});
+// THEME SWITCHER (end)
 
-    function setPanelHeight(open){
-      if(!panel) return;
-      panel.style.maxHeight = open ? "0px" : panel.scrollHeight + "px";
-      requestAnimationFrame(function(){
-        panel.style.maxHeight = open ? panel.scrollHeight + "px" : "0px";
-      });
-    }
-    function openPanel(){
-      if(!panel || !toggle || !navbar) return;
-      navbar.classList.add("is-open");
-      panel.classList.add("is-open");
-      panel.setAttribute("aria-hidden","false");
-      document.body.classList.add("panel-open");
-      toggle.setAttribute("aria-expanded","true");
-      setPanelHeight(true);
-    }
-    function closePanel(){
-      if(!panel || !toggle || !navbar) return;
-      navbar.classList.remove("is-open");
-      panel.classList.remove("is-open");
-      panel.setAttribute("aria-hidden","true");
-      document.body.classList.remove("panel-open");
-      toggle.setAttribute("aria-expanded","false");
-      setPanelHeight(false);
-    }
-    function togglePanel(){ panel && panel.classList.contains("is-open") ? closePanel() : openPanel(); }
+// MOBILE PANEL (start)
+var btnMenu = document.getElementById("mobile-menu-toggle");
+var panel = document.getElementById("mobile-panel");
+var navbar = document.getElementById("site-navbar");
 
-    if (toggle) toggle.addEventListener("click", togglePanel);
-    if (panel) panel.addEventListener("click", function(e){ if(e.target.closest("a")) closePanel(); });
-    document.addEventListener("keydown", function(e){ if(e.key === "Escape" && panel && panel.classList.contains("is-open")) closePanel(); });
-    var mq = window.matchMedia("(min-width: {{ $bp-lg | default: '992px' }})"); // this line is harmless if not templated
-    if (mq && mq.addEventListener) mq.addEventListener("change", function(){ if (mq.matches) closePanel(); });
-    window.addEventListener("resize", function(){ if(panel && panel.classList.contains("is-open")) panel.style.maxHeight = panel.scrollHeight + "px"; });
-  });
+function setPanelHeight(open) {
+ if (!panel) return;
+ if (open) {
+   panel.style.maxHeight = "0px";
+   requestAnimationFrame(function() {
+     panel.style.maxHeight = panel.scrollHeight + "px";
+   });
+ } else {
+   panel.style.maxHeight = panel.scrollHeight + "px";
+   requestAnimationFrame(function() {
+     panel.style.maxHeight = "0px";
+   });
+ }
+}
+function openPanel() {
+ if (!panel || !btnMenu || !navbar) return;
+ navbar.classList.add("is-open");
+ panel.classList.add("is-open");
+ panel.setAttribute("aria-hidden", "false");
+ btnMenu.setAttribute("aria-expanded", "true");
+ document.body.classList.add("panel-open");
+ setPanelHeight(true);
+}
+function closePanel() {
+ if (!panel || !btnMenu || !navbar) return;
+ navbar.classList.remove("is-open");
+ panel.classList.remove("is-open");
+ panel.setAttribute("aria-hidden", "true");
+ btnMenu.setAttribute("aria-expanded", "false");
+ document.body.classList.remove("panel-open");
+ setPanelHeight(false);
+}
+function togglePanel() {
+ if (!panel) return;
+ panel.classList.contains("is-open") ? closePanel() : openPanel();
+}
+
+if (btnMenu) btnMenu.addEventListener("click", togglePanel);
+if (panel) panel.addEventListener("click", function (e) { if (e.target.closest("a")) closePanel(); });
+document.addEventListener("keydown", function (e) { if (e.key === "Escape" && panel && panel.classList.contains("is-open")) closePanel(); });
+window.addEventListener("resize", function () { if (panel && panel.classList.contains("is-open")) panel.style.maxHeight = panel.scrollHeight + "px"; });
+var mq = window.matchMedia("(min-width: {{ $bp-lg | default: '992px' }})"); // harmless if literal
+if (mq && mq.addEventListener) mq.addEventListener("change", function () { if (mq.matches) closePanel(); });
+// MOBILE PANEL (end)
+});
 </script>
