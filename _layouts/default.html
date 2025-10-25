@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="{{ site.lang | default: "en-US" }}">
-{% include head.html %}
-  <body class="layout-{{ page.layout }}{% if page.title %}  {{ page.title | slugify }}{% endif %}">
-    {% include header.html %}
-    <main class="main">
-      {{ content }}
-    </main>
-    {% if site.service_worker != false %}{% include site-sw.html %}{% endif %}
-    {% include site-before-end.html %}
 
-  </body>
+{% include head.html %}
+
+<body class="layout-{{ page.layout }}{% if page.title %}  {{ page.title | slugify }}{% endif %}">
+  {% include header.html %}
+
+  <main class="main{% if page.offset_nav %} main--offset{% endif %}{% if page.narrow %} main--narrow{% endif %}">
+    {{ content }}
+  </main>
+
+  {% if site.service_worker != false %}{% include site-sw.html %}{% endif %}
+  {% include site-before-end.html %}
+</body>
 
 </html>
