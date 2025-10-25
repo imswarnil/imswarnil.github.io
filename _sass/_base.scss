@@ -1,3 +1,51 @@
+---
+---
+
+@import "vars";
+
+/* =========================
+   CSS variables (light/dark)
+   - Only CSS vars use clamp()
+   - Sass vars stay in rem/px
+========================= */
+:root{
+  --page-pad: clamp(16px, 12px + 1vw, 32px);
+  --nav-height: 58px;
+
+  --fs-3xl: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+  --fs-4xl: clamp(2rem, 1.6rem + 2vw, 3rem);
+
+  /* Light theme values from tokens */
+  --color-bg: #{$paper};
+  --color-fg: #{$fg};
+  --color-fg-weak: #{$fg-weak};
+  --color-ink: #{$ink};
+  --color-border: #{$border-lt};
+  --color-bg-elev: #{$bg-elev};
+
+  --brand: #{$brand};
+  --accent: #{$accent};
+
+  --shadow-1: #{$shadow-1};
+  --shadow-2: #{$shadow-2};
+
+  color-scheme: light;
+}
+:root[data-color-scheme="dark"]{
+  --color-bg: #{$bg-dark};
+  --color-fg: #{$fg-dark};
+  --color-fg-weak: #{$fg-weak-dark};
+  --color-ink: #{$ink-dark};
+  --color-border: #{$border-dk};
+  --color-bg-elev: #{$bg-elev-dark};
+
+  /* slightly stronger shadows in dark */
+  --shadow-1: 0 18px 54px -18px rgba(0,0,0,.5), 0 6px 18px -10px rgba(0,0,0,.4);
+  --shadow-2: 0 40px 100px -30px rgba(0,0,0,.6);
+
+  color-scheme: dark;
+}
+
 /* =========================
    Base & HTML primitives
 ========================= */
@@ -27,15 +75,17 @@ a {
   transition: color $dur-2 $ease-out;
 }
 a:hover { color: var(--brand); }
-:focus-visible { @include focus-ring; }
+:focus-visible {
+  outline: 2px solid rgba(1,118,211,.65);
+  outline-offset: 2px;
+}
 
-/* Headings & text rhythm */
+/* Typography scale */
 h1 { color: var(--color-ink); font-weight: $w-semibold; line-height: $lh-tight; font-size: var(--fs-4xl); margin: 0 0 $sp-12; }
 h2 { color: var(--color-ink); font-weight: $w-semibold; line-height: $lh-tight; font-size: var(--fs-3xl); margin: 0 0 $sp-8; }
-h3 { color: var(--color-ink); font-weight: $w-semibold; line-height: $lh-tight; font-size: $fs-2xl; margin: 0 0 $sp-6; }
-h4 { color: var(--color-ink); font-weight: $w-semibold; line-height: $lh-tight; font-size: $fs-xl;  margin: 0 0 $sp-6; }
-
-p { margin: 0 0 $sp-8; }
+h3 { color: var(--color-ink); font-weight: $w-semibold; line-height: $lh-tight; font-size: $fs-2xl;  margin: 0 0 $sp-6; }
+h4 { color: var(--color-ink); font-weight: $w-semibold; line-height: $lh-tight; font-size: $fs-xl;   margin: 0 0 $sp-6; }
+p  { margin: 0 0 $sp-8; }
 small, .small, .text-sm { font-size: $fs-sm; }
 .muted { color: var(--color-fg-weak); }
 .mono  { font-family: $font-mono; }
@@ -44,7 +94,7 @@ small, .small, .text-sm { font-size: $fs-sm; }
 ul, ol { margin: 0 0 $sp-8 $sp-8; padding: 0; }
 li + li { margin-top: .5em; }
 
-/* Code */
+/* Code blocks */
 code, pre { font-family: $font-mono; background: var(--color-bg-elev); color: var(--color-ink); }
 code { padding: 2px 6px; border: 1px solid var(--color-border); border-radius: $radius-2; }
 pre  { padding: $sp-8; border: 1px solid var(--color-border); border-radius: $radius-3; overflow: auto; }
@@ -74,37 +124,75 @@ input::placeholder, textarea::placeholder { color: var(--color-fg-weak); }
 .button--ghost{ background: transparent; color: var(--color-fg-weak); border-color: var(--color-border); }
 .button--ghost:hover{ color: var(--color-ink); background: var(--color-bg-elev); }
 
-/* Layout primitives */
-.container { @include container; padding-inline: var(--page-pad); }
-.section   { @include container; margin-block: $sp-16; padding: $sp-16; background: var(--color-bg-elev); border: 1px solid var(--color-border); border-radius: $radius-5; box-shadow: var(--shadow-1); }
-.section--flat { background: transparent; border-color: transparent; box-shadow: none; }
+/* =========================
+   Layout primitives
+========================= */
+/* Container uses fixed max width + responsive side padding via CSS var */
+.container{
+  width: #{$container-w};
+  max-width: calc(100% - 2 * var(--page-pad));
+  margin-inline: auto;
+  padding-inline: var(--page-pad);
+}
 
-/* Ensure content never hides behind sticky header */
-.site-main, body > main:first-of-type { padding-top: calc(var(--nav-height) + var(--page-pad)); }
+/* Section: reusable padded block */
+.section{
+  width: #{$container-w};
+  max-width: calc(100% - 2 * var(--page-pad));
+  margin: $sp-16 auto;
+  padding: $sp-16;
+  background: var(--color-bg-elev);
+  border: 1px solid var(--color-border);
+  border-radius: $radius-5;
+  box-shadow: var(--shadow-1);
+}
+.section--flat{ background: transparent; border-color: transparent; box-shadow: none; }
 
-/* Blog / content blocks */
+/* Row: simple flow wrapper, converts to grid when needed */
+.row{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $sp-12;
+}
+@media (min-width: 720px){
+  .row--2 { grid-template-columns: repeat(2, 1fr); }
+  .row--3 { grid-template-columns: repeat(3, 1fr); }
+  .row--4 { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Ensure content never hides behind sticky headers */
+.site-main, body > main:first-of-type {
+  padding-top: calc(var(--nav-height) + var(--page-pad));
+}
+
+/* =========================
+   Blog + common objects
+========================= */
 .content { max-width: 70ch; }
 .typeset { font-size: $fs-md; }
 .article { margin-bottom: $sp-16; }
 .article h1, .article h2, .article h3, .article h4 { scroll-margin-top: calc(var(--nav-height) + var(--page-pad)); }
 
 /* Post list */
-.list--posts {
+.list--posts{
   display: grid; gap: $sp-12;
   list-style: none; padding: 0; margin: 0;
 }
 .item--post { padding-bottom: $sp-12; border-bottom: 1px solid var(--color-border); }
 .item--post:last-child { border-bottom: 0; }
 
-/* Labels (categories) */
-.label { display: inline-block; border-radius: $radius-pill; font-size: $fs-xxs; line-height: 1; }
-.label--category {
-  padding: .3rem .6rem; background: var(--color-bg-elev); border: 1px solid var(--color-border); color: var(--color-ink);
+/* Category labels */
+.label{
+  display:inline-block; border-radius: $radius-pill; font-size: $fs-xxs; line-height: 1;
 }
-.label--category a { color: inherit; }
+.label--category{
+  padding: .3rem .6rem; background: var(--color-bg-elev);
+  border: 1px solid var(--color-border); color: var(--color-ink);
+}
+.label--category a{ color: inherit; }
 
-/* Meta + time */
-.post-meta { color: var(--color-fg-weak); display: inline-flex; gap: .5ch; align-items:center; }
+/* Meta & time */
+.post-meta{ color: var(--color-fg-weak); display:inline-flex; gap:.5ch; align-items:center; }
 
 /* Paginator */
 .nav--paginator{
@@ -112,7 +200,7 @@ input::placeholder, textarea::placeholder { color: var(--color-fg-weak); }
   margin-top: $sp-12; font-size: $fs-sm;
 }
 .pagination{
-  padding: $sp-4 $sp-8; border: 1px solid var(--color-border); border-radius: $radius-pill; background: var(--color-bg);
+  padding: $sp-4 $sp-8; border:1px solid var(--color-border); border-radius:$radius-pill; background: var(--color-bg);
 }
 .pagination--previous, .pagination--next { color: var(--color-ink); }
 .pagination--counter { color: var(--color-fg-weak); border-color: transparent; }
@@ -123,23 +211,28 @@ input::placeholder, textarea::placeholder { color: var(--color-fg-weak); }
 .aside--left{ margin-right: auto; }
 
 /* Footer */
-.footer { margin-top: $sp-24; padding: $sp-16 0; border-top: 1px solid var(--color-border); background: var(--color-bg); }
-.footer .container{ display:flex; align-items:center; justify-content:space-between; gap:$sp-8; flex-wrap:wrap; }
-.footer .copyright { color: var(--color-fg-weak); }
-
-/* Simple cards (reusable) */
-.card{
-  border: 1px solid var(--color-border); border-radius: $radius-4; background: var(--color-bg);
-  padding: $sp-12; box-shadow: var(--shadow-1);
+.footer{
+  margin-top: $sp-24; padding: $sp-16 0;
+  border-top: 1px solid var(--color-border); background: var(--color-bg);
 }
-.card:hover{ box-shadow: var(--shadow-2); transition: box-shadow $dur-3 $ease-out; }
+.footer .container{
+  display:flex; align-items:center; justify-content:space-between; gap:$sp-8; flex-wrap:wrap;
+}
+.footer .copyright{ color: var(--color-fg-weak); }
 
-/* Utilities */
+/* =========================
+   Utilities
+========================= */
 .text-center{ text-align:center!important; }
+.text-right{ text-align:right!important; }
 .muted{ color: var(--color-fg-weak)!important; }
+
 .mt-0{ margin-top:0!important; } .mb-0{ margin-bottom:0!important; }
 .mt-8{ margin-top:$sp-8!important; } .mb-8{ margin-bottom:$sp-8!important; }
+.mt-16{ margin-top:$sp-16!important; } .mb-16{ margin-bottom:$sp-16!important; }
 .pt-8{ padding-top:$sp-8!important; } .pb-8{ padding-bottom:$sp-8!important; }
+.pt-16{ padding-top:$sp-16!important; } .pb-16{ padding-bottom:$sp-16!important; }
+
 .hidden{ display:none!important; }
 .visually-hidden{
   position:absolute!important; width:1px; height:1px; padding:0; margin:-1px;
