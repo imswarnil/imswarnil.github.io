@@ -1,200 +1,104 @@
-// ==============================================
-// _base.scss — Element resets + primitives
-// Uses pure SCSS tokens from _vars.scss
-// ==============================================
+@use "vars" as *;
 
-// -------- Page padding (static, no CSS vars) --------
-:root { /* optional: expose a runtime knob; remove this block if you want strict static CSS */
-  --_page-pad: #{$page-pad-sm};
-}
-@media (min-width: #{$bp-md}) {
-  :root { --_page-pad: #{$page-pad-md}; }
-}
-@media (min-width: #{$bp-lg}) {
-  :root { --_page-pad: #{$page-pad-lg}; }
-}
+// ===============================
+// Base + Typography + Utilities
+// ===============================
 
-// -------- Base Reset
+// Fallback font-face (optional)
+// @font-face { font-family: "Geist"; font-weight: 100 900; font-display: swap; src: url(...); }
+
+// Reset-ish
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
 html { scroll-behavior: smooth; }
 body {
-  font-family: $ff-body;
-  font-size: $fs-16;
-  line-height: $lh;
-  margin: 0;
-  background-color: $bg;
-  color: $fg;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  [data-color-scheme="dark"] & {
-    background-color: $bg-dark;
-    color: $fg-dark;
-  }
+  margin: 0; font-family: $ff-body; font-size: 16px; line-height: 1.6;
+  @include theme-block { background-color: tone(background, light); color: tone(foreground, light); }
+  @include theme-block-dark { background-color: tone(background, dark); color: tone(foreground, dark); }
 }
-
-// Prevent body scroll on open panels
 body.panel-open { overflow: hidden; }
 
-// Typography
-h1, h2, h3, h4, h5, h6 {
-  font-family: $ff-head;
-  color: $ink;
-  line-height: $lh-tight;
-  margin: 0 0 $sp-8;
-
-  [data-color-scheme="dark"] & { color: $ink-dark; }
-}
-
-h1 { font-size: $fs-32; }
-h2 { font-size: $fs-28; }
-h3 { font-size: $fs-24; }
-h4 { font-size: $fs-20; }
-h5 { font-size: $fs-18; }
-h6 { font-size: $fs-16; }
-
-p { margin: 0 0 $sp-8; color: $fg; [data-color-scheme="dark"] & { color: $fg-dark; } }
-small, .small { font-size: $fs-12; }
-
+img { max-width: 100%; height: auto; display: block; }
 a {
-  color: $brand-ink;
-  text-decoration: none;
-  transition: color .2s ease;
-  &:hover { color: $brand; }
-  &:focus-visible { @include focus-ring; }
-  [data-color-scheme="dark"] & { color: $ink-dark; }
+  text-decoration: none; transition: color .2s ease;
+  @include theme-block { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark); }
+  &:hover {
+    @include theme-block { color: tone(accent, light); }
+    @include theme-block-dark { color: tone(accent, dark); }
+  }
 }
 
-strong, b { font-weight: $fw-bold; color: $ink; [data-color-scheme="dark"] & { color: $ink-dark; } }
-em, i { font-style: italic; }
+// Headings
+h1, h2, h3, h4, h5, h6 {
+  margin: 0 0 $sp-6 0; line-height: 1.2; font-family: $ff-head; font-weight: $fw-semibold;
+  @include theme-block { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark); }
+}
+h1 { font-size: clamp(2rem, 1.6rem + 1.5vw, 2.8rem); }
+h2 { font-size: clamp(1.4rem, 1rem + 1.2vw, 2rem); }
+h3 { font-size: 1.25rem; }
+
+// Text elements
+p { margin: 0 0 $sp-6 0; }
+small, .small { font-size: 0.8125rem; color: tone(secondary, light);
+  @include theme-block-dark { color: tone(secondary, dark); }
+}
+strong { font-weight: 700; }
 
 // Lists
-ul, ol { margin: 0 0 $sp-8 $sp-8; padding: 0 0 0 $sp-8; }
-li { margin: 0 0 $sp-4; }
+ul, ol { padding-left: 1.25rem; margin: 0 0 $sp-6 0; }
+li { margin-bottom: .25rem; }
 
-// Images & media
-img, svg, video { max-width: 100%; height: auto; display: block; }
-figure { margin: 0 0 $sp-8; }
-figcaption { font-size: $fs-12; color: $fg-weak; [data-color-scheme="dark"] & { color: $fg-weak-dark; } }
-
-// Code
-code, pre, kbd, samp {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+// Code blocks (simple)
+pre, code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Liberation Mono", Consolas, monospace;
 }
 pre {
-  padding: $sp-8;
-  border-radius: $r-3;
-  overflow: auto;
-  @include theme-surface($bg-elev, $bg-elev-dark, $border, $border-dark);
+  padding: $sp-6; border-radius: $radius-4; overflow-x: auto; border: 1px solid tone(border, light);
+  background: tone(background-100, light);
+  @include theme-block-dark {
+    border-color: tone(border, dark);
+    background: tone(background-100, dark);
+  }
 }
 
-// HR
-hr {
-  border: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0,0,0,.12), transparent);
-  margin: $sp-12 0;
-  [data-color-scheme="dark"] & { background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent); }
+// Layout helpers
+.container { @include container; }
+.section {
+  @include container;
+  margin: 0 auto $sp-12; padding: $sp-12;
+  border-radius: 24px; border: 1px solid tone(border, light); box-shadow: $shadow-light; background: tone(background, light);
+  @include theme-block-dark {
+    border-color: tone(border, dark); box-shadow: $shadow-dark; background: tone(background-100, dark);
+  }
+}
+.section-header { display:flex; align-items:center; justify-content:space-between; gap: 12px; margin-bottom: $sp-8; }
+.section-title { margin: 0; font-size: clamp(1.4rem, 1rem + 1.2vw, 2rem); }
+.section-sub { font-size: .95rem; color: tone(secondary, light);
+  @include theme-block-dark { color: tone(secondary, dark); }
 }
 
-// Buttons (primitive)
-.button {
-  display: inline-flex; align-items: center; justify-content: center; gap: .5em;
-  min-height: $btn-min-h; padding: $btn-pad-v $btn-pad-h;
-  font-size: $btn-fs; font-weight: $btn-weight;
-  border: 1px solid transparent; border-radius: $btn-radius;
-  background: $brand; color: #fff; cursor: pointer; user-select: none;
-  transition: transform .15s ease, box-shadow .2s ease, background-color .2s ease;
-
+// Buttons
+.button { @include button-base; background: tone(accent, light); color: tone(white, light);
   &:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,.12); }
-  &:focus-visible { @include focus-ring; }
+  @include theme-block-dark { background: tone(white, dark); color: tone(black, dark); }
 }
-.button-icon {
-  width: $btn-min-h; height: $btn-min-h;
-  padding: $sp-4; border-radius: 50%;
-  border: 1px solid $border; background: transparent; color: $fg-weak;
-  display: inline-grid; place-items: center;
-
-  [data-color-scheme="dark"] & { border-color: $border-dark; color: $fg-weak-dark; }
-}
+.button-icon { @include button-base; width: 2.25rem; height: 2.25rem; padding: $sp-4; border-radius: 50%; }
 .button-sm { min-height: 2.25rem; padding: .35rem 1rem; font-size: .82rem; }
 .button-transparent {
-  background: transparent; color: $fg-weak; border-color: $border;
-  [data-color-scheme="dark"] & { color: $fg-weak-dark; border-color: $border-dark; }
-}
-.cta-github {
-  background: #000; color: #fff; border: 1px solid transparent;
-  [data-color-scheme="dark"] & { background: #fff; color: #000; }
-}
-
-// Forms (basic)
-input, textarea, select {
-  font: inherit; color: $fg; background: $bg; border: 1px solid $border; border-radius: $r-3;
-  padding: $sp-6 $sp-8;
-  [data-color-scheme="dark"] & { color: $fg-dark; background: $bg-dark; border-color: $border-dark; }
-  &:focus-visible { @include focus-ring; }
-}
-label { display: inline-block; margin-bottom: $sp-4; color: $fg-weak; [data-color-scheme="dark"] & { color: $fg-weak-dark; } }
-
-// Containers & layout primitives
-.container {
-  width: $container-max;
-  max-width: calc(100% - 2 * #{$page-pad-sm});
-  margin-left: auto; margin-right: auto;
-
-  @include respond(md) { max-width: calc(100% - 2 * #{$page-pad-md}); }
-  @include respond(lg) { max-width: calc(100% - 2 * #{$page-pad-lg}); }
-}
-
-.section {
-  @include theme-surface($bg, $bg-elev-dark, $border, $border-dark);
-  border-radius: $r-24;
-  box-shadow: $shadow-1;
-  margin: 0 auto $sp-16;
-  padding: $sp-16;
-  width: $container-max;
-  @include respond(md) { padding: $sp-16; }
-  @include respond(lg) { padding: $sp-16; }
-  max-width: calc(100% - 2 * #{$page-pad-sm});
-  @include respond(md) { max-width: calc(100% - 2 * #{$page-pad-md}); }
-  @include respond(lg) { max-width: calc(100% - 2 * #{$page-pad-lg}); }
-}
-
-// Grid helpers
-.row { display: flex; flex-wrap: wrap; margin-left: -$sp-8; margin-right: -$sp-8; }
-.col { padding-left: $sp-8; padding-right: $sp-8; flex: 1 1 0; }
-
-// Utility helpers
-.mt-0 { margin-top: 0 !important; }
-.mb-0 { margin-bottom: 0 !important; }
-.mt-4 { margin-top: $sp-4 !important; }
-.mb-4 { margin-bottom: $sp-4 !important; }
-.mt-8 { margin-top: $sp-8 !important; }
-.mb-8 { margin-bottom: $sp-8 !important; }
-.mt-12 { margin-top: $sp-12 !important; }
-.mb-12 { margin-bottom: $sp-12 !important; }
-
-.p-0 { padding: 0 !important; }
-.p-4 { padding: $sp-4 !important; }
-.p-8 { padding: $sp-8 !important; }
-.p-12 { padding: $sp-12 !important; }
-.p-16 { padding: $sp-16 !important; }
-
-.text-center { text-align: center !important; }
-.text-right  { text-align: right !important; }
-.text-muted  { color: $fg-weak !important; [data-color-scheme="dark"] & { color: $fg-weak-dark !important; } }
-
-// Keep first main away from the sticky header
-main, .site-main {
-  padding-inline: $page-pad-sm;
-  padding-top: calc(#{$nav-height} + #{$page-pad-sm});
-  @include respond(md) {
-    padding-inline: $page-pad-md;
-    padding-top: calc(#{$nav-height} + #{$page-pad-md});
-  }
-  @include respond(lg) {
-    padding-inline: $page-pad-lg;
-    padding-top: calc(#{$nav-height} + #{$page-pad-lg});
+  @include button-base; background: transparent; color: tone(secondary, light); border-color: tone(border, light);
+  &:hover { background: tone(background-100, light); color: tone(contrast, light); }
+  @include theme-block-dark {
+    color: tone(secondary, dark); border-color: tone(border, dark);
+    &:hover { background: tone(background-100, dark); color: tone(contrast, dark); }
   }
 }
+
+// Utilities
+.hidden { display:none !important; }
+.visually-hidden {
+  position:absolute !important; width:1px; height:1px; clip:rect(1px,1px,1px,1px); overflow:hidden; white-space:nowrap;
+}
+.mt-0 { margin-top: 0 !important; } .mb-0 { margin-bottom: 0 !important; }
+.mt-6 { margin-top: $sp-6 !important; } .mb-6 { margin-bottom: $sp-6 !important; }
+.pad-inline { padding-inline: 1rem; }

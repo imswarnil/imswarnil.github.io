@@ -1,137 +1,99 @@
-// ==============================================
-// _vars.scss — Pure SCSS tokens (no CSS variables)
-// Safe for GitHub Pages (SassC / Dart Sass)
-// ==============================================
+// ===============================
+// Tokens (pure SCSS) + helpers
+// ===============================
 
-// ---- Brand
-$brand:        #111111 !default; // accent / action
-$brand-ink:    #000000 !default; // strong text
-$brand-bg:     #ffffff !default; // page bg
+// Breakpoints
+$bp-sm: 540px;
+$bp-md: 768px;
+$bp-lg: 992px;
+$bp-xl: 1200px;
 
-// ---- Light palette
-$ink:          #131313 !default;
-$fg:           #4d4d4d !default;
-$fg-weak:      #757575 !default;
-$bg:           #ffffff !default;
-$bg-elev:      #f3f3f3 !default;
-$bg-elev-2:    #ededed !default;
-$border:       rgba(0,0,0,.2) !default;
+// Spacing scale (rem)
+$sp-2: 0.25rem;
+$sp-4: 0.5rem;
+$sp-6: 0.75rem;
+$sp-7: 1rem;
+$sp-8: 1.25rem;
+$sp-10: 1.5rem;
+$sp-12: 2rem;
+$sp-16: 2.5rem;
 
-// ---- Dark palette
-$ink-dark:     #ffffff !default;
-$fg-dark:      #c9c9c9 !default;
-$fg-weak-dark: #9a9a9a !default;
-$bg-dark:      #111113 !default;
-$bg-elev-dark: #1a1a1c !default;
-$bg-elev2-dark:#2c2c2f !default;
-$border-dark:  rgba(255,255,255,.12) !default;
+// Radii
+$radius-3: 10px;
+$radius-4: 14px;
+$radius-pill: 999px;
 
-// ---- Typography
-$ff-body:      -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, system-ui, sans-serif !default;
-$ff-head:      $ff-body !default;
+// Typography
+$ff-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, system-ui, sans-serif;
+$ff-head: $ff-body;
+$fs-small: 0.875rem;
+$fs-large: 1.125rem;
+$fw-medium: 500;
+$fw-semibold: 600;
 
-$fs-12: 0.75rem !default;
-$fs-14: 0.875rem !default;
-$fs-16: 1rem !default;
-$fs-18: 1.125rem !default;
-$fs-20: 1.25rem !default;
-$fs-24: 1.5rem !default;
-$fs-28: 1.75rem !default;
-$fs-32: 2rem !default;
+// Layout
+$navbar-height: 58px;
+$island-width: 1100px;
 
-$fw-medium:    500 !default;
-$fw-semibold:  600 !default;
-$fw-bold:      700 !default;
-$lh:           1.6 !default;
-$lh-tight:     1.2 !default;
+// Shadows
+$shadow-light: 0 10px 30px -10px rgba(0, 0, 0, 0.2), 0 4px 10px -6px rgba(0, 0, 0, 0.16);
+$shadow-dark:  0 20px 60px -10px rgba(0, 0, 0, 0.4), 0 4px 20px -8px rgba(0, 0, 0, 0.4);
 
-// ---- Spacing (rem scale)
-$sp-2:  0.25rem !default;
-$sp-4:  0.5rem !default;
-$sp-6:  0.75rem !default;
-$sp-8:  1rem !default;
-$sp-10: 1.25rem !default;
-$sp-12: 1.5rem !default;
-$sp-16: 2rem !default;
-$sp-20: 2.5rem !default;
+// Color maps
+$theme-light: (
+  accent: #000,
+  contrast: #000,
+  background: #fff,
+  background-100: #f3f3f3,
+  background-200: #ededed,
+  foreground: #4d4d4d,
+  secondary: #757575,
+  border: rgba(0,0,0,0.2),
+  white: #fff,
+  black: #000
+);
 
-// ---- Radii
-$r-3:  10px !default;
-$r-4:  14px !default;
-$r-pill: 999px !default;
-$r-24: 24px !default;
+$theme-dark: (
+  accent: #fff,
+  contrast: #fff,
+  background: #111113,
+  background-100: #1a1a1c,
+  background-200: #2c2c2f,
+  foreground: #c9c9c9,
+  secondary: #9a9a9a,
+  border: rgba(255,255,255,0.12),
+  white: #fff,
+  black: #000
+);
 
-// ---- Shadows
-$shadow-1: 0 10px 30px -10px rgba(0,0,0,.2), 0 4px 10px -6px rgba(0,0,0,.16) !default;
-$shadow-2: 0 20px 60px -10px rgba(0,0,0,.35), 0 4px 20px -8px rgba(0,0,0,.35) !default;
-
-// ---- Layout
-$container-max: 68.75rem !default; // 1100px
-$nav-height:    58px !default;
-
-// page padding (responsive via media)
-$page-pad-sm: 1rem !default;
-$page-pad-md: 1.25rem !default;
-$page-pad-lg: 1.5rem !default;
-
-// ---- Buttons (derived)
-$btn-min-h:    2.5rem !default;
-$btn-pad-v:    $sp-4 !default;
-$btn-pad-h:    $sp-10 !default;
-$btn-radius:   $r-pill !default;
-$btn-fs:       $fs-14 !default;
-$btn-weight:   $fw-semibold !default;
-
-// ---- Breakpoints
-$bp-sm: 480px !default;
-$bp-md: 768px !default;
-$bp-lg: 992px !default;
-$bp-xl: 1200px !default;
-
-// ---- Z Index
-$z-nav: 1000 !default;
-$z-panel: 950 !default;
-
-// ----------------------------------------------
-// Mixins & helpers
-// ----------------------------------------------
-@mixin respond($bp) {
-  @if $bp == sm { @media (min-width: #{$bp-sm}) { @content; } }
-  @else if $bp == md { @media (min-width: #{$bp-md}) { @content; } }
-  @else if $bp == lg { @media (min-width: #{$bp-lg}) { @content; } }
-  @else if $bp == xl { @media (min-width: #{$bp-xl}) { @content; } }
-}
-
-// Emits a property with light value, plus a dark-mode override.
-// Usage: @include theme-prop(color, $fg, $fg-dark);
-@mixin theme-prop($prop, $light, $dark) {
-  #{$prop}: $light;
-  [data-color-scheme="dark"] & { #{$prop}: $dark; }
-}
-
-// Shorthand background+border with dark override
-@mixin theme-surface($bg-light, $bg-dark, $border-light, $border-dark) {
-  background-color: $bg-light;
-  border: 1px solid $border-light;
-  [data-color-scheme="dark"] & {
-    background-color: $bg-dark;
-    border-color: $border-dark;
+// Helpers to read tokens
+@function tone($key, $mode: light) {
+  @if $mode == dark {
+    @return map-get($theme-dark, $key);
+  } @else {
+    @return map-get($theme-light, $key);
   }
 }
 
-// Container utility
+// Theming mixins (prints both light and dark blocks)
+@mixin theme-block {
+  html[data-color-scheme="light"] & { @content; }
+}
+@mixin theme-block-dark {
+  html[data-color-scheme="dark"] & { @content; }
+}
+
+// Container helper
 @mixin container {
-  width: $container-max;
-  max-width: calc(100% - 2 * var(--_page-pad, #{$page-pad-sm}));
-  margin-left: auto;
-  margin-right: auto;
+  width: $island-width;
+  max-width: calc(100% - 2 * 1rem);
+  margin-inline: auto;
 }
 
-// Safe focus ring
-@mixin focus-ring {
-  outline: 2px solid rgba(0,0,0,.2);
-  outline-offset: 2px;
-  [data-color-scheme="dark"] & {
-    outline-color: rgba(255,255,255,.35);
-  }
+// Button base
+@mixin button-base {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5em;
+  min-height: 2.5rem; padding: $sp-4 $sp-8; font-size: $fs-small; font-weight: $fw-semibold;
+  border: 1px solid transparent; border-radius: $radius-pill; cursor: pointer;
+  transition: transform .15s ease, box-shadow .2s ease, background-color .2s ease, color .2s ease;
 }

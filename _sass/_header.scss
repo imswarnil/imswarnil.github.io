@@ -1,0 +1,152 @@
+@use "variables" as *;
+
+// ===================================
+// Island Navbar + Mobile Bento Header
+// ===================================
+
+.header {
+  // spacer to avoid overlap if a page forgets top padding
+  &-spacer {
+    height: calc(#{$navbar-height} + 1rem);
+    @media (min-width: $bp-md) { height: calc(#{$navbar-height} + 1.25rem); }
+    @media (min-width: $bp-lg) { height: calc(#{$navbar-height} + 1.5rem); }
+  }
+}
+
+/* NAVBAR */
+#site-navbar {
+  position: sticky; top: 1rem; z-index: 1000;
+  @include container;
+  display:flex; align-items:center; justify-content:space-between;
+  padding: $sp-4 $sp-6; border-radius: 24px;
+  border: 1px solid tone(border, light);
+  box-shadow: $shadow-light;
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  @include theme-block { background-color: rgba(255,255,255,.72); }
+  @include theme-block-dark {
+    border-color: tone(border, dark);
+    box-shadow: $shadow-dark;
+    background-color: rgba(17,17,19,.72);
+  }
+
+  .navbar-brand {
+    display:flex; align-items:center; gap: $sp-6; text-decoration:none;
+    .navbar-avatar {
+      width:36px; height:36px; border-radius:50%; object-fit:cover;
+      border: 2px solid tone(border, light);
+      @include theme-block-dark { border-color: tone(border, dark); }
+    }
+    .brand-text { display:grid; line-height: 1.1; }
+    .logo { font-size: $fs-large; font-weight: $fw-semibold;
+      @include theme-block { color: tone(contrast, light); }
+      @include theme-block-dark { color: tone(contrast, dark); }
+    }
+    .logo-sub { font-size: .8125rem; color: tone(secondary, light);
+      @include theme-block-dark { color: tone(secondary, dark); }
+    }
+  }
+
+  .navbar-menu {
+    ul { display:flex; align-items:center; gap:$sp-2; margin:0; padding:0; list-style:none; }
+    a {
+      display:inline-flex; align-items:center; gap: .5em; line-height:1; // fixes baseline misalign
+      font-size: $fs-small; font-weight: $fw-medium;
+      padding: $sp-4 $sp-6; border-radius: $radius-pill;
+      transition: background-color .2s ease, color .2s ease, transform .15s ease;
+      @include theme-block { color: tone(secondary, light); }
+      @include theme-block-dark { color: tone(secondary, dark); }
+      &:hover, &.active {
+        @include theme-block { color: tone(contrast, light); background: tone(background-100, light); }
+        @include theme-block-dark { color: tone(contrast, dark); background: tone(background-100, dark); }
+      }
+      i { font-size: 1.125em; }
+    }
+  }
+
+  .navbar-actions {
+    display:flex; align-items:center; gap: $sp-4;
+    .cta-github {
+      @extend .button;
+      @include theme-block { background: tone(black, light); color: tone(white, light); }
+      @include theme-block-dark { background: tone(white, dark); color: tone(black, dark); }
+    }
+    .button-icon { @extend .button-icon; }
+    .button-transparent { @extend .button-transparent; }
+  }
+
+  .mobile-menu-toggle { display:none; }
+
+  // theme toggle button
+  .theme-toggle-button {
+    @extend .button-icon;
+    background: tone(background-100, light); border: 1px solid tone(border, light); color: tone(secondary, light);
+    position: relative; overflow: hidden;
+    i { font-size: 1.125em; position:absolute; inset:0; margin:auto; width:1em; height:1em; opacity:0; transform: scale(.85); transition: transform .3s cubic-bezier(.25,1,.5,1), opacity .2s ease; }
+    // icon visibility controlled by attribute on <html>
+    html[data-color-scheme="light"] & .icon-sun { opacity:1; transform:scale(1); }
+
+    @include theme-block-dark {
+      background: tone(background-200, dark); border-color: tone(border, dark); color: tone(foreground, dark);
+      .icon-moon { opacity:1; transform:scale(1); }
+    }
+  }
+
+  // responsive
+  @media (max-width: $bp-lg) {
+    .navbar-menu { display:none; }
+    .mobile-menu-toggle { display:inline-flex; @extend .button-transparent; }
+    width: auto;
+  }
+}
+
+/* EXPANDING BENTO PANEL (mobile) */
+#mobile-panel {
+  position: relative; z-index: 950; @include container;
+  margin-top: -12px;
+  border-radius: 24px; border: 1px solid tone(border, light); border-top: 0;
+  box-shadow: $shadow-light; overflow: hidden;
+  max-height: 0; opacity: 0; transform: translateY(-6px) scale(.992); pointer-events: none;
+  transition: max-height .5s cubic-bezier(.25,1,.5,1), opacity .3s ease, transform .4s cubic-bezier(.25,1,.5,1);
+  @include theme-block { background-color: rgba(255,255,255,.75); }
+  @include theme-block-dark {
+    border-color: tone(border, dark); box-shadow: $shadow-dark;
+    background-color: rgba(17,17,19,.75);
+  }
+
+  &.is-open { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; border-top-left-radius: 0; border-top-right-radius: 0; }
+  &.is-open::before {
+    content:""; position:absolute; inset:0 0 auto 0; height:1px; top:0;
+    @include theme-block { background: linear-gradient(90deg, transparent, rgba(0,0,0,.08), transparent); }
+    @include theme-block-dark { background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent); }
+  }
+
+  .island-panel__inner { padding: $sp-12 $sp-10; display:grid; gap: $sp-10; }
+
+  .bento-grid {
+    display:grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+    @media (min-width: $bp-sm) { grid-template-columns: repeat(3, 1fr); }
+  }
+  .bento-card {
+    display:flex; align-items:center; gap:12px; padding:14px; border-radius: 14px;
+    border: 1px solid tone(border, light); background: tone(background, light);
+    transition: transform .15s ease, background .2s ease;
+    &:hover { transform: translateY(-2px); background: tone(background-100, light); }
+    @include theme-block-dark {
+      border-color: tone(border, dark); background: tone(background-100, dark);
+      &:hover { background: tone(background-200, dark); }
+    }
+  }
+  .bento-icon {
+    width:38px; height:38px; display:grid; place-items:center; border-radius: 12px; border:1px solid tone(border, light);
+    @include theme-block-dark { border-color: tone(border, dark); }
+  }
+  .bento-title { font-weight: $fw-semibold;
+    @include theme-block { color: tone(contrast, light); }
+    @include theme-block-dark { color: tone(contrast, dark); }
+  }
+  .bento-sub { font-size: .8rem; color: tone(secondary, light);
+    @include theme-block-dark { color: tone(secondary, dark); }
+  }
+
+  @media (min-width: $bp-lg) { display:none; } // desktop hides panel
+}
