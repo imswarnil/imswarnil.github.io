@@ -1,7 +1,7 @@
 // ======================================================================
 // _header.scss — island header with desktop icons, fixed mobile bar,
 // floating bento panel, animated theme switcher, inline navbar search
-// (uses tokens/mixins from _variables.scss)
+// (relies on tokens/mixins from _variables.scss)
 // ======================================================================
 
 // ---------- Navbar ----------
@@ -37,10 +37,13 @@
     box-shadow: $shadow-dark;
   }
 
-  &.is-open { border-bottom-left-radius: $radius-4; border-bottom-right-radius: $radius-4; }
+  &.is-open {
+    border-bottom-left-radius: $radius-4;
+    border-bottom-right-radius: $radius-4;
+  }
 }
 
-// Mobile: fixed, centered island on mobile too
+// Mobile: fixed, centered island
 @media (max-width: $bp-lg) {
   .island-navbar {
     @include container;
@@ -53,45 +56,93 @@
     border-radius: $radius-6;
   }
 
+  // spacing below the fixed island
   body.has-fixed-nav {
     padding-top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-8});
   }
 }
 
-/* --- Float the panel directly UNDER the centered island --- */
+/* --- Floating mobile panel under the centered island --- */
 .island-panel {
-  left: $container-gutter;
-  right: $container-gutter;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: $island-width;
+  position: fixed;
+  left: $container-gutter; right: $container-gutter;
+  margin-left: auto; margin-right: auto; max-width: $island-width;
 
+  // sit just below header island
   top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-3});
 
+  // rounded all corners (separate floating card)
+  border: 1px solid; border-top: 1px solid;
   border-top-left-radius: $radius-6;
   border-top-right-radius: $radius-6;
   border-bottom-left-radius: $radius-6;
   border-bottom-right-radius: $radius-6;
 
-  border-top: 1px solid;
-
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
+
+  z-index: $z-overlay;
+  transform: translateY(-6px);
+  transition: max-height 500ms $ease-in-out, opacity 300ms ease, transform 350ms $ease-in-out, box-shadow $dur-2 $ease-in-out;
+
+  max-height: 0; opacity: 0; overflow: clip; pointer-events: none;
+
+  @include theme-block      { background: rgba(255,255,255,0.92); border-color: tone(border, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: rgba(18,18,20,0.96);    border-color: tone(border, dark);  box-shadow: $shadow-dark; }
+
+  &.is-open {
+    opacity: 1; transform: translateY(0); pointer-events: auto;
+    max-height: calc(100vh - var(--nav-h, #{$navbar-height}));
+  }
+
+  .island-panel__inner {
+    padding: $sp-8; display: grid; gap: $sp-6;
+    max-height: calc(100vh - var(--nav-h, #{$navbar-height}));
+    overflow: auto;
+  }
+
+  @include mq-up($bp-lg) { display: none; }
 }
 
-.island-panel.is-open {
-  max-height: calc(100vh - (var(--nav-h, #{$navbar-height}) + #{$sp-3} + #{$sp-3}));
-}
-
-.island-panel .island-panel__inner {
-  max-height: calc(100vh - (var(--nav-h, #{$navbar-height}) + #{$sp-3} + #{$sp-3}));
-  overflow: auto;
-}
-
-/* bento grid can show 3 columns on wider phones, but stays centered */
+/* bento grid: 2 cols → 3 on wider phones */
 .bento-grid {
+  display: grid;
   grid-template-columns: repeat(2, 1fr);
+  gap: $sp-5;
   @include mq-up($bp-sm) { grid-template-columns: repeat(3, 1fr); }
+}
+
+.bento-card {
+  display: flex; align-items: center; gap: $sp-4;
+  padding: $sp-5; border-radius: $radius-4; border: 1px solid;
+  transition: transform $dur-1 ease, background $dur-1 ease;
+
+  @include theme-block      { background: tone(surface, light);       border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(background-100, dark); border-color: tone(border, dark);  }
+
+  &:hover {
+    transform: translateY(-2px);
+    @include theme-block      { background: tone(background-100, light); }
+    @include theme-block-dark { background: tone(background-100, dark);  }
+  }
+
+  .bento-icon {
+    width: 2.25rem; height: 2.25rem; display: grid; place-items: center;
+    border-radius: $radius-3; border: 1px solid;
+    @include theme-block      { border-color: tone(border, light); }
+    @include theme-block-dark { border-color: tone(border, dark); }
+    i { font-size: $fs-4; }
+  }
+  .bento-title {
+    font-weight: $fw-semibold; font-size: $fs-3;
+    @include theme-block      { color: tone(contrast, light); }
+    @include theme-block-dark { color: tone(contrast, dark); }
+  }
+  .bento-sub {
+    font-size: $fs-2;
+    @include theme-block      { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark); }
+  }
 }
 
 // ---------- Brand ----------
@@ -148,6 +199,7 @@
 .navbar-actions {
   display: flex; align-items: center; gap: $sp-3;
 
+  // circular icon button (search, menu, etc.)
   .nav-icon {
     display: inline-grid; place-items: center;
     width: $btn-height-sm; height: $btn-height-sm; border-radius: 50%;
@@ -167,6 +219,7 @@
     }
   }
 
+  // Theme toggle (animated swap)
   .theme-toggle-button {
     @extend .nav-icon;
     position: relative; overflow: hidden;
@@ -180,6 +233,7 @@
     @include theme-block-dark { .icon-moon { opacity: 1; transform: rotate(0) scale(1); } }
   }
 
+  // GitHub CTA
   .nav-cta {
     display: inline-flex; align-items: center; gap: .5em;
     min-height: $btn-height-sm; padding: 0.35rem $btn-pad-x-sm;
@@ -200,98 +254,34 @@
   @media (max-width: $bp-lg) { .mobile-menu-toggle { display: inline-grid; } }
 }
 
-// ---------- Mobile island panel ----------
-.island-panel {
-  position: fixed;
-  left: $container-gutter; right: $container-gutter;
-  top: var(--nav-h, #{$navbar-height});
-  z-index: $z-overlay;
-  margin: 0 auto; max-width: $island-width;
-
-  border: 1px solid; border-top: 0;
-  border-bottom-left-radius: $radius-6;
-  border-bottom-right-radius: $radius-6;
-
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
-  transform: translateY(-6px);
-  transition: max-height 500ms $ease-in-out, opacity 300ms ease, transform 350ms $ease-in-out, box-shadow $dur-2 $ease-in-out;
-
-  max-height: 0; opacity: 0; overflow: clip; pointer-events: none;
-
-  @include theme-block      { background: rgba(255,255,255,0.92); border-color: tone(border, light); box-shadow: $shadow-light; }
-  @include theme-block-dark { background: rgba(18,18,20,0.96);    border-color: tone(border, dark);  box-shadow: $shadow-dark; }
-
-  &.is-open {
-    opacity: 1; transform: translateY(0); pointer-events: auto;
-    max-height: calc(100vh - var(--nav-h, #{$navbar-height}));
-  }
-
-  .island-panel__inner {
-    padding: $sp-8; display: grid; gap: $sp-6;
-    max-height: calc(100vh - var(--nav-h, #{$navbar-height}));
-    overflow: auto;
-  }
-
-  @include mq-up($bp-lg) { display: none; }
+// ---------- Mobile panel height rules on wider phones ----------
+.island-panel.is-open {
+  max-height: calc(100vh - (var(--nav-h, #{$navbar-height}) + #{$sp-3} + #{$sp-3}));
 }
-
-// ---------- Mobile bento grid ----------
-.bento-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: $sp-5;
-  @include mq-up($bp-sm) { grid-template-columns: repeat(3, 1fr); }
-}
-
-.bento-card {
-  display: flex; align-items: center; gap: $sp-4;
-  padding: $sp-5; border-radius: $radius-4; border: 1px solid;
-  transition: transform $dur-1 ease, background $dur-1 ease;
-
-  @include theme-block      { background: tone(surface, light);       border-color: tone(border, light); }
-  @include theme-block-dark { background: tone(background-100, dark); border-color: tone(border, dark);  }
-
-  &:hover {
-    transform: translateY(-2px);
-    @include theme-block      { background: tone(background-100, light); }
-    @include theme-block-dark { background: tone(background-100, dark);  }
-  }
-
-  .bento-icon {
-    width: 2.25rem; height: 2.25rem; display: grid; place-items: center;
-    border-radius: $radius-3; border: 1px solid;
-    @include theme-block      { border-color: tone(border, light); }
-    @include theme-block-dark { border-color: tone(border, dark); }
-    i { font-size: $fs-4; }
-  }
-  .bento-title {
-    font-weight: $fw-semibold; font-size: $fs-3;
-    @include theme-block      { color: tone(contrast, light); }
-    @include theme-block-dark { color: tone(contrast, dark); }
-  }
-  .bento-sub {
-    font-size: $fs-2;
-    @include theme-block      { color: tone(secondary, light); }
-    @include theme-block-dark { color: tone(secondary, dark); }
-  }
+.island-panel .island-panel__inner {
+  max-height: calc(100vh - (var(--nav-h, #{$navbar-height}) + #{$sp-3} + #{$sp-3}));
+  overflow: auto;
 }
 
 /* ============================= */
 /* INLINE NAVBAR SEARCH (NEW)    */
 /* ============================= */
+
+/* Search form occupies navbar center when active */
 .navbar-search {
+  // Refinement: no inner border; island’s own border frames the area
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+
   display: none;
   align-items: center;
   gap: $sp-3;
   height: $btn-height-sm;
-  padding: 0 $sp-3;
-  border-radius: $radius-pill;
-  border: 1px solid;
+  padding-left: $sp-4;   // breathing room since no inner border
+  padding-right: $sp-2;
 
-  @include theme-block      { background: tone(background, light);   border-color: tone(border, light); }
-  @include theme-block-dark { background: tone(background-100, dark); border-color: tone(border, dark); }
-
+  // (icons inside search)
   i { opacity: .8; }
 
   .search-input {
@@ -304,60 +294,99 @@
     @include theme-block-dark { color: tone(contrast, dark);  }
   }
 
+  // Cancel (×) matches right-side icon buttons
   .search-cancel {
     @extend .nav-icon;
-    width: $btn-height-sm; height: $btn-height-sm;
+    width: $btn-height-sm;
+    height: $btn-height-sm;
+    padding: 0;
+    background: transparent;
   }
 }
 
+/* When active, hide brand/menu/cta; make room for search */
 body.search-active {
   .navbar-search { display: flex; }
   .navbar-brand, .navbar-menu, .navbar-actions .cta-github { display: none; }
   .island-navbar { gap: $sp-3; display: grid; grid-template-columns: 1fr auto; }
 }
 
+@media (max-width: $bp-lg) {
+  body.search-active .island-navbar { grid-template-columns: 1fr auto; }
+}
+
+/* Results container: hidden by default (no border/line) */
 .search-results {
   position: sticky;
   top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-3});
   z-index: $z-overlay - 1;
+
   margin: 0 auto;
   max-width: $island-width;
-  border: 1px solid;
-  border-radius: $radius-4;
-  display: none;
-  overflow: hidden;
 
-  @include theme-block      { background: tone(background, light);   border-color: tone(border, light); box-shadow: $shadow-light; }
-  @include theme-block-dark { background: tone(background-100, dark); border-color: tone(border, dark);  box-shadow: $shadow-dark; }
-  &.is-open { display: block; }
+  display: none;        // invisible until .is-open
+  border: 0;            // no line
+  box-shadow: none;     // no shadow while hidden
+  background: transparent;
+  overflow: hidden;
+  border-radius: $radius-4;
 }
 
-.search-list { list-style: none; margin: 0; padding: $sp-3; display: grid; gap: $sp-2; }
+/* Only visible when JS adds .is-open (user typed/results exist) */
+.search-results.is-open {
+  display: block;
+
+  // soft surface without hard borders
+  @include theme-block      { background: tone(background, light);   box-shadow: $shadow-light; }
+  @include theme-block-dark { background: tone(background-100, dark); box-shadow: $shadow-dark; }
+}
+
+/* Comfortable spacing & item polish */
+.search-list {
+  list-style: none;
+  margin: 0;
+  padding: $sp-5;       // more inner padding
+  display: grid;
+  gap: $sp-3;           // more space between rows
+}
+
 .search-item {
-  display: grid; grid-template-columns: 2.25rem 1fr auto; align-items: center; gap: $sp-3;
-  padding: $sp-3; border-radius: $radius-3;
+  display: grid; grid-template-columns: 2.5rem 1fr auto; // larger thumb
+  align-items: center; gap: $sp-3;
+  padding: $sp-4;       // thicker row padding
+  border-radius: $radius-4;
 
   @include theme-block      { &:hover, &[aria-selected="true"] { background: tone(background-100, light); } }
   @include theme-block-dark { &:hover, &[aria-selected="true"] { background: tone(background-100, dark);  } }
 }
+
 .search-thumb {
-  width: 2.25rem; height: 2.25rem; border-radius: $radius-3; overflow: hidden; display: grid; place-items: center; border: 1px solid;
+  width: 2.5rem; height: 2.5rem;
+  border-radius: $radius-4; overflow: hidden;
+  display: grid; place-items: center; border: 1px solid;
+
   @include theme-block      { border-color: tone(border, light); background: tone(background-100, light); }
   @include theme-block-dark { border-color: tone(border, dark);  background: tone(background-100, dark);  }
+
   img { width: 100%; height: 100%; object-fit: cover; display: block; }
 }
+
 .search-title {
-  font-weight: $fw-semibold; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-weight: $fw-semibold; line-height: 1.15;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   @include theme-block      { color: tone(contrast, light); }
   @include theme-block-dark { color: tone(contrast, dark); }
 }
+
 .search-excerpt {
+  margin-top: .1rem;
   font-size: $fs-2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   @include theme-block      { color: tone(secondary, light); }
   @include theme-block-dark { color: tone(secondary, dark); }
 }
-.search-cta { font-size: $fs-2; @include theme-block { color: tone(secondary, light);} @include theme-block-dark { color: tone(secondary, dark);} }
 
-@media (max-width: $bp-lg) {
-  body.search-active .island-navbar { grid-template-columns: 1fr auto; }
+.search-cta {
+  font-size: $fs-2;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
 }
