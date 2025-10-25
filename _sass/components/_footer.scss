@@ -1,62 +1,143 @@
-/* Ensure island has a nice height so video can cover it */
-.footer__inner {
-  min-height: 420px; // adjust if you want taller
+// ======================================================================
+// Cinematic Footer (full video cover + mask + scanlines + blur)
+// ======================================================================
+
+.page-shell { display: flex; min-height: 100vh; flex-direction: column; }
+.page-shell > .site-footer { margin-top: auto; }
+
+.site-footer { position: relative; z-index: 1; margin-top: $sp-12; overflow: clip; }
+
+/* background dots behind island */
+.footer-surface {
+  position: absolute; inset: 0; z-index: 0;
+  background-image: radial-gradient(rgba(0,0,0,.06) 1px, transparent 1px);
+  background-size: 16px 16px;
+  @include theme-block-dark { background-image: radial-gradient(rgba(255,255,255,.08) 1px, transparent 1px); }
 }
 
-/* Container that holds the video and applies a MASK (no color overlay) */
+/* --- floating island --- */
+.footer-island { position: relative; z-index: 1; border-radius: $radius-6; overflow: hidden; }
+
+/* media background (video + effects) */
+.footer-media { position: absolute; inset: 0; z-index: 0; pointer-events: none; border-radius: inherit; }
 .footer-media__inner {
-  position: absolute; inset: 0;
-  overflow: hidden; border-radius: inherit;
-
-  /* True vignette mask (fades edges, keeps center strong; no white tint) */
-  -webkit-mask-image: radial-gradient(120% 120% at 50% 35%, rgba(0,0,0,1) 55%, rgba(0,0,0,.85) 72%, rgba(0,0,0,.35) 88%, rgba(0,0,0,0) 100%);
-  mask-image: radial-gradient(120% 120% at 50% 35%, rgba(0,0,0,1) 55%, rgba(0,0,0,.85) 72%, rgba(0,0,0,.35) 88%, rgba(0,0,0,0) 100%);
+  position: absolute; inset: 0; overflow: hidden; border-radius: inherit;
+  -webkit-mask-image: radial-gradient(120% 120% at 50% 40%, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
+  mask-image: radial-gradient(120% 120% at 50% 40%, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
 }
-
-/* Make the YouTube iframe FULL COVER of the parent (like object-fit: cover) */
 .footer-yt {
-  position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  border: 0; display: block; pointer-events: none; // background only
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  border: 0; display: block; pointer-events: none;
 
-  /* Default: cover by viewport height (narrow screens) */
-  width: 177.78vh;   // 100 * (16/9) = 177.78
-  height: 100vh;
-  min-width: 100%;   // never smaller than container
-  min-height: 100%;
-
-  /* If the viewport is wider than 16:9, cover by width instead */
-  @media (min-aspect-ratio: 16/9) {
-    width: 100vw;
-    height: 56.25vw; // 100 * (9/16) = 56.25
-  }
+  /* full-cover aspect ratio handling */
+  width: 177.78vh; height: 100vh; min-width: 100%; min-height: 100%;
+  @media (min-aspect-ratio: 16/9) { width: 100vw; height: 56.25vw; }
 }
 
-/* TV scanlines (no color overlay) — stays as is */
+/* scanlines overlay */
 .footer-static {
-  position: absolute; inset: 0; border-radius: inherit; pointer-events: none; mix-blend-mode: overlay;
-  background:
-    repeating-linear-gradient(
-      to bottom,
-      rgba(0,0,0,0.30) 0px, rgba(0,0,0,0.30) 1px,
-      rgba(0,0,0,0.00) 1px, rgba(0,0,0,0.00) 3px
-    );
-  opacity: .65;
-
-  @include theme-block-dark {
-    background:
-      repeating-linear-gradient(
-        to bottom,
-        rgba(0,0,0,0.38) 0px, rgba(0,0,0,0.38) 1px,
-        rgba(0,0,0,0.00) 1px, rgba(0,0,0,0.00) 3px
-      );
-    opacity: .72;
-  }
+  position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.3) 0 1px, transparent 1px 3px);
+  opacity: .65; mix-blend-mode: overlay;
 }
 
-/* Subtle readability without tint (NO white overlay) */
+/* subtle blur for readability */
 .footer-blur {
   position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
   -webkit-backdrop-filter: blur(7px) saturate(1.05);
   backdrop-filter: blur(7px) saturate(1.05);
+}
+
+/* --- containerized content --- */
+.footer__container { @include container; }
+.footer__inner {
+  position: relative; z-index: 1;
+  display: grid; gap: $sp-8;
+  padding: clamp(#{$sp-8}, 5vw, #{$sp-12});
+  min-height: 420px;
+  border: 1px solid; border-bottom: 0;
+  border-radius: $radius-6 $radius-6 0 0;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  text-shadow: 0 1px 2px rgba(0,0,0,.35);
+  @include theme-block { background: rgba(255,255,255,.08); border-color: tone(border, light); }
+  @include theme-block-dark { background: rgba(18,18,20,.10); border-color: tone(border, dark); }
+  @include mq-up($bp-md) { grid-template-columns: repeat(2,1fr); }
+  @include mq-up($bp-lg) { grid-template-columns: repeat(4,1fr); }
+}
+
+/* columns */
+.footer__col { display: flex; flex-direction: column; gap: $sp-4; }
+
+/* titles */
+.footer__title {
+  display: flex; align-items: center; gap: .5rem;
+  font-size: $fs-4; font-weight: $fw-semibold;
+  color: rgba(255,255,255,.95);
+  i { font-size: $fs-4; opacity: .9; }
+  &::after { content:""; display:block; width:28px; height:2px; margin-top:$sp-2; border-radius:2px; background:rgba(255,255,255,.85); }
+}
+
+/* text */
+.footer__text { font-size:$fs-3; line-height:1.6; color:rgba(255,255,255,.95); }
+
+/* links */
+.footer__list {
+  list-style:none; margin:0; padding:0; display:grid; gap:$sp-2;
+  li a {
+    display:inline-flex; align-items:center; gap:.5rem;
+    color:rgba(255,255,255,.95); text-decoration:none; font-size:$fs-3;
+    i{font-size:$fs-4;opacity:.9;}
+    &:hover{text-decoration:underline;}
+  }
+}
+
+/* social */
+.footer__social {
+  display:flex;align-items:center;gap:$sp-3;
+  a {
+    display:inline-grid;place-items:center;width:2rem;height:2rem;border-radius:50%;border:1px solid rgba(255,255,255,.45);
+    color:rgba(255,255,255,.95);font-size:$fs-4;
+    transition:transform $dur-1 $ease-in-out,background-color $dur-1 $ease-in-out;
+    &:hover{transform:translateY(-2px);background:rgba(255,255,255,.14);}
+  }
+}
+
+/* newsletter */
+.footer__form {
+  display:flex;align-items:center;gap:$sp-3;
+  input {
+    flex:1;border:1px solid rgba(255,255,255,.45);border-radius:$radius-pill;
+    padding:.6rem .9rem;font-size:$fs-3;background:rgba(0,0,0,.3);color:rgba(255,255,255,.98);
+    &::placeholder{color:rgba(255,255,255,.75);}
+    &:focus{border-color:rgba(255,255,255,.9);}
+  }
+  button {
+    width:2.5rem;height:2.5rem;border-radius:50%;border:none;display:inline-grid;place-items:center;cursor:pointer;
+    background:rgba(255,255,255,.98);color:tone(black,dark);font-size:$fs-4;
+    transition:transform $dur-1 $ease-in-out;
+    &:hover{transform:translateY(-2px);}
+  }
+}
+
+/* --- footer strip (below island) --- */
+.footer-strip { position: relative; z-index: 1; margin-top: $sp-3; }
+.footer-strip .footer__container { @include container; }
+.footer-strip__inner {
+  border: 1px solid; border-radius: $radius-6;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  padding: $sp-5 clamp($sp-5, 5vw, $sp-8);
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: $sp-4;
+  background: rgba(20,20,22,.5);
+  p { margin:0; font-size:$fs-3; color:rgba(255,255,255,.95); }
+  a { color:rgba(255,255,255,.98); text-decoration:none; font-weight:$fw-medium;
+      &:hover{text-decoration:underline;} }
+}
+
+/* mobile tweaks */
+@media(max-width:$bp-sm){
+  .footer__inner{grid-template-columns:1fr;gap:$sp-8;}
+  .footer__form{flex-direction:column;align-items:stretch;}
+  .footer-strip__inner{flex-direction:column;text-align:center;}
 }
