@@ -4,14 +4,10 @@
 {% include head.html %}
 
 <body class="layout-{{ page.layout }}{% if page.title %} {{ page.title | slugify }}{% endif %}">
-
   <!-- Header -->
-  <header class="header{% if page.header_fluid %} wide{% endif %}">
-    <div class="container{% if page.header_narrow %} narrow{% endif %}">
+    <div class="container">
       {% include header.html %}
     </div>
-  </header>
-
   <!-- Main content -->
   <main class="main{% if page.fluid %} wide{% endif %}{% if page.narrow %} narrow{% endif %}{% if page.offset_nav %} offset{% endif %}">
     <div class="container{% if page.narrow %} narrow{% endif %}">
