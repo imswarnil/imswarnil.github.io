@@ -1,0 +1,275 @@
+---
+# Jekyll front-matter so SCSS compiles
+---
+
+@import "variables";
+
+/* =========================================================
+   Base, Theme, Elements & Utilities (GitHub Pages friendly)
+   NOTE: All mixed-unit values live in CSS vars below.
+========================================================= */
+
+/* CSS variables with clamp()/vw kept as raw CSS (no SCSS math) */
+:root {
+  /* Layout paddings/typography using clamp safely */
+  --container-pad: clamp(16px, 12px + 1vw, 32px);
+  --fs-3xl: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+  --fs-4xl: clamp(2rem, 1.6rem + 2vw, 3rem);
+
+  /* Theme (light) */
+  --ghost-accent-color: #{$brand-ink};
+  --brand-primary: #{$brand-primary};
+  --brand-accent:  #{$brand-accent};
+
+  --color-bg:        #{$light-bg};
+  --color-bg-elev:   #{$light-bg-elev};
+  --color-bg-elev-2: #{$light-bg-elev-2};
+  --color-fg:        #{$light-fg};
+  --color-fg-weak:   #{$light-fg-weak};
+  --color-ink:       #{$light-ink};
+  --color-border:    #{$light-border};
+
+  --shadow-1: #{$shadow-1};
+  --shadow-2: #{$shadow-2};
+  --shadow-3: #{$shadow-3};
+
+  color-scheme: light;
+}
+
+:root[data-color-scheme="dark"] {
+  --ghost-accent-color: #{$brand-paper};
+  --brand-primary: #{$brand-primary};
+  --brand-accent:  #{$brand-accent};
+
+  --color-bg:        #{$dark-bg};
+  --color-bg-elev:   #{$dark-bg-elev};
+  --color-bg-elev-2: #{$dark-bg-elev-2};
+  --color-fg:        #{$dark-fg};
+  --color-fg-weak:   #{$dark-fg-weak};
+  --color-ink:       #{$dark-ink};
+  --color-border:    #{$dark-border};
+
+  --shadow-1: #{$shadow-2};
+  --shadow-2: #{$shadow-3};
+  --shadow-3: 0 40px 90px -30px rgba(0,0,0,.55);
+
+  color-scheme: dark;
+}
+
+/* Reset / Normalize */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { font-size: $font-size-root; scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: $font-sans;
+  font-size: $fs-md;
+  line-height: $lh-normal;
+  color: var(--color-fg);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Media */
+img, svg, video, canvas { display: block; max-width: 100%; }
+img { height: auto; }
+
+/* Links */
+a {
+  color: $brand-ink;
+  text-decoration: none;
+  transition: color $dur-2 $ease-out;
+}
+a:hover { color: $brand-primary; }
+
+:focus-visible { @include focus-ring; }
+
+/* Type scale */
+h1 { @include heading(xl); margin: 0 0 $sp-12; }
+h2 { @include heading(lg); margin: 0 0 $sp-8; }
+h3 { @include heading(md); margin: 0 0 $sp-6; }
+h4 { font-size: $fs-xl; font-weight: $w-semibold; color: var(--color-ink); margin: 0 0 $sp-6; }
+
+p { margin: 0 0 $sp-8; }
+small, .text-sm { font-size: $fs-sm; }
+.mono { font-family: $font-mono; }
+
+/* Code */
+code, pre {
+  font-family: $font-mono;
+  background: var(--color-bg-elev-2);
+  color: var(--color-ink);
+}
+code {
+  padding: 2px 6px;
+  border-radius: $radius-2;
+  border: 1px solid var(--color-border);
+}
+pre {
+  padding: $sp-8;
+  border-radius: $radius-3;
+  border: 1px solid var(--color-border);
+  overflow: auto;
+}
+
+/* Container
+   IMPORTANT: no SCSS calc with clamp(). Use CSS var inside calc(). */
+.container {
+  @include container;
+  padding-left: var(--container-pad);
+  padding-right: var(--container-pad);
+}
+
+/* Sections */
+.section {
+  @include container;
+  margin-block: $sp-16;
+  padding: $sp-16;
+  background: var(--color-bg-elev);
+  border: 1px solid var(--color-border);
+  border-radius: $radius-5;
+  box-shadow: var(--shadow-2);
+}
+.section--tight { padding: $sp-12; border-radius: $radius-4; }
+
+.section__header {
+  display: flex; align-items: baseline; justify-content: space-between; gap: $sp-6;
+  margin-bottom: $sp-10;
+}
+.section__title {
+  color: var(--color-ink);
+  font-weight: $w-semibold;
+  font-size: var(--fs-3xl);
+  line-height: $lh-tight;
+}
+.section__sub { color: var(--color-fg-weak); font-size: $fs-sm; }
+
+/* Buttons */
+.button {
+  @include button-reset;
+  display: inline-flex; align-items: center; gap: .55em;
+  min-height: 2.5rem;
+  padding: $sp-6 $sp-10;
+  border-radius: $radius-pill;
+  border: 1px solid transparent;
+  font-weight: $w-semibold;
+  font-size: $fs-sm;
+  background: $brand-ink;
+  color: $brand-paper;
+  transition: transform $dur-1 $ease-out, box-shadow $dur-2 $ease-out, background $dur-2;
+}
+.button:hover { transform: translateY(-2px); box-shadow: var(--shadow-1); }
+.button:active { transform: translateY(0); box-shadow: none; }
+.button--ghost { background: transparent; color: var(--color-ink); border-color: var(--color-border); }
+.button--brand { background: $brand-primary; color: #fff; }
+.button--accent { background: $brand-accent; color: #fff; }
+.button--sm { min-height: 2.25rem; padding: $sp-4 $sp-8; font-size: $fs-xs; }
+
+/* Pills / Tags */
+.pill {
+  display:inline-flex; align-items:center; gap:.5em;
+  padding: $sp-4 $sp-8;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-elev-2);
+  color: var(--color-ink);
+  border-radius: $radius-pill;
+  font-size: $fs-sm;
+}
+
+/* Cards */
+.card { @include card; padding: $sp-10; }
+.card--hover:hover { box-shadow: var(--shadow-2); transform: translateY(-2px); transition: transform $dur-1 $ease-out, box-shadow $dur-2 $ease-out; }
+
+/* Grid helpers */
+.grid { display: grid; gap: $sp-8; }
+.grid--2 { grid-template-columns: repeat(2, 1fr); }
+.grid--3 { grid-template-columns: repeat(3, 1fr); }
+.grid--4 { grid-template-columns: repeat(4, 1fr); }
+@include responsive(lg) { .grid--3, .grid--4 { grid-template-columns: repeat(2, 1fr); } }
+@include responsive(md) { .grid--2, .grid--3, .grid--4 { grid-template-columns: 1fr; } }
+
+/* Forms */
+input, select, textarea {
+  width: 100%;
+  font: inherit;
+  color: var(--color-ink);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: $radius-3;
+  padding: $sp-6 $sp-8;
+}
+input::placeholder, textarea::placeholder { color: var(--color-fg-weak); }
+label { font-size: $fs-sm; color: var(--color-fg-weak); }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; font-size: $fs-sm; }
+th, td { padding: $sp-6 $sp-8; border-bottom: 1px solid var(--color-border); }
+th { text-align: left; color: var(--color-ink); }
+
+/* Utilities */
+.mt-0 { margin-top: 0 !important; }
+.mb-0 { margin-bottom: 0 !important; }
+.mt-8 { margin-top: $sp-8 !important; }
+.mb-8 { margin-bottom: $sp-8 !important; }
+.pt-8 { padding-top: $sp-8 !important; }
+.pb-8 { padding-bottom: $sp-8 !important; }
+.text-center { text-align: center !important; }
+.hide-sm   { @include responsive(md){ display: none !important; } }
+.only-sm   { display: none; @include responsive(md){ display: block !important; } }
+
+/* Dots backdrop (no mixing in SCSS) */
+.dots-bg {
+  background-image: radial-gradient(currentColor 1px, transparent 1px);
+  background-size: 12px 12px;
+  color: var(--color-ink);
+  opacity: .06;
+}
+
+/* Optional: sticky island navbar baseline (no color-mix) */
+.nav-island {
+  position: sticky; top: $sp-16; z-index: $z-dropdown;
+  @include container;
+  display:flex; align-items:center; justify-content:space-between;
+  padding: $sp-6 $sp-8;
+  background: rgba(255,255,255,0.75);
+  border: 1px solid var(--color-border);
+  border-radius: $radius-5;
+  box-shadow: var(--shadow-2);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+:root[data-color-scheme="dark"] .nav-island { background: rgba(17,17,19,0.75); }
+
+/* Hero baseline using CSS vars for large sizes */
+.hero {
+  @include container;
+  display:grid; gap: $sp-16;
+  grid-template-columns: 1.25fr 1fr;
+}
+@include responsive(lg){ .hero { grid-template-columns: 1fr; } }
+.hero__title { font-size: var(--fs-4xl); line-height: $lh-tight; color: var(--color-ink); font-weight: $w-semibold; }
+.hero__lead  { font-size: $fs-lg; color: var(--color-ink); }
+.hero__meta  { display:flex; flex-wrap:wrap; gap: $sp-4; }
+
+/* Project card */
+.project-card { @include card; display:grid; gap: $sp-6; }
+.project-card__thumb { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: $radius-3; border: 1px solid var(--color-border); }
+.project-card__title { font-weight: $w-semibold; color: var(--color-ink); }
+.project-card__desc  { color: var(--color-fg); font-size: $fs-sm; }
+
+/* Timeline */
+.timeline { position: relative; display:grid; gap: $sp-10; }
+.timeline::before { content:""; position:absolute; left: 16px; top:0; bottom:0; width:2px; background: linear-gradient(to bottom, var(--color-border), transparent 85%); }
+.timeline__item { position: relative; padding-left: 48px; }
+.timeline__bullet { position:absolute; left: 8px; top: 4px; width: 18px; height: 18px; border-radius: 999px; border: 2px solid var(--color-border); background: var(--color-bg); }
+.timeline__title { color: var(--color-ink); font-weight: $w-semibold; }
+.timeline__meta { color: var(--color-fg-weak); font-size: $fs-xs; }
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
