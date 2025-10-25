@@ -1,6 +1,6 @@
 // ======================================================================
-// _base.scss  — site-wide reset, typography, elements, layout helpers
-// Depends on: _variables.scss (your tokens + mixins)
+// _base.scss — reset, typography, elements, layout helpers, common UI
+// Depends on: _variables.scss
 // ======================================================================
 
 // ------------------------------
@@ -13,22 +13,19 @@ body {
   font-family: $ff-body;
   font-weight: $fw-regular;
   font-size: 16px;
-  line-height: 1.6;
+  line-height: $lh-base;
 
-  @include theme-block  { background-color: tone(background, light); color: tone(foreground, light); }
-  @include theme-block-dark { background-color: tone(background, dark); color: tone(foreground, dark); }
+  @include theme-block      { background-color: tone(background, light); color: tone(foreground, light); }
+  @include theme-block-dark { background-color: tone(background, dark);  color: tone(foreground, dark); }
 }
 body.panel-open { overflow: hidden; }
 
-// ------------------------------
-// Media
-// ------------------------------
 img, svg, video, canvas, audio, iframe { display: block; max-width: 100%; }
 img { height: auto; border-style: none; }
 figure { margin: 0 0 $sp-8 0; }
 figcaption {
   margin-top: $sp-4; font-size: $fs-2;
-  @include theme-block  { color: tone(secondary, light); }
+  @include theme-block      { color: tone(secondary, light); }
   @include theme-block-dark { color: tone(secondary, dark); }
 }
 
@@ -65,32 +62,33 @@ a {
 // ------------------------------
 h1, h2, h3, h4, h5, h6 {
   margin: 0 0 $sp-6 0;
-  line-height: 1.2;
+  line-height: $lh-tight;
   font-family: $ff-head;
   font-weight: $fw-semibold;
 
   @include theme-block      { color: tone(contrast, light); }
   @include theme-block-dark { color: tone(contrast, dark); }
 }
-h1 { font-size: 2.25rem; }
-h2 { font-size: 1.75rem; }
-h3 { font-size: 1.5rem; }
-h4 { font-size: 1.25rem; }
-h5 { font-size: 1.125rem; }
-h6 { font-size: 1rem; }
+h1 { font-size: $fs-9; }
+h2 { font-size: $fs-7; }
+h3 { font-size: $fs-6; }
+h4 { font-size: $fs-5; }
+h5 { font-size: $fs-4; }
+h6 { font-size: $fs-3; }
 
-@media (min-width: $bp-md) {
-  h1 { font-size: 2.75rem; }
-  h2 { font-size: 2rem; }
-  h3 { font-size: 1.75rem; }
+@include mq-up($bp-md) {
+  h1 { font-size: $fs-10; }
+  h2 { font-size: $fs-8; }
 }
 
 p { margin: 0 0 $sp-6 0; }
+
 small, .small {
   font-size: $fs-1;
   @include theme-block      { color: tone(secondary, light); }
   @include theme-block-dark { color: tone(secondary, dark); }
 }
+
 strong { font-weight: $fw-bold; }
 em { font-style: italic; }
 
@@ -184,17 +182,10 @@ input[type="password"],
 input[type="number"],
 input[type="tel"],
 textarea,
-select {
-  @include input-base;
-}
+select { @include input-base; }
 
 textarea { min-height: 8rem; resize: vertical; }
 select { appearance: none; background-image: none; }
-
-input[type="checkbox"],
-input[type="radio"] {
-  /* native accent color follows theme automatically in most browsers */
-}
 
 // ------------------------------
 // Buttons (generic + variants)
@@ -204,12 +195,19 @@ input[type="radio"] {
 .button--primary {
   @include theme-block      { background: tone(accent, light); color: tone(white, light); }
   @include theme-block-dark { background: tone(white, dark);  color: tone(black, dark); }
+  &:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,.12); }
 }
+
 .button--ghost {
   background: transparent; border: 1px solid;
   @include theme-block      { color: tone(secondary, light); border-color: tone(border, light); }
   @include theme-block-dark { color: tone(secondary, dark);  border-color: tone(border, dark); }
+  &:hover {
+    @include theme-block      { background: tone(background-100, light); color: tone(contrast, light); }
+    @include theme-block-dark { background: tone(background-100, dark);  color: tone(contrast, dark); }
+  }
 }
+
 .button--outline {
   background: transparent; border: 1px solid;
   @include theme-block      { color: tone(contrast, light); border-color: tone(border, light); }
@@ -217,7 +215,9 @@ input[type="radio"] {
 }
 
 .button--sm { min-height: $btn-height-sm; padding: .35rem $btn-pad-x-sm; font-size: $fs-2; }
-.button--lg { min-height: calc(#{$btn-height} + .25rem); padding: $sp-6 calc(#{$btn-pad-x} + .25rem); font-size: $fs-4; }
+
+// Icon-only helper
+.button-icon { @include button-base; width: $btn-height-sm; height: $btn-height-sm; padding: $sp-4; border-radius: 50%; }
 
 // ------------------------------
 // Layout helpers
@@ -242,7 +242,7 @@ input[type="radio"] {
 }
 
 .section-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: $sp-8; }
-.section-title  { margin: 0; font-size: 1.75rem; }
+.section-title  { margin: 0; font-size: $fs-7; }
 .section-sub {
   font-size: 0.95rem;
   @include theme-block      { color: tone(secondary, light); }
@@ -260,7 +260,7 @@ input[type="radio"] {
 }
 
 // ------------------------------
-// Blog list + meta (from your includes)
+// Blog list + meta
 // ------------------------------
 .list--posts { list-style: none; padding: 0; margin: 0; }
 .list--posts .item--post { margin-bottom: $sp-12; }
@@ -320,7 +320,7 @@ input[type="radio"] {
 // Footer
 // ------------------------------
 .footer {
-  margin-top: $sp-16; padding: $footer-pad-y 0;
+  margin-top: $sp-16; padding: $sp-10 0;
   border-top: 1px solid;
   @include theme-block      { border-top-color: tone(border, light); }
   @include theme-block-dark { border-top-color: tone(border, dark); }
@@ -336,7 +336,6 @@ input[type="radio"] {
 // ------------------------------
 .hidden { display: none !important; }
 
-// screen-reader only (no &: where illegal)
 .sr-only {
   position: absolute !important;
   width: 1px; height: 1px;
