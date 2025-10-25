@@ -3,35 +3,6 @@
 // Depends on: _variables.scss
 // ======================================================================
 
-@use "variables" as *;
-
-
-// ---------------------------------------------
-// Header
-// ---------------------------------------------
-.header {
-  position: relative;
-  z-index: $z-header;
-  width: 100%;
-  padding-block: clamp($sp-6, 2vw, $sp-10);
-
-  @include theme-block {
-    background-color: tone(background, light);
-    border-bottom: 1px solid tone(border, light);
-  }
-
-  @include theme-block-dark {
-    background-color: tone(background, dark);
-    border-bottom: 1px solid tone(border, dark);
-  }
-}
-
-// Fluid header (edge-to-edge)
-.header.wide .container {
-  width: 100%;
-  max-width: none;
-  padding-inline: $container-gutter;
-}
 
 // ---------------------------------------------
 // Containers
