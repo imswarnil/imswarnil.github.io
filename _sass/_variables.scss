@@ -131,6 +131,25 @@ $code-radius: $radius-4;
 $badge-radius: $radius-pill;
 $badge-font: $fs-2;
 
+// Layout
+$container-gutter: 1rem;        // unified units in rem
+$island-width: 68.75rem;        // 1100px -> 68.75rem (16px base)
+
+// Radii (you already have 3 & 4)
+$radius-5: 18px;
+$radius-6: 24px;
+
+// Z-index
+$z-nav: 1000;
+$z-overlay: 1050;
+
+// Easing
+$ease-in-out: cubic-bezier(.25,1,.5,1);
+
+// Shadows (already similar — keep or adjust)
+$shadow-light: 0 10px 30px -10px rgba(0, 0, 0, 0.2), 0 4px 10px -6px rgba(0, 0, 0, 0.16);
+$shadow-dark:  0 20px 60px -10px rgba(0, 0, 0, 0.4), 0 4px 20px -8px rgba(0, 0, 0, 0.4);
+
 // ------------------------------
 // Light/Dark themes
 // Keys you can call via tone(<key>)
@@ -180,6 +199,9 @@ $theme-dark: (
   warning: #f59e0b,
   danger:  #ef4444,
 );
+
+
+
 
 // ------------------------------
 // Helper: theme color fetcher
