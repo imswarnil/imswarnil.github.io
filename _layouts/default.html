@@ -10,11 +10,9 @@
     <div class="container{% if page.narrow %} narrow{% endif %}">
       {{ content }}
     </div>
+  {% include site-footer.html %}
   </main>
-
-  <div class="page-shell">
-    {% include site-footer.html %}
-  </div>
+  
 
   {% if site.service_worker != false %}{% include site-sw.html %}{% endif %}
   {% include site-before-end.html %}
