@@ -1,0 +1,133 @@
+// ======================================================================
+// home.scss — Home hero (glassy island, compact)
+// Depends on: _variables.scss + layout.scss
+// ======================================================================
+
+@use "variables" as *;
+
+// Section spacing (keeps hero breathing without touching header)
+.hero {
+  padding-block: clamp($sp-12, 6vw, $sp-20);
+}
+
+// Glass island wrapper
+.hero-island {
+  display: grid;
+  gap: $sp-10;
+  border-radius: $radius-6;
+  padding: clamp($sp-10, 2.4vw, $sp-16);
+  backdrop-filter: blur(10px);
+
+  @include theme-block {
+    background-color: tone(surface, light);
+    border: 1px solid tone(border, light);
+    box-shadow: $shadow-light;
+    color: tone(foreground, light);
+  }
+  @include theme-block-dark {
+    background-color: tone(surface, dark);
+    border: 1px solid tone(border, dark);
+    box-shadow: $shadow-dark;
+    color: tone(foreground, dark);
+  }
+
+  // Two-column on md+, text/media
+  @include mq-up($bp-md) {
+    grid-template-columns: 1.15fr 0.85fr;
+    align-items: center;
+  }
+}
+
+// Text column
+.hero-body {
+  display: grid;
+  gap: $sp-7;
+}
+
+.hero-eyebrow {
+  font-size: $fs-2;
+  letter-spacing: .02em;
+
+  @include theme-block  { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark); }
+}
+
+.hero-title {
+  font-weight: $fw-bold;
+  line-height: $lh-tight;
+  font-size: clamp($fs-7, 6.4vw, $fs-10); // no rem+vw calc mixing
+  margin: 0;
+}
+
+.hero-accent {
+  @include theme-block  { color: tone(accent, light); }
+  @include theme-block-dark { color: tone(accent, dark); }
+}
+
+.hero-sub {
+  font-size: $fs-3;
+  max-width: 60ch;
+
+  @include theme-block  { color: tone(foreground, light); }
+  @include theme-block-dark { color: tone(foreground, dark); }
+}
+
+// Actions
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $sp-7;
+  align-items: center;
+}
+
+// Buttons (compact, tokenized)
+.btn { @include button-base; }
+
+.btn-primary {
+  @include theme-block {
+    background-color: tone(accent, light);
+    color: tone(white, light);
+    border-color: tone(accent, light);
+  }
+  @include theme-block-dark {
+    background-color: tone(accent, dark);
+    color: tone(black, dark);
+    border-color: tone(accent, dark);
+  }
+  &:hover { transform: translateY(-1px); }
+}
+
+.btn-ghost {
+  @include theme-block {
+    background-color: transparent;
+    color: tone(foreground, light);
+    border-color: tone(border, light);
+  }
+  @include theme-block-dark {
+    background-color: transparent;
+    color: tone(foreground, dark);
+    border-color: tone(border, dark);
+  }
+  &:hover {
+    @include theme-block { background-color: tone(background-100, light); }
+    @include theme-block-dark { background-color: tone(background-200, dark); }
+  }
+}
+
+// Media column
+.hero-media {
+  margin: 0;
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: $radius-5;
+
+    @include theme-block { border: 1px solid tone(border, light); }
+    @include theme-block-dark { border: 1px solid tone(border, dark); }
+  }
+}
+
+// Optional: make the hero edge-to-edge while content remains narrow
+// Wrap <section class="hero"> in a .wide container if you want full-bleed bg.
