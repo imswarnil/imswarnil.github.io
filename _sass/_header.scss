@@ -1,22 +1,11 @@
 // ======================================================================
-// _header.scss — compact island header with mobile hamburger + bento panel
-// (uses your _variables.scss tokens + maps + helpers + mixins)
+// _header.scss — island header with desktop icons, fixed mobile bar,
+// floating bento panel, animated theme switcher
+// (uses tokens/mixins from _variables.scss)
 // ======================================================================
-
-// ---------- Base button helpers (use your global .button / .button-icon if already present) ----------
-.button { @include button-base; }
-.button-sm { min-height: $btn-height-sm; padding: 0.35rem $btn-pad-x-sm; font-size: $fs-2; }
-.button-icon { @include button-base; width: $btn-height-sm; height: $btn-height-sm; padding: $sp-4; border-radius: 50%; }
-.button-transparent {
-  @include button-base;
-  background: transparent; border: 1px solid;
-  @include theme-block      { color: tone(secondary, light); border-color: tone(border, light); }
-  @include theme-block-dark { color: tone(secondary, dark);  border-color: tone(border, dark); }
-}
 
 // ---------- Navbar ----------
 .island-navbar {
-  // desktop “island” stickiness
   @include container;
   position: sticky;
   top: $container-gutter;
@@ -48,19 +37,13 @@
     box-shadow: $shadow-dark;
   }
 
-  &.is-open {
-    border-bottom-left-radius: $radius-4;
-    border-bottom-right-radius: $radius-4;
-  }
+  &.is-open { border-bottom-left-radius: $radius-4; border-bottom-right-radius: $radius-4; }
 }
 
-// Mobile: make the navbar fixed full-width at the top
+// Mobile: fixed full-width
 @media (max-width: $bp-lg) {
   .island-navbar {
-    // keep horizontal gutters consistent with page container
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    width: 100%;
+    position: fixed; top: 0; left: 0; right: 0; width: 100%;
     margin: 0; border-radius: 0;
   }
   body.has-fixed-nav { padding-top: var(--nav-h, #{$navbar-height}); }
@@ -71,36 +54,33 @@
   display: flex; align-items: center; gap: $sp-5; text-decoration: none;
 
   .navbar-avatar {
-    width: 2rem; height: 2rem;
-    border-radius: 50%; object-fit: cover; border: 2px solid;
+    width: 2rem; height: 2rem; border-radius: 50%; object-fit: cover;
+    border: 2px solid;
     @include theme-block      { border-color: tone(border, light); }
     @include theme-block-dark { border-color: tone(border, dark); }
   }
 
   .brand-text { display: grid; line-height: 1.1; }
   .logo {
-    font-size: $fs-4; // small
-    font-weight: $fw-semibold;
-    letter-spacing: -0.01em;
+    font-size: $fs-4; font-weight: $fw-semibold; letter-spacing: -0.01em;
     @include theme-block      { color: tone(contrast, light); }
     @include theme-block-dark { color: tone(contrast, dark); }
   }
   .logo-sub {
-    font-size: $fs-1; // small caption
+    font-size: $fs-1;
     @include theme-block      { color: tone(secondary, light); }
     @include theme-block-dark { color: tone(secondary, dark); }
   }
 }
 
-// ---------- Desktop menu (icons + compact text) ----------
+// ---------- Desktop menu (icons + compact labels) ----------
 .navbar-menu {
   ul { display: flex; align-items: center; gap: $sp-2; margin: 0; padding: 0; list-style: none; }
 
   a {
     display: inline-flex; align-items: center; gap: .5em;
     padding: $sp-3 $sp-5;
-    font-size: $fs-3; // smaller
-    font-weight: $fw-medium;
+    font-size: $fs-3; font-weight: $fw-medium;
     border-radius: $radius-pill;
     transition: background-color $dur-1, color $dur-1;
 
@@ -119,84 +99,96 @@
   @media (max-width: $bp-lg) { display: none; }
 }
 
-// ---------- Actions ----------
+// ---------- Right-side actions (header-scoped controls only) ----------
 .navbar-actions {
   display: flex; align-items: center; gap: $sp-3;
 
-  .theme-toggle-button {
-    @extend .button-icon;
-    background: transparent; border: 1px solid; position: relative; overflow: hidden;
+  // Small circular icon button used for search, etc.
+  .nav-icon {
+    display: inline-grid; place-items: center;
+    width: $btn-height-sm; height: $btn-height-sm; border-radius: 50%;
+    border: 1px solid; padding: 0;
+    font-size: $fs-4; line-height: 1;
+    cursor: pointer; user-select: none;
+    background: transparent;
+    transition: background-color $dur-1, color $dur-1, border-color $dur-1;
 
-    // animated sun/moon swap
-    i {
-      position: absolute; inset: 0; display: grid; place-items: center;
-      opacity: 0; transform: rotate(-90deg) scale(0.8);
-      transition: opacity $dur-2 ease, transform $dur-2 $ease-in-out;
-      font-size: $fs-4;
-    }
     @include theme-block {
       color: tone(secondary, light); border-color: tone(border, light);
-      &:hover { background: tone(background-200, light); color: tone(contrast, light); }
-      .icon-sun { opacity: 1; transform: rotate(0deg) scale(1); }
+      &:hover { color: tone(contrast, light); background: tone(background-200, light); }
     }
     @include theme-block-dark {
       color: tone(secondary, dark); border-color: tone(border, dark);
-      &:hover { background: tone(background-200, dark); color: tone(contrast, dark); }
-      .icon-moon { opacity: 1; transform: rotate(0deg) scale(1); }
+      &:hover { color: tone(contrast, dark); background: tone(background-200, dark); }
     }
   }
 
-  // GitHub CTA: text on md+; icon-only on mobile
-  .cta-github {
-    @extend .button; @extend .button-sm;
+  // Theme toggle (animated icon swap)
+  .theme-toggle-button {
+    @extend .nav-icon;
+    position: relative; overflow: hidden;
+
+    i {
+      position: absolute; inset: 0; display: grid; place-items: center;
+      opacity: 0; transform: rotate(-90deg) scale(.8);
+      transition: opacity $dur-2 ease, transform $dur-2 $ease-in-out;
+    }
+    @include theme-block { .icon-sun  { opacity: 1; transform: rotate(0) scale(1); } }
+    @include theme-block-dark { .icon-moon { opacity: 1; transform: rotate(0) scale(1); } }
+  }
+
+  // GitHub CTA (text on md+, icon-only on mobile)
+  .nav-cta {
+    display: inline-flex; align-items: center; gap: .5em;
+    min-height: $btn-height-sm; padding: 0.35rem $btn-pad-x-sm;
+    border-radius: $radius-pill; border: 1px solid transparent;
+    font-size: $fs-2; font-weight: $fw-semibold; cursor: pointer; user-select: none;
+    transition: transform $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out, background-color $dur-1, color $dur-1;
+
+    @include theme-block      { background: tone(contrast, light); color: tone(white, light); }
+    @include theme-block-dark { background: tone(white, dark);    color: tone(black, dark);  }
+
+    &:hover { transform: translateY(-2px); }
+
     span { display: none; }
     @include mq-up($bp-md) { span { display: inline; } }
   }
 
   .mobile-menu-toggle { display: none; }
-  @media (max-width: $bp-lg) { .mobile-menu-toggle { display: inline-flex; } }
+  @media (max-width: $bp-lg) { .mobile-menu-toggle { display: inline-grid; } }
 }
 
-// ---------- Mobile island panel ----------
+// ---------- Mobile island panel (floating + scrollable) ----------
 .island-panel {
   position: fixed;
   left: $container-gutter; right: $container-gutter;
-  top: var(--nav-h, #{$navbar-height});    // flush under the fixed header
+  top: var(--nav-h, #{$navbar-height});
   z-index: $z-overlay;
-  margin: 0 auto;
-  max-width: $island-width;
+  margin: 0 auto; max-width: $island-width;
 
   border: 1px solid; border-top: 0;
   border-bottom-left-radius: $radius-6;
   border-bottom-right-radius: $radius-6;
 
-  // glass island
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
   transform: translateY(-6px);
   transition: max-height 500ms $ease-in-out, opacity 300ms ease, transform 350ms $ease-in-out, box-shadow $dur-2 $ease-in-out;
 
-  // collapsed
-  max-height: 0;
-  opacity: 0;
-  overflow: clip;
-  pointer-events: none;
+  max-height: 0; opacity: 0; overflow: clip; pointer-events: none;
 
-  @include theme-block      { background: rgba(255,255,255,0.9); border-color: tone(border, light); box-shadow: $shadow-light; }
-  @include theme-block-dark { background: rgba(18,18,20,0.96);  border-color: tone(border, dark);  box-shadow: $shadow-dark; }
+  @include theme-block      { background: rgba(255,255,255,0.92); border-color: tone(border, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: rgba(18,18,20,0.96);    border-color: tone(border, dark);  box-shadow: $shadow-dark; }
 
   &.is-open {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-    max-height: calc(100vh - var(--nav-h, #{$navbar-height})); // full viewport remainder
+    opacity: 1; transform: translateY(0); pointer-events: auto;
+    max-height: calc(100vh - var(--nav-h, #{$navbar-height}));
   }
 
   .island-panel__inner {
-    padding: $sp-8;
-    display: grid; gap: $sp-6;
+    padding: $sp-8; display: grid; gap: $sp-6;
     max-height: calc(100vh - var(--nav-h, #{$navbar-height}));
-    overflow: auto; // scroll if content exceeds
+    overflow: auto;
   }
 
   @include mq-up($bp-lg) { display: none; }
@@ -207,7 +199,6 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: $sp-5;
-
   @include mq-up($bp-sm) { grid-template-columns: repeat(3, 1fr); }
 }
 
@@ -233,7 +224,7 @@
     i { font-size: $fs-4; }
   }
   .bento-title {
-    font-weight: $fw-semibold; font-size: $fs-3; // compact
+    font-weight: $fw-semibold; font-size: $fs-3;
     @include theme-block      { color: tone(contrast, light); }
     @include theme-block-dark { color: tone(contrast, dark); }
   }

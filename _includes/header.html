@@ -1,7 +1,55 @@
-<!-- HEADER (Island Navbar) -->
+<!-- _includes/header.html -->
+<header class="island-navbar" role="navigation" aria-label="Primary" id="site-navbar">
+  <a href="{{ '/' | relative_url }}" class="navbar-brand">
+    <img src="{{ site.avatar | default: 'https://i.pravatar.cc/40?u=j' }}" alt="{{ site.title }}" class="navbar-avatar" />
+    <span class="brand-text">
+      <span class="logo">{{ site.title | default: 'John Doe' }}</span>
+      <span class="logo-sub">{{ site.job_title | default: 'Software Engineer' }}</span>
+    </span>
+  </a>
 
-<!-- Hard FOUC guard: decide theme before first paint -->
+  <nav class="navbar-menu" aria-label="Desktop Navigation">
+    <ul>
+      <li><a href="{{ '#about' | relative_url }}"><i class="ph-bold ph-user"></i>About</a></li>
+      <li><a href="{{ '#projects' | relative_url }}"><i class="ph-bold ph-folder"></i>Projects</a></li>
+      <li><a href="{{ '/blog/' | relative_url }}"><i class="ph-bold ph-article"></i>Blog</a></li>
+      <li><a href="{{ '#contact' | relative_url }}"><i class="ph-bold ph-paper-plane-tilt"></i>Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="navbar-actions">
+    <a href="#" id="search-open" class="nav-icon" aria-label="Search"><i class="ph-bold ph-magnifying-glass"></i></a>
+    <button class="theme-toggle-button" aria-label="Toggle theme" id="theme-toggle">
+      <i class="ph-bold ph-sun icon-sun" aria-hidden="true"></i>
+      <i class="ph-bold ph-moon icon-moon" aria-hidden="true"></i>
+    </button>
+    <a href="{{ site.github_url | default: 'https://github.com/your-username' }}" target="_blank" rel="noopener noreferrer" class="nav-cta cta-github">
+      <i class="ph-bold ph-star"></i><span>Star on GitHub</span>
+    </a>
+    <button class="mobile-menu-toggle nav-icon" id="mobile-menu-toggle" aria-label="Open menu" aria-controls="mobile-panel" aria-expanded="false">
+      <i class="ph-bold ph-list"></i>
+    </button>
+  </div>
+</header>
+
+<section id="mobile-panel" class="island-panel" aria-hidden="true">
+  <div class="island-panel__inner">
+    <div class="bento-grid">
+      <a class="bento-card" href="{{ '#about' | relative_url }}"><span class="bento-icon"><i class="ph-bold ph-user"></i></span><span><div class="bento-title">About</div><div class="bento-sub">Who I am</div></span></a>
+      <a class="bento-card" href="{{ '#projects' | relative_url }}"><span class="bento-icon"><i class="ph-bold ph-folder"></i></span><span><div class="bento-title">Projects</div><div class="bento-sub">Featured builds</div></span></a>
+      <a class="bento-card" href="{{ '/blog/' | relative_url }}"><span class="bento-icon"><i class="ph-bold ph-article"></i></span><span><div class="bento-title">Blog</div><div class="bento-sub">Notes & essays</div></span></a>
+      <a class="bento-card" href="{{ '#contact' | relative_url }}"><span class="bento-icon"><i class="ph-bold ph-paper-plane-tilt"></i></span><span><div class="bento-title">Contact</div><div class="bento-sub">Say hello</div></span></a>
+      <a class="bento-card" href="{{ site.github_url | default: 'https://github.com/your-username' }}" target="_blank" rel="noopener"><span class="bento-icon"><i class="ph-bold ph-github-logo"></i></span><span><div class="bento-title">GitHub</div><div class="bento-sub">Open-source</div></span></a>
+      <a class="bento-card" href="{{ '#resume' | relative_url }}"><span class="bento-icon"><i class="ph-bold ph-file-text"></i></span><span><div class="bento-title">Résumé</div><div class="bento-sub">Download CV</div></span></a>
+    </div>
+  </div>
+</section>
+
 <script>
+// Phosphor icons
+(function(){ var s=document.createElement('script'); s.src="https://unpkg.com/@phosphor-icons/web"; s.defer=true; document.head.appendChild(s);}());
+
+// Hard FOUC guard: set theme before paint (kept minimal here in case you already added globally)
 (function () {
   const KEY = "color-scheme";
   const saved = localStorage.getItem(KEY);
@@ -9,179 +57,46 @@
   const theme = saved || system || "light";
   document.documentElement.setAttribute("data-color-scheme", theme);
 })();
-</script>
 
-<header class="island-navbar" role="navigation" aria-label="Primary" id="site-navbar">
-  <a href="{{ '/' | relative_url }}" class="navbar-brand">
-    <img
-      src="{{ site.owner.avatar | default: 'https://i.pravatar.cc/40?u=jekyll' }}"
-      alt="{{ site.owner.name | default: site.title | default: 'Site Owner' }}"
-      class="navbar-avatar" />
-    <span class="brand-text">
-      <span class="logo">{{ site.owner.name | default: site.title | default: "Your Name" }}</span>
-      <span class="logo-sub">
-        {{ site.owner.job_title | default: "Software Engineer" }}
-      </span>
-    </span>
-  </a>
-
-  <nav class="navbar-menu" aria-label="Desktop Navigation">
-    <ul>
-      <li><a href="{{ '/' | relative_url }}"><i class="ph-bold ph-house"></i>Home</a></li>
-      <li><a href="{{ '/#about' | relative_url }}"><i class="ph-bold ph-user"></i>About</a></li>
-      <li><a href="{{ '/#projects' | relative_url }}"><i class="ph-bold ph-folder"></i>Projects</a></li>
-      <li><a href="{{ '/blog/' | relative_url }}"><i class="ph-bold ph-article"></i>Blog</a></li>
-      <li><a href="{{ '/#contact' | relative_url }}"><i class="ph-bold ph-paper-plane-tilt"></i>Contact</a></li>
-    </ul>
-  </nav>
-
-  <div class="navbar-actions">
-    <a href="#" id="search-open" class="button-icon button-sm button-transparent" aria-label="Search">
-      <i class="ph-bold ph-magnifying-glass"></i>
-    </a>
-
-    <button class="theme-toggle-button button-icon button-sm" aria-label="Toggle theme" id="theme-toggle">
-      <i class="ph-bold ph-sun icon-sun" aria-hidden="true"></i>
-      <i class="ph-bold ph-moon icon-moon" aria-hidden="true"></i>
-    </button>
-
-    <a href="{{ site.owner.github | default: 'https://github.com' }}" target="_blank" rel="noopener noreferrer" class="button button-sm cta-github">
-      <i class="ph-bold ph-star"></i><span>Star on GitHub</span>
-    </a>
-
-    <button class="mobile-menu-toggle button button-sm button-transparent button-icon"
-            id="mobile-menu-toggle"
-            aria-label="Open menu"
-            aria-controls="mobile-panel"
-            aria-expanded="false">
-      <i class="ph-bold ph-list"></i>
-    </button>
-  </div>
-</header>
-
-<!-- Mobile floating backdrop -->
-<div class="mobile-backdrop" id="mobile-backdrop" aria-hidden="true"></div>
-
-<!-- Floating Mobile Island Panel -->
-<section id="mobile-panel" class="island-panel" aria-hidden="true">
-  <div class="island-panel__inner">
-    <nav class="bento" aria-label="Quick actions">
-      <a class="bento-item col-3" href="{{ '/#about' | relative_url }}">
-        <span class="bento-icon"><i class="ph-bold ph-user"></i></span>
-        <span class="bento-content"><span class="bento-title">About</span><span class="bento-sub">Who I am</span></span>
-      </a>
-      <a class="bento-item col-3" href="{{ '/#projects' | relative_url }}">
-        <span class="bento-icon"><i class="ph-bold ph-folder"></i></span>
-        <span class="bento-content"><span class="bento-title">Projects</span><span class="bento-sub">Featured work</span></span>
-      </a>
-      <a class="bento-item col-3" href="{{ '/blog/' | relative_url }}">
-        <span class="bento-icon"><i class="ph-bold ph-article"></i></span>
-        <span class="bento-content"><span class="bento-title">Blog</span><span class="bento-sub">Notes & essays</span></span>
-      </a>
-      <a class="bento-item col-3" href="{{ '/#contact' | relative_url }}">
-        <span class="bento-icon"><i class="ph-bold ph-paper-plane-tilt"></i></span>
-        <span class="bento-content"><span class="bento-title">Contact</span><span class="bento-sub">Say hello</span></span>
-      </a>
-      <a class="bento-item col-3" href="{{ site.owner.github | default: 'https://github.com' }}" target="_blank" rel="noopener">
-        <span class="bento-icon"><i class="ph-bold ph-github-logo"></i></span>
-        <span class="bento-content"><span class="bento-title">GitHub</span><span class="bento-sub">Open source</span></span>
-      </a>
-      <a class="bento-item col-3" href="{{ '/resume.pdf' | relative_url }}" download>
-        <span class="bento-icon"><i class="ph-bold ph-file-text"></i></span>
-        <span class="bento-content"><span class="bento-title">Résumé</span><span class="bento-sub">One-pager</span></span>
-      </a>
-    </nav>
-  </div>
-</section>
-
-<!-- Optional Person JSON-LD -->
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"Person",
-  "name":"{{ site.owner.name | default: site.title | default: 'Your Name' | escape }}",
-  "jobTitle":"{{ site.owner.job_title | default: 'Software Engineer' | escape }}",
-  "url":"{{ site.url | append: site.baseurl }}",
-  "image":"{{ site.owner.avatar | default: 'https://i.pravatar.cc/200?u=jekyll' }}",
-  "sameAs":[
-    {% if site.owner.github %}"{{ site.owner.github }}"{% endif %}
-  ]
-}
-</script>
-
-<script>
+// Interactive bits
 document.addEventListener("DOMContentLoaded", function () {
   const root = document.documentElement;
+  const header = document.getElementById('site-navbar');
+  const mobileToggle = document.getElementById('mobile-menu-toggle');
+  const panel = document.getElementById('mobile-panel');
+
+  // mark body for fixed spacing on mobile
+  if (window.matchMedia('(max-width: {{ $bp_lg | default: "992px" }} )').matches) {
+    document.body.classList.add('has-fixed-nav');
+    // expose header height for panel calc
+    document.documentElement.style.setProperty('--nav-h', getComputedStyle(header).height || '{{ $navbar-height }}');
+  }
+
+  // theme switch
   const KEY = "color-scheme";
-  const themeBtn = document.getElementById("theme-toggle");
-  const mobileBtn = document.getElementById("mobile-menu-toggle");
-  const mobilePanel = document.getElementById("mobile-panel");
-  const navbar = document.getElementById("site-navbar");
-  const backdrop = document.getElementById("mobile-backdrop");
+  const btn = document.getElementById('theme-toggle');
+  function getTheme(){ return root.getAttribute('data-color-scheme') || 'light'; }
+  function setTheme(t){ root.setAttribute('data-color-scheme', t); localStorage.setItem(KEY, t); btn?.setAttribute('aria-pressed', t==='dark'); }
+  btn?.addEventListener('click', ()=> setTheme(getTheme()==='light' ? 'dark' : 'light'));
 
-  // Stick on desktop, fixed on mobile (add body padding to avoid jump)
-  function setBodyPad() {
-    const isMobile = window.matchMedia("(max-width: 991px)").matches;
-    document.body.classList.toggle("has-fixed-nav", isMobile);
-  }
-  setBodyPad();
-  window.addEventListener("resize", setBodyPad);
-
-  // Theme
-  function getTheme(){ return root.getAttribute("data-color-scheme") || "light"; }
-  function setTheme(theme){
-    root.setAttribute("data-color-scheme", theme);
-    localStorage.setItem(KEY, theme);
-    themeBtn?.setAttribute("aria-pressed", theme === "dark");
-  }
-  setTheme(localStorage.getItem(KEY) || getTheme());
-  themeBtn?.addEventListener("click", () => {
-    const next = getTheme() === "light" ? "dark" : "light";
-    // tiny crossfade for niceness
-    root.classList.add("theming");
-    setTheme(next);
-    setTimeout(()=> root.classList.remove("theming"), 220);
-  });
-
-  // Mobile island
+  // mobile panel
   function setPanelHeight(open){
     if(open){
-      mobilePanel.style.maxHeight = "0px";
-      requestAnimationFrame(()=>{ mobilePanel.style.maxHeight = mobilePanel.scrollHeight + "px"; });
+      panel.style.maxHeight = "0px";
+      requestAnimationFrame(()=>{ panel.style.maxHeight = panel.scrollHeight + "px"; });
     } else {
-      mobilePanel.style.maxHeight = mobilePanel.scrollHeight + "px";
-      requestAnimationFrame(()=>{ mobilePanel.style.maxHeight = "0px"; });
+      panel.style.maxHeight = panel.scrollHeight + "px";
+      requestAnimationFrame(()=>{ panel.style.maxHeight = "0px"; });
     }
   }
-  function openPanel(){
-    navbar.classList.add("is-open");
-    mobilePanel.classList.add("is-open");
-    mobilePanel.setAttribute("aria-hidden","false");
-    document.body.classList.add("panel-open");
-    mobileBtn.setAttribute("aria-expanded","true");
-    backdrop && backdrop.classList.add("is-open");
-    setPanelHeight(true);
-  }
-  function closePanel(){
-    navbar.classList.remove("is-open");
-    mobilePanel.classList.remove("is-open");
-    mobilePanel.setAttribute("aria-hidden","true");
-    document.body.classList.remove("panel-open");
-    mobileBtn.setAttribute("aria-expanded","false");
-    backdrop && backdrop.classList.remove("is-open");
-    setPanelHeight(false);
-  }
-  function togglePanel(){ mobilePanel.classList.contains("is-open") ? closePanel() : openPanel(); }
+  function openPanel(){ header.classList.add('is-open'); panel.classList.add('is-open'); panel.setAttribute('aria-hidden','false'); mobileToggle.setAttribute('aria-expanded','true'); setPanelHeight(true); }
+  function closePanel(){ header.classList.remove('is-open'); panel.classList.remove('is-open'); panel.setAttribute('aria-hidden','true'); mobileToggle.setAttribute('aria-expanded','false'); setPanelHeight(false); }
+  function togglePanel(){ panel.classList.contains('is-open') ? closePanel() : openPanel(); }
 
-  mobileBtn?.addEventListener("click", togglePanel);
-  backdrop?.addEventListener("click", closePanel);
-  mobilePanel.addEventListener("click", (e)=>{ if(e.target.closest("a")) closePanel(); });
-  document.addEventListener("keydown", (e)=>{ if(e.key==="Escape" && mobilePanel.classList.contains("is-open")) closePanel(); });
-
-  // Recalc height if open and viewport changes
-  window.addEventListener("resize", ()=>{ if(mobilePanel.classList.contains("is-open")) mobilePanel.style.maxHeight = mobilePanel.scrollHeight + "px"; });
-
-  // Close when switching to desktop
-  window.matchMedia("(min-width: 992px)").addEventListener("change", (mq)=>{ if(mq.matches) closePanel(); });
+  mobileToggle?.addEventListener('click', togglePanel);
+  panel?.addEventListener('click', (e)=>{ if(e.target.closest('a')) closePanel(); });
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && panel.classList.contains('is-open')) closePanel(); });
+  window.addEventListener('resize', ()=>{ if(panel.classList.contains('is-open')) panel.style.maxHeight = panel.scrollHeight + "px"; });
+  const mq = window.matchMedia("(min-width: 992px)"); mq.addEventListener("change", ()=>{ if(mq.matches) closePanel(); });
 });
 </script>
