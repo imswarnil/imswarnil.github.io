@@ -1,34 +1,229 @@
+<!-- ===========================
+Header component include
+Put {% include header.html %} in your layout
+=========================== -->
+
+<!-- ICONS -->
+<script src="https://unpkg.com/@phosphor-icons/web" defer></script>
+
+<!-- THEME SWITCHER (pre-paint): START -->
+<script>
+(function () {
+var KEY = "color-scheme";
+var saved = localStorage.getItem(KEY);
+var system = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+var theme = saved || system || "light";
+document.documentElement.setAttribute("data-color-scheme", theme);
+})();
+</script>
+<!-- THEME SWITCHER (pre-paint): END -->
+
+<style>
+/* ===========================
+Header CSS (scoped)
+=========================== */
+:root{ --island-width: 1100px; }
+
+/* Sticky island header */
+.island-navbar{
+position: sticky; top: var(--page-pad); z-index: 1000;
+width: var(--island-width);
+max-width: calc(100% - 2 * var(--page-pad));
+margin: 0 auto var(--page-pad);
+padding: 12px 16px;
+
+display:flex; align-items:center; justify-content:space-between;
+background: rgba(255,255,255,.75);
+border: 1px solid var(--color-border);
+border-radius: 24px;
+box-shadow: var(--shadow-1);
+-webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+}
+:root[data-color-scheme="dark"] .island-navbar{ background: rgba(26,26,28,.75); }
+
+.navbar-brand{ display:flex; align-items:center; gap: 12px; text-decoration:none; }
+.navbar-avatar{ width:36px; height:36px; border-radius:50%; object-fit:cover; border:2px solid var(--color-border); }
+.brand-text{ line-height:1.1; display:grid; }
+.logo{ color: var(--color-ink); font-weight: 600; font-size: 1.125rem; }
+.logo-sub{ font-size: .8rem; color: var(--color-fg-weak); }
+
+.navbar-menu ul{
+display:flex; align-items:center; gap: 8px; list-style:none; margin:0; padding:0;
+}
+.navbar-menu a{
+font-size: .875rem; color: var(--color-fg-weak);
+padding: 8px 12px; border-radius: 999px; display:flex; gap:.5em; align-items:center;
+transition: background .2s, color .2s;
+}
+.navbar-menu a:hover, .navbar-menu a.active{ color: var(--color-ink); background: var(--color-bg-elev); }
+
+.navbar-actions{ display:flex; align-items:center; gap: 8px; }
+.button-icon{
+width: 2.25rem; height: 2.25rem; display:inline-grid; place-items:center;
+border: 1px solid var(--color-border); border-radius: 999px; background: var(--color-bg-elev); color: var(--color-fg-weak);
+}
+.button-icon:hover{ color: var(--color-ink); }
+
+.theme-toggle-button{ position: relative; overflow: hidden; }
+.theme-toggle-button i{
+position:absolute; inset:0; margin:auto; width:max-content; height:max-content;
+opacity:0; transition: opacity .25s ease;
+}
+:root[data-color-scheme="light"] .theme-toggle-button .icon-sun{ opacity:1; }
+:root[data-color-scheme="dark"]  .theme-toggle-button .icon-moon{ opacity:1; }
+
+/* Mobile panel (expanding island) */
+.mobile-menu-toggle{ display:none; }
+.island-panel{
+position: relative; z-index: 950;
+width: var(--island-width);
+max-width: calc(100% - 2 * var(--page-pad));
+margin: -12px auto var(--page-pad);
+border: 1px solid var(--color-border); border-top: 0;
+border-radius: 24px; overflow: hidden;
+
+background: rgba(255,255,255,.8);
+-webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+box-shadow: var(--shadow-1);
+
+max-height: 0; opacity: 0; transform: translateY(-6px) scale(.992);
+pointer-events: none;
+transition: max-height .5s cubic-bezier(.25,1,.5,1), opacity .3s ease, transform .4s cubic-bezier(.25,1,.5,1);
+}
+:root[data-color-scheme="dark"] .island-panel{ background: rgba(26,26,28,.8); }
+.island-panel.is-open{ opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+.island-panel__inner{ padding: 24px 16px; display:grid; gap: 16px; }
+.bento-grid{ display:grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
+.bento-card{
+display:flex; align-items:center; gap: 12px; padding: 12px;
+border: 1px solid var(--color-border); border-radius: 12px;
+background: var(--color-bg);
+}
+
+/* Responsive */
+@media (max-width: 991px){
+.navbar-menu{ display:none; }
+.mobile-menu-toggle{ display:inline-grid; }
+.island-navbar{ width:auto; }
+}
+@media (max-width: 767px){
+.island-navbar{ width: calc(100% - 2 * var(--page-pad)); }
+}
+
+/* Keep page content below header (safety if layout misses .site-main) */
+body > main:first-of-type { padding-top: calc(var(--nav-height) + var(--page-pad)); }
+</style>
+
 <header class="island-navbar" role="navigation" aria-label="Primary" id="site-navbar">
-  <a href="#home" class="navbar-brand">
-    <img src="https://i.pravatar.cc/40?u=johndoe" alt="John Doe" class="navbar-avatar" />
-    <span class="brand-text">
-      <span class="logo">John Doe</span>
-      <span class="logo-sub">Software Engineer</span>
-    </span>
-  </a>
+<a href="{{ '/' | relative_url }}#home" class="navbar-brand">
+<img src="https://i.pravatar.cc/40?u=johndoe" alt="John Doe" class="navbar-avatar" />
+<span class="brand-text">
+ <span class="logo">John Doe</span>
+ <span class="logo-sub">Software Engineer</span>
+</span>
+</a>
 
-  <nav class="navbar-menu" aria-label="Desktop Navigation">
-    <ul>
-      <li><a href="#"><i class="ph-bold ph-user"></i>About</a></li>
-      <li><a href="#"><i class="ph-bold ph-folder"></i>Projects</a></li>
-      <li><a href="#"><i class="ph-bold ph-article"></i>Blog</a></li>
-      <li><a href="#"><i class="ph-bold ph-paper-plane-tilt"></i>Contact</a></li>
-    </ul>
-  </nav>
+<nav class="navbar-menu" aria-label="Desktop Navigation">
+<ul>
+ <li><a href="#about">About</a></li>
+ <li><a href="#projects">Projects</a></li>
+ <li><a href="#blog">Blog</a></li>
+ <li><a href="#contact">Contact</a></li>
+</ul>
+</nav>
 
-  <div class="navbar-actions">
-    <a href="#" class="button-icon button-sm button-transparent" aria-label="Search">
-      <i class="ph-bold ph-magnifying-glass" style="font-size: 1.25em;"></i>
-    </a>
-    <button class="theme-toggle-button button-icon button-sm" aria-label="Toggle theme" id="theme-toggle">
-      <i class="ph-bold ph-sun icon-sun" aria-hidden="true"></i>
-      <i class="ph-bold ph-moon icon-moon" aria-hidden="true"></i>
-    </button>
-    <a href="https://github.com/your-username" target="_blank" rel="noopener noreferrer" class="button button-sm cta-github">
-      <i class="ph-bold ph-star"></i><span>Star on GitHub</span>
-    </a>
-    <button class="mobile-menu-toggle button button-sm button-transparent button-icon" id="mobile-menu-toggle" aria-label="Open menu" aria-controls="mobile-panel" aria-expanded="false">
-      <i class="ph-bold ph-list"></i>
-    </button>
-  </div>
+<div class="navbar-actions">
+<button class="button-icon theme-toggle-button" id="theme-toggle" aria-label="Toggle theme" aria-pressed="false">
+ <i class="ph-bold ph-sun icon-sun" aria-hidden="true"></i>
+ <i class="ph-bold ph-moon icon-moon" aria-hidden="true"></i>
+</button>
+<button class="button-icon mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Open menu" aria-controls="mobile-panel" aria-expanded="false">
+ <i class="ph-bold ph-list"></i>
+</button>
+</div>
 </header>
+
+<section id="mobile-panel" class="island-panel" aria-hidden="true">
+<div class="island-panel__inner">
+<div class="bento-grid">
+ <a class="bento-card" href="#about">About</a>
+ <a class="bento-card" href="#projects">Projects</a>
+ <a class="bento-card" href="#blog">Blog</a>
+ <a class="bento-card" href="#contact">Contact</a>
+ <a class="bento-card" href="#resume">Résumé</a>
+ <a class="bento-card" href="https://github.com/your-username" target="_blank" rel="noopener">GitHub</a>
+</div>
+</div>
+</section>
+
+<!-- HEADER JS: START -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+// ===== THEME SWITCHER: START =====
+var root = document.documentElement;
+var KEY = "color-scheme";
+var toggleBtn = document.getElementById("theme-toggle");
+function getTheme(){ return root.getAttribute("data-color-scheme") || "light"; }
+function setTheme(t){
+ root.setAttribute("data-color-scheme", t);
+ localStorage.setItem(KEY, t);
+ if (toggleBtn) toggleBtn.setAttribute("aria-pressed", String(t === "dark"));
+}
+setTheme(localStorage.getItem(KEY) || getTheme());
+toggleBtn && toggleBtn.addEventListener("click", function(){
+ setTheme(getTheme() === "light" ? "dark" : "light");
+});
+// ===== THEME SWITCHER: END =====
+
+// ===== ISLAND PANEL (mobile): START =====
+var mobileToggle = document.getElementById("mobile-menu-toggle");
+var panel = document.getElementById("mobile-panel");
+var navbar = document.getElementById("site-navbar");
+
+function setPanelHeight(open){
+ if(!panel) return;
+ if(open){
+   panel.style.maxHeight = "0px";
+   requestAnimationFrame(function(){ panel.style.maxHeight = panel.scrollHeight + "px"; });
+ } else {
+   panel.style.maxHeight = panel.scrollHeight + "px";
+   requestAnimationFrame(function(){ panel.style.maxHeight = "0px"; });
+ }
+}
+function openPanel(){
+ navbar && navbar.classList.add("is-open");
+ panel && panel.classList.add("is-open");
+ panel && panel.setAttribute("aria-hidden","false");
+ document.body.classList.add("panel-open");
+ mobileToggle && mobileToggle.setAttribute("aria-expanded","true");
+ setPanelHeight(true);
+}
+function closePanel(){
+ navbar && navbar.classList.remove("is-open");
+ panel && panel.classList.remove("is-open");
+ panel && panel.setAttribute("aria-hidden","true");
+ document.body.classList.remove("panel-open");
+ mobileToggle && mobileToggle.setAttribute("aria-expanded","false");
+ setPanelHeight(false);
+}
+function togglePanel(){ panel && panel.classList.contains("is-open") ? closePanel() : openPanel(); }
+
+mobileToggle && mobileToggle.addEventListener("click", togglePanel);
+panel && panel.addEventListener("click", function(e){ if(e.target.closest("a")) closePanel(); });
+document.addEventListener("keydown", function(e){ if(e.key === "Escape" && panel && panel.classList.contains("is-open")) closePanel(); });
+
+var mq = window.matchMedia("(min-width: 992px)");
+if (mq.addEventListener) {
+ mq.addEventListener("change", function(){ if(mq.matches) closePanel(); });
+} else if (mq.addListener) {
+ mq.addListener(function(){ if(mq.matches) closePanel(); });
+}
+// ===== ISLAND PANEL (mobile): END =====
+
+// ===== SAFETY: keep main content below header: START =====
+var main = document.querySelector(".site-main");
+if (main) main.style.paddingTop = "calc(var(--nav-height) + var(--page-pad))";
+// ===== SAFETY: END =====
+});
+</script>
+<!-- HEADER JS: END -->
