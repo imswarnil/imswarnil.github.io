@@ -2,95 +2,169 @@
 {% assign is_home   = layout_key == 'home' or page.url == '/' %}
 {% assign is_post   = layout_key == 'post' or page.collection == 'posts' %}
 {% assign is_page   = layout_key == 'page' and not is_post and not is_home %}
+
+{% assign hero_title  = page.title  | default: site.title | default: 'Imswarnil' %}
+{% assign hero_kicker = page.kicker | default: site.kicker | default: 'Filmmaker • Engineer • Agent of Chaos' %}
+{% assign hero_desc   = page.excerpt | default: page.description | default: site.description | default: 'Stories with swagger. Code with purpose.' %}
+
 {% assign cover_img = page.image | default: page.cover | default: site.cover | default: '' %}
-{% assign hero_kicker = page.kicker | default: site.kicker %}
-{% assign hero_title  = page.title  | default: site.title | default: 'Hello there.' %}
-{% assign hero_desc   = page.excerpt | default: page.description | default: site.description %}
-{% assign avatar_url  = site.avatarurl | default: site.logo | default: 'https://i.pravatar.cc/128?u=imswarnil' %}
+{% assign cover_vid = page.video | default: '' %}
+
+{% assign avatar_url  = site.avatarurl | default: site.logo | default: 'https://i.pravatar.cc/160?u=imswarnil' %}
 {% assign author_name = page.author | default: site.author | default: site.title | default: 'Imswarnil' %}
 {% assign read_mins   = page.reading_time | default: page.read_time | default: '' %}
+{% assign tags_list   = page.tags | default: site.default_tags %}
 
-<section class="hero{% if cover_img %} hero--has-cover{% endif %}{% if is_post %} hero--post{% elsif is_home %} hero--home{% elsif is_page %} hero--page{% else %} hero--default{% endif %}">
-  {% if cover_img %}
-    <div class="hero__bg" style="--hero-bg:url('{{ cover_img | relative_url }}')"></div>
-    <div class="hero__scrim"></div>
-  {% endif %}
+<section
+  class="hero-cine{% if is_home %} is-home{% elsif is_post %} is-post{% elsif is_page %} is-page{% else %} is-default{% endif %}{% if cover_img or cover_vid %} has-media{% endif %}"
+  aria-label="Intro"
+>
 
-  <div class="hero__inner">
-    {% if is_home %}
-      <div class="hero__head">
-        {% if hero_kicker %}<span class="hero__kicker">{{ hero_kicker }}</span>{% endif %}
-        <h1 class="hero__title">{{ hero_title }}</h1>
-        {% if hero_desc %}<p class="hero__desc">{{ hero_desc }}</p>{% endif %}
+  <!-- BACKDROP LAYERS -->
+  <div class="hc-backdrop" aria-hidden="true">
+    {% if cover_vid %}
+      <video class="hc-media" autoplay muted loop playsinline preload="metadata">
+        <source src="{{ cover_vid | relative_url }}" type="video/mp4" />
+      </video>
+    {% elsif cover_img %}
+      <div class="hc-media" style="--bg:url('{{ cover_img | relative_url }}')"></div>
+    {% endif %}
+    <div class="hc-gradient"></div>
+    <div class="hc-grain"></div>
+    <svg class="hc-blobs" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <radialGradient id="g1" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="var(--hc-accent1)"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+        <radialGradient id="g2" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="var(--hc-accent2)"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+      </defs>
+      <circle class="blob b1" cx="200" cy="180" r="180" fill="url(#g1)"/>
+      <circle class="blob b2" cx="620" cy="420" r="220" fill="url(#g2)"/>
+    </svg>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="hc-inner">
+    <header class="hc-head">
+      <div class="hc-eyebrow">
+        <span class="hc-kicker">{{ hero_kicker }}</span>
+
+        <!-- status marquee (optional; set site.status_text or page.status_text) -->
+        {% assign marquee = page.status_text | default: site.status_text | default: '' %}
+        {% if marquee != '' %}
+          <span class="hc-status">
+            <i class="ph-bold ph-broadcast"></i>
+            <span class="hc-ticker">
+              <span>{{ marquee }}</span><span aria-hidden="true"> • {{ marquee }}</span><span aria-hidden="true"> • {{ marquee }}</span>
+            </span>
+          </span>
+        {% endif %}
       </div>
 
-      <div class="hero__meta hero__meta--home">
-        <div class="chip chip--avatar">
-          <img src="{{ avatar_url | relative_url }}" alt="{{ author_name | escape }}" loading="lazy" />
-          <span>{{ author_name }}</span>
+      <h1 class="hc-title" data-reveal data-reveal-delay="0">{{ hero_title }}</h1>
+
+      {% if is_home %}
+        <p class="hc-desc" data-reveal data-reveal-delay="60">{{ hero_desc }}</p>
+        <div class="hc-meta" data-reveal data-reveal-delay="120">
+          <span class="chip chip--avatar">
+            <img src="{{ avatar_url | relative_url }}" alt="{{ author_name | escape }}" />
+            <span>{{ author_name }}</span>
+          </span>
+          <span class="chip"><i class="ph-bold ph-users"></i><span>{{ site.subscribers | default: '17k+' }} subscribers</span></span>
+          <span class="chip"><i class="ph-bold ph-camera"></i><span>{{ site.videos_count | default: '120+' }} videos</span></span>
+          <span class="chip"><i class="ph-bold ph-fire"></i><span>{{ site.streak | default: 'Weekly films' }}</span></span>
         </div>
-        <div class="stat"><i class="ph-bold ph-users"></i><span>{{ site.subscribers | default: '17k+' }} subscribers</span></div>
-        <div class="stat"><i class="ph-bold ph-camera"></i><span>{{ site.videos_count | default: '120+' }} videos</span></div>
-        <div class="stat"><i class="ph-bold ph-rocket-launch"></i><span>New films every week</span></div>
-      </div>
 
-      <div class="hero__cta">
-        <a class="btn" href="{{ '/#projects' | relative_url }}"><i class="ph-bold ph-folder"></i> View Projects</a>
-        <a class="btn btn--soft" href="{{ '/blog/' | relative_url }}"><i class="ph-bold ph-article"></i> Read the Blog</a>
-        <a class="btn btn--ghost" href="{{ '/#contact' | relative_url }}"><i class="ph-bold ph-paper-plane-tilt"></i> Contact</a>
-      </div>
+        <nav class="hc-cta" data-reveal data-reveal-delay="180">
+          <a class="btn btn--mag" href="{{ '/#projects' | relative_url }}"><i class="ph-bold ph-folder"></i> Projects</a>
+          <a class="btn btn--soft btn--mag" href="{{ '/blog/' | relative_url }}"><i class="ph-bold ph-article"></i> Blog</a>
+          <a class="btn btn--ghost btn--mag" href="{{ '/#contact' | relative_url }}"><i class="ph-bold ph-paper-plane-tilt"></i> Contact</a>
+        </nav>
 
-    {% elsif is_post %}
-      {% if hero_kicker %}<span class="hero__kicker">{{ hero_kicker }}</span>{% endif %}
-      <h1 class="hero__title">{{ hero_title }}</h1>
-      {% if hero_desc %}<p class="hero__desc">{{ hero_desc }}</p>{% endif %}
-
-      <div class="hero__meta">
-        <div class="chip chip--avatar">
-          <img src="{{ avatar_url | relative_url }}" alt="{{ author_name | escape }}" loading="lazy" />
-          <span>{{ author_name }}</span>
+      {% elsif is_post %}
+        {% if hero_desc %}<p class="hc-desc" data-reveal data-reveal-delay="60">{{ hero_desc }}</p>{% endif %}
+        <div class="hc-meta" data-reveal data-reveal-delay="120">
+          <span class="chip chip--avatar">
+            <img src="{{ avatar_url | relative_url }}" alt="{{ author_name | escape }}" />
+            <span>{{ author_name }}</span>
+          </span>
+          <span class="dot"></span>
+          <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%b %d, %Y" }}</time>
+          {% if read_mins %}<span class="dot"></span><span>{{ read_mins }} min read</span>{% endif %}
+          {% if page.tags and page.tags.size > 0 %}
+            <span class="dot"></span>
+            <ul class="tags">
+              {% for tag in page.tags limit:3 %}
+                <li><a href="{{ '/tags/#' | append: tag | relative_url }}">{{ tag }}</a></li>
+              {% endfor %}
+            </ul>
+          {% endif %}
         </div>
-        <div class="dot"></div>
-        <time datetime="{{ page.date | date_to_xmlschema }}">
-          {{ page.date | date: "%b %d, %Y" }}
-        </time>
-        {% if read_mins %}
-          <div class="dot"></div>
-          <span>{{ read_mins }} min read</span>
-        {% endif %}
-        {% if page.tags and page.tags.size > 0 %}
-          <div class="dot"></div>
-          <ul class="tags">
-            {% for tag in page.tags limit:3 %}
-              <li><a href="{{ '/tags/#' | append: tag | relative_url }}">{{ tag }}</a></li>
-            {% endfor %}
-          </ul>
-        {% endif %}
-      </div>
 
-    {% elsif is_page %}
-      {% if hero_kicker %}<span class="hero__kicker">{{ hero_kicker }}</span>{% endif %}
-      <h1 class="hero__title">{{ hero_title }}</h1>
-      {% if hero_desc %}<p class="hero__desc">{{ hero_desc }}</p>{% endif %}
-      <div class="hero__cta">
-        {% if page.cta_href %}
-          <a class="btn" href="{{ page.cta_href | relative_url }}"><i class="ph-bold ph-arrow-right"></i> {{ page.cta_label | default: 'Get Started' }}</a>
-        {% endif %}
-        {% if page.cta2_href %}
-          <a class="btn btn--soft" href="{{ page.cta2_href | relative_url }}">{{ page.cta2_label | default: 'Learn more' }}</a>
-        {% endif %}
-      </div>
+      {% elsif is_page %}
+        {% if hero_desc %}<p class="hc-desc" data-reveal data-reveal-delay="60">{{ hero_desc }}</p>{% endif %}
+        <nav class="hc-cta" data-reveal data-reveal-delay="120">
+          {% if page.cta_href %}<a class="btn btn--mag" href="{{ page.cta_href | relative_url }}"><i class="ph-bold ph-arrow-right"></i> {{ page.cta_label | default: 'Get Started' }}</a>{% endif %}
+          {% if page.cta2_href %}<a class="btn btn--soft btn--mag" href="{{ page.cta2_href | relative_url }}">{{ page.cta2_label | default: 'Learn more' }}</a>{% endif %}
+        </nav>
 
-    {% else %}
-      <h1 class="hero__title">{{ hero_title }}</h1>
-      {% if hero_desc %}<p class="hero__desc">{{ hero_desc }}</p>{% endif %}
+      {% else %}
+        {% if hero_desc %}<p class="hc-desc" data-reveal data-reveal-delay="60">{{ hero_desc }}</p>{% endif %}
+      {% endif %}
+    </header>
+
+    {% if is_home and tags_list %}
+      <div class="hc-scroller" aria-label="Focus areas" data-reveal data-reveal-delay="240">
+        <div class="hc-scroll-inner">
+          {% for tag in tags_list %}
+            <span class="pill">{{ tag }}</span>
+          {% endfor %}
+        </div>
+      </div>
     {% endif %}
   </div>
-
-  <!-- Decorative or fallback media (shows if no cover but you still want flair) -->
-  <div class="hero__decor" aria-hidden="true">
-    <span class="orb orb--1"></span>
-    <span class="orb orb--2"></span>
-    <span class="orb orb--3"></span>
-  </div>
 </section>
+
+<!-- tiny progressive enhancement -->
+<script>
+  (function(){
+    const root = document.documentElement;
+    // parallax on mouse
+    const sec = document.currentScript.previousElementSibling;
+    const hero = sec && sec.matches('.hero-cine') ? sec : document.querySelector('.hero-cine');
+    if(!hero) return;
+
+    // reveal delays
+    hero.querySelectorAll('[data-reveal]').forEach(el=>{
+      const d = +el.getAttribute('data-reveal-delay')||0;
+      el.style.setProperty('--reveal-delay', (d)+'ms');
+      el.classList.add('will-reveal');
+    });
+
+    // parallax
+    const backdrop = hero.querySelector('.hc-backdrop');
+    function onMove(e){
+      const r = hero.getBoundingClientRect();
+      const x = (e.clientX - (r.left + r.width/2)) / r.width;
+      const y = (e.clientY - (r.top + r.height/2)) / r.height;
+      backdrop.style.setProperty('--px', (x*6).toFixed(2)+'px');
+      backdrop.style.setProperty('--py', (y*6).toFixed(2)+'px');
+    }
+    hero.addEventListener('mousemove', onMove);
+
+    // magnetic buttons
+    hero.querySelectorAll('.btn--mag').forEach(btn=>{
+      btn.addEventListener('mousemove', (e)=>{
+        const r = btn.getBoundingClientRect();
+        const x = e.clientX - (r.left + r.width/2);
+        const y = e.clientY - (r.top + r.height/2);
+        btn.style.transform = `translate(${x*0.06}px, ${y*0.06}px)`;
+      });
+      btn.addEventListener('mouseleave', ()=> btn.style.transform = '');
+    });
+  })();
+</script>
