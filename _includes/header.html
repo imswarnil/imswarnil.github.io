@@ -1,301 +1,321 @@
-<!-- <header class="island-navbar" role="navigation" aria-label="Primary" id="site-navbar">
-  <a href="#home" class="navbar-brand">
-    <img src="https://i.pravatar.cc/40?u=johndoe" alt="John Doe" class="navbar-avatar" />
+{% comment %} ===========================
+  Header (Island Navbar) — self contained
+  Requirements:
+  - Uses site.title, site.job_title, site.navigation_header
+  - Phosphor icons working
+  - Dark mode toggle + no FOUC
+  - Mobile bento panel (hamburger)
+  - No content overlap
+=========================== {% endcomment %}
+
+<!-- THEME FOUC GUARD (must run before paint) -->
+<script>
+(function () {
+  var KEY = "color-scheme";
+  try {
+    var saved = localStorage.getItem(KEY);
+    var system = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    var theme = saved || system || "light";
+    document.documentElement.setAttribute("data-color-scheme", theme);
+  } catch(e) {
+    document.documentElement.setAttribute("data-color-scheme", "light");
+  }
+})();
+</script>
+
+<!-- Phosphor Icons (CSS + JS so <i class="ph-bold ..."> works) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/style.css">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+<style>
+/* ===========================
+   HEADER CSS (scoped to header)
+   =========================== */
+
+/* Tokens (compiled values aligned with your SCSS) */
+:is(html)[data-color-scheme="light"] .island-navbar { background-color: hsla(0,0%,100%,.72); }
+:is(html)[data-color-scheme="dark"]  .island-navbar { background-color: hsla(240,3%,12%,.72); }
+
+:root { /* only to allow consistent spacing under the sticky header */
+  --_page-pad-sm: 1rem;
+  --_page-pad-md: 1.25rem;
+  --_page-pad-lg: 1.5rem;
+}
+/* = base spacing helpers used in header only */
+@media (min-width: 768px){ :root { --_page-pad-sm: var(--_page-pad-md); } }
+@media (min-width: 992px){ :root { --_page-pad-sm: var(--_page-pad-lg); } }
+
+/* Base */
+#site-navbar, #mobile-panel { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,system-ui,sans-serif; }
+
+/* ===== NAVBAR ===== */
+.island-navbar{
+  position: sticky; top: var(--_page-pad-sm); z-index: 1000;
+  margin: 0 auto 0;
+  display:flex; align-items:center; justify-content:space-between;
+  padding: .5rem .75rem;
+  border-radius: 24px; border: 1px solid rgba(0,0,0,.2);
+  box-shadow: 0 10px 30px -10px rgba(0,0,0,.2), 0 4px 10px -6px rgba(0,0,0,.16);
+  width: 68.75rem; /* 1100px */
+  max-width: calc(100% - 2 * var(--_page-pad-sm));
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+}
+html[data-color-scheme="dark"] .island-navbar{ border-color: rgba(255,255,255,.12); box-shadow: 0 20px 60px -10px rgba(0,0,0,.4), 0 4px 20px -8px rgba(0,0,0,.4); }
+
+.navbar-brand{
+  display:flex; align-items:center; gap: .75rem; text-decoration:none;
+}
+.navbar-avatar{
+  width:36px; height:36px; border-radius:50%; object-fit:cover; border:2px solid rgba(0,0,0,.2);
+}
+html[data-color-scheme="dark"] .navbar-avatar{ border-color: rgba(255,255,255,.12); }
+.brand-text{display:grid; line-height:1.1;}
+.logo{ font-size:1.125rem; font-weight:600; color:#131313; }
+.logo-sub{ font-size:.8125rem; color:#757575; }
+html[data-color-scheme="dark"] .logo{ color:#ffffff; }
+html[data-color-scheme="dark"] .logo-sub{ color:#9a9a9a; }
+
+/* Menu */
+.navbar-menu ul{
+  display:flex; align-items:center; gap:.25rem; margin:0; padding:0; list-style:none;
+}
+.navbar-menu a{
+  display:inline-flex; align-items:center; gap:.5em;
+  line-height:1; /* fixes 'Home sits higher' baseline issue */
+  font-size:.875rem; font-weight:500; color:#757575;
+  padding:.5rem .75rem; border-radius:999px; text-decoration:none;
+  transition:background-color .2s ease, color .2s ease, transform .15s ease;
+}
+.navbar-menu a:hover,
+.navbar-menu a.active{
+  color:#131313; background:#f3f3f3;
+}
+html[data-color-scheme="dark"] .navbar-menu a{ color:#9a9a9a; }
+html[data-color-scheme="dark"] .navbar-menu a:hover,
+html[data-color-scheme="dark"] .navbar-menu a.active{
+  color:#ffffff; background:#1a1a1c;
+}
+.navbar-menu i{ font-size:1.125em; display:inline-block; vertical-align:middle; }
+
+/* Actions */
+.navbar-actions{ display:flex; align-items:center; gap:.5rem; }
+.button{ display:inline-flex; align-items:center; gap:.5em; min-height:2.5rem; padding:.5rem 1.25rem; font-size:.875rem; font-weight:600; border:1px solid transparent; border-radius:999px; background:#111; color:#fff; cursor:pointer; transition:transform .15s ease, box-shadow .2s ease, background-color .2s ease; }
+.button:hover{ transform:translateY(-2px); box-shadow:0 4px 10px rgba(0,0,0,.12); }
+.button-icon{ width:2.25rem; height:2.25rem; padding:.5rem; border-radius:50%; display:inline-grid; place-items:center; }
+.button-sm{ min-height:2.25rem; padding:.35rem 1rem; font-size:.82rem; }
+.button-transparent{ background:transparent; color:#757575; border-color:rgba(0,0,0,.2); }
+.button-transparent:hover{ background:#f3f3f3; color:#131313; }
+html[data-color-scheme="dark"] .button-transparent{ color:#9a9a9a; border-color:rgba(255,255,255,.12); }
+html[data-color-scheme="dark"] .button-transparent:hover{ background:#1a1a1c; color:#fff; }
+.cta-github{ background:#000; color:#fff; }
+html[data-color-scheme="dark"] .cta-github{ background:#fff; color:#000; }
+
+/* Theme switcher */
+.theme-toggle-button{ position:relative; overflow:hidden; background:#f3f3f3; border:1px solid rgba(0,0,0,.2); color:#757575; }
+.theme-toggle-button i{ font-size:1.125em; position:absolute; inset:0; margin:auto; width:1em; height:1em; opacity:0; transform:scale(.85); transition:transform .3s cubic-bezier(.25,1,.5,1), opacity .2s ease; }
+html[data-color-scheme="light"] .theme-toggle-button .icon-sun{ opacity:1; transform:scale(1); }
+html[data-color-scheme="dark"]  .theme-toggle-button{ background:#2c2c2f; border-color:rgba(255,255,255,.12); color:#c9c9c9; }
+html[data-color-scheme="dark"]  .theme-toggle-button .icon-moon{ opacity:1; transform:scale(1); }
+
+/* Mobile toggle visible under 992px */
+.mobile-menu-toggle{ display:none; }
+@media (max-width: 991px){
+  .navbar-menu{ display:none; }
+  .mobile-menu-toggle{ display:inline-flex; }
+  .island-navbar{ width:auto; }
+}
+
+/* ===== EXPANDING ISLAND PANEL ===== */
+.island-panel{
+  position: relative; z-index: 950;
+  margin: -12px auto 0;
+  width: 68.75rem; max-width: calc(100% - 2 * var(--_page-pad-sm));
+  border-radius: 24px; border:1px solid rgba(0,0,0,.2);
+  border-top:0;
+  background-color: hsla(0,0%,100%,.75);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 10px 30px -10px rgba(0,0,0,.2), 0 4px 10px -6px rgba(0,0,0,.16);
+  overflow:hidden; max-height:0; opacity:0; transform: translateY(-6px) scale(.992);
+  pointer-events:none;
+  transition:max-height .5s cubic-bezier(.25,1,.5,1), opacity .3s ease, transform .4s cubic-bezier(.25,1,.5,1);
+}
+html[data-color-scheme="dark"] .island-panel{
+  background-color: hsla(240,3%,12%,.75);
+  border-color: rgba(255,255,255,.12);
+  box-shadow: 0 20px 60px -10px rgba(0,0,0,.4), 0 4px 20px -8px rgba(0,0,0,.4);
+}
+.island-panel.is-open{ opacity:1; transform: translateY(0) scale(1); pointer-events:auto; border-top-left-radius:0; border-top-right-radius:0; }
+.island-panel.is-open::before{ content:""; position:absolute; inset:0 0 auto 0; height:1px; top:0; background: linear-gradient(90deg, transparent, rgba(0,0,0,.08), transparent); }
+html[data-color-scheme="dark"] .island-panel.is-open::before{ background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent); }
+
+.island-panel__inner{ padding: 1.5rem 1.25rem; display:grid; gap: 1.25rem; }
+
+/* Bento grid */
+.bento-grid{ display:grid; grid-template-columns: repeat(2,1fr); gap:12px; }
+@media (min-width: 540px){ .bento-grid{ grid-template-columns: repeat(3,1fr);} }
+.bento-card{
+  display:flex; align-items:center; gap:12px; padding:14px;
+  border-radius:14px; border:1px solid rgba(0,0,0,.2);
+  background:#ffffff; transition: transform .15s ease, background .2s ease;
+}
+html[data-color-scheme="dark"] .bento-card{ background:#1a1a1c; border-color: rgba(255,255,255,.12); }
+.bento-card:hover{ transform: translateY(-2px); background:#f3f3f3; }
+html[data-color-scheme="dark"] .bento-card:hover{ background:#2c2c2f; }
+.bento-icon{
+  width:38px; height:38px; display:grid; place-items:center;
+  border-radius:12px; border:1px solid rgba(0,0,0,.2);
+}
+html[data-color-scheme="dark"] .bento-icon{ border-color: rgba(255,255,255,.12); }
+.bento-title{ color:#131313; font-weight:600; font-size:.95rem; }
+.bento-sub{ color:#757575; font-size:.8rem; }
+html[data-color-scheme="dark"] .bento-title{ color:#fff; }
+html[data-color-scheme="dark"] .bento-sub{ color:#9a9a9a; }
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .island-panel{ transition:none; }
+}
+
+/* Hide panel entirely on desktop (we have desktop menu) */
+@media (min-width: 992px){ .island-panel{ display:none; } }
+
+/* Spacer to ensure no overlap with content below when theme/layouts forget padding */
+.island-spacer{ height: calc(58px + var(--_page-pad-sm)); }
+@media (min-width: 768px){ .island-spacer{ height: calc(58px + var(--_page-pad-md)); } }
+@media (min-width: 992px){ .island-spacer{ height: calc(58px + var(--_page-pad-lg)); } }
+</style>
+
+<header class="island-navbar" role="navigation" aria-label="Primary" id="site-navbar">
+  <a href="{{ site.baseurl }}/" class="navbar-brand">
+    <img src="{{ site.logo | default: 'https://i.pravatar.cc/40?u=' | append: site.title | escape }}" alt="{{ site.title }}" class="navbar-avatar">
     <span class="brand-text">
-      <span class="logo">John Doe</span>
-      <span class="logo-sub">Software Engineer</span>
+      <span class="logo">{{ site.title }}</span>
+      <span class="logo-sub">{{ site.job_title | default: site.description }}</span>
     </span>
   </a>
 
   <nav class="navbar-menu" aria-label="Desktop Navigation">
     <ul>
-      <li><a href="#"><i class="ph-bold ph-user"></i>About</a></li>
-      <li><a href="#"><i class="ph-bold ph-folder"></i>Projects</a></li>
-      <li><a href="#"><i class="ph-bold ph-article"></i>Blog</a></li>
-      <li><a href="#"><i class="ph-bold ph-paper-plane-tilt"></i>Contact</a></li>
+      {% for item in site.navigation_header %}
+      <li>
+        <a href="{{ item.url | relative_url }}" {% if page.url == item.url %}class="active"{% endif %}>
+          {% assign txt = item.title | downcase %}
+          {% if txt == 'home' %}<i class="ph-bold ph-house"></i>{% endif %}
+          {% if txt == 'blog' %}<i class="ph-bold ph-article"></i>{% endif %}
+          {% if txt == 'categories' %}<i class="ph-bold ph-folders"></i>{% endif %}
+          {% if txt == 'search' %}<i class="ph-bold ph-magnifying-glass"></i>{% endif %}
+          {% if txt contains 'fork' or txt contains 'github' %}<i class="ph-bold ph-github-logo"></i>{% endif %}
+          {{ item.title }}
+        </a>
+      </li>
+      {% endfor %}
     </ul>
   </nav>
 
   <div class="navbar-actions">
-    <a href="#" class="button-icon button-sm button-transparent" aria-label="Search">
-      <i class="ph-bold ph-magnifying-glass" style="font-size: 1.25em;"></i>
+    <a href="{{ '/search/' | relative_url }}" class="button-icon button-sm button-transparent" aria-label="Search">
+      <i class="ph-bold ph-magnifying-glass" style="font-size:1.125em;"></i>
     </a>
-    <button class="theme-toggle-button button-icon button-sm" aria-label="Toggle theme" id="theme-toggle">
+    <!-- THEME SWITCHER: start -->
+    <button class="theme-toggle-button button-icon button-sm" aria-label="Toggle theme" id="theme-toggle" type="button">
       <i class="ph-bold ph-sun icon-sun" aria-hidden="true"></i>
       <i class="ph-bold ph-moon icon-moon" aria-hidden="true"></i>
     </button>
-    <a href="https://github.com/your-username" target="_blank" rel="noopener noreferrer" class="button button-sm cta-github">
+    <!-- THEME SWITCHER: end -->
+    {% assign gh = site.repo | default: 'https://github.com' %}
+    <a href="{{ gh }}" target="_blank" rel="noopener noreferrer" class="button button-sm cta-github">
       <i class="ph-bold ph-star"></i><span>Star on GitHub</span>
     </a>
-    <button class="mobile-menu-toggle button button-sm button-transparent button-icon" id="mobile-menu-toggle" aria-label="Open menu" aria-controls="mobile-panel" aria-expanded="false">
+    <button class="mobile-menu-toggle button button-sm button-transparent button-icon" id="mobile-menu-toggle" aria-label="Open menu" aria-controls="mobile-panel" aria-expanded="false" type="button">
       <i class="ph-bold ph-list"></i>
     </button>
   </div>
-</header> -->
-
-<!-- =============================================
-header.html — Dynamic Island Header (Jekyll)
-- Uses site.* + navigation_header from _config.yml
-- Theme Switcher (start/end) included
-- Mobile "island panel" menu included
-- Styles use CSS vars from _base.scss (no mixed-unit Sass math)
-============================================= -->
-<header class="island-navbar" role="navigation" aria-label="Primary" id="site-navbar">
-<a href="{{ site.baseurl }}/" class="navbar-brand">
-{% if site.logo %}
- <img src="{{ site.logo | relative_url }}" alt="{{ site.title }}" class="navbar-avatar">
-{% endif %}
-<span class="brand-text">
- <span class="logo">{{ site.title }}</span>
- <span class="logo-sub">{{ site.description | default: " " }}</span>
-</span>
-</a>
-
-<!-- Desktop nav -->
-<nav class="navbar-menu" aria-label="Desktop Navigation">
-<ul>
- {% for item in site.navigation_header %}
-   <li>
-     <a href="{{ item.url | relative_url }}" class="{% if page.url == item.url %}active{% endif %}">
-       {% if item.icon %}{% include icon.html id=item.icon %}{% endif %}
-       {{ item.title }}
-     </a>
-   </li>
- {% endfor %}
-</ul>
-</nav>
-
-<!-- Actions -->
-<div class="navbar-actions">
-<a href="{{ '/search/' | relative_url }}" class="button-icon button-sm button-transparent" aria-label="Search">
- <i class="ph-bold ph-magnifying-glass" style="font-size:1.25em;"></i>
-</a>
-
-<!-- THEME SWITCHER: start -->
-<button class="theme-toggle-button button-icon button-sm" aria-label="Toggle theme" id="theme-toggle">
- <i class="ph-bold ph-sun icon-sun" aria-hidden="true"></i>
- <i class="ph-bold ph-moon icon-moon" aria-hidden="true"></i>
-</button>
-<!-- THEME SWITCHER: end -->
-
-{% if site.repo %}
- <a href="{{ site.repo }}" target="_blank" rel="noopener noreferrer" class="button button-sm cta-github">
-   <i class="ph-bold ph-star"></i><span>Star on GitHub</span>
- </a>
-{% endif %}
-
-<button class="mobile-menu-toggle button button-sm button-transparent button-icon"
-       id="mobile-menu-toggle"
-       aria-label="Open menu"
-       aria-controls="mobile-panel"
-       aria-expanded="false">
- <i class="ph-bold ph-list"></i>
-</button>
-</div>
 </header>
 
-<!-- EXPANDING MOBILE PANEL (Island style) -->
 <section id="mobile-panel" class="island-panel" aria-hidden="true">
-<div class="island-panel__inner">
-<div class="bento-grid">
- {% for item in site.navigation_header %}
-   <a class="bento-card" href="{{ item.url | relative_url }}">
-     <span class="bento-icon">
-       {% if item.icon %}
-         {% include icon.html id=item.icon %}
-       {% else %}
-         <i class="ph-bold ph-caret-right"></i>
-       {% endif %}
-     </span>
-     <span>
-       <div class="bento-title">{{ item.title }}</div>
-       <div class="bento-sub">{{ item.sub | default: "Open" }}</div>
-     </span>
-   </a>
- {% endfor %}
- {% if site.repo %}
-   <a class="bento-card" href="{{ site.repo }}" target="_blank" rel="noopener">
-     <span class="bento-icon"><i class="ph-bold ph-github-logo"></i></span>
-     <span>
-       <div class="bento-title">GitHub</div>
-       <div class="bento-sub">Open-source</div>
-     </span>
-   </a>
- {% endif %}
-</div>
-</div>
+  <div class="island-panel__inner">
+    <!-- Bento-style menu -->
+    <div class="bento-grid">
+      {% for item in site.navigation_header %}
+      <a class="bento-card" href="{{ item.url | relative_url }}">
+        <span class="bento-icon">
+          {% assign txt = item.title | downcase %}
+          {% if txt == 'home' %}<i class="ph-bold ph-house"></i>{% endif %}
+          {% if txt == 'elements' %}<i class="ph-bold ph-squares-four"></i>{% endif %}
+          {% if txt == 'blog' %}<i class="ph-bold ph-article"></i>{% endif %}
+          {% if txt == 'categories' %}<i class="ph-bold ph-folders"></i>{% endif %}
+          {% if txt == 'search' %}<i class="ph-bold ph-magnifying-glass"></i>{% endif %}
+          {% if txt contains 'fork' or txt contains 'github' %}<i class="ph-bold ph-github-logo"></i>{% endif %}
+        </span>
+        <span>
+          <div class="bento-title">{{ item.title }}</div>
+          <div class="bento-sub">{% if txt == 'home' %}Go to start{% elsif txt == 'blog' %}Latest posts{% elsif txt == 'categories' %}Browse topics{% elsif txt == 'search' %}Find things{% else %}Open{% endif %}</div>
+        </span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
 </section>
 
-<!-- Header local styles (uses _base.scss CSS variables) -->
-<style>
-/* ========== HEADER (island) ========== */
-.island-navbar{
-position: sticky; top: var(--page-pad); z-index: 1000;
-margin: 0 auto var(--spacing-6, 0.75rem);
-display:flex; align-items:center; justify-content:space-between; gap: .75rem;
-padding: .5rem .75rem;
-background-color: hsla(0, 0%, 100%, 0.72);
--webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
-border-radius: 24px; border: 1px solid var(--color-border); box-shadow: var(--shadow-1);
-width: {{ site.container_w | default: "1100px" }}; max-width: calc(100% - 2 * var(--page-pad));
-transition: background-color .2s, border-radius .25s ease;
-}
-:root[data-color-scheme="dark"] .island-navbar{ background-color: hsla(240, 3%, 12%, 0.72); }
-.island-navbar.is-open{ border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; }
+<!-- Spacer to avoid overlap if main doesn’t set padding-top -->
+<div class="island-spacer" aria-hidden="true"></div>
 
-.navbar-brand{ display:flex; align-items:center; gap:.75rem; text-decoration:none; }
-.navbar-avatar{ width:36px; height:36px; border-radius:50%; object-fit:cover; border:2px solid var(--color-border); }
-.brand-text{ display:grid; line-height:1.05; }
-.logo{ font-size: var(--font-large, 1.125rem); font-weight: 600; color: var(--color-ink); }
-.logo-sub{ font-size: .8rem; color: var(--color-fg-weak); }
-
-/* desktop nav */
-.navbar-menu ul{ display:flex; align-items:center; list-style:none; margin:0; padding:0; gap:.25rem; }
-.navbar-menu a{
-font-size: var(--font-small, .875rem); font-weight: 500;
-color: var(--color-fg-weak); padding: .5rem .75rem;
-border-radius: 999px; display:flex; align-items:center; gap:.5em;
-transition: color .2s, background-color .2s;
-}
-.navbar-menu a:hover, .navbar-menu a.active{ color: var(--color-ink); background: var(--color-bg-elev); }
-
-/* actions */
-.navbar-actions{ display:flex; align-items:center; gap:.5rem; }
-.button{ align-items:center; gap:.5em; }
-.button-icon{
-border: 1px solid var(--color-border); border-radius: 999px; background: transparent;
-display:inline-grid; place-items:center; width: 2.25rem; height: 2.25rem;
-}
-.button-sm{ min-height: 2.25rem; padding: .4rem .9rem; font-size: .82rem; }
-.button-transparent{ background: transparent; color: var(--color-fg-weak); }
-.cta-github{ background: var(--brand); color: #fff; border: 1px solid transparent; }
-.cta-github:hover{ background: var(--color-ink); color: var(--color-bg); }
-
-/* theme toggle */
-.theme-toggle-button{
-position: relative; overflow: hidden;
-background: var(--color-bg-elev); color: var(--color-fg-weak);
-}
-.theme-toggle-button:hover{ color: var(--color-ink); }
-.theme-toggle-button i{
-font-size:1.25em; position:absolute; inset:0; margin:auto; height:1em; width:1em;
-transform: scale(.9); opacity:0; transition: transform .35s var(--ease, cubic-bezier(.25,1,.5,1)), opacity .25s ease;
-}
-:root[data-color-scheme="light"] .theme-toggle-button .icon-sun{ opacity:1; transform: scale(1); }
-:root[data-color-scheme="dark"]  .theme-toggle-button .icon-moon{ opacity:1; transform: scale(1); }
-
-/* mobile visibility */
-.mobile-menu-toggle{ display:none; }
-@media (max-width: 991px){ .navbar-menu{ display:none; } .mobile-menu-toggle{ display:inline-grid; } .island-navbar{ width:auto; } }
-@media (max-width: 767px){
-.island-navbar{ width: calc(100% - 2 * var(--page-pad)); }
-.cta-github > span{ display:none; }
-.cta-github{ padding: .4rem; }
-}
-
-/* ========== MOBILE PANEL (island) ========== */
-.island-panel{
-position: relative; z-index: 950;
-margin: -12px auto var(--page-pad);
-width: {{ site.container_w | default: "1100px" }}; max-width: calc(100% - 2 * var(--page-pad));
-border-radius: 24px; border: 1px solid var(--color-border); border-top: 0;
-background: hsla(0,0%,100%,.75); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
-box-shadow: var(--shadow-1); overflow: hidden; max-height: 0; opacity: 0; transform: translateY(-6px) scale(.992);
-pointer-events: none;
-transition: max-height .5s cubic-bezier(.25,1,.5,1), opacity .3s ease, transform .4s cubic-bezier(.25,1,.5,1);
-}
-:root[data-color-scheme="dark"] .island-panel{ background: hsla(240,3%,12%,.75); }
-.island-panel.is-open{ opacity:1; transform: translateY(0) scale(1); pointer-events:auto; border-top-left-radius:0; border-top-right-radius:0; }
-.island-panel.is-open::before{
-content:""; position:absolute; inset:0 0 auto 0; height:1px; top:0;
-background: linear-gradient(90deg, transparent, rgba(0,0,0,.08), transparent);
-}
-:root[data-color-scheme="dark"] .island-panel.is-open::before{
-background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
-}
-.island-panel__inner{ padding: 2rem 1.5rem; display:grid; gap: 1rem; }
-
-/* bento grid */
-.bento-grid{ display:grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-@media (min-width: 540px){ .bento-grid{ grid-template-columns: repeat(3, 1fr); } }
-.bento-card{
-display:flex; align-items:center; gap: 12px; padding: 14px;
-border-radius: 14px; border: 1px solid var(--color-border);
-background: var(--color-bg); transition: transform .15s ease, background .2s ease;
-}
-.bento-card:hover{ transform: translateY(-2px); background: var(--color-bg-elev); }
-.bento-icon{
-width: 38px; height: 38px; display:grid; place-items:center;
-border-radius: 12px; border: 1px solid var(--color-border);
-}
-.bento-title{ color: var(--color-ink); font-weight: 600; font-size: .95rem; }
-.bento-sub{ color: var(--color-fg-weak); font-size: .8rem; }
-
-/* only show mobile panel on sub-992px */
-@media (min-width: 992px){ .island-panel{ display:none; } }
-
-/* Ensure main content never hides behind the nav */
-body > main:first-of-type, .site-main{ padding-top: calc(var(--nav-height, 58px) + var(--page-pad)); }
-</style>
-
-<!-- Header behavior -->
 <script>
-/* ========== HEADER BEHAVIOR (island) ========== */
 document.addEventListener("DOMContentLoaded", function () {
-const root = document.documentElement;
+  var root = document.documentElement;
 
-// THEME SWITCHER: start
-const KEY = "color-scheme";
-const themeToggleBtn = document.getElementById("theme-toggle");
-function getTheme(){ return root.getAttribute("data-color-scheme") || "light"; }
-function setTheme(theme){
-root.setAttribute("data-color-scheme", theme);
-try { localStorage.setItem(KEY, theme); } catch(e){}
-themeToggleBtn && themeToggleBtn.setAttribute("aria-pressed", theme === "dark");
-}
-setTheme(localStorage.getItem(KEY) || getTheme());
-themeToggleBtn && themeToggleBtn.addEventListener("click", () => setTheme(getTheme()==="light" ? "dark" : "light"));
-// THEME SWITCHER: end
+  // THEME SWITCHER: start
+  var KEY = "color-scheme";
+  var btn = document.getElementById("theme-toggle");
+  function getTheme(){ return root.getAttribute("data-color-scheme") || "light"; }
+  function setTheme(t){
+    root.setAttribute("data-color-scheme", t);
+    try{ localStorage.setItem(KEY, t); }catch(e){}
+    btn && btn.setAttribute("aria-pressed", String(t === "dark"));
+  }
+  setTheme((function(){ try{ return localStorage.getItem(KEY) || getTheme(); } catch(e){ return getTheme(); } })());
+  btn && btn.addEventListener("click", function(){
+    setTheme(getTheme() === "light" ? "dark" : "light");
+  });
+  // THEME SWITCHER: end
 
-// Mobile island panel
-const mobileMenuToggle = document.getElementById("mobile-menu-toggle");
-const mobilePanel = document.getElementById("mobile-panel");
-const navbar = document.getElementById("site-navbar");
+  // Mobile panel toggle
+  var toggle = document.getElementById("mobile-menu-toggle");
+  var panel  = document.getElementById("mobile-panel");
+  var navbar = document.getElementById("site-navbar");
 
-function setPanelHeight(open){
-if(!mobilePanel) return;
-if(open){
- mobilePanel.style.maxHeight = "0px";
- requestAnimationFrame(()=>{ mobilePanel.style.maxHeight = mobilePanel.scrollHeight + "px"; });
-} else {
- mobilePanel.style.maxHeight = mobilePanel.scrollHeight + "px";
- requestAnimationFrame(()=>{ mobilePanel.style.maxHeight = "0px"; });
-}
-}
-function openPanel(){
-navbar && navbar.classList.add("is-open");
-mobilePanel && mobilePanel.classList.add("is-open");
-mobilePanel && mobilePanel.setAttribute("aria-hidden","false");
-document.body.classList.add("panel-open");
-mobileMenuToggle && mobileMenuToggle.setAttribute("aria-expanded","true");
-setPanelHeight(true);
-}
-function closePanel(){
-navbar && navbar.classList.remove("is-open");
-mobilePanel && mobilePanel.classList.remove("is-open");
-mobilePanel && mobilePanel.setAttribute("aria-hidden","true");
-document.body.classList.remove("panel-open");
-mobileMenuToggle && mobileMenuToggle.setAttribute("aria-expanded","false");
-setPanelHeight(false);
-}
-function togglePanel(){ (mobilePanel && mobilePanel.classList.contains("is-open")) ? closePanel() : openPanel(); }
+  function setPanelHeight(open){
+    if(open){
+      panel.style.maxHeight = "0px";
+      requestAnimationFrame(function(){ panel.style.maxHeight = panel.scrollHeight + "px"; });
+    }else{
+      panel.style.maxHeight = panel.scrollHeight + "px";
+      requestAnimationFrame(function(){ panel.style.maxHeight = "0px"; });
+    }
+  }
+  function openPanel(){
+    navbar.classList.add("is-open");
+    panel.classList.add("is-open");
+    panel.setAttribute("aria-hidden","false");
+    document.body.classList.add("panel-open");
+    toggle.setAttribute("aria-expanded","true");
+    setPanelHeight(true);
+  }
+  function closePanel(){
+    navbar.classList.remove("is-open");
+    panel.classList.remove("is-open");
+    panel.setAttribute("aria-hidden","true");
+    document.body.classList.remove("panel-open");
+    toggle.setAttribute("aria-expanded","false");
+    setPanelHeight(false);
+  }
+  function togglePanel(){ panel.classList.contains("is-open") ? closePanel() : openPanel(); }
 
-mobileMenuToggle && mobileMenuToggle.addEventListener("click", togglePanel);
-mobilePanel && mobilePanel.addEventListener("click", (e)=>{ if(e.target.closest("a")) closePanel(); });
-document.addEventListener("keydown", (e)=>{ if(e.key==="Escape" && mobilePanel && mobilePanel.classList.contains("is-open")) closePanel(); });
-
-// Close panel when crossing desktop breakpoint
-const mq = window.matchMedia("(min-width: 992px)");
-mq.addEventListener("change", ()=>{ if(mq.matches) closePanel(); });
+  toggle && toggle.addEventListener("click", togglePanel);
+  panel && panel.addEventListener("click", function(e){ if(e.target.closest("a")) closePanel(); });
+  document.addEventListener("keydown", function(e){ if(e.key === "Escape" && panel.classList.contains("is-open")) closePanel(); });
+  window.addEventListener("resize", function(){ if(panel.classList.contains("is-open")) panel.style.maxHeight = panel.scrollHeight + "px"; });
+  var mq = window.matchMedia("(min-width: 992px)");
+  mq.addEventListener("change", function(){ if(mq.matches) closePanel(); });
 });
 </script>
