@@ -1,75 +1,55 @@
-{% comment %} ===========================
-  Header (Island Navbar) — self contained
-  Requirements:
-  - Uses site.title, site.job_title, site.navigation_header
-  - Phosphor icons working
-  - Dark mode toggle + no FOUC
-  - Mobile bento panel (hamburger)
-  - No content overlap
-=========================== {% endcomment %}
-
-<!-- THEME FOUC GUARD (must run before paint) -->
-<script>
-(function () {
-  var KEY = "color-scheme";
-  try {
-    var saved = localStorage.getItem(KEY);
-    var system = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    var theme = saved || system || "light";
-    document.documentElement.setAttribute("data-color-scheme", theme);
-  } catch(e) {
-    document.documentElement.setAttribute("data-color-scheme", "light");
-  }
-})();
-</script>
-
-<!-- Phosphor Icons (CSS + JS so <i class="ph-bold ..."> works) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/style.css">
-<script src="https://unpkg.com/@phosphor-icons/web"></script>
 
 
-<header class="island-navbar" role="navigation" aria-label="Primary" id="site-navbar">
-  <a href="{{ site.baseurl }}/" class="navbar-brand">
-    <img src="{{ site.logo | default: 'https://i.pravatar.cc/40?u=' | append: site.title | escape }}" alt="{{ site.title }}" class="navbar-avatar">
+<!-- Optional spacer so content never hides behind the navbar -->
+<div class="header-spacer" aria-hidden="true"></div>
+
+<header id="site-navbar" role="navigation" aria-label="Primary">
+  <a class="navbar-brand" href="{{ '/' | relative_url }}">
+    {%- assign avatar = site.logo | default: '/assets/logos/logo.svg' -%}
+    <img class="navbar-avatar" src="{{ avatar | relative_url }}" alt="{{ site.title }}">
     <span class="brand-text">
       <span class="logo">{{ site.title }}</span>
-      <span class="logo-sub">{{ site.job_title | default: site.description }}</span>
+      <span class="logo-sub">
+        {%- if site.job_title and site.job_title != '' -%}
+          {{ site.job_title }}
+        {%- else -%}
+          {{ site.description }}
+        {%- endif -%}
+      </span>
     </span>
   </a>
 
   <nav class="navbar-menu" aria-label="Desktop Navigation">
     <ul>
-      {% for item in site.navigation_header %}
-      <li>
-        <a href="{{ item.url | relative_url }}" {% if page.url == item.url %}class="active"{% endif %}>
-          {% assign txt = item.title | downcase %}
-          {% if txt == 'home' %}<i class="ph-bold ph-house"></i>{% endif %}
-          {% if txt == 'blog' %}<i class="ph-bold ph-article"></i>{% endif %}
-          {% if txt == 'categories' %}<i class="ph-bold ph-folders"></i>{% endif %}
-          {% if txt == 'search' %}<i class="ph-bold ph-magnifying-glass"></i>{% endif %}
-          {% if txt contains 'fork' or txt contains 'github' %}<i class="ph-bold ph-github-logo"></i>{% endif %}
-          {{ item.title }}
-        </a>
-      </li>
-      {% endfor %}
+      {%- for item in site.navigation_header -%}
+        <li>
+          <a href="{{ item.url | relative_url }}" class="{% if page.url == item.url %}active{% endif %}">
+            {%- comment -%} Optional: add icon by title (edit mapping in include if you want) {%- endcomment -%}
+            {%- assign t = item.title | downcase -%}
+            {%- if t == 'home' -%}<i class="ph-bold ph-house"></i>{%- endif -%}
+            {%- if t == 'blog' -%}<i class="ph-bold ph-article"></i>{%- endif -%}
+            {%- if t == 'categories' -%}<i class="ph-bold ph-folders"></i>{%- endif -%}
+            {%- if t == 'search' -%}<i class="ph-bold ph-magnifying-glass"></i>{%- endif -%}
+            {{ item.title }}
+          </a>
+        </li>
+      {%- endfor -%}
     </ul>
   </nav>
 
   <div class="navbar-actions">
-    <a href="{{ '/search/' | relative_url }}" class="button-icon button-sm button-transparent" aria-label="Search">
-      <i class="ph-bold ph-magnifying-glass" style="font-size:1.125em;"></i>
-    </a>
-    <!-- THEME SWITCHER: start -->
-    <button class="theme-toggle-button button-icon button-sm" aria-label="Toggle theme" id="theme-toggle" type="button">
+    <button class="button-icon button-transparent" id="theme-toggle" aria-label="Toggle theme" aria-pressed="false">
       <i class="ph-bold ph-sun icon-sun" aria-hidden="true"></i>
       <i class="ph-bold ph-moon icon-moon" aria-hidden="true"></i>
     </button>
-    <!-- THEME SWITCHER: end -->
-    {% assign gh = site.repo | default: 'https://github.com' %}
-    <a href="{{ gh }}" target="_blank" rel="noopener noreferrer" class="button button-sm cta-github">
-      <i class="ph-bold ph-star"></i><span>Star on GitHub</span>
+    <a class="button button-sm cta-github" href="{{ site.repo }}" target="_blank" rel="noopener">
+      <i class="ph-bold ph-star"></i> <span>Star</span>
     </a>
-    <button class="mobile-menu-toggle button button-sm button-transparent button-icon" id="mobile-menu-toggle" aria-label="Open menu" aria-controls="mobile-panel" aria-expanded="false" type="button">
+    <button class="mobile-menu-toggle button button-sm button-transparent button-icon"
+            id="mobile-menu-toggle"
+            aria-label="Open menu"
+            aria-controls="mobile-panel"
+            aria-expanded="false">
       <i class="ph-bold ph-list"></i>
     </button>
   </div>
@@ -77,88 +57,105 @@
 
 <section id="mobile-panel" class="island-panel" aria-hidden="true">
   <div class="island-panel__inner">
-    <!-- Bento-style menu -->
     <div class="bento-grid">
-      {% for item in site.navigation_header %}
-      <a class="bento-card" href="{{ item.url | relative_url }}">
-        <span class="bento-icon">
-          {% assign txt = item.title | downcase %}
-          {% if txt == 'home' %}<i class="ph-bold ph-house"></i>{% endif %}
-          {% if txt == 'elements' %}<i class="ph-bold ph-squares-four"></i>{% endif %}
-          {% if txt == 'blog' %}<i class="ph-bold ph-article"></i>{% endif %}
-          {% if txt == 'categories' %}<i class="ph-bold ph-folders"></i>{% endif %}
-          {% if txt == 'search' %}<i class="ph-bold ph-magnifying-glass"></i>{% endif %}
-          {% if txt contains 'fork' or txt contains 'github' %}<i class="ph-bold ph-github-logo"></i>{% endif %}
-        </span>
-        <span>
-          <div class="bento-title">{{ item.title }}</div>
-          <div class="bento-sub">{% if txt == 'home' %}Go to start{% elsif txt == 'blog' %}Latest posts{% elsif txt == 'categories' %}Browse topics{% elsif txt == 'search' %}Find things{% else %}Open{% endif %}</div>
-        </span>
-      </a>
-      {% endfor %}
+      {%- for item in site.navigation_header -%}
+        <a class="bento-card" href="{{ item.url | relative_url }}">
+          <span class="bento-icon">
+            {%- assign t = item.title | downcase -%}
+            {%- if t == 'home' -%}<i class="ph-bold ph-house"></i>{%- endif -%}
+            {%- if t == 'blog' -%}<i class="ph-bold ph-article"></i>{%- endif -%}
+            {%- if t == 'categories' -%}<i class="ph-bold ph-folders"></i>{%- endif -%}
+            {%- if t == 'search' -%}<i class="ph-bold ph-magnifying-glass"></i>{%- endif -%}
+            {%- if t == 'elements' -%}<i class="ph-bold ph-squares-four"></i>{%- endif -%}
+            {%- if t == 'fork alembic' -%}<i class="ph-bold ph-github-logo"></i>{%- endif -%}
+          </span>
+          <span>
+            <div class="bento-title">{{ item.title }}</div>
+            <div class="bento-sub">{{ item.url }}</div>
+          </span>
+        </a>
+      {%- endfor -%}
     </div>
   </div>
 </section>
 
-<!-- Spacer to avoid overlap if main doesn’t set padding-top -->
-<div class="island-spacer" aria-hidden="true"></div>
-
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+  // ===============================
+// Header interactions
+// ===============================
+(function () {
   var root = document.documentElement;
-
-  // THEME SWITCHER: start
   var KEY = "color-scheme";
-  var btn = document.getElementById("theme-toggle");
-  function getTheme(){ return root.getAttribute("data-color-scheme") || "light"; }
-  function setTheme(t){
-    root.setAttribute("data-color-scheme", t);
-    try{ localStorage.setItem(KEY, t); }catch(e){}
-    btn && btn.setAttribute("aria-pressed", String(t === "dark"));
+
+  // Early set (in case no head guard)
+  if (!root.getAttribute("data-color-scheme")) {
+    try {
+      var saved = localStorage.getItem(KEY);
+      var system = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      root.setAttribute("data-color-scheme", saved || system || "light");
+    } catch (e) {
+      root.setAttribute("data-color-scheme", "light");
+    }
   }
-  setTheme((function(){ try{ return localStorage.getItem(KEY) || getTheme(); } catch(e){ return getTheme(); } })());
-  btn && btn.addEventListener("click", function(){
-    setTheme(getTheme() === "light" ? "dark" : "light");
-  });
-  // THEME SWITCHER: end
 
-  // Mobile panel toggle
-  var toggle = document.getElementById("mobile-menu-toggle");
-  var panel  = document.getElementById("mobile-panel");
-  var navbar = document.getElementById("site-navbar");
+  // THEME SWITCHER (start)
+  var toggleBtn = document.getElementById("theme-toggle");
+  function getTheme() { return root.getAttribute("data-color-scheme") || "light"; }
+  function setTheme(t) {
+    root.setAttribute("data-color-scheme", t);
+    try { localStorage.setItem(KEY, t); } catch(e) {}
+    if (toggleBtn) toggleBtn.setAttribute("aria-pressed", String(t === "dark"));
+  }
+  if (toggleBtn) {
+    setTheme(getTheme()); // sync aria
+    toggleBtn.addEventListener("click", function(){ setTheme(getTheme() === "light" ? "dark" : "light"); });
+  }
+  // THEME SWITCHER (end)
 
-  function setPanelHeight(open){
-    if(open){
+  // BENTO PANEL (start)
+  var openBtn = document.getElementById("mobile-menu-toggle");
+  var panel   = document.getElementById("mobile-panel");
+  var navbar  = document.getElementById("site-navbar");
+
+  function setPanelHeight(open) {
+    if (!panel) return;
+    if (open) {
       panel.style.maxHeight = "0px";
       requestAnimationFrame(function(){ panel.style.maxHeight = panel.scrollHeight + "px"; });
-    }else{
+    } else {
       panel.style.maxHeight = panel.scrollHeight + "px";
       requestAnimationFrame(function(){ panel.style.maxHeight = "0px"; });
     }
   }
   function openPanel(){
+    if (!panel || !navbar || !openBtn) return;
     navbar.classList.add("is-open");
     panel.classList.add("is-open");
     panel.setAttribute("aria-hidden","false");
     document.body.classList.add("panel-open");
-    toggle.setAttribute("aria-expanded","true");
+    openBtn.setAttribute("aria-expanded","true");
     setPanelHeight(true);
   }
   function closePanel(){
+    if (!panel || !navbar || !openBtn) return;
     navbar.classList.remove("is-open");
     panel.classList.remove("is-open");
     panel.setAttribute("aria-hidden","true");
     document.body.classList.remove("panel-open");
-    toggle.setAttribute("aria-expanded","false");
+    openBtn.setAttribute("aria-expanded","false");
     setPanelHeight(false);
   }
-  function togglePanel(){ panel.classList.contains("is-open") ? closePanel() : openPanel(); }
+  function togglePanel(){ panel && panel.classList.contains("is-open") ? closePanel() : openPanel(); }
 
-  toggle && toggle.addEventListener("click", togglePanel);
-  panel && panel.addEventListener("click", function(e){ if(e.target.closest("a")) closePanel(); });
-  document.addEventListener("keydown", function(e){ if(e.key === "Escape" && panel.classList.contains("is-open")) closePanel(); });
-  window.addEventListener("resize", function(){ if(panel.classList.contains("is-open")) panel.style.maxHeight = panel.scrollHeight + "px"; });
-  var mq = window.matchMedia("(min-width: 992px)");
-  mq.addEventListener("change", function(){ if(mq.matches) closePanel(); });
-});
+  if (openBtn && panel) {
+    openBtn.addEventListener("click", togglePanel);
+    panel.addEventListener("click", function(e){ if (e.target.closest("a")) closePanel(); });
+    document.addEventListener("keydown", function(e){ if (e.key === "Escape" && panel.classList.contains("is-open")) closePanel(); });
+    window.addEventListener("resize", function(){ if(panel.classList.contains("is-open")) panel.style.maxHeight = panel.scrollHeight + "px"; });
+    var mq = window.matchMedia("(min-width: 992px)");
+    mq.addEventListener("change", function(){ if (mq.matches) closePanel(); });
+  }
+  // BENTO PANEL (end)
+})();
+
 </script>
