@@ -1,35 +1,24 @@
 // ======================================================================
-// Footer — Island footer with YouTube bg, TV static overlay, 4 columns,
-// container width, sticky-at-bottom, gorgeous on mobile.
-// Uses your tokens/mixins from _variables.scss
+// Cinematic Island Footer
+// - YouTube bg with scanlines + blur (no white overlay)
+// - 4-column grid, containerized
+// - Floating island; separate footer strip below
+// - Sticky at bottom via .page-shell
 // ======================================================================
 
-/* Sticky footer layout helper:
-   Add .page-shell around your page (display:flex; min-height:100vh)
-   and put .site-footer at the end so it sticks to bottom. */
-.page-shell {
-  display: flex; min-height: 100vh; flex-direction: column;
-}
-.page-shell > .site-footer { margin-top: auto; }
+/* Sticky shell (wrap your page content with .page-shell) */
+.page-shell { display: flex; min-height: 100vh; flex-direction: column; }
+.page-shell > .site-footer,
+.page-shell > .footer-strip { margin-top: auto; } // strip follows footer naturally
 
-/* Root element with subtle dot pattern behind the island */
-.site-footer {
-  position: relative;
-  overflow: clip; // contain media & effects
-  z-index: 1;
-  // breathing space from content
-  margin-top: $sp-12;
-}
-
-/* Subtle pattern (background layer) */
+/* Root footer area with subtle dot background */
+.site-footer { position: relative; z-index: 1; margin-top: $sp-12; overflow: clip; }
 .footer-surface {
   position: absolute; inset: 0; z-index: 0;
   background-image:
     radial-gradient(rgba(0,0,0,.06) 1px, transparent 1px),
     radial-gradient(rgba(0,0,0,.04) 1px, transparent 1px);
-  background-size: 16px 16px, 16px 16px;
-  background-position: 0 0, 8px 8px;
-
+  background-size: 16px 16px, 16px 16px; background-position: 0 0, 8px 8px;
   @include theme-block-dark {
     background-image:
       radial-gradient(rgba(255,255,255,.09) 1px, transparent 1px),
@@ -37,91 +26,67 @@
   }
 }
 
-/* The island wrapper holds both the footer content and the strip below */
-.footer-island {
-  position: relative;
-  z-index: 1;
-}
+/* The floating island wrapper */
+.footer-island { position: relative; z-index: 1; }
 
-/* Media background stack inside the island area */
+/* Media stack (video + effects) */
 .footer-media {
-  position: absolute; inset: 0 auto auto 0; // pinned to top of island content area
-  width: 100%; height: 100%;
-  z-index: 0; pointer-events: none; // don’t block links
-  border-radius: $radius-6;
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; border-radius: $radius-6;
 }
-
-/* constrain the iframe and make it cover like background */
-.footer-media__inner {
-  position: absolute; inset: 0;
-  overflow: hidden; border-radius: inherit;
-}
+.footer-media__inner { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; }
 .footer-yt {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  border: 0; display: block; object-fit: cover;
-  // scale a bit so crop looks cinematic
-  transform: scale(1.02);
+  position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; object-fit: cover;
+  transform: scale(1.03);
 }
 
-/* Scrim for contrast */
-.footer-scrim {
-  position: absolute; inset: 0; border-radius: inherit;
-  background: linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.55));
-  mix-blend-mode: multiply;
-}
-
-/* TV static horizontal lines overlay for readability */
+/* TV static scanlines (no white overlay) */
 .footer-static {
-  position: absolute; inset: 0; border-radius: inherit;
-  // repeating transparent + dim lines
+  position: absolute; inset: 0; border-radius: inherit; pointer-events: none; mix-blend-mode: overlay;
   background:
     repeating-linear-gradient(
       to bottom,
-      rgba(255,255,255,0.08) 0px,
-      rgba(255,255,255,0.08) 1px,
-      transparent 1px,
-      transparent 3px
+      rgba(0,0,0,0.25) 0px, rgba(0,0,0,0.25) 1px,
+      rgba(0,0,0,0.00) 1px, rgba(0,0,0,0.00) 3px
     );
-  opacity: .45;
-  pointer-events: none;
-  mix-blend-mode: overlay;
-
+  opacity: .6;
   @include theme-block-dark {
     background:
       repeating-linear-gradient(
         to bottom,
-        rgba(255,255,255,0.10) 0px,
-        rgba(255,255,255,0.10) 1px,
-        transparent 1px,
-        transparent 3px
+        rgba(0,0,0,0.35) 0px, rgba(0,0,0,0.35) 1px,
+        rgba(0,0,0,0.00) 1px, rgba(0,0,0,0.00) 3px
       );
-    opacity: .5;
+    opacity: .7;
   }
 }
 
-/* Content container (uses your container mixin for width) */
+/* Soft blur to enhance text contrast (no color overlay) */
+.footer-blur {
+  position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  -webkit-backdrop-filter: blur(6px) saturate(1.05) brightness(.92);
+  backdrop-filter: blur(6px) saturate(1.05) brightness(.92);
+}
+
+/* Content container */
 .footer__container { @include container; }
 
-/* Island content (rounded, glassy, NO bottom border) */
+/* Island content card — NO bottom border */
 .footer__inner {
-  position: relative;
-  z-index: 1;
+  position: relative; z-index: 1;
+  display: grid; gap: $sp-8;
+  padding: clamp(#{$sp-8}, 5vw, #{$sp-12});
 
-  // island frame
-  border: 1px solid; border-bottom: 0; // <- no border at bottom
+  border: 1px solid; border-bottom: 0;
   border-radius: $radius-6 $radius-6 0 0;
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
-  box-shadow: $shadow-light;
   overflow: hidden;
 
-  @include theme-block      { background: rgba(255,255,255,.68); border-color: tone(border, light); box-shadow: $shadow-light; }
-  @include theme-block-dark { background: rgba(20,20,22,.72);    border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
+  @include theme-block      { background: rgba(255,255,255,.08); border-color: tone(border, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: rgba(18,18,20,.10);   border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
 
-  // content grid
-  display: grid; gap: $sp-8;
-  padding: clamp(#{$sp-8}, 5vw, #{$sp-12});
+  // readable text over video
+  text-shadow: 0 1px 1px rgba(0,0,0,.35);
 
   @include mq-up($bp-md) { grid-template-columns: repeat(2, 1fr); }
   @include mq-up($bp-lg) { grid-template-columns: repeat(4, 1fr); }
@@ -130,44 +95,32 @@
 /* Columns */
 .footer__col { display: flex; flex-direction: column; gap: $sp-4; }
 
-/* Titles with icons */
+/* Titles + icons */
 .footer__title {
   display: inline-flex; align-items: center; gap: .55rem;
   font-size: $fs-4; font-weight: $fw-semibold; letter-spacing: -0.01em;
-
   @include theme-block      { color: tone(white, light); }
   @include theme-block-dark { color: tone(white, dark);  }
-
-  i { font-size: $fs-4; line-height: 1; opacity: .9; }
-
-  position: relative;
-  &::after {
-    content: "";
-    display: block; width: 28px; height: 2px; margin-top: $sp-2; border-radius: 2px;
+  i { font-size: $fs-4; opacity: .95; }
+  &::after { content: ""; display: block; width: 28px; height: 2px; margin-top: $sp-2; border-radius: 2px;
     @include theme-block      { background: rgba(255,255,255,.85); }
-    @include theme-block-dark { background: rgba(255,255,255,.85); }
-  }
+    @include theme-block-dark { background: rgba(255,255,255,.85); } }
 }
 
 .footer__text {
   font-size: $fs-3; line-height: 1.6;
-  @include theme-block      { color: rgba(255,255,255,.92); }
-  @include theme-block-dark { color: rgba(255,255,255,.92); }
+  @include theme-block      { color: rgba(255,255,255,.96); }
+  @include theme-block-dark { color: rgba(255,255,255,.96); }
 }
 
-/* Lists */
+/* Links list with icons */
 .footer__list {
-  list-style: none; margin: 0; padding: 0;
-  display: grid; gap: $sp-2;
-
+  list-style: none; margin: 0; padding: 0; display: grid; gap: $sp-2;
   li a {
-    display: inline-flex; align-items: center; gap: .55rem;
-    text-decoration: none; font-size: $fs-3;
-
-    @include theme-block      { color: rgba(255,255,255,.92); }
-    @include theme-block-dark { color: rgba(255,255,255,.92); }
-
-    i { font-size: $fs-4; opacity: .9; }
+    display: inline-flex; align-items: center; gap: .55rem; text-decoration: none; font-size: $fs-3;
+    @include theme-block      { color: rgba(255,255,255,.96); }
+    @include theme-block-dark { color: rgba(255,255,255,.96); }
+    i { font-size: $fs-4; opacity: .95; }
     &:hover { text-decoration: underline; }
   }
 }
@@ -175,88 +128,55 @@
 /* Social icons */
 .footer__social {
   display: flex; align-items: center; gap: $sp-3;
-
   a {
-    display: inline-grid; place-items: center;
-    width: 2rem; height: 2rem; border-radius: 50%;
-    border: 1px solid; font-size: $fs-4;
-    transition: transform $dur-1 $ease-in-out, background-color $dur-1;
-
-    @include theme-block      { color: rgba(255,255,255,.9); border-color: rgba(255,255,255,.55); }
-    @include theme-block-dark { color: rgba(255,255,255,.9); border-color: rgba(255,255,255,.55); }
-
-    &:hover { transform: translateY(-2px); background: rgba(255,255,255,.12); }
+    display: inline-grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; border: 1px solid; font-size: $fs-4;
+    @include theme-block      { color: rgba(255,255,255,.98); border-color: rgba(255,255,255,.45); }
+    @include theme-block-dark { color: rgba(255,255,255,.98); border-color: rgba(255,255,255,.45); }
+    transition: transform $dur-1 $ease-in-out, background-color $dur-1 $ease-in-out;
+    &:hover { transform: translateY(-2px); background: rgba(255,255,255,.14); }
   }
 }
 
 /* Newsletter */
 .footer__form {
   display: flex; align-items: center; gap: $sp-3;
-
   input {
-    flex: 1;
-    border: 1px solid; border-radius: $radius-pill;
-    padding: .6rem .9rem; font-size: $fs-3;
-    background: rgba(0,0,0,.28); outline: none;
-
-    @include theme-block      { color: rgba(255,255,255,.95); border-color: rgba(255,255,255,.45); }
-    @include theme-block-dark { color: rgba(255,255,255,.95); border-color: rgba(255,255,255,.45); }
-
-    &::placeholder { color: rgba(255,255,255,.75); }
-    &:focus {
-      @include theme-block      { border-color: rgba(255,255,255,.85); }
-      @include theme-block-dark { border-color: rgba(255,255,255,.85); }
-    }
+    flex: 1; border: 1px solid; border-radius: $radius-pill; padding: .6rem .9rem; font-size: $fs-3; background: rgba(0,0,0,.3); outline: none;
+    @include theme-block      { color: rgba(255,255,255,.98); border-color: rgba(255,255,255,.45); }
+    @include theme-block-dark { color: rgba(255,255,255,.98); border-color: rgba(255,255,255,.45); }
+    &::placeholder { color: rgba(255,255,255,.78); }
+    &:focus { @include theme-block { border-color: rgba(255,255,255,.9); } @include theme-block-dark { border-color: rgba(255,255,255,.9); } }
   }
-
   button {
-    width: 2.5rem; height: 2.5rem; border-radius: 50%; border: none;
-    display: inline-grid; place-items: center; cursor: pointer; font-size: $fs-4;
-
-    @include theme-block      { background: rgba(255,255,255,.95); color: tone(black, dark); }
-    @include theme-block-dark { background: rgba(255,255,255,.95); color: tone(black, dark); }
-
-    transition: transform $dur-1 $ease-in-out;
-    &:hover { transform: translateY(-2px); }
+    width: 2.5rem; height: 2.5rem; border-radius: 50%; border: none; display: inline-grid; place-items: center; cursor: pointer; font-size: $fs-4;
+    @include theme-block      { background: rgba(255,255,255,.98); color: tone(black, dark); }
+    @include theme-block-dark { background: rgba(255,255,255,.98); color: tone(black, dark); }
+    transition: transform $dur-1 $ease-in-out; &:hover { transform: translateY(-2px); }
   }
 }
 
-/* Footer strip — sits directly under the island; NO top border (no seam) */
-.footer__strip {
-  position: relative;
-  z-index: 1;
-  // no top border to avoid double-border seam; also no bottom border per request
-  border-top: 0; border-bottom: 0;
-  background: transparent; // strip has its own inner card
+/* Separate Footer Strip (own card; sits below island) */
+.footer-strip { position: relative; z-index: 1; margin-top: $sp-2; }
+.footer-strip .footer__container { @include container; }
+.footer-strip__inner {
+  border: 1px solid; border-radius: $radius-6; // fully rounded; separate piece
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  padding: $sp-5 clamp($sp-5, 5vw, $sp-8);
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: $sp-4;
 
-  .footer__strip-inner {
-    border: 1px solid; border-top: 0; // visually “attached” to island above
-    border-radius: 0 0 $radius-6 $radius-6;
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-    padding: $sp-5 clamp($sp-5, 5vw, $sp-8);
-    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: $sp-4;
+  @include theme-block      { background: rgba(255,255,255,.08); border-color: tone(border, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: rgba(18,18,20,.10);   border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
 
-    @include theme-block      { background: rgba(255,255,255,.68); border-color: tone(border, light); box-shadow: $shadow-light; }
-    @include theme-block-dark { background: rgba(20,20,22,.72);    border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
-
-    p { margin: 0; font-size: $fs-3; line-height: 1.5;
-      @include theme-block      { color: rgba(255,255,255,.92); }
-      @include theme-block-dark { color: rgba(255,255,255,.92); }
-    }
-    a { text-decoration: none; font-weight: $fw-medium;
-      @include theme-block      { color: rgba(255,255,255,.98); }
-      @include theme-block-dark { color: rgba(255,255,255,.98); }
-      &:hover { text-decoration: underline; }
-    }
-  }
+  p { margin: 0; font-size: $fs-3; line-height: 1.5; @include theme-block { color: rgba(255,255,255,.95);} @include theme-block-dark { color: rgba(255,255,255,.95);} }
+  a { text-decoration: none; font-weight: $fw-medium; @include theme-block { color: rgba(255,255,255,.98);} @include theme-block-dark { color: rgba(255,255,255,.98);} &:hover{ text-decoration: underline; } }
 }
 
-/* Mobile polish */
+/* Mobile tweaks */
 @media (max-width: $bp-sm) {
   .footer__inner { grid-template-columns: 1fr; gap: $sp-8; }
   .footer__list { text-align: left; }
   .footer__social { justify-content: flex-start; }
   .footer__form { flex-direction: column; align-items: stretch; }
-  .footer__strip .footer__strip-inner { flex-direction: column; text-align: center; }
+  .footer-strip__inner { flex-direction: column; text-align: center; }
 }
