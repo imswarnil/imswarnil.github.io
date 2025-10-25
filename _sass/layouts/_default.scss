@@ -1,56 +1,32 @@
-// ======================================================================
-// default.scss — minimal responsive layout with dynamic layout class
-// Depends on: _variables.scss
-// ======================================================================
-
 
 // ---------------------------------------------
-// Containers
-// ---------------------------------------------
-.container {
-  @include container; // width: $island-width; safe gutters
-}
-
-.container.narrow,
-.narrow .container {
-  width: ($island-width - 11.25rem);
-  max-width: calc(100% - 2 * #{$container-gutter});
-  margin-inline: auto;
-}
-
-.container.wide,
-.wide .container {
-  width: 100%;
-  max-width: none;
-  padding-inline: $container-gutter;
-}
-
-// ---------------------------------------------
-// Main content
+// Main layout
 // ---------------------------------------------
 .main {
+  // vertical rhythm and safe inline padding
   padding-block: clamp($sp-10, 4vw, $sp-16);
   padding-inline: $container-gutter;
-  display: block;
+  display: grid;
+  gap: $sp-8;
   width: 100%;
 
-  // Avoid content overflowing horizontally
+  // prevent horizontal scroll on content
   > * { min-width: 0; }
 }
 
-// Add offset if mobile header is fixed
+// Add offset if mobile header is fixed (page.offset_nav: true)
 .main.offset {
   padding-top: calc(#{$navbar-height} + #{$sp-8});
 }
 
-// Wide layout
+// Full width main (edge-to-edge sections)
 .main.wide {
   width: 100%;
   max-width: none;
   padding-inline: $container-gutter;
 }
 
-// Narrow layout
+// Narrow reading width
 .main.narrow {
   width: ($island-width - 11.25rem);
   max-width: calc(100% - 2 * #{$container-gutter});
@@ -58,22 +34,22 @@
 }
 
 // ---------------------------------------------
-// Safety: media, tables, code
+// Inside main: safety + typography blocks
 // ---------------------------------------------
-.container :where(img, video, svg, canvas) {
+.main :where(img, video, svg, canvas) {
   max-width: 100%;
   height: auto;
   display: block;
 }
 
-.container table {
+.main table {
   width: 100%;
   border-collapse: collapse;
   display: block;
   overflow-x: auto;
 }
 
-.container pre {
+.main pre {
   overflow: auto;
   font-family: $ff-mono;
   font-size: $fs-2;
@@ -94,11 +70,11 @@
 }
 
 // ---------------------------------------------
-// Utilities
+// Utilities (scoped to main)
 // ---------------------------------------------
-.wrap { overflow-wrap: break-word; word-break: break-word; }
-.bleed { margin-inline: calc(-1 * #{$container-gutter}); }
+.main .wrap  { overflow-wrap: break-word; word-break: break-word; }
+.main .bleed { margin-inline: calc(-1 * #{$container-gutter}); }
 
 @include mq-up($bp-lg) {
-  .bleed-lg { margin-inline: calc(-1 * #{$container-gutter}); }
+  .main .bleed-lg { margin-inline: calc(-1 * #{$container-gutter}); }
 }
