@@ -12,6 +12,11 @@
     </div>
   </main>
 
+  <div class="page-shell">
+    <!-- header + content -->
+    {% include site-footer.html %}
+  </div>
+
   {% if site.service_worker != false %}{% include site-sw.html %}{% endif %}
   {% include site-before-end.html %}
 </body>
