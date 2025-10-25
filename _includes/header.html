@@ -1,34 +1,158 @@
+
 <header class="island-navbar" role="navigation" aria-label="Primary" id="site-navbar">
-  <a href="#home" class="navbar-brand">
-    <img src="https://i.pravatar.cc/40?u=johndoe" alt="John Doe" class="navbar-avatar" />
+  <a href="{{ '/' | relative_url }}" class="navbar-brand">
+    {%- if site.logo -%}
+      <img src="{{ site.logo | relative_url }}" alt="{{ site.title }}" class="navbar-avatar">
+    {%- else -%}
+      <span class="navbar-avatar" style="display:grid;place-items:center;font-weight:600;background:#ddd;color:#000;">{{ site.title | slice: 0,1 }}</span>
+    {%- endif -%}
     <span class="brand-text">
-      <span class="logo">John Doe</span>
-      <span class="logo-sub">Software Engineer</span>
+      <span class="logo">{{ site.title }}</span>
+      {%- if site.job_title -%}
+        <span class="logo-sub">{{ site.job_title }}</span>
+      {%- else -%}
+        <span class="logo-sub">{{ site.description }}</span>
+      {%- endif -%}
     </span>
   </a>
 
   <nav class="navbar-menu" aria-label="Desktop Navigation">
     <ul>
-      <li><a href="#"><i class="ph-bold ph-user"></i>About</a></li>
-      <li><a href="#"><i class="ph-bold ph-folder"></i>Projects</a></li>
-      <li><a href="#"><i class="ph-bold ph-article"></i>Blog</a></li>
-      <li><a href="#"><i class="ph-bold ph-paper-plane-tilt"></i>Contact</a></li>
+      {%- for item in site.navigation_header -%}
+        {%- assign is_active = item.url | relative_url == page.url -%}
+        <li>
+          <a href="{{ item.url | relative_url }}" class="{% if is_active %}active{% endif %}">
+            {%- comment -%} Optional icon mapping by title {%- endcomment -%}
+            {%- case item.title | downcase -%}
+              {%- when 'home' -%}<i class="ph-bold ph-house"></i>
+              {%- when 'blog' -%}<i class="ph-bold ph-article"></i>
+              {%- when 'categories' -%}<i class="ph-bold ph-tag"></i>
+              {%- when 'elements' -%}<i class="ph-bold ph-squares-four"></i>
+              {%- when 'search' -%}<i class="ph-bold ph-magnifying-glass"></i>
+              {%- else -%}<i class="ph-bold ph-dot"></i>
+            {%- endcase -%}
+            {{ item.title }}
+          </a>
+        </li>
+      {%- endfor -%}
     </ul>
   </nav>
 
   <div class="navbar-actions">
-    <a href="#" class="button-icon button-sm button-transparent" aria-label="Search">
-      <i class="ph-bold ph-magnifying-glass" style="font-size: 1.25em;"></i>
+    <!-- Search button (placeholder) -->
+    <a href="{{ '/search/' | relative_url }}" class="button-icon button--sm button--ghost" aria-label="Search">
+      <i class="ph-bold ph-magnifying-glass" style="font-size:1.1em;"></i>
     </a>
-    <button class="theme-toggle-button button-icon button-sm" aria-label="Toggle theme" id="theme-toggle">
+
+    <!-- Theme switcher -->
+    <!-- ==== Theme switcher: start ==== -->
+    <button class="theme-toggle-button" id="theme-toggle" aria-label="Toggle theme" aria-pressed="false">
       <i class="ph-bold ph-sun icon-sun" aria-hidden="true"></i>
       <i class="ph-bold ph-moon icon-moon" aria-hidden="true"></i>
     </button>
-    <a href="https://github.com/your-username" target="_blank" rel="noopener noreferrer" class="button button-sm cta-github">
-      <i class="ph-bold ph-star"></i><span>Star on GitHub</span>
-    </a>
-    <button class="mobile-menu-toggle button button-sm button-transparent button-icon" id="mobile-menu-toggle" aria-label="Open menu" aria-controls="mobile-panel" aria-expanded="false">
+    <!-- ==== Theme switcher: end ==== -->
+
+    {%- if site.repo -%}
+      <a href="{{ site.repo }}" target="_blank" rel="noopener" class="button button--sm cta-github">
+        <i class="ph-bold ph-star"></i><span>Star</span>
+      </a>
+    {%- endif -%}
+
+    <!-- Mobile menu toggle -->
+    <button class="mobile-menu-toggle button button--sm button--ghost button-icon" id="mobile-menu-toggle" aria-label="Open menu" aria-controls="mobile-panel" aria-expanded="false">
       <i class="ph-bold ph-list"></i>
     </button>
   </div>
 </header>
+
+<!-- Mobile expanding panel -->
+<section id="mobile-panel" class="island-panel" aria-hidden="true">
+  <div class="island-panel__inner">
+    <div class="bento-grid">
+      {%- for item in site.navigation_header -%}
+        <a class="bento-card" href="{{ item.url | relative_url }}">
+          <span class="bento-icon">
+            {%- case item.title | downcase -%}
+              {%- when 'home' -%}<i class="ph-bold ph-house"></i>
+              {%- when 'blog' -%}<i class="ph-bold ph-article"></i>
+              {%- when 'categories' -%}<i class="ph-bold ph-tag"></i>
+              {%- when 'elements' -%}<i class="ph-bold ph-squares-four"></i>
+              {%- when 'search' -%}<i class="ph-bold ph-magnifying-glass"></i>
+              {%- else -%}<i class="ph-bold ph-dot"></i>
+            {%- endcase -%}
+          </span>
+          <span>
+            <div class="bento-title">{{ item.title }}</div>
+            <div class="bento-sub">{{ site.title }}</div>
+          </span>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<script>
+  // ============================================================
+  // Header behavior (safe to inline in include)
+  // ============================================================
+  document.addEventListener("DOMContentLoaded", function () {
+    const root = document.documentElement;
+
+    // ---- THEME SWITCHER ----
+    // ==== Theme switcher: start ====
+    const KEY = "color-scheme";
+    const btnTheme = document.getElementById("theme-toggle");
+    function getTheme(){ return root.getAttribute("data-color-scheme") || "light"; }
+    function setTheme(theme){
+      root.setAttribute("data-color-scheme", theme);
+      try { localStorage.setItem(KEY, theme); } catch(e){}
+      btnTheme && btnTheme.setAttribute("aria-pressed", theme === "dark");
+    }
+    setTheme(localStorage.getItem(KEY) || getTheme());
+    btnTheme && btnTheme.addEventListener("click", () => {
+      setTheme(getTheme() === "light" ? "dark" : "light");
+    });
+    // ==== Theme switcher: end ====
+
+    // ---- EXPANDING ISLAND PANEL (Mobile) ----
+    const btnBurger = document.getElementById("mobile-menu-toggle");
+    const panel = document.getElementById("mobile-panel");
+    const navbar = document.getElementById("site-navbar");
+
+    function setPanelHeight(open){
+      if(open){
+        panel.style.maxHeight = "0px";
+        requestAnimationFrame(()=>{ panel.style.maxHeight = panel.scrollHeight + "px"; });
+      } else {
+        panel.style.maxHeight = panel.scrollHeight + "px";
+        requestAnimationFrame(()=>{ panel.style.maxHeight = "0px"; });
+      }
+    }
+    function openPanel(){
+      navbar.classList.add("is-open");
+      panel.classList.add("is-open");
+      panel.setAttribute("aria-hidden","false");
+      document.body.classList.add("panel-open");
+      btnBurger.setAttribute("aria-expanded","true");
+      setPanelHeight(true);
+    }
+    function closePanel(){
+      navbar.classList.remove("is-open");
+      panel.classList.remove("is-open");
+      panel.setAttribute("aria-hidden","true");
+      document.body.classList.remove("panel-open");
+      btnBurger.setAttribute("aria-expanded","false");
+      setPanelHeight(false);
+    }
+    function togglePanel(){ panel.classList.contains("is-open") ? closePanel() : openPanel(); }
+
+    btnBurger && btnBurger.addEventListener("click", togglePanel);
+    panel.addEventListener("click", (e)=>{ if(e.target.closest("a")) closePanel(); });
+    document.addEventListener("keydown", (e)=>{ if(e.key==="Escape" && panel.classList.contains("is-open")) closePanel(); });
+    window.addEventListener("resize", ()=>{ if(panel.classList.contains("is-open")) panel.style.maxHeight = panel.scrollHeight + "px"; });
+
+    // Close panel automatically when switching to desktop
+    const mq = window.matchMedia("(min-width: {{  site.bp_breakpoint | default: '992px'  }})"); // optional; safe default
+    mq.addEventListener && mq.addEventListener("change", ()=>{ if(mq.matches) closePanel(); });
+  });
+</script>
