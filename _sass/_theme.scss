@@ -1,14 +1,17 @@
-/* ===========================================================
-   Theme — only CSS variables may use clamp()/vw for GH safety
-=========================================================== */
+---
+---
+
+@import "vars";
+
+// Only CSS vars (with clamp/vw) to keep GH Pages Sass happy
 :root{
-  /* Layout + typography scales (mixed units kept in CSS) */
   --page-pad: clamp(16px, 12px + 1vw, 32px);
   --nav-height: 58px;
+
   --fs-3xl: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
   --fs-4xl: clamp(2rem, 1.6rem + 2vw, 3rem);
 
-  /* Light */
+  /* Light theme */
   --color-bg: #{$paper};
   --color-fg: #{$fg};
   --color-fg-weak: #{$fg-weak};

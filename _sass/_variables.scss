@@ -1,30 +1,31 @@
-// ========================================
-// Vars — design tokens (GH Pages friendly)
-// ========================================
+// ===============================
+// Vars — tokens for the whole UI
+// ===============================
 
-// Brand & neutrals
-$brand: #0176d3;
-$accent: #f22f46;
+// Brand
+$brand:   #0176d3;
+$accent:  #f22f46;
 
-$ink:   #0b0b0d;  // near-black
-$paper: #ffffff;
-
+// Neutrals (light)
+$ink:     #0b0b0d;
+$paper:   #ffffff;
 $fg:        #4d4d52;
 $fg-weak:   #7a7a80;
 $border-lt: rgba(0,0,0,.12);
 $bg-elev:   #f5f5f5;
 
+// Neutrals (dark)
 $fg-dark:        #c9c9cf;
 $fg-weak-dark:   #9a9aa1;
-$border-dk:      rgba(255,255,255,.12);
+$border-dk:      rgba(255,255,255,.14);
 $bg-dark:        #111113;
 $bg-elev-dark:   #1a1a1c;
 
-// Type
+// Typography
 $font-sans: "Geist", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 $font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Courier New", monospace;
 
-$fs-root: 16px;  // html
+$fs-root: 16px;
 $fs-xxs: .75rem;
 $fs-xs:  .8125rem;
 $fs-sm:  .875rem;
@@ -41,27 +42,26 @@ $w-medium:  500;
 $w-semibold:600;
 $w-bold:    700;
 
-// Spacing (rem only)
-$sp-1:  .125rem;  // 2
-$sp-2:  .25rem;   // 4
-$sp-3:  .375rem;  // 6
-$sp-4:  .5rem;    // 8
-$sp-5:  .625rem;  // 10
-$sp-6:  .75rem;   // 12
-$sp-7:  .875rem;  // 14
-$sp-8:  1rem;     // 16
-$sp-10: 1.25rem;  // 20
-$sp-12: 1.5rem;   // 24
-$sp-16: 2rem;     // 32
-$sp-20: 2.5rem;   // 40
-$sp-24: 3rem;     // 48
-$sp-32: 4rem;     // 64
+// Spacing (rem only, GH Pages friendly)
+$sp-2:  .25rem;    // 4
+$sp-3:  .375rem;   // 6
+$sp-4:  .5rem;     // 8
+$sp-5:  .625rem;   // 10
+$sp-6:  .75rem;    // 12
+$sp-7:  .875rem;   // 14
+$sp-8:  1rem;      // 16
+$sp-10: 1.25rem;   // 20
+$sp-12: 1.5rem;    // 24
+$sp-16: 2rem;      // 32
+$sp-20: 2.5rem;    // 40
+$sp-24: 3rem;      // 48
+$sp-32: 4rem;      // 64
 
 // Radii / shadows / layout
-$radius-2: 8px;
-$radius-3: 12px;
-$radius-4: 16px;
-$radius-5: 20px;
+$radius-2: 10px;
+$radius-3: 14px;
+$radius-4: 18px;
+$radius-5: 24px;
 $radius-pill: 999px;
 
 $shadow-1: 0 10px 30px -10px rgba(0,0,0,.12), 0 4px 10px -6px rgba(0,0,0,.08);

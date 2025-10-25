@@ -1,15 +1,18 @@
-// =====================
-// Mixins (tiny + handy)
-// =====================
+// Container width is fixed; side padding via CSS var
+@mixin container {
+  width: $container-w;
+  max-width: calc(100% - 2 * var(--page-pad));
+  margin-inline: auto;
+}
 
-// Container: width by px, side padding via CSS var to avoid Sass math
-@mixin container { width: $container-w; max-width: calc(100% - 2 * var(--page-pad)); margin-inline: auto; }
-
-// Responsive helpers
+// Media helpers
 @mixin media-sm { @media (max-width: 480px) { @content; } }
 @mixin media-md { @media (max-width: 768px) { @content; } }
 @mixin media-lg { @media (max-width: 992px) { @content; } }
 @mixin media-xl { @media (max-width: 1200px){ @content; } }
 
 // Focus ring
-@mixin focus-ring { outline: 2px solid rgba($brand,.65); outline-offset: 2px; }
+@mixin focus-ring {
+  outline: 2px solid rgba(1,118,211,.65);
+  outline-offset: 2px;
+}
