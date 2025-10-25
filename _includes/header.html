@@ -1,5 +1,4 @@
-<!-- header.html — fixed mobile navbar + icons + bento + theme switcher + JSON-LD -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/style.css">
+<!-- Phosphor Icons (bold set) -->
 
 <header class="island-navbar" role="navigation" aria-label="Primary" id="site-navbar">
   <a href="{{ '/' | relative_url }}" class="navbar-brand">
@@ -16,6 +15,7 @@
     </span>
   </a>
 
+  <!-- Desktop nav (icons + text) -->
   <nav class="navbar-menu" aria-label="Desktop Navigation">
     <ul>
       {% for item in site.navigation_header %}
@@ -31,10 +31,9 @@
 
   <div class="navbar-actions">
     <a href="{{ '/search/' | relative_url }}" class="button-icon button-sm button-transparent" aria-label="Search">
-      <i class="ph-bold ph-magnifying-glass" style="font-size: 1.25em;"></i>
+      <i class="ph-bold ph-magnifying-glass"></i>
     </a>
 
-    <!-- Theme switcher -->
     <button class="theme-toggle-button button-icon button-sm" aria-label="Toggle theme" id="theme-toggle" aria-pressed="false">
       <i class="ph-bold ph-sun icon-sun" aria-hidden="true"></i>
       <i class="ph-bold ph-moon icon-moon" aria-hidden="true"></i>
@@ -46,15 +45,20 @@
       </a>
     {% endif %}
 
-    <button class="mobile-menu-toggle button button-sm button-transparent button-icon" id="mobile-menu-toggle" aria-label="Open menu" aria-controls="mobile-panel" aria-expanded="false">
+    <button class="mobile-menu-toggle button button-sm button-transparent button-icon"
+            id="mobile-menu-toggle"
+            aria-label="Open menu"
+            aria-controls="mobile-panel"
+            aria-expanded="false">
       <i class="ph-bold ph-list"></i>
     </button>
   </div>
 </header>
 
+<!-- Mobile floating island panel -->
 <section id="mobile-panel" class="island-panel" aria-hidden="true">
   <div class="island-panel__inner">
-    <div class="bento-grid">
+    <nav class="bento-grid" aria-label="Quick navigation">
       {% for item in site.navigation_header %}
         <a class="bento-card" href="{{ item.url | relative_url }}">
           <span class="bento-icon"><i class="ph-bold ph-{{ item.icon | default: 'caret-right' }}"></i></span>
@@ -64,13 +68,52 @@
           </span>
         </a>
       {% endfor %}
-    </div>
+      {% if site.repo %}
+      <a class="bento-card" href="{{ site.repo }}" target="_blank" rel="noopener">
+        <span class="bento-icon"><i class="ph-bold ph-github-logo"></i></span>
+        <span>
+          <div class="bento-title">GitHub</div>
+          <div class="bento-sub">Open-source</div>
+        </span>
+      </a>
+      {% endif %}
+    </nav>
   </div>
 </section>
 
+<!-- JSON-LD (Person + Site) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": {{ site.title | jsonify }},
+  "jobTitle": {{ site.job_title | default: site.description | jsonify }},
+  "url": {{ site.url | append: site.baseurl | jsonify }}{% if site.logo %},
+  "image": {{ site.url | append: site.logo | jsonify }}{% endif %},
+  "sameAs": [{% assign S=site.social_links %}{% assign first=true %}
+    {% if S.Twitter %}{% unless first %}, {% endunless %}{{ S.Twitter | jsonify }}{% assign first=false %}{% endif %}
+    {% if S.LinkedIn %}{% unless first %}, {% endunless %}{{ S.LinkedIn | jsonify }}{% assign first=false %}{% endif %}
+    {% if S.GitHub %}{% unless first %}, {% endunless %}{{ S.GitHub | jsonify }}{% assign first=false %}{% endif %}
+    {% if S.RSS %}{% unless first %}, {% endunless %}{{ site.url | append: S.RSS | jsonify }}{% assign first=false %}{% endif %}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"WebSite",
+  "name": {{ site.title | jsonify }},
+  "url": {{ site.url | append: site.baseurl | jsonify }},
+  "potentialAction":{
+    "@type":"SearchAction",
+    "target": {{ site.url | append: site.baseurl | append: "/search/?q={search_term_string}" | jsonify }},
+    "query-input":"required name=search_term_string"
+  }
+}
+</script>
 
 <script>
-  // ---- FOUC guard: decide theme before first paint ----
+  // 1) Prevent FOUC: decide theme before first paint
   (function () {
     var KEY = "color-scheme";
     var saved = localStorage.getItem(KEY);
@@ -83,11 +126,11 @@
     var root   = document.documentElement;
     var KEY    = "color-scheme";
     var btn    = document.getElementById("theme-toggle");
-    var menu   = document.getElementById("mobile-panel");
+    var panel  = document.getElementById("mobile-panel");
     var toggle = document.getElementById("mobile-menu-toggle");
     var bar    = document.getElementById("site-navbar");
 
-    // measure nav height for fixed layout on mobile
+    // 2) Fix mobile padding so fixed navbar doesn’t overlap content
     function setNavHeightVar() {
       if (!bar) return;
       var h = bar.getBoundingClientRect().height;
@@ -97,7 +140,7 @@
     setNavHeightVar();
     window.addEventListener("resize", setNavHeightVar);
 
-    // THEME SWITCH (animated)
+    // 3) Theme switch (with soft animation handled by CSS)
     function getTheme(){ return root.getAttribute("data-color-scheme") || "light"; }
     function setTheme(t){
       root.setAttribute("data-color-scheme", t);
@@ -105,32 +148,30 @@
       if (btn) btn.setAttribute("aria-pressed", String(t === "dark"));
     }
     setTheme(localStorage.getItem(KEY) || getTheme());
-    if (btn) btn.addEventListener("click", function(){ setTheme(getTheme() === "light" ? "dark" : "light"); });
+    if (btn) btn.addEventListener("click", function(){ setTheme(getTheme()==="light" ? "dark" : "light"); });
 
-    // BENTO PANEL (use max-height cap so content never hides; inner scrolls)
+    // 4) Mobile panel (full height under the nav; inner scroll)
     function openPanel(){
-      if (!menu || !toggle || !bar) return;
+      if (!panel || !toggle || !bar) return;
       bar.classList.add("is-open");
-      menu.classList.add("is-open");
-      menu.setAttribute("aria-hidden","false");
+      panel.classList.add("is-open");
+      panel.setAttribute("aria-hidden","false");
       toggle.setAttribute("aria-expanded","true");
-      menu.style.maxHeight = "90vh";
     }
     function closePanel(){
-      if (!menu || !toggle || !bar) return;
+      if (!panel || !toggle || !bar) return;
       bar.classList.remove("is-open");
-      menu.classList.remove("is-open");
-      menu.setAttribute("aria-hidden","true");
+      panel.classList.remove("is-open");
+      panel.setAttribute("aria-hidden","true");
       toggle.setAttribute("aria-expanded","false");
-      menu.style.maxHeight = "0px";
     }
-    function togglePanel(){ (menu && menu.classList.contains("is-open")) ? closePanel() : openPanel(); }
+    function togglePanel(){ (panel && panel.classList.contains("is-open")) ? closePanel() : openPanel(); }
 
     if (toggle) toggle.addEventListener("click", togglePanel);
-    if (menu)   menu.addEventListener("click", function(e){ if (e.target.closest("a")) closePanel(); });
-    document.addEventListener("keydown", function(e){ if (e.key === "Escape" && menu && menu.classList.contains("is-open")) closePanel(); });
+    if (panel)  panel.addEventListener("click", function(e){ if (e.target.closest("a")) closePanel(); });
+    document.addEventListener("keydown", function(e){ if (e.key === "Escape" && panel && panel.classList.contains("is-open")) closePanel(); });
 
-    // close panel when switching to desktop width
+    // Close if switching to desktop
     var mq = window.matchMedia("(min-width: {{ site.bp_lg | default: '992px' }})");
     if (mq && mq.addEventListener) mq.addEventListener("change", function(){ if (mq.matches) closePanel(); });
   });
