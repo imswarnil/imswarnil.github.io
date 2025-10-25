@@ -140,6 +140,12 @@ navigation_header:
   - title: Search
     url: /search/
     icon: magnifying-glass
+  - title: Fork Alembic
+    url: https://github.com/daviddarnes/alembic
+    icon: github-logo
+
+# New field used under the brand name:
+job_title: "Software Engineer"
 
 
 navigation_footer:
