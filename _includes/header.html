@@ -1,5 +1,8 @@
+<!-- Header Include: put {% include header.html %} in your layout -->
+<link rel="preload" as="font" href="https://assets.vercel.com/raw/upload/v1699971935/fonts/geist/Geist-Variable.woff2" type="font/woff2" crossorigin>
+
 <header class="island-navbar" role="navigation" aria-label="Primary" id="site-navbar">
-  <a href="#home" class="navbar-brand">
+  <a href="{{ '/' | relative_url }}#home" class="navbar-brand">
     <img src="https://i.pravatar.cc/40?u=johndoe" alt="John Doe" class="navbar-avatar" />
     <span class="brand-text">
       <span class="logo">John Doe</span>
@@ -9,22 +12,22 @@
 
   <nav class="navbar-menu" aria-label="Desktop Navigation">
     <ul>
-      <li><a href="#"><i class="ph-bold ph-user"></i>About</a></li>
-      <li><a href="#"><i class="ph-bold ph-folder"></i>Projects</a></li>
-      <li><a href="#"><i class="ph-bold ph-article"></i>Blog</a></li>
-      <li><a href="#"><i class="ph-bold ph-paper-plane-tilt"></i>Contact</a></li>
+      <li><a href="#about"><i class="ph-bold ph-user"></i>About</a></li>
+      <li><a href="#projects"><i class="ph-bold ph-folder"></i>Projects</a></li>
+      <li><a href="#blog"><i class="ph-bold ph-article"></i>Blog</a></li>
+      <li><a href="#contact"><i class="ph-bold ph-paper-plane-tilt"></i>Contact</a></li>
     </ul>
   </nav>
 
   <div class="navbar-actions">
-    <a href="#" class="button-icon button-sm button-transparent" aria-label="Search">
-      <i class="ph-bold ph-magnifying-glass" style="font-size: 1.25em;"></i>
+    <a href="#search" class="button-icon button-sm button-transparent" aria-label="Search">
+      <i class="ph-bold ph-magnifying-glass" style="font-size:1.25em;"></i>
     </a>
     <button class="theme-toggle-button button-icon button-sm" aria-label="Toggle theme" id="theme-toggle">
       <i class="ph-bold ph-sun icon-sun" aria-hidden="true"></i>
       <i class="ph-bold ph-moon icon-moon" aria-hidden="true"></i>
     </button>
-    <a href="https://github.com/your-username" target="_blank" rel="noopener noreferrer" class="button button-sm cta-github">
+    <a href="https://github.com/your-username" target="_blank" rel="noopener" class="button button-sm button-transparent cta-github">
       <i class="ph-bold ph-star"></i><span>Star on GitHub</span>
     </a>
     <button class="mobile-menu-toggle button button-sm button-transparent button-icon" id="mobile-menu-toggle" aria-label="Open menu" aria-controls="mobile-panel" aria-expanded="false">
@@ -32,3 +35,16 @@
     </button>
   </div>
 </header>
+
+<section id="mobile-panel" class="island-panel" aria-hidden="true">
+  <div class="island-panel__inner">
+    <div class="bento-grid">
+      <a class="bento-card" href="#about"><span class="bento-icon"><i class="ph-bold ph-user"></i></span><span><div class="bento-title">About</div><div class="bento-sub">Who I am</div></span></a>
+      <a class="bento-card" href="#projects"><span class="bento-icon"><i class="ph-bold ph-folder"></i></span><span><div class="bento-title">Projects</div><div class="bento-sub">Featured builds</div></span></a>
+      <a class="bento-card" href="#blog"><span class="bento-icon"><i class="ph-bold ph-article"></i></span><span><div class="bento-title">Blog</div><div class="bento-sub">Notes & essays</div></span></a>
+      <a class="bento-card" href="#contact"><span class="bento-icon"><i class="ph-bold ph-paper-plane-tilt"></i></span><span><div class="bento-title">Contact</div><div class="bento-sub">Say hello</div></span></a>
+      <a class="bento-card" href="#resume"><span class="bento-icon"><i class="ph-bold ph-file-text"></i></span><span><div class="bento-title">Resume</div><div class="bento-sub">Download CV</div></span></a>
+      <a class="bento-card" href="https://github.com/your-username" target="_blank" rel="noopener"><span class="bento-icon"><i class="ph-bold ph-github-logo"></i></span><span><div class="bento-title">GitHub</div><div class="bento-sub">Open-source</div></span></a>
+    </div>
+  </div>
+</section>
