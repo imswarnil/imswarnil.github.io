@@ -1,6 +1,7 @@
 ---
 title: Description of an Alembic
 categories:
+aside : true
 - General
 - External sources
 feature_image: "https://picsum.photos/2560/600?image=872"
