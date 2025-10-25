@@ -1,24 +1,23 @@
 <!DOCTYPE html>
-<html lang="{{ site.lang | default: "en-US" }}">
+<html lang="{{ site.lang | default: 'en-US' }}">
 
 {% include head.html %}
 
-<body class="layout-default{% if page.title %}  {{ page.title | slugify }}{% endif %}">
-  <!-- Header region: wrap in responsive shell + container -->
-  <div class="r-shell r-shell--header{% if page.header_fluid %} r-shell--fluid{% endif %}">
-    <div class="r-container{% if page.header_narrow %} r-container--narrow{% endif %}">
+<body class="layout-{{ page.layout }}{% if page.title %} {{ page.title | slugify }}{% endif %}">
+
+  <!-- Header -->
+  <header class="header{% if page.header_fluid %} wide{% endif %}">
+    <div class="container{% if page.header_narrow %} narrow{% endif %}">
       {% include header.html %}
     </div>
-  </div>
+  </header>
 
-  <!-- Content region -->
-  <div class="r-shell{% if page.fluid %} r-shell--fluid{% endif %}">
-    <div class="r-container{% if page.narrow %} r-container--narrow{% endif %}">
-      <main class="main{% if page.offset_nav %} main--offset{% endif %}">
-        {{ content }}
-      </main>
+  <!-- Main content -->
+  <main class="main{% if page.fluid %} wide{% endif %}{% if page.narrow %} narrow{% endif %}{% if page.offset_nav %} offset{% endif %}">
+    <div class="container{% if page.narrow %} narrow{% endif %}">
+      {{ content }}
     </div>
-  </div>
+  </main>
 
   {% if site.service_worker != false %}{% include site-sw.html %}{% endif %}
   {% include site-before-end.html %}

@@ -1,80 +1,108 @@
 // ======================================================================
-// default.scss — responsive wrapper system + safe default layout styles
+// default.scss — minimal responsive layout with dynamic layout class
 // Depends on: _variables.scss
 // ======================================================================
 
+@use "variables" as *;
 
-// Guard: prevent horizontal scroll for this layout
-body.layout-default { max-width: 100%; overflow-x: clip; }
 
 // ---------------------------------------------
-// Responsive shells (full-bleed sections)
+// Header
 // ---------------------------------------------
-.r-shell {
-  // full-bleed region background/padding; content sits in .r-container
-  padding-block: clamp($sp-8, 3vw, $sp-16);
-}
-
-.r-shell--header {
+.header {
   position: relative;
   z-index: $z-header;
+  width: 100%;
+  padding-block: clamp($sp-6, 2vw, $sp-10);
+
+  @include theme-block {
+    background-color: tone(background, light);
+    border-bottom: 1px solid tone(border, light);
+  }
+
+  @include theme-block-dark {
+    background-color: tone(background, dark);
+    border-bottom: 1px solid tone(border, dark);
+  }
 }
 
-// When you want the container to stretch to 100% (fluid section)
-.r-shell--fluid .r-container {
+// Fluid header (edge-to-edge)
+.header.wide .container {
   width: 100%;
   max-width: none;
-  margin-inline: 0;
-  padding-inline: $container-gutter; // maintain safe side gutters
+  padding-inline: $container-gutter;
 }
 
 // ---------------------------------------------
-// Containers (centered columns at island width)
+// Containers
 // ---------------------------------------------
-.r-container {
-  @include container; // width: $island-width; safe max with gutters
+.container {
+  @include container; // width: $island-width; safe gutters
 }
 
-.r-container--narrow {
-  width: ($island-width - 11.25rem); // “hero/reading” width
+.container.narrow,
+.narrow .container {
+  width: ($island-width - 11.25rem);
+  max-width: calc(100% - 2 * #{$container-gutter});
+  margin-inline: auto;
+}
+
+.container.wide,
+.wide .container {
+  width: 100%;
+  max-width: none;
+  padding-inline: $container-gutter;
+}
+
+// ---------------------------------------------
+// Main content
+// ---------------------------------------------
+.main {
+  padding-block: clamp($sp-10, 4vw, $sp-16);
+  padding-inline: $container-gutter;
+  display: block;
+  width: 100%;
+
+  // Avoid content overflowing horizontally
+  > * { min-width: 0; }
+}
+
+// Add offset if mobile header is fixed
+.main.offset {
+  padding-top: calc(#{$navbar-height} + #{$sp-8});
+}
+
+// Wide layout
+.main.wide {
+  width: 100%;
+  max-width: none;
+  padding-inline: $container-gutter;
+}
+
+// Narrow layout
+.main.narrow {
+  width: ($island-width - 11.25rem);
   max-width: calc(100% - 2 * #{$container-gutter});
   margin-inline: auto;
 }
 
 // ---------------------------------------------
-// Main area (page body)
+// Safety: media, tables, code
 // ---------------------------------------------
-.main {
-  display: grid;
-  gap: $sp-7;
-
-  // prevent children from pushing width
-  > * { min-width: 0; }
-}
-
-// Add offset if your mobile header is fixed
-.main--offset { padding-top: calc(#{$navbar-height} + #{$sp-6}); }
-
-// Optional: you can further narrow a specific block using .r-container--narrow
-// around it; keeping .main generic avoids opinionated constraints.
-
-// ---------------------------------------------
-// Safe media & long content inside main/container
-// ---------------------------------------------
-.r-container :where(img, video, canvas, svg) {
+.container :where(img, video, svg, canvas) {
   max-width: 100%;
   height: auto;
   display: block;
 }
 
-.r-container table {
+.container table {
   width: 100%;
   border-collapse: collapse;
-  display: block;        // allow inner horizontal scroll without page widening
+  display: block;
   overflow-x: auto;
 }
 
-.r-container pre {
+.container pre {
   overflow: auto;
   font-family: $ff-mono;
   font-size: $fs-2;
@@ -86,6 +114,7 @@ body.layout-default { max-width: 100%; overflow-x: clip; }
     border: 1px solid tone(border, light);
     color: tone(foreground, light);
   }
+
   @include theme-block-dark {
     background: tone(background-100, dark);
     border: 1px solid tone(border, dark);
@@ -93,20 +122,12 @@ body.layout-default { max-width: 100%; overflow-x: clip; }
   }
 }
 
-// Utilities: wrap long words/URLs and safe full-bleed inside a container
-.u-wrap { overflow-wrap: break-word; word-break: break-word; }
-.u-bleed { margin-inline: calc(-1 * #{$container-gutter}); }
-@include mq-up($bp-lg) { .u-bleed-lg { margin-inline: calc(-1 * #{$container-gutter}); } }
-
 // ---------------------------------------------
-// Header overflow safety (if your header has fixed/attached parts)
+// Utilities
 // ---------------------------------------------
-.m-header, .d-header { max-width: 100%; overflow-x: clip; }
+.wrap { overflow-wrap: break-word; word-break: break-word; }
+.bleed { margin-inline: calc(-1 * #{$container-gutter}); }
 
-.m-panel {
-  // keep attached mobile panel within viewport & container
-  left: 0; right: 0; margin-inline: auto;
-  width: $island-width;
-  max-width: calc(100% - 2 * #{$container-gutter});
-  z-index: $z-overlay;
+@include mq-up($bp-lg) {
+  .bleed-lg { margin-inline: calc(-1 * #{$container-gutter}); }
 }

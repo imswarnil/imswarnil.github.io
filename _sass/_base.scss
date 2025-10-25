@@ -13,7 +13,8 @@ body {
   font-family: $ff-body;
   font-size: $fs-3;
   line-height: $lh-base;
-
+  max-width: 100%;
+  overflow-x: clip;
   @include theme-block      { background-color: tone(background, light); color: tone(foreground, light); }
   @include theme-block-dark { background-color: tone(background, dark);  color: tone(foreground, dark); }
 }
