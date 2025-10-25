@@ -1,52 +1,16 @@
-{% assign posts_source = paginator.posts | default: site.posts %}
-
-<section class="section typeset">
-  <ul class="list list--posts">
-    {% for page in posts_source %}
-      {% assign cover_img = page.image | default: page.cover | default: '' %}
-      {% assign primary_cat = page.categories | first | default: page.category %}
-
-      <li class="item item--post">
-        <article class="content-card">
-
-          {% if cover_img != '' %}
-            <figure class="content-card__media">
-              <img src="{{ cover_img | relative_url }}" alt="{{ page.title | escape }}" loading="lazy" />
-              {% if primary_cat %}
-                <span class="content-card__cat">
-                  <i class="ph-bold ph-bookmark-simple"></i>
-                  <a href="{{ site.baseurl }}/categories/#{{ primary_cat | downcase | slugify }}">{{ primary_cat }}</a>
-                </span>
-              {% endif %}
-            </figure>
-          {% endif %}
-
-          <div class="content-card__body">
-            <h2 class="content-card__title">
-              <a href="{{ site.baseurl }}{{ page.url }}">{{ page.title }}</a>
-            </h2>
-
-            <div class="content-card__meta">
-              {% include post-meta.html %}
-            </div>
-
-            <p class="content-card__excerpt">
-              {{ page.excerpt | markdownify | strip_html | strip_newlines | truncatewords: 60 }}
-            </p>
-          </div>
-
-          <div class="content-card__footer">
-            <a class="readmore" href="{{ site.baseurl }}{{ page.url }}">
-              Read more <i class="ph-bold ph-arrow-right"></i>
-            </a>
-          </div>
-
-        </article>
-      </li>
+{% if page.categories %}
+  {% capture categories %}
+    {% for category in page.categories %}
+      <span class="label  label--category"><a href="{{ site.baseurl }}/categories/#{{ category | downcase | slugify }}">{{ category }}</a></span>{% if forloop.last == false %},{% endif %}
     {% endfor %}
-  </ul>
+  {% endcapture %}
+{% elsif page.category %}
+  {% capture categories %}
+    <span class="label  label--category"><a href="{{ site.baseurl }}/categories/#{{ page.category | downcase | slugify }}">{{ page.category }}</a></span>
+  {% endcapture %}
+{% endif %}
 
-  {% if paginator %}
-    {% include post-pagination.html %}
-  {% endif %}
-</section>
+<small class="small  post-meta">
+  {% assign date_format = site.date_format | default: "%d %b %Y" %}
+  {{ categories | append: "&nbsp;&middot;&nbsp;" }}<time datetime="{{ page.date | date_to_xmlschema }}" class="time">{{ page.date | date: date_format }}</time>
+</small>
