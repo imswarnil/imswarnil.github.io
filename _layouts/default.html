@@ -36,11 +36,7 @@
       <link rel="stylesheet" href="{{ "/assets/styles.css" | relative_url }}">
     {% endif %}
 
-     <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/style.css"
-    />
+     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/style.css"/>
 
     {% if site.favicons or site.avatarurl %}{% include site-favicons.html %}{% endif %}
 
@@ -52,26 +48,7 @@
   </head>
 
   <body class="layout-{{ page.layout }}{% if page.title %}  {{ page.title | slugify }}{% endif %}">
-
-    <section id="home" class="section section-hero">
-      <div class="hero-grid">
-          <div class="hero-content">
-              <h1>Designing the future of digital products.</h1>
-              <p class="profession">Senior Product Designer at Stripe</p>
-              <p class="location">
-                  <i class="ph-fill ph-map-pin"></i>
-                  San Francisco, CA
-              </p>
-              <div class="hero-buttons">
-                  <a href="#contact" class="button">Get in Touch</a>
-                  <a href="#" class="button button-transparent">See My Work</a>
-              </div>
-          </div>
-          <div class="hero-image">
-              <img src="https://images.unsplash.com/photo-1583864697784-a0efc8379f70?q=80&w=800" alt="John Doe portrait">
-          </div>
-      </div>
-  </section>
+    {% include site-icons.svg %}
 
     {{ content }}
 
