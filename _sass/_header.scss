@@ -1,6 +1,6 @@
 // ======================================================================
 // _header.scss — island header with desktop icons, fixed mobile bar,
-// floating bento panel, animated theme switcher
+// floating bento panel, animated theme switcher, inline navbar search
 // (uses tokens/mixins from _variables.scss)
 // ======================================================================
 
@@ -40,22 +40,19 @@
   &.is-open { border-bottom-left-radius: $radius-4; border-bottom-right-radius: $radius-4; }
 }
 
-// Mobile: fixed full-width
-/* --- Make the navbar FLOAT & CENTER on mobile too (not full-width) --- */
+// Mobile: fixed, centered island on mobile too
 @media (max-width: $bp-lg) {
   .island-navbar {
-    /* center like desktop */
     @include container;
     position: fixed;
-    top: $container-gutter;                /* same breathing room as desktop */
+    top: $container-gutter;
     left: $container-gutter;
     right: $container-gutter;
     width: auto;
     margin: 0 auto;
-    border-radius: $radius-6;              /* keep the rounded island */
+    border-radius: $radius-6;
   }
 
-  /* give the page room below the fixed, centered island */
   body.has-fixed-nav {
     padding-top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-8});
   }
@@ -63,31 +60,25 @@
 
 /* --- Float the panel directly UNDER the centered island --- */
 .island-panel {
-  /* already fixed; just ensure it mirrors the island width/centering */
   left: $container-gutter;
   right: $container-gutter;
   margin-left: auto;
   margin-right: auto;
   max-width: $island-width;
 
-  /* sit just below the header island (keep a small gap) */
   top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-3});
 
-  /* keep the same rounded look on ALL corners */
   border-top-left-radius: $radius-6;
   border-top-right-radius: $radius-6;
   border-bottom-left-radius: $radius-6;
   border-bottom-right-radius: $radius-6;
 
-  /* keep the border on top so it looks like a separate floating card */
   border-top: 1px solid;
 
-  /* stronger glassy look while floating */
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
 }
 
-/* when open, allow full viewport remainder with scroll INSIDE the panel */
 .island-panel.is-open {
   max-height: calc(100vh - (var(--nav-h, #{$navbar-height}) + #{$sp-3} + #{$sp-3}));
 }
@@ -127,7 +118,7 @@
   }
 }
 
-// ---------- Desktop menu (icons + compact labels) ----------
+// ---------- Desktop menu ----------
 .navbar-menu {
   ul { display: flex; align-items: center; gap: $sp-2; margin: 0; padding: 0; list-style: none; }
 
@@ -153,11 +144,10 @@
   @media (max-width: $bp-lg) { display: none; }
 }
 
-// ---------- Right-side actions (header-scoped controls only) ----------
+// ---------- Right-side actions ----------
 .navbar-actions {
   display: flex; align-items: center; gap: $sp-3;
 
-  // Small circular icon button used for search, etc.
   .nav-icon {
     display: inline-grid; place-items: center;
     width: $btn-height-sm; height: $btn-height-sm; border-radius: 50%;
@@ -177,7 +167,6 @@
     }
   }
 
-  // Theme toggle (animated icon swap)
   .theme-toggle-button {
     @extend .nav-icon;
     position: relative; overflow: hidden;
@@ -191,7 +180,6 @@
     @include theme-block-dark { .icon-moon { opacity: 1; transform: rotate(0) scale(1); } }
   }
 
-  // GitHub CTA (text on md+, icon-only on mobile)
   .nav-cta {
     display: inline-flex; align-items: center; gap: .5em;
     min-height: $btn-height-sm; padding: 0.35rem $btn-pad-x-sm;
@@ -212,7 +200,7 @@
   @media (max-width: $bp-lg) { .mobile-menu-toggle { display: inline-grid; } }
 }
 
-// ---------- Mobile island panel (floating + scrollable) ----------
+// ---------- Mobile island panel ----------
 .island-panel {
   position: fixed;
   left: $container-gutter; right: $container-gutter;
@@ -287,4 +275,89 @@
     @include theme-block      { color: tone(secondary, light); }
     @include theme-block-dark { color: tone(secondary, dark); }
   }
+}
+
+/* ============================= */
+/* INLINE NAVBAR SEARCH (NEW)    */
+/* ============================= */
+.navbar-search {
+  display: none;
+  align-items: center;
+  gap: $sp-3;
+  height: $btn-height-sm;
+  padding: 0 $sp-3;
+  border-radius: $radius-pill;
+  border: 1px solid;
+
+  @include theme-block      { background: tone(background, light);   border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(background-100, dark); border-color: tone(border, dark); }
+
+  i { opacity: .8; }
+
+  .search-input {
+    flex: 1;
+    border: 0;
+    background: transparent;
+    outline: none;
+    font-size: $fs-3;
+    @include theme-block      { color: tone(contrast, light); }
+    @include theme-block-dark { color: tone(contrast, dark);  }
+  }
+
+  .search-cancel {
+    @extend .nav-icon;
+    width: $btn-height-sm; height: $btn-height-sm;
+  }
+}
+
+body.search-active {
+  .navbar-search { display: flex; }
+  .navbar-brand, .navbar-menu, .navbar-actions .cta-github { display: none; }
+  .island-navbar { gap: $sp-3; display: grid; grid-template-columns: 1fr auto; }
+}
+
+.search-results {
+  position: sticky;
+  top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-3});
+  z-index: $z-overlay - 1;
+  margin: 0 auto;
+  max-width: $island-width;
+  border: 1px solid;
+  border-radius: $radius-4;
+  display: none;
+  overflow: hidden;
+
+  @include theme-block      { background: tone(background, light);   border-color: tone(border, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: tone(background-100, dark); border-color: tone(border, dark);  box-shadow: $shadow-dark; }
+  &.is-open { display: block; }
+}
+
+.search-list { list-style: none; margin: 0; padding: $sp-3; display: grid; gap: $sp-2; }
+.search-item {
+  display: grid; grid-template-columns: 2.25rem 1fr auto; align-items: center; gap: $sp-3;
+  padding: $sp-3; border-radius: $radius-3;
+
+  @include theme-block      { &:hover, &[aria-selected="true"] { background: tone(background-100, light); } }
+  @include theme-block-dark { &:hover, &[aria-selected="true"] { background: tone(background-100, dark);  } }
+}
+.search-thumb {
+  width: 2.25rem; height: 2.25rem; border-radius: $radius-3; overflow: hidden; display: grid; place-items: center; border: 1px solid;
+  @include theme-block      { border-color: tone(border, light); background: tone(background-100, light); }
+  @include theme-block-dark { border-color: tone(border, dark);  background: tone(background-100, dark);  }
+  img { width: 100%; height: 100%; object-fit: cover; display: block; }
+}
+.search-title {
+  font-weight: $fw-semibold; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark); }
+}
+.search-excerpt {
+  font-size: $fs-2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark); }
+}
+.search-cta { font-size: $fs-2; @include theme-block { color: tone(secondary, light);} @include theme-block-dark { color: tone(secondary, dark);} }
+
+@media (max-width: $bp-lg) {
+  body.search-active .island-navbar { grid-template-columns: 1fr auto; }
 }

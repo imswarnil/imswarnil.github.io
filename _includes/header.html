@@ -34,7 +34,6 @@
           </li>
         {% endfor %}
       {% else %}
-        <!-- Fallback items if config list is empty -->
         <li><a href="{{ '/#about' | relative_url }}"><i class="ph-bold ph-user"></i>About</a></li>
         <li><a href="{{ '/#projects' | relative_url }}"><i class="ph-bold ph-folder"></i>Projects</a></li>
         <li><a href="{{ '/blog/' | relative_url }}"><i class="ph-bold ph-article"></i>Blog</a></li>
@@ -43,8 +42,19 @@
     </ul>
   </nav>
 
+  <!-- Inline navbar search -->
+  <form class="navbar-search" id="navbar-search" role="search" aria-label="Site search" autocomplete="off">
+    <i class="ph-bold ph-magnifying-glass" aria-hidden="true"></i>
+    <input class="search-input" id="navbar-search-input" type="search"
+           placeholder="Search {{ site.title | escape }}…" aria-label="Search" />
+    <button type="button" class="search-cancel" id="navbar-search-cancel" aria-label="Cancel search">
+      <i class="ph-bold ph-x"></i>
+    </button>
+  </form>
+
   <!-- Actions -->
   <div class="navbar-actions">
+    <!-- Use this to OPEN inline search (prevents navigation) -->
     <a href="{{ '/search/' | relative_url }}" id="search-open" class="nav-icon" aria-label="Search">
       <i class="ph-bold ph-magnifying-glass"></i>
     </a>
@@ -88,7 +98,6 @@
           </a>
         {% endfor %}
       {% else %}
-        <!-- Fallback tiles -->
         <a class="bento-card" href="{{ '/#about' | relative_url }}"><span class="bento-icon"><i class="ph-bold ph-user"></i></span><span><div class="bento-title">About</div><div class="bento-sub">Who I am</div></span></a>
         <a class="bento-card" href="{{ '/#projects' | relative_url }}"><span class="bento-icon"><i class="ph-bold ph-folder"></i></span><span><div class="bento-title">Projects</div><div class="bento-sub">Featured builds</div></span></a>
         <a class="bento-card" href="{{ '/blog/' | relative_url }}"><span class="bento-icon"><i class="ph-bold ph-article"></i></span><span><div class="bento-title">Blog</div><div class="bento-sub">Notes & essays</div></span></a>
@@ -98,11 +107,14 @@
   </div>
 </section>
 
-<!-- Phosphor Icons (if not already in your layout head) -->
-<script defer src="https://unpkg.com/@phosphor-icons/web"></script>
+<!-- Results panel, docked under the island -->
+<section id="search-results" class="search-results" aria-live="polite" aria-label="Search results"></section>
 
+<!-- Phosphor Icons (if not included in your <head>) -->
 <script>
-/* FOUC guard (keep your global one in <head> for best results) */
+  /* assets/scripts/header.js */
+
+/* FOUC guard — you likely already run something similar in <head> */
 (function () {
   var KEY = "color-scheme";
   try {
@@ -113,15 +125,14 @@
   } catch(e){}
 })();
 
-/* Header interactions */
 document.addEventListener("DOMContentLoaded", function () {
-  var root   = document.documentElement;
-  var header = document.getElementById('site-navbar');
-  var panel  = document.getElementById('mobile-panel');
-  var toggle = document.getElementById('mobile-menu-toggle');
+  var root    = document.documentElement;
+  var header  = document.getElementById('site-navbar');
+  var panel   = document.getElementById('mobile-panel');
+  var toggle  = document.getElementById('mobile-menu-toggle');
   var themeBtn = document.getElementById('theme-toggle');
 
-  // ---- Theme toggle (persisted) ----
+  // --- Theme toggle (persist) ---
   var KEY = "color-scheme";
   function getTheme(){ return root.getAttribute("data-color-scheme") || "light"; }
   function setTheme(theme){
@@ -129,7 +140,6 @@ document.addEventListener("DOMContentLoaded", function () {
     try { localStorage.setItem(KEY, theme); } catch(e){}
     if (themeBtn) themeBtn.setAttribute("aria-pressed", String(theme === "dark"));
   }
-  // Respect saved theme
   try {
     var saved = localStorage.getItem(KEY);
     if (saved && saved !== getTheme()) setTheme(saved);
@@ -138,7 +148,7 @@ document.addEventListener("DOMContentLoaded", function () {
     setTheme(getTheme() === "light" ? "dark" : "light");
   });
 
-  // ---- Mobile: float/center island, compute --nav-h and body spacing ----
+  // --- Compute nav height for mobile spacing ---
   function setNavHeightVar() {
     var h = header ? header.getBoundingClientRect().height : 58;
     root.style.setProperty("--nav-h", h + "px");
@@ -153,7 +163,7 @@ document.addEventListener("DOMContentLoaded", function () {
   window.addEventListener("orientationchange", setNavHeightVar);
   window.setTimeout(setNavHeightVar, 120);
 
-  // ---- Mobile panel open/close with smooth height ----
+  // --- Mobile panel open/close ---
   function setPanelHeight(open){
     if (!panel) return;
     if (open) {
@@ -181,13 +191,149 @@ document.addEventListener("DOMContentLoaded", function () {
     setPanelHeight(false);
   }
   function togglePanel(){ panel && (panel.classList.contains("is-open") ? closePanel() : openPanel()); }
-
   toggle && toggle.addEventListener("click", togglePanel);
   panel && panel.addEventListener("click", function(e){ if(e.target.closest("a")) closePanel(); });
   document.addEventListener("keydown", function(e){ if(e.key === "Escape" && panel && panel.classList.contains("is-open")) closePanel(); });
-
-  // Close panel when switching to desktop
   var mq = window.matchMedia("(min-width: 992px)");
   mq.addEventListener("change", function(){ if (mq.matches) closePanel(); });
+
+  // ===========================
+  // Inline Navbar Search (NEW)
+  // ===========================
+  var body    = document.body;
+  var openBtn = document.getElementById("search-open");
+  var form    = document.getElementById("navbar-search");
+  var input   = document.getElementById("navbar-search-input");
+  var cancel  = document.getElementById("navbar-search-cancel");
+  var results = document.getElementById("search-results");
+  var endpoint = "{{ '/assets/search.json' | relative_url }}"; // Jekyll will resolve
+  var PAGES = [];
+
+  // Load index once
+  if (endpoint) {
+    fetch(endpoint)
+      .then(function(r){ return r.json(); })
+      .then(function(data){ PAGES = data || []; })
+      .catch(function(){ PAGES = []; });
+  }
+
+  function openSearch() {
+    body.classList.add("search-active");
+    if (results) results.classList.add("is-open");
+    setTimeout(function(){ input && input.focus(); }, 10);
+  }
+  function clearResults(){ if (results) results.innerHTML = ""; }
+  function closeSearch() {
+    body.classList.remove("search-active");
+    if (results) results.classList.remove("is-open");
+    clearResults();
+    if (input) input.value = "";
+  }
+
+  // Cancel btn
+  cancel && cancel.addEventListener("click", closeSearch);
+
+  // Open trigger: prevent navigating to /search/
+  openBtn && openBtn.addEventListener("click", function(e){
+    e.preventDefault();
+    openSearch();
+  });
+
+  // Click-away to close
+  document.addEventListener("click", function(e){
+    if (!body.classList.contains("search-active")) return;
+    if (e.target.closest(".island-navbar") || e.target.closest("#search-results")) return;
+    closeSearch();
+  });
+
+  // Keyboard shortcuts + nav
+  document.addEventListener("keydown", function(e){
+    if (e.key === "/" && !body.classList.contains("search-active")) {
+      e.preventDefault(); openSearch();
+    } else if (e.key === "Escape" && body.classList.contains("search-active")) {
+      e.preventDefault(); closeSearch();
+    } else if (body.classList.contains("search-active") && ["ArrowDown","ArrowUp","Enter"].includes(e.key)) {
+      var opts = Array.from(results.querySelectorAll('.search-item[role="option"]'));
+      if (!opts.length) return;
+      var cur = opts.findIndex(function(el){ return el.getAttribute("aria-selected")==="true"; });
+      if (e.key === "ArrowDown") { cur = (cur+1) % opts.length; highlight(cur); e.preventDefault(); }
+      if (e.key === "ArrowUp")   { cur = (cur-1+opts.length) % opts.length; highlight(cur); e.preventDefault(); }
+      if (e.key === "Enter" && cur >= 0) { opts[cur].click(); }
+    }
+  });
+
+  // Debounced type → filter
+  var timer = null;
+  input && input.addEventListener("input", function(){
+    clearTimeout(timer);
+    var q = (this.value || "").trim();
+    timer = setTimeout(function(){ renderSearch(q); }, 120);
+    if (q && results && !results.classList.contains("is-open")) results.classList.add("is-open");
+    if (!q && results && results.classList.contains("is-open")) results.classList.remove("is-open");
+  });
+
+  // Prevent form navigation
+  form && form.addEventListener("submit", function(e){
+    e.preventDefault();
+    var first = results && results.querySelector('.search-item[role="option"] a[href]');
+    if (first) { window.location.href = first.getAttribute("href"); closeSearch(); }
+  });
+
+  function findResults(term, pages) {
+    if (!term) return [];
+    var regex = new RegExp(term, "gi");
+    return (pages || []).filter(function(item){
+      return (item.title && item.title.match(regex)) || (item.content && item.content.match(regex));
+    });
+  }
+
+  function renderSearch(q) {
+    var arr = findResults(q, PAGES).slice(0, 12);
+    if (!results) return;
+    if (!q || !arr.length) {
+      results.innerHTML = '<div class="search-list"><div class="search-item" aria-disabled="true" style="opacity:.75">No results</div></div>';
+      return;
+    }
+
+    var html = ['<ul class="search-list" role="listbox">']
+      .concat(arr.map(function(item, i){
+        var thumb = item.image
+          ? '<div class="search-thumb"><img src="'+item.image+'" alt=""></div>'
+          : '<div class="search-thumb"><i class="ph-bold ph-file-text"></i></div>';
+        var url = item.url || "#";
+        var safeTitle = item.title || "Untitled";
+        var excerpt = item.excerpt || "";
+        return (
+          '<li class="search-item" role="option" data-index="'+i+'" tabindex="-1">'+
+            thumb+
+            '<div class="search-main">'+
+              '<div class="search-title">'+safeTitle+'</div>'+
+              '<div class="search-excerpt">'+excerpt+'</div>'+
+            '</div>'+
+            '<a class="search-cta" href="'+url+'">Open</a>'+
+          '</li>'
+        );
+      }))
+      .concat(['</ul>']).join('');
+    results.innerHTML = html;
+    highlight(0);
+
+    results.querySelectorAll('.search-item').forEach(function(li){
+      li.addEventListener("click", function(e){
+        if (e.target.tagName.toLowerCase() !== "a") {
+          var a = li.querySelector("a[href]");
+          if (a) { window.location.href = a.getAttribute("href"); }
+        }
+        closeSearch();
+      });
+    });
+  }
+
+  function highlight(idx){
+    var opts = results.querySelectorAll('.search-item[role="option"]');
+    opts.forEach(function(el){ el.setAttribute("aria-selected","false"); });
+    if (opts[idx]) { opts[idx].setAttribute("aria-selected","true"); opts[idx].scrollIntoView({block: "nearest"}); }
+  }
 });
+
 </script>
