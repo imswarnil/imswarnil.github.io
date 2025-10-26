@@ -2,166 +2,52 @@
 layout: default
 ---
 
-
-<!-- HERO -->
-<section class="hero">
-  <div class="section-inner">
-    <div class="hero-card">
-      <!-- Left: square image -->
-      <figure class="hero-media">
-        <img
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRl6dqv_avIvyeanSyi6l7QBVBXK00cj2SZLA&s"
-          alt="{{ site.title | default: 'Profile image' }}"
-        />
-      </figure>
-
-      <!-- Right: details -->
-      <div class="hero-body">
-        <h1 class="title">
-          {{ site.title | default: 'Your Name' }}
+<!-- Home Hero -->
+<section class="home-hero">
+  <div class="container">
+    <div class="home-hero-card">
+      <!-- Copy -->
+      <div class="home-hero-copy">
+        <p class="home-hero-kicker">
+          {{ site.social.name | default: site.author | default: site.title }}
+        </p>
+        <h1 class="home-hero-title">
+          {{ page.hero_title
+            | default: "Your go-to " 
+            | append: (site.work.role | default: "engineer") 
+            | append: " for impactful projects" }}
         </h1>
 
-        <p class="subtitle">
-          <span class="job">{{ site.job_title | default: 'Creative Developer' }}</span>
-          <span class="dot">•</span>
-          <span class="company">{{ site.company | default: 'Freelance' }}</span>
+        <p class="home-hero-lead">
+          {{ page.hero_subtitle
+            | default: "Bringing ideas to life with clean, efficient and scalable code. From building web apps to performance tuning and solving complex technical challenges." }}
         </p>
 
-        <p class="meta">
-          <i class="ph-bold ph-map-pin"></i>
-          <span>{{ site.location | default: 'Bengaluru, IN' }}</span>
-        </p>
-
-        <p class="lead">
-          {{ site.bio | default: 'I craft cinematic, lightweight web experiences with a filmmaker’s timing and an engineer’s rigor.' }}
-        </p>
-
-        <div class="actions">
-          <a class="btn btn-primary" href="{{ '/projects/' | relative_url }}">
-            <i class="ph-bold ph-squares-four"></i><span>Projects</span>
+        <div class="home-hero-actions">
+          <a class="btn button" href="mailto:{{ site.email | default: 'hello@example.com' }}">
+            <i class="ph-bold ph-paper-plane-tilt"></i><span>Contact me</span>
           </a>
-          <a class="btn btn-ghost" href="{{ '/contact/' | relative_url }}">
-            <i class="ph-bold ph-paper-plane-tilt"></i><span>Contact</span>
+          <a class="btn button-transparent" href="{{ '/portfolio/' | relative_url }}">
+            <i class="ph-bold ph-squares-four"></i><span>View projects</span>
           </a>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ABOUT -->
-<section class="section about">
-  <div class="section-inner">
-    <div class="about-card">
-      <div class="about-text">
-        <h2 class="title-2"><i class="ph-bold ph-user"></i><span>About</span></h2>
-        <p class="copy">
-          I blend filmmaking with engineering to build fast, expressive products.
-          My work focuses on clarity, pacing, and story-driven UX.
-        </p>
-        <ul class="stats">
-          <li><i class="ph-bold ph-video"></i> 100+ videos</li>
-          <li><i class="ph-bold ph-rocket"></i> 7+ years dev</li>
-          <li><i class="ph-bold ph-globe"></i> Clients worldwide</li>
-        </ul>
-      </div>
-      <div class="about-media">
-        <img src="{{ '/assets/img/about.jpg' | relative_url }}" alt="Behind the scenes" />
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PROJECTS -->
-<section class="section projects">
-  <div class="section-inner">
-    <div class="section-head">
-      <h2 class="title-2"><i class="ph-bold ph-sparkle"></i><span>Featured Projects</span></h2>
-      <a class="link" href="{{ '/projects/' | relative_url }}">View all →</a>
-    </div>
-
-    <div class="grid grid-3">
-      {% assign items = site.projects | default: site.posts %}
-      {% for p in items limit:6 %}
-      <article class="card">
-        <a class="card-link" href="{{ p.url | relative_url }}">
-          <div class="thumb">
-            {% if p.cover %}
-              <img src="{{ p.cover | relative_url }}" alt="{{ p.title }}">
-            {% else %}
-              <div class="thumb-fallback"><i class="ph-bold ph-image"></i></div>
-            {% endif %}
-          </div>
-          <div class="card-body">
-            <h3 class="card-title">{{ p.title }}</h3>
-            <p class="card-desc">{{ p.excerpt | strip_html | truncate: 120 }}</p>
-          </div>
-        </a>
-      </article>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-
-<!-- EXPERIENCE -->
-<section class="section experience">
-  <div class="section-inner">
-    <h2 class="title-2"><i class="ph-bold ph-briefcase"></i><span>Experience</span></h2>
-    <ol class="timeline">
-      <li class="item">
-        <div class="dot"></div>
-        <div class="content">
-          <h3 class="role">Creative Developer · {{ site.company | default: 'Freelance' }}</h3>
-          <p class="small">2022 — Present · Bengaluru, IN</p>
-          <p class="copy">Cinematic, fast web for creators & brands. Product design, front-end systems, narrative.</p>
+        <div class="home-hero-meta">
+          <img class="home-hero-avatar" src="{{ site.avatarurl | default: site.logo | relative_url }}" alt="{{ site.author | default: site.title }}">
+          <span class="home-hero-name">{{ site.social.name | default: site.author | default: site.title }}</span>
+          <span class="home-hero-dot">•</span>
+          <span class="home-hero-role">{{ site.work.role | default: 'Software Engineer' }} at {{ site.work.company | default: 'Studio' }}</span>
+          <span class="home-hero-dot">•</span>
+          <span class="home-hero-loc"><i class="ph-bold ph-map-pin"></i> {{ site.location | default: 'Bengaluru, India' }}</span>
+          <span class="home-hero-dot">•</span>
+          <span class="home-hero-time"><i class="ph-bold ph-clock'></i> {{ site.timezone | default: 'IST' }}</span>
         </div>
-      </li>
-      <li class="item">
-        <div class="dot"></div>
-        <div class="content">
-          <h3 class="role">Software Engineer · {{ site.prev_company | default: 'Acme' }}</h3>
-          <p class="small">2019 — 2022</p>
-          <p class="copy">Shipped UI platforms, design tokens, and performance pipelines across teams.</p>
-        </div>
-      </li>
-      <li class="item">
-        <div class="dot"></div>
-        <div class="content">
-          <h3 class="role">Filmmaker · Imswarnil</h3>
-          <p class="small">2017 — 2019</p>
-          <p class="copy">Wrote, shot, and edited films & series; grew channel with story-led content.</p>
-        </div>
-      </li>
-    </ol>
-  </div>
-</section>
-
-<!-- SKILLS -->
-<section class="section skills">
-  <div class="section-inner">
-    <h2 class="title-2"><i class="ph-bold ph-wrench"></i><span>Skills</span></h2>
-    <ul class="chips">
-      <li>React</li><li>Next.js</li><li>TypeScript</li><li>Node</li>
-      <li>GSAP</li><li>Framer Motion</li><li>Figma</li><li>Design Systems</li>
-      <li>Color Grading</li><li>DaVinci Resolve</li><li>Premiere Pro</li>
-    </ul>
-  </div>
-</section>
-
-<!-- CTA -->
-<section class="section cta">
-  <div class="section-inner">
-    <div class="cta-card">
-      <h3 class="title-2">Let’s build something beautiful.</h3>
-      <p class="copy">Available for selected projects, collaborations, and consulting.</p>
-      <div class="actions">
-        <a class="btn btn-primary" href="{{ '/contact/' | relative_url }}">
-          <i class="ph-bold ph-handshake"></i><span>Collaborate</span>
-        </a>
-        <a class="btn btn-ghost" href="{{ site.github_url | default: 'https://github.com' }}">
-          <i class="ph-bold ph-github-logo"></i><span>GitHub</span>
-        </a>
       </div>
+      <figure class="home-hero-art">
+        <img
+          src="{{ page.hero_image | default: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRl6dqv_avIvyeanSyi6l7QBVBXK00cj2SZLA&s' }}"
+          alt="{{ page.hero_image_alt | default: 'Portrait illustration' }}"
+        />
+      </figure>
     </div>
   </div>
 </section>
