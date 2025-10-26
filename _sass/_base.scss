@@ -151,7 +151,7 @@ input, select, textarea {
 
 // Layout helpers
 .container { @include container; }
-// Content wrapper (use im- prefix)
+
 .main {
   padding-inline: $container-gutter;
   padding-top: calc(#{$navbar-height} + #{$sp-6});
