@@ -34,65 +34,20 @@
     {% endif %}
 
     {%- if site.adsense and site.adsense.enabled and site.adsense.client -%}
+  <!-- AdSense: single loader -->
   <script>
-    // Expose config to the page JS
-    window.__ADCFG = {
-      enabled: {{ site.adsense.enabled | jsonify }},
-      client: {{ site.adsense.client | jsonify }},
-      placements: {{ site.adsense.placements | jsonify }},
-      lazyOffset: {{ site.adsense.lazy_offset | default: 200 | jsonify }}
-    };
-  </script>
-
-  <script defer>
     (function(){
-      if (!window.__ADCFG || !__ADCFG.enabled) return;
-
-      var loaderInjected = false;
-      function ensureLoader(){
-        if (loaderInjected) return;
-        var s = document.createElement('script');
-        s.async = true;
-        s.crossOrigin = 'anonymous';
-        s.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" + encodeURIComponent(__ADCFG.client);
-        document.head.appendChild(s);
-        loaderInjected = true;
-      }
-
-      function hydrate(el){
-        if (el.__hydrated) return;
-        ensureLoader();
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-        el.__hydrated = true;
-      }
-
-      function observe(){
-        var margin = (__ADCFG.lazyOffset || 200) + "px";
-        var ads = document.querySelectorAll('ins.adsbygoogle[data-ad-slot]');
-        if ('IntersectionObserver' in window) {
-          var io = new IntersectionObserver(function(entries){
-            entries.forEach(function(e){
-              if (e.isIntersecting) {
-                hydrate(e.target);
-                io.unobserve(e.target);
-              }
-            });
-          }, { rootMargin: margin });
-          ads.forEach(function(el){ io.observe(el); });
-        } else {
-          // Fallback: no IO support → hydrate immediately
-          ads.forEach(hydrate);
-        }
-      }
-
-      if (document.readyState === "loading") {
-        document.addEventListener('DOMContentLoaded', observe);
-      } else {
-        observe();
-      }
+      if (window.__adsense_loaded__) return;
+      var s = document.createElement('script');
+      s.async = true;
+      s.crossOrigin = 'anonymous';
+      s.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ site.adsense.client | uri_escape }}";
+      document.head.appendChild(s);
+      window.__adsense_loaded__ = true;
     })();
   </script>
 {%- endif -%}
+
 
      <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/style.css"/>
 

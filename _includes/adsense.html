@@ -1,16 +1,17 @@
 {%- comment -%}
-Usage examples:
-  {% include adsense.html type="square" %}          # uses site.adsense.placements.square
+Usage:
+  {% include adsense.html type="square" %}
+  {% include adsense.html type="square-large" %}
   {% include adsense.html type="horizontal" %}
   {% include adsense.html type="vertical" %}
-  {% include adsense.html type="fluid" %}
-  {% include adsense.html type="in_article" %}
   {% include adsense.html type="autorelaxed" %}
+  {% include adsense.html type="in_article" %}
+  {% include adsense.html type="fluid" %}
 
 Override slot explicitly:
   {% include adsense.html type="square" slot="1234567890" %}
 
-Optional: add class for spacing overrides:
+Optional extra class:
   {% include adsense.html type="square" class="mt-8" %}
 {%- endcomment -%}
 
@@ -26,6 +27,9 @@ Optional: add class for spacing overrides:
            data-ad-client="{{ site.adsense.client }}"
            data-ad-slot="{{ slot }}"></ins>
     </div>
+
+    <!-- Immediate render (no lazy) -->
+    <script>(window.adsbygoogle = window.adsbygoogle || []).push({});</script>
   {%- else -%}
     <!-- Missing slot for type: {{ type }} -->
   {%- endif -%}

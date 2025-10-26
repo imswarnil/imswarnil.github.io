@@ -115,9 +115,8 @@ css_inline: true # Will insert all styles into a single <style> block in the <he
 
 
 adsense:
-  enabled: true              # set false to disable everywhere
+  enabled: true
   client: "ca-pub-1291242080282540"
-  # Map "type" -> slot id (easy to call from includes)
   placements:
     square: "7663977887"
     horizontal: "8939839370"
@@ -125,8 +124,8 @@ adsense:
     vertical: "3487917390"
     fluid: "9130894804"
     in_article: "6501428979"
-  # Lazy-load viewport margin (px). e.g., start loading 200px before view.
-  lazy_offset: 200
+
+  # optional: you can still pass slot="" explicitly in the include to override
 
 
 
