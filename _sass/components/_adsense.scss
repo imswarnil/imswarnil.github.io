@@ -103,55 +103,67 @@
 
 
 // ======================================================================
-// ads-rails.scss — Floating left/right rails with 160x600 skyscrapers
+// ads-rails.scss — Floating rails, each with a fixed 160×600 unit
 // Depends on: _variables.scss + adsense.scss
 // ======================================================================
 
-// Tweak how far from the screen edge the rails sit
+@use "variables" as *;
+
+// how far from the screen edge the rails sit
 $rail-edge-gap: $sp-8; // ~1.25rem
 
-/* Hidden by default on smaller screens to avoid overlay */
+/* Hide on smaller screens so they don’t overlay content */
 .ad-rails { display: none; }
 
-/* Show rails on wide viewports */
 @media (min-width: 1300px) {
   .ad-rails { display: block; }
 
+  /* Full-height rails, centered content, non-interfering with page clicks */
   .ad-rail {
     position: fixed;
-    top: 0; bottom: 0;                // full-height rail
-    width: 160px;                      // classic "wide skyscraper" width
+    top: 0;
+    bottom: 0;                 // full height
+    width: 160px;              // wide skyscraper width
     z-index: $z-base;
-    display: flex;                     // center the ad vertically
+    display: flex;             // center the ad vertically
     align-items: center;
     justify-content: center;
-    pointer-events: none;              // so rail doesn’t trap scroll/clicks
+    pointer-events: none;      // rail itself doesn’t trap clicks/scroll
   }
 
-  /* Left/right offset from screen edges (not from the island) */
+  /* Offset from the viewport edges (not from the island) */
   .ad-rail--left  { left:  $rail-edge-gap; }
   .ad-rail--right { right: $rail-edge-gap; }
 
-  /* Let the ad be clickable inside the non-clickable rail */
-  .ad-rail .ad { pointer-events: auto; width: 160px; max-width: 160px; margin: 0; }
-  .ad-rail .ad__slot { width: 160px; max-width: 160px; }
+  /* The ad wrapper inside the rail: fixed 160×600 area, clickable */
+  .ad-rail .ad {
+    pointer-events: auto;      // allow clicking the ad
+    width: 160px;
+    max-width: 160px;
+    height: 600px;
+    max-height: 600px;
+    margin: 0;
+    display: grid;
+    place-items: center;
+  }
 
-  /* Force a clean 160x600 canvas (Google will fill it when eligible).
-     The placeholder from adsense.scss still applies. */
-  .ad-rail .ad--vertical .ad__slot {
+  /* The actual AdSense slot: lock to 160×600 */
+  .ad-rail .ad__slot {
+    width: 160px;
+    max-width: 160px;
     height: 600px;
     min-height: 600px;
-    aspect-ratio: auto;   // don't let aspect-ratio override our fixed size
+    aspect-ratio: auto;        // don’t let aspect-ratio override fixed size
     overflow: hidden;
   }
 
-  /* Keep the "Advertisement" label readable above the unit */
+  /* Keep the “Advertisement” ribbon from overlapping the unit */
   .ad-rail .ad::before {
     transform: translate(-50%, -70%);
   }
 }
 
-/* Optional: on ultra-wide screens, nudge them a bit more in */
+/* Optional: nudge rails a bit further inward on ultra-wide screens */
 @media (min-width: 1800px) {
   .ad-rail--left  { left:  calc(#{$rail-edge-gap} + #{$sp-6}); }
   .ad-rail--right { right: calc(#{$rail-edge-gap} + #{$sp-6}); }

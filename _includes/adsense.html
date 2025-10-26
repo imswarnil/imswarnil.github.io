@@ -20,6 +20,8 @@ Optional extra class:
   {%- assign slot_from_map = site.adsense.placements[type] -%}
   {%- assign slot = include.slot | default: slot_from_map -%}
   {%- assign extra = include.class -%}
+  {%- assign size = include.size | downcase | replace: ' ', '' -%}
+
 
   {%- if slot -%}
     <div class="ad ad--{{ type }}{% if extra %} {{ extra }}{% endif %}">
@@ -34,3 +36,8 @@ Optional extra class:
     <!-- Missing slot for type: {{ type }} -->
   {%- endif -%}
 {%- endif -%}
+{%- assign size = include.size | downcase | replace: ' ', '' -%}
+<div class="ad ad--{{ type }}{% if extra %} {{ extra }}{% endif %}"
+     {% if size != '' %}data-size="{{ size }}"{% endif %}>
+  <ins class="adsbygoogle ad__slot" ...></ins>
+</div>
