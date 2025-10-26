@@ -1,6 +1,10 @@
 // ======================================================================
-// home.scss — Container-wrapped, two-column hero (mobile-perfect)
-// Depends on: _variables.scss + layout.scss (for .container)
+// home.scss — Unique responsive hero (no container helpers required)
+// - Animated background pattern
+// - Glass island
+// - Square image with animated floating pills
+// - Signature, role/company/location/bio, compact CTAs
+// Depends on: _variables.scss
 // ======================================================================
 
 @use "variables" as *;
@@ -8,44 +12,64 @@
 .home-hero {
   position: relative;
   padding-block: clamp($sp-12, 6vw, $sp-20);
-  overflow: clip; // prevents floating pills from causing page scroll
+  overflow: clip; // prevent pill overflow from causing page scroll
 
-  // subtle animated background pattern
-  &::before {
+  // Animated, subtle pattern background
+  &::before, &::after {
     content: "";
     position: absolute; inset: 0;
+    pointer-events: none; z-index: 0;
+  }
+
+  // Layer 1: soft grid
+  &::before {
     background:
-      radial-gradient(18px 18px at 12% 14%, rgba(0,0,0,.06), transparent 55%) repeat,
-      radial-gradient(22px 22px at 82% 26%, rgba(0,0,0,.05), transparent 60%) repeat,
-      repeating-linear-gradient(135deg, rgba(0,0,0,.04) 0 10px, transparent 10px 20px);
-    opacity: .5;
-    animation: hh-bg 22s $ease-in-out infinite alternate;
-    z-index: 0;
-    pointer-events: none;
+      repeating-linear-gradient(45deg, rgba(0,0,0,.04) 0 12px, transparent 12px 24px),
+      radial-gradient(20px 20px at 12% 22%, rgba(0,0,0,.06), transparent 60%) repeat;
+    opacity: .55;
+    animation: heroFloatA 26s $ease-in-out infinite alternate;
 
     @include theme-block-dark {
       background:
-        radial-gradient(18px 18px at 12% 14%, rgba(255,255,255,.05), transparent 55%) repeat,
-        radial-gradient(22px 22px at 82% 26%, rgba(255,255,255,.04), transparent 60%) repeat,
-        repeating-linear-gradient(135deg, rgba(255,255,255,.04) 0 10px, transparent 10px 20px);
+        repeating-linear-gradient(45deg, rgba(255,255,255,.05) 0 12px, transparent 12px 24px),
+        radial-gradient(20px 20px at 12% 22%, rgba(255,255,255,.06), transparent 60%) repeat;
+    }
+  }
+
+  // Layer 2: drifting blobs
+  &::after {
+    background:
+      radial-gradient(60% 50% at 10% 20%, rgba(0,0,0,.06), transparent 60%),
+      radial-gradient(50% 60% at 80% 70%, rgba(0,0,0,.05), transparent 60%);
+    mix-blend-mode: multiply;
+    animation: heroFloatB 22s $ease-in-out infinite alternate;
+
+    @include theme-block-dark {
+      background:
+        radial-gradient(60% 50% at 10% 20%, rgba(255,255,255,.04), transparent 60%),
+        radial-gradient(50% 60% at 80% 70%, rgba(255,255,255,.035), transparent 60%);
+      mix-blend-mode: screen;
     }
   }
 }
 
-@keyframes hh-bg {
-  0% { transform: translateY(-6px) }
-  100% { transform: translateY(6px) }
+@keyframes heroFloatA { from { transform: translateY(-8px) } to { transform: translateY(8px) } }
+@keyframes heroFloatB { from { transform: translateX(-10px) } to { transform: translateX(10px) } }
+
+// Shell acts like a container without relying on layout.scss
+.home-hero-shell {
+  width: $island-width;
+  max-width: calc(100% - 2 * #{$container-gutter});
+  margin-inline: auto;
+  position: relative;
+  z-index: 1; // above pattern
 }
 
-/* The hero “card”: mobile stacks, desktop = 2 columns with equal height */
+// The glass card: mobile = stack; md+ = two columns
 .home-hero-card {
-  position: relative;
-  z-index: 1; // above bg
   display: grid;
+  grid-template-columns: 1fr;       // mobile stack
   gap: $sp-12;
-
-  // Mobile: stack (image first)
-  grid-template-columns: 1fr;
 
   border-radius: $radius-6;
   padding: clamp($sp-10, 2.4vw, $sp-16);
@@ -64,27 +88,23 @@
     color: tone(foreground, dark);
   }
 
-  // Desktop: 2 columns with equal heights
   @include mq-up($bp-md) {
-    grid-template-columns: minmax(10rem, 14rem) 1fr;
-    align-items: stretch; // equal height
+    grid-template-columns: minmax(10rem, 15rem) 1fr; // image | details
+    align-items: stretch; // equal height columns
     gap: $sp-14;
   }
 }
 
-/* Square image */
+// Square image block
 .home-hero-photo {
   position: relative;
   width: 100%;
-  aspect-ratio: 1 / 1;  // square
+  aspect-ratio: 1 / 1;     // force square
   border-radius: $radius-6;
   overflow: hidden;
   align-self: stretch;
 
-  img {
-    width: 100%; height: 100%;
-    object-fit: cover; display: block;
-  }
+  img { width: 100%; height: 100%; display: block; object-fit: cover; }
 
   .home-hero-signature {
     position: absolute;
@@ -94,11 +114,11 @@
     font-size: $fs-6; opacity: .85; white-space: nowrap;
 
     @include theme-block { color: tone(contrast, light); text-shadow: 0 1px 0 rgba(255,255,255,.4); }
-    @include theme-block-dark { color: tone(contrast, dark); text-shadow: 0 1px 0 rgba(0,0,0,.5); }
+    @include theme-block-dark { color: tone(contrast, dark); text-shadow: 0 1px 0 rgba(0,0,0,.55); }
   }
 }
 
-/* Details (right column on desktop) */
+// Details column
 .home-hero-details {
   display: grid;
   gap: $sp-7;
@@ -126,7 +146,7 @@
 
 .home-hero-meta {
   margin: 0;
-  display: inline-flex; gap: $sp-5; align-items: center;
+  display: inline-flex; align-items: center; gap: $sp-5;
   font-size: $fs-2;
 
   @include theme-block { color: tone(secondary, light); }
@@ -134,51 +154,46 @@
 }
 
 .home-hero-bio {
-  margin: 0; font-size: $fs-3; max-width: 58ch;
+  margin: 0;
+  font-size: $fs-3;
+  max-width: 58ch;
 
   @include theme-block { color: tone(foreground, light); }
   @include theme-block-dark { color: tone(foreground, dark); }
 }
 
-/* Actions */
+// Actions
 .home-hero-actions { display: flex; flex-wrap: wrap; gap: $sp-7; align-items: center; }
 .btn { @include button-base; }
 .btn-primary {
   @include theme-block   { background-color: tone(accent, light); color: tone(white, light); border-color: tone(accent, light); }
-  @include theme-block-dark { background-color: tone(accent, dark);  color: tone(black, dark); border-color: tone(accent, dark); }
+  @include theme-block-dark { background-color: tone(accent, dark); color: tone(black, dark); border-color: tone(accent, dark); }
   &:hover { transform: translateY(-1px); }
 }
 .btn-ghost {
-  @include theme-block   { background-color: transparent; color: tone(foreground, light); border-color: tone(border, light); }
-  @include theme-block-dark { background-color: transparent; color: tone(foreground, dark); border-color: tone(border, dark); }
+  @include theme-block   { background: transparent; color: tone(foreground, light); border-color: tone(border, light); }
+  @include theme-block-dark { background: transparent; color: tone(foreground, dark); border-color: tone(border, dark); }
   &:hover {
     @include theme-block { background-color: tone(background-100, light); }
     @include theme-block-dark { background-color: tone(background-200, dark); }
   }
 }
 
-/* Floating badges OUTSIDE the image */
-.home-hero-badges {
-  position: relative;
-  // Overlay relative to image block area:
-  @include mq-up($bp-md) {
-    grid-column: 1; grid-row: 1; // sit in the image column (outside the square)
-  }
-}
-
-/* Pill style */
+// Floating pills (outside the image edges), animated
 .home-hero-tag {
   position: absolute;
   display: inline-flex; align-items: center; gap: $sp-4;
-  padding: $sp-4 $sp-6; font-size: $fs-2; line-height: 1;
-  border-radius: $radius-pill; white-space: nowrap;
+  padding: $sp-4 $sp-6;
+  font-size: $fs-2; line-height: 1;
+  border-radius: $radius-pill;
+  white-space: nowrap;
   pointer-events: auto;
   transform: translate(-50%, -50%);
   animation: floatY 5.2s $ease-in-out infinite alternate;
 
   @include theme-block {
     color: tone(contrast, light);
-    background-color: rgba(255,255,255,.7);
+    background-color: rgba(255,255,255,.72);
     border: 1px solid tone(border, light);
     box-shadow: $shadow-light;
   }
@@ -190,24 +205,30 @@
   }
 }
 
-/* Positions relative to the photo area */
-.t1 { top: -8%;  left: 12%; animation-delay: -.2s; }
-.t2 { top: 10%;  left: -10%; animation-delay: -.6s; }
-.t3 { top: 50%;  left: -12%; animation-delay: -.9s; }
-.t4 { bottom: -8%; left: 20%; animation-delay: -1.2s; }
-.t5 { top: -6%;  right: -10%; animation-delay: -.4s; }
-.t6 { bottom: 14%; right: -12%; animation-delay: -.8s; }
+/* Position tags around the square (desktop) */
+@include mq-up($bp-md) {
+  .home-hero-photo {
+    .t1 { top: -8%;  left: 15%; animation-delay: -.2s; }
+    .t2 { top: 12%;  left: -10%; animation-delay: -.6s; }
+    .t3 { top: 50%;  left: -12%; animation-delay: -.9s; }
+    .t4 { bottom: -8%; left: 22%; animation-delay: -1.2s; }
+    .t5 { top: -6%;  right: -10%; animation-delay: -.4s; }
+    .t6 { bottom: 16%; right: -12%; animation-delay: -.8s; }
+  }
+}
+
+/* On small screens, keep pills tight and fewer */
+@media (max-width: $bp-md) {
+  .home-hero-photo {
+    .t1 { top: $sp-4; left: $sp-4;  transform: translate(0,0); }
+    .t2 { top: $sp-4; right: $sp-4; transform: translate(0,0); }
+    .t3 { bottom: $sp-4; left: $sp-4; transform: translate(0,0); }
+    .t4 { bottom: $sp-4; right: $sp-4; transform: translate(0,0); }
+    .t5, .t6 { display: none; }
+  }
+}
 
 @keyframes floatY {
   from { transform: translate(-50%, -50%) translateY(-4px); }
   to   { transform: translate(-50%, -50%) translateY(4px); }
-}
-
-/* Mobile badge simplification and perfect alignment */
-@media (max-width: $bp-md) {
-  .home-hero-card { gap: $sp-10; }
-  .home-hero-badges {
-    // keep four closest tags only for clarity on small screens
-    .t5, .t6 { display: none; }
-  }
 }
