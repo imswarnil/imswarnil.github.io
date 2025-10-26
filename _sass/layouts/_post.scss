@@ -5,14 +5,19 @@
 
 @use "variables" as *;
 
-/* Container helper available via mixin */
+/* Container helper (local class if you use it in markup) */
 .container { @include container; }
 
-/* Hero section */
+/* ---------------- Hero ---------------- */
 .post-hero { padding-block: clamp($sp-12, 6vw, $sp-20); }
 .post-header { display: grid; gap: $sp-7; }
-.post-kicker { font-size: $fs-2; letter-spacing: .04em; text-transform: uppercase; opacity: .8; margin: 0; }
-.post-title  { margin: 0; font-size: clamp($fs-7, 6vw, $fs-10); line-height: $lh-tight; font-weight: $fw-bold; }
+
+.post-kicker {
+  font-size: $fs-2; letter-spacing: .04em; text-transform: uppercase; opacity: .8; margin: 0;
+}
+.post-title {
+  margin: 0; font-size: clamp($fs-7, 6vw, $fs-10); line-height: $lh-tight; font-weight: $fw-bold;
+}
 
 .post-meta {
   display: grid; grid-auto-flow: column; gap: $sp-7; align-items: center; width: max-content;
@@ -26,7 +31,7 @@
 .post-cover img { width: 100%; height: auto; display: block; }
 .post-cover figcaption { font-size: $fs-2; margin-top: $sp-5; opacity: .8; }
 
-/* Layout grid */
+/* ---------------- Layout grid ---------------- */
 .post-layout {
   display: grid;
   grid-template-columns: minmax(0,1fr) 320px;
@@ -38,13 +43,15 @@
 }
 .post-layout--single { grid-template-columns: 1fr; }
 
-/* Article */
+/* ---------------- Article content ---------------- */
 .article { min-width: 0; }
+
 .content {
   font-size: $fs-3; line-height: $lh-base;
-  > * { min-width: 0; } // prevents overflow
+  > * { min-width: 0; } // prevent overflow
 }
 .content :where(img, video, svg, canvas) { max-width: 100%; height: auto; display: block; }
+
 .content pre {
   overflow: auto; font-family: $ff-mono; font-size: $fs-2;
   padding: $code-pad-y $code-pad-x; border-radius: $code-radius;
@@ -54,13 +61,14 @@
 }
 .content table { width: 100%; border-collapse: collapse; display: block; overflow-x: auto; }
 
-/* Type-specific blocks */
+/* ---------------- Type-specific blocks ---------------- */
 .post-facts {
   display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: $sp-6; margin: $sp-7 0;
   @include mq-up($bp-md){ grid-template-columns: repeat(3, minmax(0,1fr)); }
 }
-.fact { display: grid; gap: $sp-2; padding: $sp-6; border-radius: $radius-4;
-  @include theme-block { background: tone(background-100, light); }
+.fact {
+  display: grid; gap: $sp-2; padding: $sp-6; border-radius: $radius-4;
+  @include theme-block      { background: tone(background-100, light); }
   @include theme-block-dark { background: tone(background-200, dark); }
 }
 .fact-label { font-size: $fs-2; opacity: .8; }
@@ -69,19 +77,16 @@
 .post-media { margin: $sp-8 0; border-radius: $radius-6; overflow: hidden; }
 .post-media iframe, .post-media video, .post-media audio { width: 100%; display: block; }
 
-.post-rating { display: grid; grid-template-columns: auto 1fr; gap: $sp-6; align-items: center; margin: $sp-8 0; }
+.post-rating {
+  display: grid; grid-template-columns: auto 1fr; gap: $sp-6; align-items: center; margin: $sp-8 0;
+}
 .rating-label { font-weight: $fw-semibold; }
 .rating-stars {
   --score: 0;
   --size: 22px;
   position: relative; height: var(--size);
-  background:
-    linear-gradient(90deg, currentColor calc(var(--score) * 20%), transparent 0);
-  -webkit-mask:
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='110' height='22' viewBox='0 0 110 22'><defs/><g fill='black'>
-      <path d='M11 0l2.7 6.7 7.3.6-5.5 4.7 1.7 7-6.2-3.8-6.2 3.8 1.7-7L1 7.3l7.3-.6z'/>
-      <use x='22' href='#s'/><use x='44' href='#s'/><use x='66' href='#s'/><use x='88' href='#s'/>
-    </g></svg>") left / contain repeat-x;
+  background: linear-gradient(90deg, currentColor calc(var(--score) * 20%), transparent 0);
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='110' height='22' viewBox='0 0 110 22'><g fill='black'><path d='M11 0l2.7 6.7 7.3.6-5.5 4.7 1.7 7-6.2-3.8-6.2 3.8 1.7-7L1 7.3l7.3-.6z'/><use x='22' href='#s'/><use x='44' href='#s'/><use x='66' href='#s'/><use x='88' href='#s'/></g></svg>") left / contain repeat-x;
   mask: inherit;
 }
 
@@ -89,84 +94,92 @@
 .post-tripmeta { display: flex; flex-wrap: wrap; gap: $sp-6; align-items: center; margin: $sp-7 0; font-size: $fs-3; }
 .trip-item { display: inline-flex; align-items: center; gap: $sp-4; }
 
-/* Tags */
-.post-tags { display: flex; flex-wrap: wrap; gap: $sp-6; padding: 0; margin: $sp-12 0 0 0; list-style: none; }
+/* ---------------- Tags ---------------- */
+.post-tags {
+  display: flex; flex-wrap: wrap; gap: $sp-6; padding: 0; margin: $sp-12 0 0 0; list-style: none;
+}
 .post-tags a {
   display: inline-block; padding: $sp-4 $sp-7; border-radius: $radius-pill; font-size: $fs-2;
   @include theme-block      { background: tone(background-100, light); color: tone(foreground, light); }
   @include theme-block-dark { background: tone(background-200, dark);  color: tone(foreground, dark); }
 }
 
-/* Share */
+/* ---------------- Share ---------------- */
 .post-share { display: flex; flex-wrap: wrap; gap: $sp-7; margin-top: $sp-12; }
+
 .btn { @include button-base; }
+
 .btn-ghost {
-  @include theme-block   { background: transparent; color: tone(foreground, light); border-color: tone(border, light); }
-  @include theme-block-dark { background: transparent; color: tone(foreground, dark); border-color: tone(border, dark); }
-  &:hover { @include theme-block { background: tone(background-100, light); } @include theme-block-dark { background: tone(background-200, dark); } }
+  @include theme-block      { background: transparent; color: tone(foreground, light); border-color: tone(border, light); }
+  @include theme-block-dark { background: transparent; color: tone(foreground, dark);  border-color: tone(border, dark); }
+  &:hover {
+    @include theme-block      { background: tone(background-100, light); }
+    @include theme-block-dark { background: tone(background-200, dark); }
+  }
 }
 .post-share-copy.copied { outline: $focus-ring-width solid rgba(106,166,255,.35); }
 
-/* Author box */
-.post-author { display: grid; grid-template-columns: 56px 1fr; gap: $sp-7; margin-top: $sp-12; align-items: center; }
+/* ---------------- Author box ---------------- */
+.post-author {
+  display: grid; grid-template-columns: 56px 1fr; gap: $sp-7; margin-top: $sp-12; align-items: center;
+}
 .author-avatar { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; }
 .author-name { margin: 0; font-weight: $fw-semibold; }
 .author-bio { margin: 0; font-size: $fs-3; opacity: .9; }
 
-/* Prev/Next */
+/* ---------------- Prev/Next ---------------- */
 .post-nav { display: flex; justify-content: space-between; gap: $sp-7; margin-top: $sp-12; }
 .post-prev, .post-next {
   display: grid; gap: $sp-2; text-decoration: none; color: inherit; align-items: center;
 }
 .post-prev .label, .post-next .label { font-size: $fs-2; opacity: .7; }
-.post-prev .name, .post-next .name { font-size: $fs-3; font-weight: $fw-medium; }
+.post-prev .name,  .post-next .name  { font-size: $fs-3; font-weight: $fw-medium; }
 
-/* Sidebar */
-.sidebar { position: sticky; top: calc(#{$navbar-height} + #{$sp-8}); display: grid; gap: $sp-12; align-self: start; }
+/* ---------------- Sidebar + TOC + Tag cloud ---------------- */
+.sidebar {
+  position: sticky; top: calc(#{$navbar-height} + #{$sp-8});
+  display: grid; gap: $sp-12; align-self: start;
+}
+.sidebar > * {
+  @include theme-block      { background: tone(surface, light); border: 1px solid tone(border, light); box-shadow: none; }
+  @include theme-block-dark { background: tone(surface, dark);  border: 1px solid tone(border, dark);  box-shadow: none; }
+}
 
-/* TOC */
-.toc { display: grid; gap: $sp-6; padding: $sp-8; border-radius: $radius-6; }
+.toc {
+  display: grid; gap: $sp-6; padding: $sp-8; border-radius: $radius-6;
+  @include theme-block      { background: tone(background-100, light); border: 1px solid tone(border, light); }
+  @include theme-block-dark { background: tone(background-200, dark);  border: 1px solid tone(border, dark); }
+}
 .toc-title { margin: 0; font-weight: $fw-semibold; font-size: $fs-4; }
 .toc-list { list-style: none; margin: 0; padding: 0; display: grid; gap: $sp-4; }
 .toc-item a { text-decoration: none; }
 .toc-h2 a { font-size: $fs-3; }
 .toc-h3 a { font-size: $fs-2; opacity: .9; padding-left: $sp-6; display: inline-block; }
 
-@include theme-block      { .toc { background: tone(background-100, light); border: 1px solid tone(border, light);} }
-@include theme-block-dark { .toc { background: tone(background-200, dark);  border: 1px solid tone(border, dark);} }
-
 /* Tag cloud (sidebar) */
 .tag-cloud { display: grid; gap: $sp-6; padding: $sp-8; border-radius: $radius-6; }
 .tagcloud-title { margin: 0; font-weight: $fw-semibold; font-size: $fs-4; }
-.tagcloud-list { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: $sp-6; }
+.tagcloud-list {
+  list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: $sp-6;
+}
 .tagcloud-list a {
   --w: 6;
   font-size: calc(0.5rem + (var(--w) * 0.05rem));
   text-decoration: none;
-  @include theme-block { color: tone(foreground, light); }
+  @include theme-block      { color: tone(foreground, light); }
   @include theme-block-dark { color: tone(foreground, dark); }
 }
 
-/* Mobile behavior: sidebar collapses under article; toc appears after hero already */
+/* ---------------- Responsive behavior ---------------- */
 @media (max-width: $bp-lg) {
   .post-layout { grid-template-columns: 1fr; }
   .sidebar { position: static; }
   .toc--desktop { display: none; }
-  .toc--mobile {
-    display: grid;
-    margin-top: $sp-8;
-  }
+  .toc--mobile { display: grid; margin-top: $sp-8; }
 }
-
-/* Desktop: hide mobile toc and show sticky one */
 @media (min-width: $bp-lg) {
   .toc--mobile { display: none; }
 }
 
-/* Theme surfaces for side blocks */
-@include theme-block {
-  .sidebar > * { background: tone(surface, light); border: 1px solid tone(border, light); box-shadow: none; }
-}
-@include theme-block-dark {
-  .sidebar > * { background: tone(surface, dark); border: 1px solid tone(border, dark); box-shadow: none; }
-}
+/* ---------------- Safety: media in article ---------------- */
+.content code, .content kbd, .content samp { font-family: $ff-mono; }
