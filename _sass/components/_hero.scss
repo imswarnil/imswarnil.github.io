@@ -1,0 +1,167 @@
+// ======================================================================
+// Smart Hero (home / post / page / default)
+// Unit-safe clamp() via helper to avoid "Incompatible units: 'rem' and 'vw'"
+// Uses your existing tokens + theme mixins (no new design vars)
+// ======================================================================
+
+@function fluid-clamp($min, $fluid, $max) {
+  // Prevent Sass from unit-math inside clamp()
+  @return unquote("clamp(#{$min}, #{$fluid}, #{$max})");
+}
+
+.site-hero {
+  position: relative;
+  padding: #{fluid-clamp($sp-8, 6vw, $sp-14)} 0 $sp-10;
+  overflow: clip;
+
+  .hero-surface {
+    position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      radial-gradient(rgba(0,0,0,.05) 1px, transparent 1px),
+      radial-gradient(rgba(0,0,0,.03) 1px, transparent 1px);
+    background-size: 16px 16px, 16px 16px;
+    background-position: 0 0, 8px 8px;
+
+    @include theme-block-dark {
+      background-image:
+        radial-gradient(rgba(255,255,255,.09) 1px, transparent 1px),
+        radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px);
+    }
+  }
+}
+
+/* Base grid */
+.hero-grid {
+  position: relative; z-index: 1;
+  display: grid; gap: $sp-8;
+}
+
+/* Variant grids */
+.hero-grid--home { grid-template-columns: 1.25fr .75fr; @media (max-width: $bp-lg) { grid-template-columns: 1fr; } }
+.hero-grid--post { grid-template-columns: 1fr; }
+.hero-grid--page { grid-template-columns: 1fr .8fr; @media (max-width: $bp-lg) { grid-template-columns: 1fr; } }
+.hero-grid--default { grid-template-columns: 1fr; }
+
+/* Card-like copy */
+.hero-copy {
+  border: 1px solid; border-radius: $radius-6;
+  padding: #{fluid-clamp($sp-6, 3.5vw, $sp-10)};
+  @include theme-block      { background: tone(surface, light);       border-color: tone(border, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: tone(background-100, dark); border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
+}
+
+/* Title/Sub */
+.hero-title {
+  margin: 0 0 $sp-3;
+  font-size: #{fluid-clamp($fs-6, unquote("calc(2.4vw + 1.2rem)"), $fs-9)};
+  line-height: 1.05; letter-spacing: -.01em;
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  }
+}
+.hero-sub {
+  margin: 0;
+  font-size: #{fluid-clamp($fs-3, unquote("calc(1vw + 0.85rem)"), $fs-5)};
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+}
+
+/* CTAs */
+.hero-ctas { margin-top: $sp-5; display: flex; flex-wrap: wrap; gap: $sp-3; }
+.btn-solid, .btn-outline {
+  display: inline-flex; align-items: center; gap: .6rem;
+  min-height: 42px; padding: .55rem 1rem;
+  border-radius: $radius-pill; text-decoration: none; font-weight: $fw-semibold;
+  transition: transform $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out;
+  i { font-size: $fs-4; }
+  &:hover { transform: translateY(-2px); }
+}
+.btn-solid {
+  border: 1px solid transparent;
+  @include theme-block      { background: tone(contrast, light); color: tone(white, light); }
+  @include theme-block-dark { background: tone(contrast, dark);  color: tone(white, dark);  }
+}
+.btn-outline {
+  border: 1px solid;
+  @include theme-block      { color: tone(contrast, light); border-color: tone(border, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  border-color: tone(border, dark);  }
+}
+
+/* Home hero extras */
+.home-head {
+  display: grid; grid-template-columns: auto 1fr; gap: $sp-5; align-items: center; margin-bottom: $sp-4;
+}
+.home-avatar {
+  width: 72px; height: 72px; border-radius: 50%; border: 1px solid; object-fit: cover;
+  @include theme-block      { border-color: tone(border, light); }
+  @include theme-block-dark { border-color: tone(border, dark);  }
+}
+.home-chips { display: flex; flex-wrap: wrap; gap: $sp-3; margin-top: $sp-2; }
+
+/* Chips / badges */
+.chip {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .3rem .65rem; border-radius: $radius-pill; border: 1px solid; font-size: $fs-2; text-decoration: none;
+  @include theme-block      { color: tone(contrast, light); border-color: tone(border, light); background: transparent; }
+  @include theme-block-dark { color: tone(contrast, dark);  border-color: tone(border, dark);  background: transparent; }
+}
+.chip--soft {
+  @include theme-block      { background: tone(background-100, light); }
+  @include theme-block-dark { background: tone(background-100, dark);  }
+}
+.chip--ghost {
+  @include theme-block      { border-color: transparent; background: tone(background-100, light); }
+  @include theme-block-dark { border-color: transparent; background: tone(background-100, dark);  }
+}
+.chip--link:hover { text-decoration: underline; }
+
+/* Social icons */
+.hero-social {
+  margin-top: $sp-5; display: flex; gap: $sp-3;
+  a {
+    display:inline-grid; place-items:center; width: 2rem; height: 2rem; border-radius: 50%; border: 1px solid; font-size: $fs-4;
+    @include theme-block      { color: tone(contrast, light); border-color: tone(border, light); }
+    @include theme-block-dark { color: tone(contrast, dark);  border-color: tone(border, dark);  }
+    transition: transform $dur-1 $ease-in-out, background-color $dur-1 $ease-in-out;
+    &:hover {
+      transform: translateY(-2px);
+      @include theme-block      { background: tone(background-100, light); }
+      @include theme-block-dark { background: tone(background-100, dark);  }
+    }
+  }
+}
+
+/* Art */
+.hero-art img {
+  width: 100%; height: auto; display: block;
+  border: 1px solid; border-radius: $radius-6;
+  @include theme-block      { border-color: tone(border, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
+}
+.hero-art--cover img { border-radius: $radius-5; }
+
+/* Post meta row */
+.hero-meta {
+  display: flex; align-items: center; gap: $sp-2; flex-wrap: wrap;
+  margin-bottom: $sp-4; font-size: $fs-2;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+
+  time, .read, .by { display: inline-flex; align-items: center; gap: .4rem; }
+  .dot { opacity: .5; }
+  .cats { display: inline-flex; align-items: center; gap: .25rem; }
+}
+
+/* Breadcrumbs (page hero) */
+.hero-breadcrumbs {
+  position: relative; z-index: 1; margin-bottom: $sp-4; font-size: $fs-2; display: flex; gap: $sp-2; align-items: center; flex-wrap: wrap;
+  a {
+    text-decoration: none; display: inline-flex; align-items: center; gap: .4rem;
+    @include theme-block      { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark);  }
+    &:hover { text-decoration: underline; }
+  }
+  .crumb-sep { opacity: .5; }
+}
+
+/* Page badges row */
+.hero-badges { margin-top: $sp-4; display: flex; flex-wrap: wrap; gap: $sp-3; }
