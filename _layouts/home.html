@@ -44,5 +44,121 @@ layout: default
   </div>
 </section>
 
-<!-- Ensure Phosphor icons are loaded in head.html -->
-<!-- <script defer src="https://unpkg.com/@phosphor-icons/web"></script> -->
+<!-- ABOUT / INTRO -->
+<section class="home-about">
+  <div class="home-about-shell">
+    <div class="home-about-card">
+      <div class="home-about-text">
+        <h2 class="home-about-title"><i class="ph-bold ph-user"></i> About</h2>
+        <p class="home-about-lead">
+          I blend filmmaking with engineering to craft lightweight, cinematic web experiences.
+          Focused on clarity, timing, and story.
+        </p>
+        <ul class="home-about-stats">
+          <li><i class="ph-bold ph-video"></i><span>100+ videos</span></li>
+          <li><i class="ph-bold ph-rocket"></i><span>7+ years dev</span></li>
+          <li><i class="ph-bold ph-globe"></i><span>Clients worldwide</span></li>
+        </ul>
+      </div>
+      <div class="home-about-media">
+        <img src="{{ '/assets/img/about.jpg' | relative_url }}" alt="Behind the scenes">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS / WORK -->
+<section class="home-projects">
+  <div class="home-projects-shell">
+    <div class="home-section-head">
+      <h2 class="home-section-title"><i class="ph-bold ph-sparkle"></i> Featured Projects</h2>
+      <a href="{{ '/projects/' | relative_url }}" class="home-link">View all →</a>
+    </div>
+
+    <div class="home-projects-grid">
+      {% assign items = site.projects | default: site.posts %}
+      {% for p in items limit:6 %}
+      <article class="home-project">
+        <a class="home-project-link" href="{{ p.url | relative_url }}">
+          <div class="home-project-thumb">
+            {% if p.cover %}
+              <img src="{{ p.cover | relative_url }}" alt="{{ p.title }}">
+            {% else %}
+              <div class="home-project-thumb-fallback"><i class="ph-bold ph-image"></i></div>
+            {% endif %}
+          </div>
+          <div class="home-project-body">
+            <h3 class="home-project-title">{{ p.title }}</h3>
+            <p class="home-project-desc">{{ p.excerpt | strip_html | truncate: 120 }}</p>
+          </div>
+        </a>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE / TIMELINE -->
+<section class="home-experience">
+  <div class="home-experience-shell">
+    <h2 class="home-section-title"><i class="ph-bold ph-briefcase"></i> Experience</h2>
+
+    <ol class="home-timeline">
+      <li class="home-timeline-item">
+        <div class="dot"></div>
+        <div class="content">
+          <h3 class="role">Creative Developer · {{ site.company | default: 'Freelance' }}</h3>
+          <p class="meta">2022 — Present · Bengaluru, IN</p>
+          <p class="desc">Building cinematic, fast web for creators & brands. Product design, front-end systems, and narrative.</p>
+        </div>
+      </li>
+      <li class="home-timeline-item">
+        <div class="dot"></div>
+        <div class="content">
+          <h3 class="role">Software Engineer · {{ site.prev_company | default: 'Acme' }}</h3>
+          <p class="meta">2019 — 2022</p>
+          <p class="desc">Shipped UI platforms, design tokens, and performance pipelines across teams.</p>
+        </div>
+      </li>
+      <li class="home-timeline-item">
+        <div class="dot"></div>
+        <div class="content">
+          <h3 class="role">Filmmaker · Imswarnil</h3>
+          <p class="meta">2017 — 2019</p>
+          <p class="desc">Wrote, shot, and edited films & series; grew channel with story-led content.</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="home-skills">
+  <div class="home-skills-shell">
+    <h2 class="home-section-title"><i class="ph-bold ph-wrench"></i> Skills</h2>
+    <ul class="home-skill-chips">
+      <li>React</li><li>Next.js</li><li>TypeScript</li><li>Node</li>
+      <li>GSAP</li><li>Framer Motion</li><li>Figma</li><li>Design Systems</li>
+      <li>Color Grading</li><li>DaVinci Resolve</li><li>Premiere Pro</li>
+    </ul>
+  </div>
+</section>
+
+<!-- CONTACT / CTA -->
+<section class="home-cta">
+  <div class="home-cta-shell">
+    <div class="home-cta-card">
+      <h3 class="home-cta-title">Let’s build something beautiful.</h3>
+      <p class="home-cta-sub">Available for selected projects, collaborations, and consulting.</p>
+      <div class="home-cta-actions">
+        <a class="btn btn-primary" href="{{ '/contact/' | relative_url }}">
+          <i class="ph-bold ph-handshake"></i><span>Collaborate</span>
+        </a>
+        <a class="btn btn-ghost" href="{{ site.github_url | default: 'https://github.com' }}">
+          <i class="ph-bold ph-github-logo"></i><span>GitHub</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
