@@ -1,0 +1,111 @@
+{%- comment -%}
+  Smart Hero
+  Chooses variant by priority:
+  1) page.hero_style (force: "home" | "post" | "page" | "default")
+  2) page.layout == "home" → home
+  3) page.layout == "post" or page.collection == "posts" → post
+  4) page.layout == "page" → page
+  5) fallback → default
+
+  Front matter you can use:
+  - title, subtitle
+  - feature_image
+  - cta_primary:  { label: "...", url: "/..." }
+  - cta_secondary:{ label: "...", url: "/..." }
+{%- endcomment -%}
+
+{%- assign _hero_kind = 'default' -%}
+{%- if page.hero_style %}{% assign _hero_kind = page.hero_style %}
+{%- elsif page.layout == 'home' %}{% assign _hero_kind = 'home' %}
+{%- elsif page.layout == 'post' or page.collection == 'posts' %}{% assign _hero_kind = 'post' %}
+{%- elsif page.layout == 'page' %}{% assign _hero_kind = 'page' %}
+{%- endif -%}
+
+<section class="site-hero hero--{{ _hero_kind }}" role="region" aria-label="Hero">
+  <div class="hero-surface" aria-hidden="true"></div>
+
+  {% if _hero_kind == 'home' %}
+    <div class="container">
+      <div class="hero-grid hero-grid--home">
+        <div class="hero-copy">
+          <h1 class="hero-title">{{ page.title | default: site.title | default: "Welcome" }}</h1>
+          {% if page.subtitle or site.description %}
+            <p class="hero-sub">{{ page.subtitle | default: site.description }}</p>
+          {% endif %}
+          <div class="hero-ctas">
+            {% if page.cta_primary %}
+              <a class="btn-solid" href="{{ page.cta_primary.url | relative_url }}"><i class="ph-bold ph-rocket-launch"></i>{{ page.cta_primary.label }}</a>
+            {% endif %}
+            {% if page.cta_secondary %}
+              <a class="btn-outline" href="{{ page.cta_secondary.url | relative_url }}"><i class="ph-bold ph-chat-circle-dots"></i>{{ page.cta_secondary.label }}</a>
+            {% endif %}
+          </div>
+        </div>
+        {% if page.feature_image or site.collections.posts.feature_image %}
+          <figure class="hero-art">
+            <img src="{{ page.feature_image | default: site.collections.posts.feature_image }}" alt="" loading="eager">
+          </figure>
+        {% endif %}
+      </div>
+    </div>
+
+  {% elsif _hero_kind == 'post' %}
+    <div class="container">
+      <div class="hero-grid hero-grid--post">
+        <div class="hero-copy">
+          <h1 class="hero-title">{{ page.title }}</h1>
+          <div class="hero-meta">
+            {% assign date_format = site.date_format | default: "%d %b %Y" %}
+            <time datetime="{{ page.date | date_to_xmlschema }}"><i class="ph-bold ph-calendar-blank"></i>{{ page.date | date: date_format }}</time>
+            {% if page.categories and page.categories.size > 0 %}
+              <span class="dot">•</span>
+              <span class="cats">
+                {% for c in page.categories %}
+                  <a class="chip" href="{{ '/categories/#' | append: c | downcase | slugify | relative_url }}"><i class="ph-bold ph-tag"></i>{{ c }}</a>{% unless forloop.last %}<span>,</span>{% endunless %}
+                {% endfor %}
+              </span>
+            {% endif %}
+            {% if page.content %}
+              {% assign words = page.content | number_of_words %}
+              {% assign mins = words | divided_by:200 | plus:1 %}
+              <span class="dot">•</span><span class="read"><i class="ph-bold ph-hourglass-low"></i>{{ mins }} min read</span>
+            {% endif %}
+          </div>
+          {% if page.subtitle %}<p class="hero-sub">{{ page.subtitle }}</p>{% endif %}
+        </div>
+        {% if page.feature_image %}
+          <figure class="hero-art hero-art--cover">
+            <img src="{{ page.feature_image }}" alt="" loading="eager">
+          </figure>
+        {% endif %}
+      </div>
+    </div>
+
+  {% elif _hero_kind == 'page' %}
+    <div class="container">
+      <div class="hero-grid hero-grid--page">
+        <div class="hero-copy">
+          <h1 class="hero-title">{{ page.title }}</h1>
+          {% if page.subtitle %}<p class="hero-sub">{{ page.subtitle }}</p>{% endif %}
+        </div>
+        {% if page.feature_image %}
+          <figure class="hero-art">
+            <img src="{{ page.feature_image }}" alt="" loading="eager">
+          </figure>
+        {% endif %}
+      </div>
+    </div>
+
+  {% else %}
+    <div class="container">
+      <div class="hero-grid hero-grid--default">
+        <div class="hero-copy">
+          <h1 class="hero-title">{{ page.title | default: site.title }}</h1>
+          {% if page.subtitle or site.description %}
+            <p class="hero-sub">{{ page.subtitle | default: site.description }}</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</section>
