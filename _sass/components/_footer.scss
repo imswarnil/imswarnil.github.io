@@ -1,205 +1,193 @@
 // ======================================================================
-// Cinematic Footer — Full-cover video + mask + TV scanlines (NO BLUR)
-// Dark mode via theme tokens; tasty hover; newsletter UX.
+// home.scss — Compact square hero with floating tags & ticker
+// Depends on: _variables.scss
 // ======================================================================
 
-/* Sticky shell */
-.page-shell { display: flex; min-height: 100vh; flex-direction: column; }
-.page-shell > .site-footer { margin-top: auto; }
+@use "variables" as *;
 
-/* Root */
-.site-footer { position: relative; z-index: 1; margin-top: $sp-12; overflow: clip; }
+.home-hero {
+  padding-block: clamp($sp-12, 6vw, $sp-20);
+}
 
-/* Background pattern */
-.footer-surface {
-  position: absolute; inset: 0; z-index: 0;
-  background-image:
-    radial-gradient(rgba(0,0,0,.06) 1px, transparent 1px),
-    radial-gradient(rgba(0,0,0,.04) 1px, transparent 1px);
-  background-size: 16px 16px, 16px 16px;
-  background-position: 0 0, 8px 8px;
+/* Self-centered wrapper with safe gutters (no .container dependency) */
+.home-hero-wrap {
+  width: $island-width;
+  max-width: calc(100% - 2 * #{$container-gutter});
+  margin-inline: auto;
+
+  display: grid;
+  gap: $sp-12;
+  /* Mobile: image first, then details (source order already image first) */
+  @include mq-up($bp-md) {
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: $sp-14;
+  }
+}
+
+/* Square photo with floating tags */
+.home-hero-photo {
+  position: relative;
+  width: clamp(9rem, 32vw, 14rem);
+  aspect-ratio: 1 / 1;
+  border-radius: $radius-6;
+  overflow: hidden;
+  backdrop-filter: blur(6px);
+
+  @include theme-block {
+    background-color: tone(surface, light);
+    border: 1px solid tone(border, light);
+    box-shadow: $shadow-light;
+  }
   @include theme-block-dark {
-    background-image:
-      radial-gradient(rgba(255,255,255,.09) 1px, transparent 1px),
-      radial-gradient(rgba(255,255,255,.07) 1px, transparent 1px);
+    background-color: tone(surface, dark);
+    border: 1px solid tone(border, dark);
+    box-shadow: $shadow-dark;
+  }
+
+  img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
   }
 }
 
-/* Island */
-.footer-island { position: relative; z-index: 1; border-radius: $radius-6; overflow: hidden; }
+/* Floating tag pills */
+.home-hero-tag {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: $sp-4;
+  padding: $sp-4 $sp-6;
+  font-size: $fs-2;
+  line-height: 1;
+  border-radius: $radius-pill;
+  white-space: nowrap;
+  backdrop-filter: blur(8px);
 
-/* Background video + effects */
-.footer-media { position: absolute; inset: 0; z-index: 0; pointer-events: none; border-radius: inherit; }
-
-/* Mask that fades edges (no tint/overlay) */
-.footer-media__inner {
-  position: absolute; inset: 0; overflow: hidden; border-radius: inherit;
-  -webkit-mask-image: radial-gradient(120% 120% at 50% 40%, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
-  mask-image: radial-gradient(120% 120% at 50% 40%, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
-}
-
-/* Full-cover responsive iframe (16:9) */
-.footer-yt {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  border: 0; display: block; pointer-events: none;
-
-  /* cover by height (tall/narrow) */
-  width: 177.78vh; height: 100vh; min-width: 100%; min-height: 100%;
-
-  /* cover by width (wide) */
-  @media (min-aspect-ratio: 16/9) { width: 100vw; height: 56.25vw; }
-
-  /* cinematic hover drift */
-  transition: transform $dur-2 $ease-in-out;
-}
-.footer-island:hover .footer-yt { transform: translate(-50%, -50%) scale(1.03); }
-
-/* TV scanlines (no white overlay) */
-.footer-static {
-  position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
-  background:
-    repeating-linear-gradient(
-      to bottom,
-      rgba(0,0,0,.30) 0px, rgba(0,0,0,.30) 1px,
-      rgba(0,0,0,0) 1px, rgba(0,0,0,0) 3px
-    );
-  opacity: .65;
-  mix-blend-mode: overlay;
+  @include theme-block {
+    color: tone(contrast, light);
+    background-color: rgba(255,255,255,.6);
+    border: 1px solid tone(border, light);
+  }
   @include theme-block-dark {
-    background:
-      repeating-linear-gradient(
-        to bottom,
-        rgba(0,0,0,.38) 0px, rgba(0,0,0,.38) 1px,
-        rgba(0,0,0,0) 1px, rgba(0,0,0,0) 3px
-      );
-    opacity: .72;
+    color: tone(contrast, dark);
+    background-color: rgba(0,0,0,.38);
+    border: 1px solid tone(border, dark);
   }
 }
 
-/* Container */
-.footer__container { @include container; }
-
-/* Island content card (no bottom border; rounded top) */
-.footer__inner {
-  position: relative; z-index: 1;
-  display: grid; gap: $sp-8;
-  padding: clamp(#{$sp-8}, 5vw, #{$sp-12});
-  min-height: 440px;
-
-  border: 1px solid; border-bottom: 0;
-  border-radius: $radius-6 $radius-6 0 0;
-
-  /* glassy card surfaces without blur */
-  @include theme-block      { background: rgba(255,255,255,.08); border-color: tone(border, light); box-shadow: $shadow-light; }
-  @include theme-block-dark { background: rgba(18,18,20,.10);   border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
-
-  text-shadow: 0 1px 2px rgba(0,0,0,.35);
-
-  @include mq-up($bp-md) { grid-template-columns: repeat(2, 1fr); }
-  @include mq-up($bp-lg) { grid-template-columns: repeat(4, 1fr); }
-}
-
-.footer__col { display: flex; flex-direction: column; gap: $sp-4; }
-
-/* Titles */
-.footer__title {
-  display: inline-flex; align-items: center; gap: .55rem;
-  font-size: $fs-4; font-weight: $fw-semibold; letter-spacing: -0.01em;
-  color: rgba(255,255,255,.96);
-  i { font-size: $fs-4; opacity: .92; }
-  &::after { content:""; display:block; width:28px; height:2px; margin-top:$sp-2; border-radius:2px; background:rgba(255,255,255,.85); }
-}
-
-/* Body text */
-.footer__text { font-size:$fs-3; line-height:1.6; color:rgba(255,255,255,.96); }
-
-/* Lists */
-.footer__list {
-  list-style:none; margin:0; padding:0; display:grid; gap:$sp-2;
-
-  li a {
-    display:inline-flex; align-items:center; gap:.55rem;
-    text-decoration:none; font-size:$fs-3; color:rgba(255,255,255,.96);
-    i { font-size:$fs-4; opacity:.92; transition: transform $dur-1 $ease-in-out; }
-    &:hover { text-decoration:underline; i { transform: translateX(2px); } }
+/* Randomized positions (desktop) */
+@include mq-up($bp-md) {
+  .home-hero-photo {
+    .tag-1 { top: -$sp-6; left: -$sp-6; }
+    .tag-2 { top: $sp-4; right: -$sp-6; }
+    .tag-3 { bottom: $sp-6; left: -$sp-4; }
+    .tag-4 { bottom: -$sp-6; right: $sp-6; }
+    .tag-5 { top: 45%; left: -$sp-8; transform: translateY(-50%); }
+    .tag-6 { top: -$sp-6; right: 30%; }
+    .tag-7 { bottom: 35%; right: -$sp-8; }
   }
 }
 
-/* Social */
-.footer__social {
-  display:flex; align-items:center; gap:$sp-3;
-  a {
-    display:inline-grid; place-items:center;
-    width:2rem; height:2rem; border-radius:50%;
-    border:1px solid rgba(255,255,255,.45);
-    color:rgba(255,255,255,.96); font-size:$fs-4;
-    transition: transform $dur-1 $ease-in-out, background-color $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out;
-    &:hover {
-      transform: translateY(-2px);
-      background: rgba(255,255,255,.14);
-      box-shadow: 0 10px 22px -10px rgba(0,0,0,.45);
-    }
+/* On small screens, keep fewer pills snug near edges */
+@media (max-width: $bp-md) {
+  .home-hero-photo {
+    .home-hero-tag { font-size: $fs-2; transform: none; }
+    .tag-1 { top: $sp-4; left: $sp-4; }
+    .tag-2 { top: $sp-4; right: $sp-4; }
+    .tag-3 { bottom: $sp-4; left: $sp-4; }
+    .tag-4 { bottom: $sp-4; right: $sp-4; }
+    .tag-5, .tag-6, .tag-7 { display: none; } /* trim to 4 pills on mobile for clarity */
   }
 }
 
-/* Newsletter */
-.footer__form { display:flex; flex-direction:column; gap:$sp-3; }
+/* Details block */
+.home-hero-details {
+  display: grid;
+  gap: $sp-7;
+  min-width: 0;
+}
 
-.footer__field {
-  display:flex; align-items:center; gap:$sp-3;
-  border:1px solid rgba(255,255,255,.45); border-radius:$radius-pill;
-  padding:.55rem .8rem; background: rgba(0,0,0,.28);
+.home-hero-name {
+  font-weight: $fw-bold;
+  line-height: $lh-tight;
+  font-size: clamp($fs-7, 5.6vw, $fs-10);
+  margin: 0;
+}
 
-  i { font-size:$fs-4; color:rgba(255,255,255,.9); }
+.home-hero-role {
+  margin: 0;
+  font-size: $fs-3;
 
-  input {
-    flex:1; border:0; outline:0; background:transparent;
-    color: rgba(255,255,255,.98); font-size:$fs-3;
+  @include theme-block { color: tone(foreground, light); }
+  @include theme-block-dark { color: tone(foreground, dark); }
 
-    &::placeholder { color: rgba(255,255,255,.75); }
+  .company { font-weight: $fw-semibold; }
+  .dot { margin-inline: $sp-6; opacity: .6; }
+}
+
+.home-hero-meta {
+  display: inline-flex; align-items: center; gap: $sp-5;
+  margin: 0; font-size: $fs-2;
+
+  @include theme-block { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark); }
+}
+
+.home-hero-bio {
+  margin: 0;
+  font-size: $fs-3;
+  max-width: 60ch;
+
+  @include theme-block { color: tone(foreground, light); }
+  @include theme-block-dark { color: tone(foreground, dark); }
+}
+
+/* Actions */
+.home-hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: $sp-7; }
+.btn { @include button-base; }
+.btn-primary {
+  @include theme-block { background-color: tone(accent, light); color: tone(white, light); border-color: tone(accent, light); }
+  @include theme-block-dark { background-color: tone(accent, dark); color: tone(black, dark); border-color: tone(accent, dark); }
+  &:hover { transform: translateY(-1px); }
+}
+.btn-ghost {
+  @include theme-block { background-color: transparent; color: tone(foreground, light); border-color: tone(border, light); }
+  @include theme-block-dark { background-color: transparent; color: tone(foreground, dark); border-color: tone(border, dark); }
+  &:hover {
+    @include theme-block { background-color: tone(background-100, light); }
+    @include theme-block-dark { background-color: tone(background-200, dark); }
   }
-
-  &:focus-within { border-color: rgba(255,255,255,.9); }
 }
 
-.footer__submit {
-  display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
-  min-height: 38px; padding: .45rem .9rem;
-  border-radius: $radius-pill; border: 1px solid transparent;
-  cursor:pointer; user-select:none; font-size:$fs-3; font-weight:$fw-semibold;
+/* Ticker */
+.home-hero-ticker {
+  border-radius: $radius-3;
+  overflow: hidden;
+  border: 1px solid transparent;
 
-  @include theme-block      { background: tone(white, light); color: tone(black, dark); }
-  @include theme-block-dark { background: tone(white, dark);  color: tone(black, dark); }
-
-  transition: transform $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out, opacity $dur-1;
-  i { font-size:$fs-4; }
-  &:hover { transform: translateY(-2px); box-shadow: 0 10px 22px -10px rgba(0,0,0,.45); }
-  &:active { transform: translateY(0); opacity: .9; }
+  @include theme-block { background: tone(background-100, light); border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(background-200, dark); border-color: tone(border, dark); }
 }
 
-.footer__hint {
-  margin:0; font-size:$fs-2; color:rgba(255,255,255,.85);
+.home-hero-track {
+  display: inline-flex;
+  gap: $sp-10;
+  padding: $sp-5 $sp-7;
+  min-width: 100%;
+  white-space: nowrap;
+  animation: heroMarquee 24s linear infinite;
+
+  span {
+    display: inline-flex; align-items: center; gap: $sp-5;
+    font-size: $fs-2;
+    @include theme-block { color: tone(foreground, light); }
+    @include theme-block-dark { color: tone(foreground, dark); }
+  }
 }
 
-/* Footer strip (flush bottom: 0) */
-.footer-strip { position: relative; z-index: 1; margin: $sp-3 0 0 0; }
-.footer-strip .footer__container { @include container; }
-
-.footer-strip__inner {
-  border: 1px solid; border-radius: $radius-6;
-  padding: $sp-5 clamp($sp-5, 5vw, $sp-8);
-  display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:$sp-4;
-  margin-bottom: 0; // bottom: 0 look
-
-  @include theme-block      { background: rgba(255,255,255,.08); border-color: tone(border, light); box-shadow: $shadow-light; }
-  @include theme-block-dark { background: rgba(18,18,20,.10);   border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
-
-  p { margin:0; font-size:$fs-3; color:rgba(255,255,255,.96); }
-  a { color:rgba(255,255,255,.98); text-decoration:none; font-weight:$fw-medium; &:hover { text-decoration: underline; } }
-}
-
-/* Mobile */
-@media (max-width: $bp-sm) {
-  .footer__inner { grid-template-columns: 1fr; gap: $sp-8; }
-  .footer-strip__inner { flex-direction: column; text-align: center; }
+@keyframes heroMarquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
 }

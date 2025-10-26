@@ -1,19 +1,19 @@
 <!-- ====================================================================== -->
 <!--  CINEMATIC ISLAND FOOTER (FULL INCLUDE)                                -->
 <!--  - Sticky page shell                                                   -->
-<!--  - Floating island footer (YT bg: autoplay/muted/loop/no-controls)     -->
-<!--  - Masked edges + TV scanlines (NO BLUR)                               -->
-<!--  - 4 responsive columns                                                -->
-<!--  - Footer strip at bottom: 0                                           -->
+<!--  - Full-cover YouTube bg (muted/auto/loop/no-controls)                 -->
+<!--  - Grid-line overlay + translucent scrim (above video, below content)  -->
+<!--  - Light mode: white text/icons + black scrim; Dark: reversed          -->
+<!--  - 4 responsive columns + floating strip that feels like navbar island -->
 <!-- ====================================================================== -->
 
-<div class="page-shell container">
+<div class="page-shell">
   <footer class="site-footer">
-    <!-- Subtle dot pattern behind island -->
+    <!-- Subtle dotted background behind island -->
     <div class="footer-surface" aria-hidden="true"></div>
 
     <div class="footer-island">
-      <!-- Cinematic background video -->
+      <!-- Video background -->
       <div class="footer-media" aria-hidden="true">
         <div class="footer-media__inner">
           <iframe
@@ -25,14 +25,17 @@
             referrerpolicy="strict-origin-when-cross-origin"
           ></iframe>
         </div>
-        <!-- TV scanlines (no overlay tint) -->
-        <div class="footer-static"></div>
+
+        <!-- Grid overlay (on top of video, below content) -->
+        <div class="footer-grid" aria-hidden="true"></div>
+
+        <!-- Translucent scrim (on top of video, below content) -->
+        <div class="footer-scrim" aria-hidden="true"></div>
       </div>
 
       <!-- Island content -->
       <div class="footer__container">
         <div class="footer__inner">
-
           <!-- Column 1 -->
           <div class="footer__col footer__about">
             <h4 class="footer__title"><i class="ph-bold ph-user"></i> About</h4>
@@ -75,12 +78,10 @@
             <h4 class="footer__title"><i class="ph-bold ph-megaphone-simple"></i> Newsletter</h4>
             <p class="footer__text">Join the crew — stories, updates & creative chaos once a month.</p>
 
-            <!-- Newsletter (progressive enhancement: just a form; hook your backend) -->
             <form class="footer__form" action="#" method="post" novalidate>
               <div class="footer__field">
                 <i class="ph-bold ph-at"></i>
-                <input type="email" name="email" placeholder="Your email" required
-                       aria-label="Email address" />
+                <input type="email" name="email" placeholder="Your email" required aria-label="Email address" />
               </div>
               <button type="submit" class="footer__submit" aria-label="Subscribe">
                 <i class="ph-bold ph-paper-plane-tilt"></i>
@@ -89,19 +90,18 @@
               <p class="footer__hint">No spam. Unsubscribe anytime.</p>
             </form>
           </div>
-
         </div>
       </div>
     </div>
 
-    <!-- Footer strip (flush bottom: 0) -->
+    <!-- Floating strip (looks like navbar island) -->
     <section class="footer-strip">
       <div class="footer__container">
         <div class="footer-strip__inner">
-          <p>© {{ site.time | date: "%Y" }} <strong>ImSwarnil</strong> — Built for the screen and the soul.</p>
+          <p>© {{ site.time | date: "%Y" }} <strong>ImSwarnil</strong></p>
           <p class="footer__credit">
             <i class="ph-bold ph-heart"></i>
-            Powered by <a href="https://jekyllrb.com/" target="_blank" rel="noopener">Jekyll</a> • Deployed on <a href="https://vercel.com" target="_blank" rel="noopener">Vercel</a>
+            <span>Powered by <a href="https://jekyllrb.com/" target="_blank" rel="noopener">Jekyll</a> • Deployed on <a href="https://vercel.com" target="_blank" rel="noopener">Vercel</a></span>
           </p>
         </div>
       </div>
