@@ -8,11 +8,9 @@
  
   <main class="main">
     {% include adsense.html type="horizontal" %}
-    {% include adsense.html type="vertical" %}
     {% include hero.html %}
       {{ content }}
-      {% include adsense.html type="horizontal" %}
-
+    {% include adsense.html type="horizontal" %}
   {% include site-footer.html %}
   </main>
   {% if site.service_worker != false %}{% include site-sw.html %}{% endif %}
