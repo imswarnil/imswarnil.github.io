@@ -1,0 +1,185 @@
+// ======================================================================
+// home-hero.scss — Responsive hero with TV static, dust, faint BG video + modal
+// Depends on: _variables.scss (tokens, mixins)
+// ======================================================================
+
+@use "variables" as *;
+
+.home-hero {
+  position: relative;
+  padding-block: clamp($sp-12, 8vw, $sp-20);
+  overflow: clip; // keep bg video/overlays contained
+}
+
+/* ultra-faint background video */
+.home-hero-bg {
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  filter: grayscale(1) brightness(3.2) contrast(0.7); /* washed out */
+  opacity: .08; /* barely visible */
+}
+.home-hero-bg__frame,
+.home-hero-bg__frame iframe {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.home-hero-bg__frame iframe { border: 0; }
+
+/* card */
+.home-hero-card {
+  position: relative; z-index: 1;
+  display: grid; grid-template-columns: 1fr; gap: clamp($sp-10, 4vw, $sp-16);
+  border-radius: $radius-6;
+  padding: clamp($sp-10, 3vw, $sp-16);
+
+  @include theme-block      { background: rgba(map-get($theme-light, surface), 0.88); border: 1px solid rgba(0,0,0,.08); backdrop-filter: blur(6px); }
+  @include theme-block-dark { background: rgba(map-get($theme-dark, surface),  0.70); border: 1px solid rgba(255,255,255,.12); backdrop-filter: blur(6px); }
+
+  @include mq-up($bp-lg) {
+    grid-template-columns: 1.05fr .95fr; // copy | art (desktop)
+    align-items: center;
+  }
+}
+
+/* order: image first on mobile */
+.home-hero-art { order: -1; }
+@include mq-up($bp-lg) { .home-hero-art { order: initial; } }
+
+/* copy */
+.home-hero-copy { display: grid; gap: clamp($sp-7, 1.8vw, $sp-12); }
+.home-hero-kicker { margin: 0; font-size: $fs-2; letter-spacing: .04em; text-transform: uppercase; opacity: .85; }
+.home-hero-title { margin: 0; font-weight: $fw-bold; line-height: $lh-tight; font-size: clamp($fs-8, 6.6vw, $fs-10); }
+.home-hero-lead {
+  margin: 0; font-size: clamp($fs-3, 2.6vw, $fs-5); max-width: 60ch;
+  @include theme-block      { color: tone(foreground, light); }
+  @include theme-block-dark { color: tone(foreground, dark); }
+}
+
+.home-hero-actions { display: flex; flex-wrap: wrap; gap: $sp-7; align-items: center; .btn { gap: .5em; } }
+
+/* meta row */
+.home-hero-meta {
+  display: inline-flex; flex-wrap: wrap; align-items: center; gap: $sp-6; font-size: $fs-2; opacity: .9;
+  .home-hero-avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
+  .home-hero-name { font-weight: $fw-semibold; }
+  .home-hero-dot { opacity: .55; }
+  .home-hero-loc i, .home-hero-time i { margin-right: $sp-4; }
+}
+
+/* art (square) + tv static + dust */
+.home-hero-art {
+  position: relative; margin: 0; width: 100%; max-width: 520px; aspect-ratio: 1 / 1;
+  border-radius: $radius-6; overflow: hidden; justify-self: center;
+
+  @include theme-block      { background: tone(background-100, light); }
+  @include theme-block-dark { background: tone(background-200, dark); }
+
+  img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* scanlines */
+  &::before {
+    content: "";
+    position: absolute; inset: 0; pointer-events: none; mix-blend-mode: overlay;
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,.09) 0px,
+        rgba(255,255,255,.09) 1px,
+        rgba(0,0,0,0) 2px,
+        rgba(0,0,0,0) 3px
+      );
+    animation: home-hero-scan 6s linear infinite;
+  }
+  /* dust/grain */
+  &::after {
+    content: "";
+    position: absolute; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,.08) 50%, transparent 51%) repeat,
+      radial-gradient(1px 1px at 70% 60%, rgba(255,255,255,.06) 50%, transparent 51%) repeat,
+      radial-gradient(1px 1px at 40% 80%, rgba(255,255,255,.05) 50%, transparent 51%) repeat;
+    background-size: 120px 120px, 140px 140px, 160px 160px;
+    opacity: .5;
+    animation: home-hero-dust 3.5s steps(2) infinite;
+  }
+}
+@keyframes home-hero-scan {
+  0%   { transform: translateY(-10%); opacity: .25; }
+  50%  { transform: translateY(10%);  opacity: .35; }
+  100% { transform: translateY(-10%); opacity: .25; }
+}
+@keyframes home-hero-dust {
+  0% { filter: brightness(1); }
+  50% { filter: brightness(1.1); }
+  100% { filter: brightness(1); }
+}
+
+/* buttons */
+.btn { @include button-base; }
+
+/* Primary — keep text readable on hover (no black-on-black) */
+.button {
+  @include theme-block      { background: tone(accent, light); color: tone(white, light); }
+  @include theme-block-dark { background: tone(white, dark);  color: tone(black, dark); }
+  border-color: transparent;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    @include theme-block      { color: tone(white, light); }  // stay white
+    @include theme-block-dark { color: tone(black, dark); }   // stay black
+  }
+}
+.button-transparent {
+  @include button-base; background: transparent;
+  @include theme-block      { border-color: tone(border, light); color: tone(contrast, light); }
+  @include theme-block-dark { border-color: tone(border, dark);  color: tone(contrast, dark); }
+  &:hover {
+    @include theme-block      { background: tone(background-100, light); }
+    @include theme-block-dark { background: tone(background-200, dark);  }
+  }
+}
+.button-ghost {
+  @include button-base; background: transparent;
+  @include theme-block      { color: tone(foreground, light); border-color: tone(border, light); }
+  @include theme-block-dark { color: tone(foreground, dark);  border-color: tone(border, dark); }
+  &:hover {
+    @include theme-block      { background: tone(background-100, light); }
+    @include theme-block-dark { background: tone(background-200, dark); }
+  }
+}
+
+/* media safety */
+.home-hero :where(img, video, svg, canvas) { max-width: 100%; height: auto; display: block; }
+
+/* desktop alignment: art towards right edge */
+@include mq-up($bp-lg) {
+  .home-hero-art { justify-self: end; }
+}
+
+/* modal */
+.home-hero-modal { position: fixed; inset: 0; z-index: $z-modal; display: none; }
+.home-hero-modal[aria-hidden="false"] { display: block; }
+.home-hero-modal__backdrop {
+  position: absolute; inset: 0; backdrop-filter: blur(8px);
+  @include theme-block      { background: rgba(255,255,255,.25); }
+  @include theme-block-dark { background: rgba(0,0,0,.45); }
+}
+.home-hero-modal__dialog {
+  position: relative; z-index: $z-modal + 1;
+  /* Avoid Sass min()/max() pitfalls: use width + max-width pair */
+  width: calc(100% - 2 * #{$container-gutter});
+  max-width: 960px;
+  margin: 10vh auto;
+  border-radius: $radius-6; overflow: hidden;
+
+  @include theme-block      { background: tone(surface, light); border: 1px solid rgba(0,0,0,.08); }
+  @include theme-block-dark { background: tone(surface, dark);  border: 1px solid rgba(255,255,255,.12); }
+}
+.home-hero-modal__close {
+  position: absolute; top: $sp-6; right: $sp-6; z-index: 2;
+  @include button-base; min-height: $btn-height-sm; width: $btn-height-sm; padding: 0; border-radius: 50%;
+  @include theme-block      { background: transparent; border-color: tone(border, light); }
+  @include theme-block-dark { background: transparent; border-color: tone(border, dark);  }
+}
+.home-hero-modal__frame,
+.home-hero-modal__frame iframe { width: 100%; aspect-ratio: 16 / 9; display: block; }
+.home-hero-modal__frame iframe { border: 0; }
