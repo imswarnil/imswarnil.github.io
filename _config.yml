@@ -168,4 +168,4 @@ fonts:
   preconnect_urls:
     - https://fonts.gstatic.com
   font_urls:
-    - https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&family=Geist:wght@100..900&display=swap
+    - https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap
