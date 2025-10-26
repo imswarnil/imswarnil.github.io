@@ -3,6 +3,7 @@
 // Depends on: _variables.scss + layout.scss (for .container)
 // ======================================================================
 
+@use "variables" as *;
 
 .home-hero {
   position: relative;
