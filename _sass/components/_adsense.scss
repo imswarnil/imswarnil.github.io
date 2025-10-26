@@ -24,32 +24,6 @@
   place-items: center;
 }
 
-/* Small top label: "Advertisement" — sits above the ad */
-.ad::before {
-  content: "Advertisement";
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translate(-50%, -60%); /* float a bit higher */
-  padding: $sp-2 $sp-5;
-  font-size: $fs-2;
-  border-radius: $radius-pill;
-  line-height: 1;
-  white-space: nowrap;
-  z-index: 2;               /* ensure above iframe */
-  pointer-events: none;     /* avoid trapping clicks */
-
-  @include theme-block {
-    color: tone(secondary, light);
-    background: tone(background, light);
-    border: 1px solid rgba(0,0,0,.10);
-  }
-  @include theme-block-dark {
-    color: tone(secondary, dark);
-    background: tone(background, dark);
-    border: 1px solid rgba(255,255,255,.14);
-  }
-}
 
 /* Core slot: fluid within parent, no overflow */
 .adsbygoogle.ad__slot {
