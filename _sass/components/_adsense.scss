@@ -100,3 +100,54 @@
   .ad--square-small .ad__slot { max-width: 250px; }
   .ad--square-large .ad__slot { max-width: 420px; }
 }
+
+
+// ======================================================================
+// ads-rails.scss — left/right skyscraper rails outside the main island
+// Depends on: _variables.scss, adsense.scss (for .ad variants)
+// ======================================================================
+
+
+/* Hidden by default on small screens; we enable at wide widths */
+.ad-rails { display: none; }
+
+/* Show rails on large viewports so they don't overlap content.
+   Tune this threshold: 1400px is a good starting point. */
+@media (min-width: 1400px) {
+  .ad-rails { display: block; }
+
+  .ad-rail {
+    position: fixed;
+    top: calc(#{$navbar-height} + #{$sp-8});  /* clear your header */
+    z-index: $z-base;                          /* under modals, over content */
+    width: 300px;                              /* AdSense vertical common width */
+    max-width: 300px;
+    /* Let the ad component size itself; our wrapper just anchors it */
+  }
+
+  /* Align outside the centered island:
+     50% to center, + half island, + container gutter, + small gap */
+  .ad-rail--left {
+    right: calc(50% + (#{$island-width} / 2) + #{$container-gutter} + #{$sp-8});
+  }
+  .ad-rail--right {
+    left:  calc(50% + (#{$island-width} / 2) + #{$container-gutter} + #{$sp-8});
+  }
+
+  /* Make sure the contained ad never overflows its rail box */
+  .ad-rail .ad { width: 100%; max-width: 100%; margin-block: 0; }
+  .ad-rail .ad__slot { width: 100%; max-width: 100%; }
+
+  /* Optional: keep the rail ad roughly within viewport height */
+  .ad-rail .ad--vertical .ad__slot {
+    min-height: clamp(400px, 70vh, 700px);
+  }
+}
+
+/* If you need to nudge rails for ultra-wide or narrower thresholds, add more MQs: */
+/*
+@media (min-width: 1800px) {
+  .ad-rail--left  { right: calc(50% + (#{$island-width} / 2) + #{$container-gutter} + #{$sp-12}); }
+  .ad-rail--right { left:  calc(50% + (#{$island-width} / 2) + #{$container-gutter} + #{$sp-12}); }
+}
+*/
