@@ -5,9 +5,8 @@
 
 <body class="layout-{{ page.layout }}{% if page.title %} {{ page.title | slugify }}{% endif %}">
   {% include header.html %}
-  {% include hero.html %}
-  <!-- Main content area -->
   <main class="main">
+    {% include hero.html %}
       {{ content }}
   {% include site-footer.html %}
   </main>
