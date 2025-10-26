@@ -1,33 +1,32 @@
 ---
 layout: default
 ---
-  <section class="hero">
-    <div class="container narrow">
-      <div class="hero-island">
-        <div class="hero-body">
-          <p class="hero-eyebrow">Filmmaker · Engineer · Storyteller</p>
-          <h1 class="hero-title">
-            Tiny islands. <span class="hero-accent">Big stories.</span>
-          </h1>
-          <p class="hero-sub">
-            Lightweight, glassy UI with compact vibes. Built for speed, crafted for cinema.
-          </p>
-  
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="{{ '/projects/' | relative_url }}">
-              <i class="ph-bold ph-squares-four"></i><span>View Projects</span>
-            </a>
-            <a class="btn btn-ghost" href="{{ '/contact/' | relative_url }}">
-              <i class="ph-bold ph-paper-plane-tilt"></i><span>Say Hello</span>
-            </a>
-          </div>
+
+<section class="home-hero">
+  <div class="home-hero-wrap">
+    <div class="home-hero-box">
+      <div class="home-hero-body">
+        <p class="home-hero-eyebrow">Filmmaker · Engineer · Storyteller</p>
+        <h1 class="home-hero-title">
+          Tiny islands. <span class="home-hero-accent">Big stories.</span>
+        </h1>
+        <p class="home-hero-sub">
+          Lightweight, glassy UI with compact vibes. Built for speed, crafted for cinema.
+        </p>
+        <div class="home-hero-actions">
+          <a class="btn btn-primary" href="{{ '/projects/' | relative_url }}">
+            <i class="ph-bold ph-squares-four"></i><span>View Projects</span>
+          </a>
+          <a class="btn btn-ghost" href="{{ '/contact/' | relative_url }}">
+            <i class="ph-bold ph-paper-plane-tilt"></i><span>Say Hello</span>
+          </a>
         </div>
-  
-        <!-- Optional media; remove if you prefer text-only -->
-        <figure class="hero-media">
-          <img src="https://thumbs.dreamstime.com/b/close-portrait-beautiful-young-man-hairstyle-black-white-light-left-boy-wearing-coat-scarf-51321857.jpg" alt="{{ site.title }} cover" />
-        </figure>
       </div>
+
+      <figure class="home-hero-media">
+        <img src="{{ '/assets/img/cover.jpg' | relative_url }}" alt="Cover">
+      </figure>
     </div>
-  </section>
+  </div>
+</section>
 

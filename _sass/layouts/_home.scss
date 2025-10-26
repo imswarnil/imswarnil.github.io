@@ -1,22 +1,31 @@
 // ======================================================================
-// home.scss — Home hero (glassy island, compact)
-// Depends on: _variables.scss + layout.scss
+// home.scss — Responsive square hero (no container dependency)
+// Depends on: _variables.scss (tokens/mixins)
 // ======================================================================
 
 @use "variables" as *;
 
-// Section spacing (keeps hero breathing without touching header)
-.hero {
+/* Section breathing room */
+.home-hero {
   padding-block: clamp($sp-12, 6vw, $sp-20);
 }
 
-// Glass island wrapper
-.hero-island {
+/* Centers the hero and provides safe gutters without using .container */
+.home-hero-wrap {
+  width: $island-width;
+  max-width: calc(100% - 2 * #{$container-gutter});
+  margin-inline: auto;
+}
+
+/* The square itself */
+.home-hero-box {
+  aspect-ratio: 1 / 1;              /* FORCE a perfect square */
   display: grid;
   gap: $sp-10;
   border-radius: $radius-6;
   padding: clamp($sp-10, 2.4vw, $sp-16);
   backdrop-filter: blur(10px);
+  overflow: hidden;                  /* keep media rounded inside */
 
   @include theme-block {
     background-color: tone(surface, light);
@@ -31,20 +40,24 @@
     color: tone(foreground, dark);
   }
 
-  // Two-column on md+, text/media
+  /* Layout inside the square */
+  grid-template-rows: auto 1fr;      /* text on top, media fills rest by default */
+
   @include mq-up($bp-md) {
-    grid-template-columns: 1.15fr 0.85fr;
+    /* On md+, split square into two columns */
+    grid-template-rows: 1fr;
+    grid-template-columns: 1.05fr 0.95fr;
     align-items: center;
   }
 }
 
-// Text column
-.hero-body {
+/* Text column */
+.home-hero-body {
   display: grid;
   gap: $sp-7;
 }
 
-.hero-eyebrow {
+.home-hero-eyebrow {
   font-size: $fs-2;
   letter-spacing: .02em;
 
@@ -52,19 +65,19 @@
   @include theme-block-dark { color: tone(secondary, dark); }
 }
 
-.hero-title {
+.home-hero-title {
   font-weight: $fw-bold;
   line-height: $lh-tight;
-  font-size: clamp($fs-7, 6.4vw, $fs-10); // no rem+vw calc mixing
+  font-size: clamp($fs-7, 6.4vw, $fs-10);
   margin: 0;
 }
 
-.hero-accent {
+.home-hero-accent {
   @include theme-block  { color: tone(accent, light); }
   @include theme-block-dark { color: tone(accent, dark); }
 }
 
-.hero-sub {
+.home-hero-sub {
   font-size: $fs-3;
   max-width: 60ch;
 
@@ -72,15 +85,14 @@
   @include theme-block-dark { color: tone(foreground, dark); }
 }
 
-// Actions
-.hero-actions {
+.home-hero-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: $sp-7;
   align-items: center;
+  gap: $sp-7;
 }
 
-// Buttons (compact, tokenized)
+/* Buttons */
 .btn { @include button-base; }
 
 .btn-primary {
@@ -114,20 +126,23 @@
   }
 }
 
-// Media column
-.hero-media {
+/* Media column: fills available space, keeps square feel */
+.home-hero-media {
   margin: 0;
 
+  /* On mobile, put media below text; on md+, media sits to the right */
+  @include mq-up($bp-md) {
+    justify-self: stretch;
+    align-self: stretch;
+  }
+
   img {
-    display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;              /* fill the area; stay cinematic */
     border-radius: $radius-5;
 
     @include theme-block { border: 1px solid tone(border, light); }
     @include theme-block-dark { border: 1px solid tone(border, dark); }
   }
 }
-
-// Optional: make the hero edge-to-edge while content remains narrow
-// Wrap <section class="hero"> in a .wide container if you want full-bleed bg.
