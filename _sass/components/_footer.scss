@@ -1,56 +1,71 @@
 // ======================================================================
-// Cinematic Footer — Light: white text/icons + black scrim + grid
-//                       Dark: dark text/icons + white scrim + grid
-// - Full-cover video (no blur), grid/scrim above video and below content
-// - Floating strip styled like navbar island
-// - Uses your tokens/mixins from _variables.scss
+// Cinematic Footer — Full-width video, container content, lighter look
+// - Lighter scrim & grid lines; dark mode brightens video slightly
+// - No page shell; just drop include at bottom of layout
+// - Uses your tokens/mixins only
 // ======================================================================
 
-/* Sticky shell so footer sits at bottom on short pages */
-.page-shell { display: flex; min-height: 100vh; flex-direction: column; }
-.page-shell > .site-footer { margin-top: auto; }
+/* Root footer */
+.site-footer {
+  position: relative; z-index: 1;
+  margin-top: $sp-12;
+  width: 100%;
+  overflow: clip;
+}
 
-/* Root */
-.site-footer { position: relative; z-index: 1; margin-top: $sp-12; overflow: clip; }
-
-/* Dotted surface behind the island */
+/* Subtle dotted background behind island */
 .footer-surface {
   position: absolute; inset: 0; z-index: 0;
   background-image:
-    radial-gradient(rgba(0,0,0,.06) 1px, transparent 1px),
-    radial-gradient(rgba(0,0,0,.04) 1px, transparent 1px);
+    radial-gradient(rgba(0,0,0,.05) 1px, transparent 1px),
+    radial-gradient(rgba(0,0,0,.03) 1px, transparent 1px);
   background-size: 16px 16px, 16px 16px;
   background-position: 0 0, 8px 8px;
 
   @include theme-block-dark {
     background-image:
       radial-gradient(rgba(255,255,255,.09) 1px, transparent 1px),
-      radial-gradient(rgba(255,255,255,.07) 1px, transparent 1px);
+      radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px);
   }
 }
 
-/* Island */
-.footer-island { position: relative; z-index: 1; border-radius: $radius-6; overflow: hidden; }
+/* Full-width island wrapper (video spans edge-to-edge) */
+.footer-island {
+  position: relative; z-index: 1;
+  width: 100%;
+  border-radius: $radius-6;
+  overflow: hidden;
+}
 
-/* Media stack */
-.footer-media { position: absolute; inset: 0; z-index: 0; pointer-events: none; border-radius: inherit; }
+/* Background media spans full width */
+.footer-media {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; border-radius: inherit;
+}
 
-/* Full-cover responsive iframe with soft mask on container */
+/* Soft mask around edges (no tint) */
 .footer-media__inner {
   position: absolute; inset: 0; overflow: hidden; border-radius: inherit;
-  -webkit-mask-image: radial-gradient(120% 120% at 50% 40%, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
-  mask-image: radial-gradient(120% 120% at 50% 40%, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
+  -webkit-mask-image: radial-gradient(130% 130% at 50% 40%, rgba(0,0,0,1) 62%, rgba(0,0,0,0) 100%);
+  mask-image: radial-gradient(130% 130% at 50% 40%, rgba(0,0,0,1) 62%, rgba(0,0,0,0) 100%);
 }
+
+/* Full-cover responsive iframe */
 .footer-yt {
   position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
   border: 0; display: block; pointer-events: none;
-  width: 177.78vh; height: 100vh; min-width: 100%; min-height: 100%;
-  @media (min-aspect-ratio: 16/9) { width: 100vw; height: 56.25vw; }
-  transition: transform $dur-2 $ease-in-out;
-}
-.footer-island:hover .footer-yt { transform: translate(-50%, -50%) scale(1.03); }
 
-/* Grid overlay (on top of video, below content) */
+  /* Cover by height (tall/narrow viewports) */
+  width: 177.78vh; height: 100vh; min-width: 100%; min-height: 100%;
+
+  /* Cover by width (wide viewports) */
+  @media (min-aspect-ratio: 16/9) { width: 100vw; height: 56.25vw; }
+
+  /* Cinematic micro drift */
+  transition: transform $dur-2 $ease-in-out, filter $dur-2 $ease-in-out;
+}
+.footer-island:hover .footer-yt { transform: translate(-50%, -50%) scale(1.02); }
+
+/* Light grid lines over video */
 .footer-grid {
   position: absolute; inset: 0; z-index: 1; pointer-events: none; border-radius: inherit;
   background-image:
@@ -65,35 +80,40 @@
   }
 }
 
-/* Scrim overlay for legibility (no blur, color-reversed by theme) */
+/* Lighter scrim, reversed by theme; brighten video in dark mode */
 .footer-scrim {
   position: absolute; inset: 0; z-index: 2; pointer-events: none; border-radius: inherit;
-  background: rgba(0,0,0,.48);  // Light mode: black translucent
-  @include theme-block-dark { background: rgba(255,255,255,.42); } // Dark mode: white translucent
+  background: rgba(0,0,0,.28); // Light mode: gentle black scrim (lighter than before)
+  @include theme-block-dark { background: rgba(255,255,255,.22); } // Dark: gentle white scrim
 }
+/* Subtle video brightening in dark mode for readability */
+:root[data-color-scheme="dark"] .footer-yt { filter: brightness(1.12) contrast(.98) saturate(1.06); }
 
-/* Container */
+/* Containerized content (your layout width) */
 .footer__container { @include container; }
 
-/* Content card (no bottom border; rounded top) */
+/* Content card (rounded top; no bottom border) */
 .footer__inner {
   position: relative; z-index: 3; // above grid/scrim
   display: grid; gap: $sp-8;
   padding: clamp(#{$sp-8}, 5vw, #{$sp-12});
-  min-height: 440px;
+  min-height: 420px;
 
   border: 1px solid; border-bottom: 0;
   border-radius: $radius-6 $radius-6 0 0;
 
-  // subtle card surfaces (no blur)
-  @include theme-block      { background: rgba(255,255,255,.08); border-color: tone(border, light); box-shadow: $shadow-light; }
-  @include theme-block-dark { background: rgba(18,18,20,.10);   border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
+  /* lighter glass surfaces (no blur) */
+  @include theme-block      { background: rgba(255,255,255,.06); border-color: tone(border, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: rgba(18,18,20,.08);   border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
 
   @include mq-up($bp-md) { grid-template-columns: repeat(2, 1fr); }
   @include mq-up($bp-lg) { grid-template-columns: repeat(4, 1fr); }
 }
 
-/* Typography & icon colors — Light: white; Dark: dark */
+/* Columns */
+.footer__col { display: flex; flex-direction: column; gap: $sp-4; }
+
+/* Typography & icon colors — lighter feel */
 .footer__title,
 .footer__text,
 .footer__list a,
@@ -102,43 +122,50 @@
 .footer-strip__inner p,
 .footer-strip__inner a,
 .footer__social a {
-  @include theme-block      { color: rgba(255,255,255,.98); }
-  @include theme-block-dark { color: tone(contrast, dark); }
+  @include theme-block      { color: rgba(255,255,255,.98); }   // light mode: white text
+  @include theme-block-dark { color: tone(contrast, dark); }    // dark mode: theme contrast
 }
 .footer__list a i,
 .footer__title i,
-.footer__social a { @include theme-block { color: rgba(255,255,255,.98); } @include theme-block-dark { color: tone(contrast, dark); } }
+.footer__social a {
+  @include theme-block { color: rgba(255,255,255,.98); }
+  @include theme-block-dark { color: tone(contrast, dark); }
+}
 
-/* Title underline */
+/* Titles + underline */
 .footer__title {
   display: inline-flex; align-items: center; gap: .55rem;
   font-size: $fs-4; font-weight: $fw-semibold; letter-spacing: -0.01em;
   &::after { content:""; display:block; width:28px; height:2px; margin-top:$sp-2; border-radius:2px;
-    @include theme-block { background: rgba(255,255,255,.9); }
-    @include theme-block-dark { background: rgba(0,0,0,.75); } }
+    @include theme-block      { background: rgba(255,255,255,.9); }
+    @include theme-block-dark { background: rgba(0,0,0,.7); } }
 }
 
-/* Lists */
-.footer__list { list-style:none; margin:0; padding:0; display:grid; gap:$sp-2; }
-.footer__list a {
-  display:inline-flex; align-items:center; gap:.55rem; text-decoration:none; font-size:$fs-3;
-  transition: transform $dur-1 $ease-in-out, text-decoration-color $dur-1;
-  &:hover { text-decoration: underline; transform: translateX(2px); }
+/* Lists + hover */
+.footer__list {
+  list-style:none; margin:0; padding:0; display:grid; gap:$sp-2;
+  a {
+    display:inline-flex; align-items:center; gap:.55rem; text-decoration:none; font-size:$fs-3;
+    transition: transform $dur-1 $ease-in-out, text-decoration-color $dur-1;
+    &:hover { text-decoration: underline; transform: translateX(2px); }
+  }
 }
 
-/* Social */
-.footer__social { display:flex; align-items:center; gap:$sp-3; }
-.footer__social a {
-  display:inline-grid; place-items:center; width:2rem; height:2rem; border-radius:50%;
-  border: 1px solid;
-  @include theme-block      { border-color: rgba(255,255,255,.45); }
-  @include theme-block-dark { border-color: rgba(0,0,0,.25); }
-  font-size:$fs-4;
-  transition: transform $dur-1 $ease-in-out, background-color $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out;
-  &:hover {
-    transform: translateY(-2px);
-    @include theme-block      { background: rgba(255,255,255,.14); box-shadow: 0 10px 22px -10px rgba(0,0,0,.45); }
-    @include theme-block-dark { background: rgba(0,0,0,.08);  box-shadow: 0 10px 22px -10px rgba(0,0,0,.35); }
+/* Social chips */
+.footer__social {
+  display:flex; align-items:center; gap:$sp-3;
+  a {
+    display:inline-grid; place-items:center; width:2rem; height:2rem; border-radius:50%;
+    border: 1px solid;
+    @include theme-block      { border-color: rgba(255,255,255,.42); }
+    @include theme-block-dark { border-color: rgba(0,0,0,.28); }
+    font-size:$fs-4;
+    transition: transform $dur-1 $ease-in-out, background-color $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out;
+    &:hover {
+      transform: translateY(-2px);
+      @include theme-block      { background: rgba(255,255,255,.16); box-shadow: 0 10px 22px -10px rgba(0,0,0,.4); }
+      @include theme-block-dark { background: rgba(0,0,0,.08);       box-shadow: 0 10px 22px -10px rgba(0,0,0,.35); }
+    }
   }
 }
 
@@ -146,8 +173,7 @@
 .footer__form { display:flex; flex-direction:column; gap:$sp-3; }
 .footer__field {
   display:flex; align-items:center; gap:$sp-3;
-  border:1px solid; border-radius:$radius-pill; padding:.55rem .8rem;
-  background: transparent;
+  border:1px solid; border-radius:$radius-pill; padding:.55rem .85rem; background: transparent;
 
   @include theme-block      { border-color: rgba(255,255,255,.55); }
   @include theme-block-dark { border-color: rgba(0,0,0,.35); }
@@ -155,12 +181,12 @@
   i { font-size:$fs-4; }
   input {
     flex:1; border:0; outline:0; background:transparent; font-size:$fs-3;
-    @include theme-block      { color: rgba(255,255,255,.98); &::placeholder { color: rgba(255,255,255,.75); } }
+    @include theme-block      { color: rgba(255,255,255,.98); &::placeholder { color: rgba(255,255,255,.72); } }
     @include theme-block-dark { color: tone(contrast, dark);   &::placeholder { color: rgba(0,0,0,.55); } }
   }
   &:focus-within {
     @include theme-block      { border-color: rgba(255,255,255,.9); }
-    @include theme-block-dark { border-color: rgba(0,0,0,.65); }
+    @include theme-block-dark { border-color: rgba(0,0,0,.62); }
   }
 }
 .footer__submit {
@@ -170,11 +196,11 @@
   font-size:$fs-3; font-weight:$fw-semibold;
 
   @include theme-block      { background: rgba(255,255,255,1); color: tone(black, dark); }
-  @include theme-block-dark { background: rgba(0,0,0,.92);     color: rgba(255,255,255,.98); }
+  @include theme-block-dark { background: rgba(0,0,0,.9);      color: rgba(255,255,255,.98); }
 
   transition: transform $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out, opacity $dur-1;
   i { font-size:$fs-4; }
-  &:hover { transform: translateY(-2px); box-shadow: 0 10px 22px -10px rgba(0,0,0,.45); }
+  &:hover { transform: translateY(-2px); box-shadow: 0 10px 22px -10px rgba(0,0,0,.4); }
   &:active { transform: translateY(0); opacity: .92; }
 }
 .footer__hint {
@@ -183,7 +209,7 @@
   @include theme-block-dark { color: rgba(0,0,0,.7); }
 }
 
-/* Floating footer strip (navbar island vibe) */
+/* Floating footer strip (navbar island style) */
 .footer-strip { position: relative; z-index: 2; margin-top: $sp-3; }
 .footer-strip .footer__container { @include container; }
 .footer-strip__inner {
@@ -192,13 +218,13 @@
   border: 1px solid; border-radius: $radius-pill;
 
   @include theme-block {
-    background: rgba(255,255,255,.92);
+    background: rgba(255,255,255,.94);
     border-color: tone(border, light);
     color: tone(contrast, light);
     box-shadow: $shadow-light;
   }
   @include theme-block-dark {
-    background: rgba(0,0,0,.82);
+    background: rgba(0,0,0,.84);
     border-color: tone(border, dark);
     color: tone(contrast, dark);
     box-shadow: $shadow-dark;

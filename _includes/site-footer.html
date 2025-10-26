@@ -1,110 +1,106 @@
 <!-- ====================================================================== -->
-<!--  CINEMATIC ISLAND FOOTER (FULL INCLUDE)                                -->
-<!--  - Sticky page shell                                                   -->
-<!--  - Full-cover YouTube bg (muted/auto/loop/no-controls)                 -->
-<!--  - Grid-line overlay + translucent scrim (above video, below content)  -->
-<!--  - Light mode: white text/icons + black scrim; Dark: reversed          -->
-<!--  - 4 responsive columns + floating strip that feels like navbar island -->
+<!--  CINEMATIC ISLAND FOOTER (FULL-WIDTH VIDEO, CONTAINER CONTENT)         -->
+<!--  - Full-cover YouTube bg (autoplay/muted/loop/no-controls)             -->
+<!--  - Grid overlay + light scrim (above video, below content)             -->
+<!--  - Lighter overall look; video brightened in dark mode                 -->
+<!--  - 4 responsive columns + floating strip                               -->
 <!-- ====================================================================== -->
 
-<div class="page-shell">
-  <footer class="site-footer">
-    <!-- Subtle dotted background behind island -->
-    <div class="footer-surface" aria-hidden="true"></div>
+<footer class="site-footer">
+  <!-- subtle dotted surface behind everything -->
+  <div class="footer-surface" aria-hidden="true"></div>
 
-    <div class="footer-island">
-      <!-- Video background -->
-      <div class="footer-media" aria-hidden="true">
-        <div class="footer-media__inner">
-          <iframe
-            class="footer-yt"
-            src="https://www.youtube.com/embed/ecOkmTD7KhU?autoplay=1&mute=1&controls=0&playsinline=1&loop=1&modestbranding=1&rel=0&showinfo=0&playlist=ecOkmTD7KhU&iv_load_policy=3&disablekb=1&fs=0"
-            title="Footer background reel"
-            loading="lazy"
-            allow="autoplay; fullscreen; picture-in-picture"
-            referrerpolicy="strict-origin-when-cross-origin"
-          ></iframe>
-        </div>
-
-        <!-- Grid overlay (on top of video, below content) -->
-        <div class="footer-grid" aria-hidden="true"></div>
-
-        <!-- Translucent scrim (on top of video, below content) -->
-        <div class="footer-scrim" aria-hidden="true"></div>
+  <div class="footer-island">
+    <!-- Full-width cinematic video -->
+    <div class="footer-media" aria-hidden="true">
+      <div class="footer-media__inner">
+        <iframe
+          class="footer-yt"
+          src="https://www.youtube.com/embed/ecOkmTD7KhU?autoplay=1&mute=1&controls=0&playsinline=1&loop=1&modestbranding=1&rel=0&showinfo=0&playlist=ecOkmTD7KhU&iv_load_policy=3&disablekb=1&fs=0"
+          title="Footer background reel"
+          loading="lazy"
+          allow="autoplay; fullscreen; picture-in-picture"
+          referrerpolicy="strict-origin-when-cross-origin"
+        ></iframe>
       </div>
 
-      <!-- Island content -->
-      <div class="footer__container">
-        <div class="footer__inner">
-          <!-- Column 1 -->
-          <div class="footer__col footer__about">
-            <h4 class="footer__title"><i class="ph-bold ph-user"></i> About</h4>
-            <p class="footer__text">
-              I’m <strong>ImSwarnil</strong> — filmmaker, software engineer, and storyteller.<br>
-              Code × Cinema × Chaos = Legacy.
-            </p>
-            <div class="footer__social">
-              <a href="https://youtube.com/imswarnil" aria-label="YouTube" target="_blank" rel="noopener"><i class="ph-bold ph-youtube-logo"></i></a>
-              <a href="https://instagram.com/imswarnil" aria-label="Instagram" target="_blank" rel="noopener"><i class="ph-bold ph-instagram-logo"></i></a>
-              <a href="https://github.com/imswarnil" aria-label="GitHub" target="_blank" rel="noopener"><i class="ph-bold ph-github-logo"></i></a>
-              <a href="mailto:hello@imswarnil.com" aria-label="Email"><i class="ph-bold ph-envelope"></i></a>
+      <!-- Grid lines (on top of video) -->
+      <div class="footer-grid" aria-hidden="true"></div>
+      <!-- Soft scrim (lighter than before) -->
+      <div class="footer-scrim" aria-hidden="true"></div>
+    </div>
+
+    <!-- Content container (kept inside your layout width) -->
+    <div class="footer__container">
+      <div class="footer__inner">
+        <!-- Column 1 -->
+        <div class="footer__col footer__about">
+          <h4 class="footer__title"><i class="ph-bold ph-user"></i> About</h4>
+          <p class="footer__text">
+            I’m <strong>ImSwarnil</strong> — filmmaker, software engineer, and storyteller.<br>
+            Code × Cinema × Chaos = Legacy.
+          </p>
+          <div class="footer__social">
+            <a href="https://youtube.com/imswarnil" aria-label="YouTube" target="_blank" rel="noopener"><i class="ph-bold ph-youtube-logo"></i></a>
+            <a href="https://instagram.com/imswarnil" aria-label="Instagram" target="_blank" rel="noopener"><i class="ph-bold ph-instagram-logo"></i></a>
+            <a href="https://github.com/imswarnil" aria-label="GitHub" target="_blank" rel="noopener"><i class="ph-bold ph-github-logo"></i></a>
+            <a href="mailto:hello@imswarnil.com" aria-label="Email"><i class="ph-bold ph-envelope"></i></a>
+          </div>
+        </div>
+
+        <!-- Column 2 -->
+        <div class="footer__col">
+          <h4 class="footer__title"><i class="ph-bold ph-compass"></i> Explore</h4>
+          <ul class="footer__list">
+            <li><a href="{{ '/#about' | relative_url }}"><i class="ph-bold ph-user"></i> About Me</a></li>
+            <li><a href="{{ '/#projects' | relative_url }}"><i class="ph-bold ph-folder"></i> Projects</a></li>
+            <li><a href="{{ '/blog/' | relative_url }}"><i class="ph-bold ph-article"></i> Blog</a></li>
+            <li><a href="{{ '/#contact' | relative_url }}"><i class="ph-bold ph-paper-plane-tilt"></i> Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3 -->
+        <div class="footer__col">
+          <h4 class="footer__title"><i class="ph-bold ph-books"></i> Resources</h4>
+          <ul class="footer__list">
+            <li><a href="{{ '/videos/' | relative_url }}"><i class="ph-bold ph-video"></i> Videos</a></li>
+            <li><a href="{{ '/webseries/' | relative_url }}"><i class="ph-bold ph-clapperboard"></i> Web Series</a></li>
+            <li><a href="{{ '/projects/' | relative_url }}"><i class="ph-bold ph-git-branch"></i> Open Source</a></li>
+            <li><a href="{{ '/privacy/' | relative_url }}"><i class="ph-bold ph-lock-key"></i> Privacy Policy</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 4 -->
+        <div class="footer__col">
+          <h4 class="footer__title"><i class="ph-bold ph-megaphone-simple"></i> Newsletter</h4>
+          <p class="footer__text">Join the crew — stories, updates & creative chaos once a month.</p>
+
+          <form class="footer__form" action="#" method="post" novalidate>
+            <div class="footer__field">
+              <i class="ph-bold ph-at"></i>
+              <input type="email" name="email" placeholder="Your email" required aria-label="Email address" />
             </div>
-          </div>
-
-          <!-- Column 2 -->
-          <div class="footer__col">
-            <h4 class="footer__title"><i class="ph-bold ph-compass"></i> Explore</h4>
-            <ul class="footer__list">
-              <li><a href="{{ '/#about' | relative_url }}"><i class="ph-bold ph-user"></i> About Me</a></li>
-              <li><a href="{{ '/#projects' | relative_url }}"><i class="ph-bold ph-folder"></i> Projects</a></li>
-              <li><a href="{{ '/blog/' | relative_url }}"><i class="ph-bold ph-article"></i> Blog</a></li>
-              <li><a href="{{ '/#contact' | relative_url }}"><i class="ph-bold ph-paper-plane-tilt"></i> Contact</a></li>
-            </ul>
-          </div>
-
-          <!-- Column 3 -->
-          <div class="footer__col">
-            <h4 class="footer__title"><i class="ph-bold ph-books"></i> Resources</h4>
-            <ul class="footer__list">
-              <li><a href="{{ '/videos/' | relative_url }}"><i class="ph-bold ph-video"></i> Videos</a></li>
-              <li><a href="{{ '/webseries/' | relative_url }}"><i class="ph-bold ph-clapperboard"></i> Web Series</a></li>
-              <li><a href="{{ '/projects/' | relative_url }}"><i class="ph-bold ph-git-branch"></i> Open Source</a></li>
-              <li><a href="{{ '/privacy/' | relative_url }}"><i class="ph-bold ph-lock-key"></i> Privacy Policy</a></li>
-            </ul>
-          </div>
-
-          <!-- Column 4 -->
-          <div class="footer__col">
-            <h4 class="footer__title"><i class="ph-bold ph-megaphone-simple"></i> Newsletter</h4>
-            <p class="footer__text">Join the crew — stories, updates & creative chaos once a month.</p>
-
-            <form class="footer__form" action="#" method="post" novalidate>
-              <div class="footer__field">
-                <i class="ph-bold ph-at"></i>
-                <input type="email" name="email" placeholder="Your email" required aria-label="Email address" />
-              </div>
-              <button type="submit" class="footer__submit" aria-label="Subscribe">
-                <i class="ph-bold ph-paper-plane-tilt"></i>
-                <span>Subscribe</span>
-              </button>
-              <p class="footer__hint">No spam. Unsubscribe anytime.</p>
-            </form>
-          </div>
+            <button type="submit" class="footer__submit" aria-label="Subscribe">
+              <i class="ph-bold ph-paper-plane-tilt"></i>
+              <span>Subscribe</span>
+            </button>
+            <p class="footer__hint">No spam. Unsubscribe anytime.</p>
+          </form>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Floating strip (looks like navbar island) -->
-    <section class="footer-strip">
-      <div class="footer__container">
-        <div class="footer-strip__inner">
-          <p>© {{ site.time | date: "%Y" }} <strong>ImSwarnil</strong></p>
-          <p class="footer__credit">
-            <i class="ph-bold ph-heart"></i>
-            <span>Powered by <a href="https://jekyllrb.com/" target="_blank" rel="noopener">Jekyll</a> • Deployed on <a href="https://vercel.com" target="_blank" rel="noopener">Vercel</a></span>
-          </p>
-        </div>
+  <!-- Floating strip (navbar island vibe) -->
+  <section class="footer-strip">
+    <div class="footer__container">
+      <div class="footer-strip__inner">
+        <p>© {{ site.time | date: "%Y" }} <strong>ImSwarnil</strong></p>
+        <p class="footer__credit">
+          <i class="ph-bold ph-heart"></i>
+          <span>Powered by <a href="https://jekyllrb.com/" target="_blank" rel="noopener">Jekyll</a> • Deployed on <a href="https://vercel.com" target="_blank" rel="noopener">Vercel</a></span>
+        </p>
       </div>
-    </section>
-  </footer>
-</div>
+    </div>
+  </section>
+</footer>
