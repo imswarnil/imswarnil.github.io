@@ -1,5 +1,5 @@
 // ======================================================================
-// home.scss — Compact square hero with floating tags & ticker
+// home.scss — Compact square hero (image-first), no marquee
 // Depends on: _variables.scss
 // ======================================================================
 
@@ -9,7 +9,7 @@
   padding-block: clamp($sp-12, 6vw, $sp-20);
 }
 
-/* Self-centered wrapper with safe gutters (no .container dependency) */
+/* Self-contained “container” to avoid conflicts with site .container */
 .home-hero-wrap {
   width: $island-width;
   max-width: calc(100% - 2 * #{$container-gutter});
@@ -17,7 +17,8 @@
 
   display: grid;
   gap: $sp-12;
-  /* Mobile: image first, then details (source order already image first) */
+
+  // Mobile: image first (source order). Desktop: split.
   @include mq-up($bp-md) {
     grid-template-columns: auto 1fr;
     align-items: center;
@@ -25,10 +26,10 @@
   }
 }
 
-/* Square photo with floating tags */
+/* Square image card with floating tags */
 .home-hero-photo {
   position: relative;
-  width: clamp(9rem, 32vw, 14rem);
+  width: clamp(9rem, 34vw, 15rem);
   aspect-ratio: 1 / 1;
   border-radius: $radius-6;
   overflow: hidden;
@@ -52,7 +53,7 @@
   }
 }
 
-/* Floating tag pills */
+/* Floating pills (icon + label) */
 .home-hero-tag {
   position: absolute;
   display: inline-flex;
@@ -77,7 +78,7 @@
   }
 }
 
-/* Randomized positions (desktop) */
+/* Positions (desktop) */
 @include mq-up($bp-md) {
   .home-hero-photo {
     .tag-1 { top: -$sp-6; left: -$sp-6; }
@@ -86,11 +87,10 @@
     .tag-4 { bottom: -$sp-6; right: $sp-6; }
     .tag-5 { top: 45%; left: -$sp-8; transform: translateY(-50%); }
     .tag-6 { top: -$sp-6; right: 30%; }
-    .tag-7 { bottom: 35%; right: -$sp-8; }
   }
 }
 
-/* On small screens, keep fewer pills snug near edges */
+/* Trim pills on small screens for clarity */
 @media (max-width: $bp-md) {
   .home-hero-photo {
     .home-hero-tag { font-size: $fs-2; transform: none; }
@@ -98,11 +98,11 @@
     .tag-2 { top: $sp-4; right: $sp-4; }
     .tag-3 { bottom: $sp-4; left: $sp-4; }
     .tag-4 { bottom: $sp-4; right: $sp-4; }
-    .tag-5, .tag-6, .tag-7 { display: none; } /* trim to 4 pills on mobile for clarity */
+    .tag-5, .tag-6 { display: none; }
   }
 }
 
-/* Details block */
+/* Details */
 .home-hero-details {
   display: grid;
   gap: $sp-7;
@@ -120,18 +120,19 @@
   margin: 0;
   font-size: $fs-3;
 
-  @include theme-block { color: tone(foreground, light); }
+  @include theme-block  { color: tone(foreground, light); }
   @include theme-block-dark { color: tone(foreground, dark); }
 
+  .job     { font-weight: $fw-semibold; }
   .company { font-weight: $fw-semibold; }
-  .dot { margin-inline: $sp-6; opacity: .6; }
+  .dot     { margin-inline: $sp-6; opacity: .6; }
 }
 
 .home-hero-meta {
   display: inline-flex; align-items: center; gap: $sp-5;
   margin: 0; font-size: $fs-2;
 
-  @include theme-block { color: tone(secondary, light); }
+  @include theme-block  { color: tone(secondary, light); }
   @include theme-block-dark { color: tone(secondary, dark); }
 }
 
@@ -140,54 +141,47 @@
   font-size: $fs-3;
   max-width: 60ch;
 
-  @include theme-block { color: tone(foreground, light); }
+  @include theme-block  { color: tone(foreground, light); }
   @include theme-block-dark { color: tone(foreground, dark); }
 }
 
-/* Actions */
-.home-hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: $sp-7; }
+/* Actions (compact buttons) */
+.home-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $sp-7;
+}
+
 .btn { @include button-base; }
+
 .btn-primary {
-  @include theme-block { background-color: tone(accent, light); color: tone(white, light); border-color: tone(accent, light); }
-  @include theme-block-dark { background-color: tone(accent, dark); color: tone(black, dark); border-color: tone(accent, dark); }
+  @include theme-block {
+    background-color: tone(accent, light);
+    color: tone(white, light);
+    border-color: tone(accent, light);
+  }
+  @include theme-block-dark {
+    background-color: tone(accent, dark);
+    color: tone(black, dark);
+    border-color: tone(accent, dark);
+  }
   &:hover { transform: translateY(-1px); }
 }
+
 .btn-ghost {
-  @include theme-block { background-color: transparent; color: tone(foreground, light); border-color: tone(border, light); }
-  @include theme-block-dark { background-color: transparent; color: tone(foreground, dark); border-color: tone(border, dark); }
+  @include theme-block {
+    background-color: transparent;
+    color: tone(foreground, light);
+    border-color: tone(border, light);
+  }
+  @include theme-block-dark {
+    background-color: transparent;
+    color: tone(foreground, dark);
+    border-color: tone(border, dark);
+  }
   &:hover {
     @include theme-block { background-color: tone(background-100, light); }
     @include theme-block-dark { background-color: tone(background-200, dark); }
   }
-}
-
-/* Ticker */
-.home-hero-ticker {
-  border-radius: $radius-3;
-  overflow: hidden;
-  border: 1px solid transparent;
-
-  @include theme-block { background: tone(background-100, light); border-color: tone(border, light); }
-  @include theme-block-dark { background: tone(background-200, dark); border-color: tone(border, dark); }
-}
-
-.home-hero-track {
-  display: inline-flex;
-  gap: $sp-10;
-  padding: $sp-5 $sp-7;
-  min-width: 100%;
-  white-space: nowrap;
-  animation: heroMarquee 24s linear infinite;
-
-  span {
-    display: inline-flex; align-items: center; gap: $sp-5;
-    font-size: $fs-2;
-    @include theme-block { color: tone(foreground, light); }
-    @include theme-block-dark { color: tone(foreground, dark); }
-  }
-}
-
-@keyframes heroMarquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
 }

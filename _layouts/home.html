@@ -1,38 +1,41 @@
 ---
 layout: default
 ---
-
 <section class="home-hero">
   <div class="home-hero-wrap">
+    <!-- 1) Image first (mobile) -->
+    <figure class="home-hero-photo">
+      <img
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRl6dqv_avIvyeanSyi6l7QBVBXK00cj2SZLA&s"
+        alt="{{ site.title | default: 'Profile image' }}"
+      />
 
-    <!-- IMAGE SIDE (mobile-first first column) -->
-    <div class="home-hero-photo">
-      <img src="{{ '/assets/img/avatar.jpg' | relative_url }}" alt="{{ site.title }} portrait" />
-
-      <!-- Floating skill/identity tags (6-7) -->
+      <!-- Floating pills (icon + label). Trimmed on small screens. -->
       <span class="home-hero-tag tag-1"><i class="ph-bold ph-film-script"></i> Filmmaker</span>
       <span class="home-hero-tag tag-2"><i class="ph-bold ph-code"></i> Engineer</span>
-      <span class="home-hero-tag tag-3"><i class="ph-bold ph-camera"></i> DP</span>
-      <span class="home-hero-tag tag-4"><i class="ph-bold ph-microphone-stage"></i> Narrator</span>
-      <span class="home-hero-tag tag-5"><i class="ph-bold ph-brain"></i> Story</span>
-      <span class="home-hero-tag tag-6"><i class="ph-bold ph-lightning"></i> Editor</span>
-      <span class="home-hero-tag tag-7"><i class="ph-bold ph-compass"></i> Traveler</span>
-    </div>
+      <span class="home-hero-tag tag-3"><i class="ph-bold ph-brain"></i> Story</span>
+      <span class="home-hero-tag tag-4"><i class="ph-bold ph-lightning"></i> Editor</span>
+      <span class="home-hero-tag tag-5"><i class="ph-bold ph-compass"></i> Traveler</span>
+      <span class="home-hero-tag tag-6"><i class="ph-bold ph-camera"></i> DP</span>
+    </figure>
 
-    <!-- DETAILS SIDE -->
+    <!-- 2) Details -->
     <div class="home-hero-details">
-      <h1 class="home-hero-name">{{ site.title }}</h1>
+      <h1 class="home-hero-name">{{ site.title | default: 'Your Name' }}</h1>
+
       <p class="home-hero-role">
-        {{ site.job_title | default: 'Creative Developer' }}
+        <span class="job">{{ site.job_title | default: 'Creative Developer' }}</span>
         <span class="dot">•</span>
         <span class="company">{{ site.company | default: 'Freelance' }}</span>
       </p>
+
       <p class="home-hero-meta">
         <i class="ph-bold ph-map-pin"></i>
         <span class="location">{{ site.location | default: 'Bengaluru, IN' }}</span>
       </p>
+
       <p class="home-hero-bio">
-        {{ site.bio | default: 'I design cinematic web experiences, blending filmmaker instincts with engineering precision.' }}
+        {{ site.bio | default: 'I craft cinematic, lightweight web experiences — equal parts filmmaker and engineer.' }}
       </p>
 
       <div class="home-hero-actions">
@@ -43,27 +46,8 @@ layout: default
           <i class="ph-bold ph-paper-plane-tilt"></i><span>Contact</span>
         </a>
       </div>
-
-      <!-- TICKER -->
-      <div class="home-hero-ticker" aria-label="Highlights">
-        <div class="home-hero-track">
-          <span><i class="ph-bold ph-star"></i> 100+ videos</span>
-          <span><i class="ph-bold ph-rocket"></i> Fast, lightweight UI</span>
-          <span><i class="ph-bold ph-chats-circle"></i> Deadpool wit</span>
-          <span><i class="ph-bold ph-sword"></i> Jack Sparrow charm</span>
-          <span><i class="ph-bold ph-fire"></i> Cinematic edits</span>
-          <span><i class="ph-bold ph-lightning"></i> Real-time builds</span>
-          <!-- duplicate for seamless loop -->
-          <span><i class="ph-bold ph-star"></i> 100+ videos</span>
-          <span><i class="ph-bold ph-rocket"></i> Fast, lightweight UI</span>
-          <span><i class="ph-bold ph-chats-circle"></i> Deadpool wit</span>
-          <span><i class="ph-bold ph-sword"></i> Jack Sparrow charm</span>
-          <span><i class="ph-bold ph-fire"></i> Cinematic edits</span>
-          <span><i class="ph-bold ph-lightning"></i> Real-time builds</span>
-        </div>
-      </div>
     </div>
-
   </div>
 </section>
+
 
