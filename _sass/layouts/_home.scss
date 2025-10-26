@@ -1,187 +1,228 @@
 // ======================================================================
-// home.scss — Compact square hero (image-first), no marquee
+// home.scss — Mobile-first 2-col hero (image left, details right)
+// Square image, floating badges, signature, animated background pattern.
 // Depends on: _variables.scss
 // ======================================================================
 
 @use "variables" as *;
 
 .home-hero {
+  position: relative;
   padding-block: clamp($sp-12, 6vw, $sp-20);
-}
+  overflow: clip; // keep floated badges from causing scroll
 
-/* Self-contained “container” to avoid conflicts with site .container */
-.home-hero-wrap {
-  width: $island-width;
-  max-width: calc(100% - 2 * #{$container-gutter});
-  margin-inline: auto;
+  // Animated pattern background (subtle)
+  &::before {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(18px 18px at 10% 10%, rgba(0,0,0,.06), transparent 55%) repeat,
+      radial-gradient(22px 22px at 80% 30%, rgba(0,0,0,.05), transparent 60%) repeat,
+      repeating-linear-gradient(135deg, rgba(0,0,0,.04) 0 10px, transparent 10px 20px);
+    opacity: .6;
+    filter: saturate(0.9) contrast(1);
+    animation: bgFloat 24s $ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: 0;
 
-  display: grid;
-  gap: $sp-12;
-
-  // Mobile: image first (source order). Desktop: split.
-  @include mq-up($bp-md) {
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    gap: $sp-14;
+    @include theme-block-dark {
+      background:
+        radial-gradient(18px 18px at 10% 10%, rgba(255,255,255,.05), transparent 55%) repeat,
+        radial-gradient(22px 22px at 80% 30%, rgba(255,255,255,.04), transparent 60%) repeat,
+        repeating-linear-gradient(135deg, rgba(255,255,255,.04) 0 10px, transparent 10px 20px);
+    }
   }
 }
 
-/* Square image card with floating tags */
-.home-hero-photo {
+@keyframes bgFloat {
+  0%   { transform: translateY(-6px); }
+  100% { transform: translateY(6px); }
+}
+
+/* Self-contained width with safe gutters (no .container dependency) */
+.home-hero-wrap {
   position: relative;
-  width: clamp(9rem, 34vw, 15rem);
-  aspect-ratio: 1 / 1;
+  z-index: 1; // above bg
+  width: $island-width;
+  max-width: calc(100% - 2 * #{$container-gutter});
+  margin-inline: auto;
+}
+
+/* Card: two columns on ALL sizes (image left, details right) with equal height */
+.home-hero-card {
+  display: grid;
+  grid-template-columns: minmax(9rem, clamp(9.5rem, 34vw, 13.5rem)) 1fr;
+  align-items: stretch;  // equal height columns
+  gap: $sp-12;
   border-radius: $radius-6;
-  overflow: hidden;
-  backdrop-filter: blur(6px);
+  padding: clamp($sp-10, 2.4vw, $sp-16);
+  backdrop-filter: blur(10px);
 
   @include theme-block {
     background-color: tone(surface, light);
     border: 1px solid tone(border, light);
     box-shadow: $shadow-light;
+    color: tone(foreground, light);
   }
   @include theme-block-dark {
     background-color: tone(surface, dark);
     border: 1px solid tone(border, dark);
     box-shadow: $shadow-dark;
+    color: tone(foreground, dark);
   }
+}
+
+/* Square image (left col) */
+.home-hero-photo {
+  position: relative;
+  inline-size: 100%;      // fills the left column width
+  aspect-ratio: 1 / 1;    // stays square
+  border-radius: $radius-6;
+  overflow: hidden;
+  align-self: stretch;    // equal height to details column
 
   img {
     width: 100%; height: 100%;
-    object-fit: cover;
-    display: block;
+    object-fit: cover; display: block;
+  }
+
+  // Signature sits below, overlapping slightly
+  .home-hero-signature {
+    position: absolute;
+    bottom: -$sp-8; left: 50%;
+    transform: translateX(-50%);
+    font-family: "Brush Script MT", "Segoe Script", "Lucida Handwriting", cursive;
+    font-size: $fs-6;
+    opacity: .8;
+    letter-spacing: .5px;
+    white-space: nowrap;
+
+    @include theme-block { color: tone(contrast, light); text-shadow: 0 1px 0 rgba(255,255,255,.4); }
+    @include theme-block-dark { color: tone(contrast, dark); text-shadow: 0 1px 0 rgba(0,0,0,.5); }
   }
 }
 
-/* Floating pills (icon + label) */
-.home-hero-tag {
-  position: absolute;
-  display: inline-flex;
-  align-items: center;
-  gap: $sp-4;
-  padding: $sp-4 $sp-6;
-  font-size: $fs-2;
-  line-height: 1;
-  border-radius: $radius-pill;
-  white-space: nowrap;
-  backdrop-filter: blur(8px);
-
-  @include theme-block {
-    color: tone(contrast, light);
-    background-color: rgba(255,255,255,.6);
-    border: 1px solid tone(border, light);
-  }
-  @include theme-block-dark {
-    color: tone(contrast, dark);
-    background-color: rgba(0,0,0,.38);
-    border: 1px solid tone(border, dark);
-  }
-}
-
-/* Positions (desktop) */
-@include mq-up($bp-md) {
-  .home-hero-photo {
-    .tag-1 { top: -$sp-6; left: -$sp-6; }
-    .tag-2 { top: $sp-4; right: -$sp-6; }
-    .tag-3 { bottom: $sp-6; left: -$sp-4; }
-    .tag-4 { bottom: -$sp-6; right: $sp-6; }
-    .tag-5 { top: 45%; left: -$sp-8; transform: translateY(-50%); }
-    .tag-6 { top: -$sp-6; right: 30%; }
-  }
-}
-
-/* Trim pills on small screens for clarity */
-@media (max-width: $bp-md) {
-  .home-hero-photo {
-    .home-hero-tag { font-size: $fs-2; transform: none; }
-    .tag-1 { top: $sp-4; left: $sp-4; }
-    .tag-2 { top: $sp-4; right: $sp-4; }
-    .tag-3 { bottom: $sp-4; left: $sp-4; }
-    .tag-4 { bottom: $sp-4; right: $sp-4; }
-    .tag-5, .tag-6 { display: none; }
-  }
-}
-
-/* Details */
+/* Details (right col) stretches to same height */
 .home-hero-details {
   display: grid;
   gap: $sp-7;
   min-width: 0;
+  align-self: stretch;
 }
 
 .home-hero-name {
+  margin: 0;
   font-weight: $fw-bold;
   line-height: $lh-tight;
-  font-size: clamp($fs-7, 5.6vw, $fs-10);
-  margin: 0;
+  font-size: clamp($fs-6, 5.2vw, $fs-9);
 }
 
 .home-hero-role {
   margin: 0;
   font-size: $fs-3;
 
-  @include theme-block  { color: tone(foreground, light); }
+  @include theme-block { color: tone(foreground, light); }
   @include theme-block-dark { color: tone(foreground, dark); }
 
-  .job     { font-weight: $fw-semibold; }
+  .job { font-weight: $fw-semibold; }
   .company { font-weight: $fw-semibold; }
-  .dot     { margin-inline: $sp-6; opacity: .6; }
+  .dot { margin-inline: $sp-6; opacity: .6; }
 }
 
 .home-hero-meta {
-  display: inline-flex; align-items: center; gap: $sp-5;
-  margin: 0; font-size: $fs-2;
+  margin: 0;
+  display: inline-flex; gap: $sp-5; align-items: center;
+  font-size: $fs-2;
 
-  @include theme-block  { color: tone(secondary, light); }
+  @include theme-block { color: tone(secondary, light); }
   @include theme-block-dark { color: tone(secondary, dark); }
 }
 
 .home-hero-bio {
   margin: 0;
   font-size: $fs-3;
-  max-width: 60ch;
+  max-width: 58ch;
 
-  @include theme-block  { color: tone(foreground, light); }
+  @include theme-block { color: tone(foreground, light); }
   @include theme-block-dark { color: tone(foreground, dark); }
 }
 
-/* Actions (compact buttons) */
 .home-hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: $sp-7;
+  display: flex; flex-wrap: wrap; gap: $sp-7; align-items: center;
 }
 
+/* Buttons */
 .btn { @include button-base; }
-
 .btn-primary {
-  @include theme-block {
-    background-color: tone(accent, light);
-    color: tone(white, light);
-    border-color: tone(accent, light);
-  }
-  @include theme-block-dark {
-    background-color: tone(accent, dark);
-    color: tone(black, dark);
-    border-color: tone(accent, dark);
-  }
+  @include theme-block   { background-color: tone(accent, light); color: tone(white, light); border-color: tone(accent, light); }
+  @include theme-block-dark { background-color: tone(accent, dark);  color: tone(black, dark); border-color: tone(accent, dark); }
   &:hover { transform: translateY(-1px); }
 }
-
 .btn-ghost {
-  @include theme-block {
-    background-color: transparent;
-    color: tone(foreground, light);
-    border-color: tone(border, light);
-  }
-  @include theme-block-dark {
-    background-color: transparent;
-    color: tone(foreground, dark);
-    border-color: tone(border, dark);
-  }
+  @include theme-block   { background-color: transparent; color: tone(foreground, light); border-color: tone(border, light); }
+  @include theme-block-dark { background-color: transparent; color: tone(foreground, dark); border-color: tone(border, dark); }
   &:hover {
     @include theme-block { background-color: tone(background-100, light); }
     @include theme-block-dark { background-color: tone(background-200, dark); }
   }
+}
+
+/* Floating badges — positioned OUTSIDE the image, orbiting */
+.home-hero-badges {
+  position: relative;
+  // anchor to the photo box area:
+  grid-column: 1; grid-row: 1;     // overlay column 1
+  pointer-events: none;
+}
+
+.home-hero-tag {
+  position: absolute;
+  display: inline-flex; align-items: center; gap: $sp-4;
+  padding: $sp-4 $sp-6;
+  font-size: $fs-2; line-height: 1;
+  border-radius: $radius-pill;
+  white-space: nowrap;
+  pointer-events: auto;            // allow hover/tap
+  transform: translate(-50%, -50%);
+  animation: floatY 5.5s $ease-in-out infinite alternate;
+
+  @include theme-block {
+    color: tone(contrast, light);
+    background-color: rgba(255,255,255,.7);
+    border: 1px solid tone(border, light);
+    box-shadow: $shadow-light;
+  }
+  @include theme-block-dark {
+    color: tone(contrast, dark);
+    background-color: rgba(0,0,0,.42);
+    border: 1px solid tone(border, dark);
+    box-shadow: $shadow-dark;
+  }
+}
+
+/* Place them around the square (percentages relative to photo’s box corner) */
+.t1 { top: -8%;  left: 10%; animation-delay: -.2s; }
+.t2 { top: 10%;  left: -8%; animation-delay: -.6s; }
+.t3 { top: 50%;  left: -10%; animation-delay: -.9s; }
+.t4 { bottom: -8%; left: 18%; animation-delay: -1.2s; }
+.t5 { top: -6%;  right: -8%; animation-delay: -.4s; }
+.t6 { bottom: 12%; right: -12%; animation-delay: -.8s; }
+
+@keyframes floatY {
+  from { transform: translate(-50%, -50%) translateY(-4px); }
+  to   { transform: translate(-50%, -50%) translateY(4px); }
+}
+
+/* RESPONSIVE TWEAKS */
+@include mq-up($bp-lg) {
+  .home-hero-card {
+    grid-template-columns: minmax(10.5rem, 14rem) 1fr;
+    gap: $sp-14;
+  }
+}
+
+/* Super small screens: tighten spacing, reduce badge count */
+@media (max-width: $bp-sm) {
+  .home-hero-card { gap: $sp-10; padding: $sp-10; }
+  .home-hero-badges .t5, .home-hero-badges .t6 { display: none; }
 }
