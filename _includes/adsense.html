@@ -1,45 +1,32 @@
 {%- comment -%}
-Usage:
-  {% include adsense.html
-      slot="7663977887"             # required (your data-ad-slot)
-      type="square"                 # square | square-small | square-large | horizontal | vertical | autorelaxed | in-article | fluid
-      client=site.adsense_client    # optional; falls back to site.adsense_client or default id
-      class="mt-8"                  # optional extra classes on wrapper
-  %}
+Usage examples:
+  {% include adsense.html type="square" %}          # uses site.adsense.placements.square
+  {% include adsense.html type="horizontal" %}
+  {% include adsense.html type="vertical" %}
+  {% include adsense.html type="fluid" %}
+  {% include adsense.html type="in_article" %}
+  {% include adsense.html type="autorelaxed" %}
 
-Notes:
-- We intentionally avoid inline styles and format-specific data attributes.
-- CSS in assets/css/adsense.scss controls sizing/responsiveness.
-- The loader script is injected once (guarded) to avoid duplicates.
+Override slot explicitly:
+  {% include adsense.html type="square" slot="1234567890" %}
+
+Optional: add class for spacing overrides:
+  {% include adsense.html type="square" class="mt-8" %}
 {%- endcomment -%}
 
-{%- assign ad_client = include.client | default: site.adsense_client | default: 'ca-pub-1291242080282540' -%}
-{%- assign ad_slot   = include.slot -%}
-{%- assign ad_type   = include.type | default: 'square' -%}
-{%- assign extra_cls = include.class -%}
+{%- if site.adsense and site.adsense.enabled and site.adsense.client -%}
+  {%- assign type = include.type | default: 'square' -%}
+  {%- assign slot_from_map = site.adsense.placements[type] -%}
+  {%- assign slot = include.slot | default: slot_from_map -%}
+  {%- assign extra = include.class -%}
 
-{%- if ad_slot == nil or ad_slot == '' -%}
-  <!-- adsense include needs a slot -->
-{%- else -%}
-  <div class="ad ad--{{ ad_type }}{% if extra_cls %} {{ extra_cls }}{% endif %}">
-    <ins class="adsbygoogle ad__slot"
-         data-ad-client="{{ ad_client }}"
-         data-ad-slot="{{ ad_slot }}"></ins>
-  </div>
-
-  <script>
-    (function ensureAdsenseLoader(){
-      if (!window.__adsense_init__) {
-        var s = document.createElement('script');
-        s.async = true;
-        s.crossOrigin = 'anonymous';
-        s.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ ad_client }}";
-        document.head.appendChild(s);
-        window.__adsense_init__ = true;
-      }
-    })();
-
-    // Render this instance
-    (window.adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
+  {%- if slot -%}
+    <div class="ad ad--{{ type }}{% if extra %} {{ extra }}{% endif %}">
+      <ins class="adsbygoogle ad__slot"
+           data-ad-client="{{ site.adsense.client }}"
+           data-ad-slot="{{ slot }}"></ins>
+    </div>
+  {%- else -%}
+    <!-- Missing slot for type: {{ type }} -->
+  {%- endif -%}
 {%- endif -%}

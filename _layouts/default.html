@@ -5,12 +5,14 @@
 
 <body class="layout-{{ page.layout }}{% if page.title %} {{ page.title | slugify }}{% endif %}">
   {% include header.html %}
+  {% include adsense.html type="horizontal" %}
   <main class="main">
     {% include hero.html %}
       {{ content }}
   {% include site-footer.html %}
   </main>
-  
+  {% include adsense.html type="square" %}
+
   {% if site.service_worker != false %}{% include site-sw.html %}{% endif %}
   {% include site-before-end.html %}
 </body>

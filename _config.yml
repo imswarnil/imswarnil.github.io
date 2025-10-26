@@ -113,6 +113,23 @@ work:
 # short_name: "Al" # The web application short name, defaults to the site title
 css_inline: true # Will insert all styles into a single <style> block in the <head> element and remove the style <link> reference
 
+
+adsense:
+  enabled: true              # set false to disable everywhere
+  client: "ca-pub-1291242080282540"
+  # Map "type" -> slot id (easy to call from includes)
+  placements:
+    square: "7663977887"
+    horizontal: "8939839370"
+    autorelaxed: "6808134701"
+    vertical: "3487917390"
+    fluid: "9130894804"
+    in_article: "6501428979"
+  # Lazy-load viewport margin (px). e.g., start loading 200px before view.
+  lazy_offset: 200
+
+
+
 # 8. Site favicons & manifest icons
 favicons: # Favicons are also used in the manifest file. Syntax is 'size: path'
   16: '/assets/logos/logo@16px.png'
