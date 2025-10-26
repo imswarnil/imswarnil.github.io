@@ -11,7 +11,7 @@
   display: grid;
   place-items: center;        // center the slot
   position: relative;
-  width: $container-gutter;
+  max-width: $container-gutter;
 }
 
 /* Small top label: "Advertisement" — sits on the border line */
