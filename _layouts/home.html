@@ -1,104 +1,110 @@
 ---
 layout: default
 ---
-<section class="home-hero">
+
+<section class="home-hero" itemscope itemtype="https://schema.org/Person">
   <div class="container">
     <div class="home-hero-card">
-      <!-- Inline player (hidden until play) -->
-      <div class="home-hero-player" aria-hidden="true">
-        <div class="home-hero-player__frame">
-          <iframe
-            id="inline-player"
-            title="My story"
-            src=""
-            allow="autoplay; encrypted-media"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade">
-          </iframe>
-        </div>
-      </div>
-
-      <!-- Art FIRST on mobile -->
-      <figure class="home-hero-art fadeable">
+      <!-- Art FIRST on mobile; tilted with perspective -->
+      <figure class="home-hero-art fadeable" itemprop="image">
         <img
-          src="{{ page.hero_image | default: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRl6dqv_avIvyeanSyi6l7QBVBXK00cj2SZLA&s' }}"
-          alt="{{ page.hero_image_alt | default: 'Portrait illustration' }}"
-        />
+          src="{{ page.hero_image | default: 'https://images.pexels.com/photos/10570189/pexels-photo-10570189.jpeg' }}"
+          alt="{{ page.hero_image_alt | default: 'Portrait of the creator' }}"
+          width="800" height="800" loading="eager" fetchpriority="high" />
       </figure>
 
       <!-- Copy -->
       <div class="home-hero-copy fadeable">
-        <p class="home-hero-kicker">
-          {{ site.social.name | default: site.author | default: site.title }}
+        <p class="home-hero-kicker" itemprop="jobTitle">
+          {{ site.work.role | default: 'Software Engineer & Filmmaker' }}
         </p>
 
-        <h1 class="home-hero-title">
-          {{
-            page.hero_title
-            | default: "Your go-to "
-            | append: (site.work.role | default: "engineer")
-            | append: " for impactful projects"
-          }}
+        <h1 class="home-hero-title" itemprop="name">
+          {{ page.hero_title | default: 'Your go-to engineer for impactful projects' }}
         </h1>
 
-        <p class="home-hero-lead">
+        <p class="home-hero-lead" itemprop="description">
           {{
             page.hero_subtitle
-            | default: "Bringing ideas to life with clean, efficient and scalable code. From building web apps to performance tuning and solving complex technical challenges."
+            | default: "I build fast, cinematic, and robust experiences—pairing engineering with storytelling."
           }}
         </p>
 
-        <div class="home-hero-actions">
+        <nav class="home-hero-actions" aria-label="Primary actions">
           <a class="btn button" href="mailto:{{ site.email | default: 'hello@example.com' }}">
-            <i class="ph-bold ph-paper-plane-tilt"></i><span>Contact me</span>
+            <i class="ph-bold ph-paper-plane-tilt" aria-hidden="true"></i><span>Contact me</span>
           </a>
-          <a class="btn button-transparent" href="{{ '/portfolio/' | relative_url }}">
-            <i class="ph-bold ph-squares-four"></i><span>View projects</span>
+          <a class="btn button-transparent" href="{{ '/projects/' | relative_url }}">
+            <i class="ph-bold ph-squares-four" aria-hidden="true"></i><span>View projects</span>
           </a>
-          <!-- Inline video trigger -->
           <button
             class="btn button-ghost home-hero-watch"
-            data-video="{{ page.story_video_id | default: '12o3Zgupu_8' }}">
-            <i class="ph-bold ph-play-circle"></i><span>Watch my story</span>
+            data-video="{{ page.story_video_id | default: '12o3Zgupu_8' }}"
+            aria-haspopup="dialog">
+            <i class="ph-bold ph-play-circle" aria-hidden="true"></i><span>Watch my story</span>
           </button>
-        </div>
+        </nav>
 
-        <div class="home-hero-meta">
-          <img class="home-hero-avatar" src="{{ site.avatarurl | default: site.logo | relative_url }}" alt="{{ site.author | default: site.title }}">
-          <span class="home-hero-name">{{ site.social.name | default: site.author | default: site.title }}</span>
+        <p class="home-hero-meta" aria-label="Profile details">
+          <img class="home-hero-avatar" src="{{ site.avatarurl | default: site.logo | relative_url }}"
+               alt="" width="28" height="28" loading="lazy">
+          <span class="home-hero-name" itemprop="alternateName">
+            {{ site.social.name | default: site.author | default: site.title }}
+          </span>
           <span class="home-hero-dot">•</span>
-          <span class="home-hero-role">{{ site.work.role | default: 'Software Engineer' }} at {{ site.work.company | default: 'Imswarnil Studio' }}</span>
+          <span class="home-hero-role">{{ site.work.role | default: 'Software Engineer' }} @ {{ site.work.company | default: 'Imswarnil Studio' }}</span>
           <span class="home-hero-dot">•</span>
-          <span class="home-hero-loc"><i class="ph-bold ph-map-pin"></i> {{ site.location | default: 'Bengaluru, India' }}</span>
-          <span class="home-hero-dot">•</span>
-          <span class="home-hero-time"><i class="ph-bold ph-clock"></i> {{ site.timezone | default: 'IST (UTC+5:30)' }}</span>
-        </div>
+          <span class="home-hero-loc"><i class="ph-bold ph-map-pin" aria-hidden="true"></i> {{ site.location | default: 'Bengaluru, India' }}</span>
+        </p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Phosphor icons (once per page if not already loaded) -->
+<!-- Story Modal (blur background) -->
+<div class="home-hero-modal" id="story-modal" aria-hidden="true">
+  <div class="home-hero-modal__backdrop"></div>
+  <div class="home-hero-modal__dialog" role="dialog" aria-modal="true" aria-label="Watch my story">
+    <button class="home-hero-modal__close" aria-label="Close">
+      <i class="ph-bold ph-x" aria-hidden="true"></i>
+    </button>
+    <div class="home-hero-modal__frame">
+      <iframe id="story-player" title="My story"
+              src="" allow="autoplay; encrypted-media" loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- Icons (once per page if not already loaded) -->
 <script defer src="https://unpkg.com/@phosphor-icons/web"></script>
 
 <script>
 (function(){
-  var section = document.querySelector('.home-hero');
-  var trigger = document.querySelector('.home-hero-watch');
-  var playerWrap = document.querySelector('.home-hero-player');
-  var frame = document.getElementById('inline-player');
+  // Modal open/close
+  var openBtn = document.querySelector('.home-hero-watch');
+  var modal   = document.getElementById('story-modal');
+  var closeBtn= modal ? modal.querySelector('.home-hero-modal__close') : null;
+  var player  = document.getElementById('story-player');
 
-  function playInline(){
-    if (!section || !playerWrap || !frame || !trigger) return;
-    var vid = trigger.getAttribute('data-video') || '12o3Zgupu_8';
-    // Load only on click
-    frame.src = "https://www.youtube.com/embed/" + encodeURIComponent(vid) + "?autoplay=1&mute=0&playsinline=1&rel=0&modestbranding=1";
-    section.classList.add('is-playing');
-    playerWrap.setAttribute('aria-hidden','false');
-    // scroll into view in case on mobile
-    section.scrollIntoView({behavior:'smooth', block:'start'});
+  function openModal(){
+    var vid = (openBtn && openBtn.getAttribute('data-video')) || '12o3Zgupu_8';
+    // YouTube embed with autoplay, playsinline for mobile
+    player.src = "https://www.youtube.com/embed/" + encodeURIComponent(vid) + "?autoplay=1&mute=0&playsinline=1&rel=0&modestbranding=1";
+    modal.setAttribute('aria-hidden','false');
+    document.documentElement.style.overflow = 'hidden';
+  }
+  function closeModal(){
+    modal.setAttribute('aria-hidden','true');
+    player.src = ""; // stop playback
+    document.documentElement.style.overflow = '';
   }
 
-  if (trigger) trigger.addEventListener('click', playInline);
+  if (openBtn && modal) {
+    openBtn.addEventListener('click', openModal);
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e){ if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeModal(); });
+  }
 })();
 </script>
