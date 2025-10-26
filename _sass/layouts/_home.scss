@@ -3,7 +3,6 @@
 // Depends on: _variables.scss
 // ======================================================================
 
-@use "variables" as *;
 
 .home-hero { position: relative; padding-block: clamp($sp-12, 8vw, $sp-20); overflow: clip; }
 
