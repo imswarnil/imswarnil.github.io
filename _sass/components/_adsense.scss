@@ -4,6 +4,7 @@
 // Depends on: _variables.scss
 // ======================================================================
 
+@use "variables" as *;
 
 /* Wrapper spacing + centering */
 .ad {
@@ -40,7 +41,6 @@
 /* Core slot: fluid, centered, with a calm placeholder look */
 .adsbygoogle.ad__slot {
   display: block;
-  max-width: $container-gutter;
   width: 100%;
   border-radius: $radius-3;
   // Placeholder surface while AdSense loads:
