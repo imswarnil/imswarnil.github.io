@@ -1,11 +1,3 @@
-{%- comment -%}
-  Smart Hero Router (no front matter required)
-  - layout: home  → hero/home.html
-  - layout: post  OR collection: posts → hero/post.html
-  - layout: page  → hero/page.html
-  - else default → hero/default.html
-{%- endcomment -%}
-
 {%- assign _hero_kind = 'default' -%}
 {%- if page.layout == 'home' -%}
   {%- assign _hero_kind = 'home' -%}
@@ -16,12 +8,8 @@
 {%- endif -%}
 
 {%- case _hero_kind -%}
-  {%- when 'home' -%}
-    {% include hero/home.html %}
-  {%- when 'post' -%}
-    {% include hero/post.html %}
-  {%- when 'page' -%}
-    {% include hero/page.html %}
-  {%- else -%}
-    {% include hero/default.html %}
+  {%- when 'home' -%}{% include hero/home.html %}
+  {%- when 'post' -%}{% include hero/post.html %}
+  {%- when 'page' -%}{% include hero/page.html %}
+  {%- else -%}{% include hero/default.html %}
 {%- endcase -%}

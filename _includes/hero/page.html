@@ -1,41 +1,50 @@
 <section class="site-hero hero--page" role="region" aria-label="Page hero">
-    <div class="hero-surface" aria-hidden="true"></div>
-  
-    <div class="container">
-      <nav class="hero-breadcrumbs" aria-label="Breadcrumb">
-        <a href="{{ '/' | relative_url }}"><i class="ph-bold ph-house"></i> Home</a>
-        <span class="crumb-sep">/</span>
-        <span aria-current="page">{{ page.title | default: 'Page' }}</span>
-      </nav>
-  
-      <div class="hero-grid hero-grid--page">
-        <div class="hero-copy">
-          <h1 class="hero-title">{{ page.title }}</h1>
-          {% if page.subtitle %}<p class="hero-sub">{{ page.subtitle }}</p>{% endif %}
-  
-          <div class="hero-badges">
-            {% if page.category %}
-              <span class="chip chip--soft"><i class="ph-bold ph-tag"></i>{{ page.category }}</span>
-            {% endif %}
-            {% if page.tags and page.tags.size > 0 %}
-              {% for t in page.tags %}
-                <span class="chip chip--ghost"><i class="ph-bold ph-hash"></i>{{ t }}</span>
-              {% endfor %}
-            {% endif %}
-  
-            {% assign author_name = page.author | default: site.author | default: site.social.name %}
-            {% if author_name %}
-              <span class="chip"><i class="ph-bold ph-user"></i>{{ author_name }}</span>
-            {% endif %}
+  <div class="hero-surface" aria-hidden="true"></div>
+
+  <div class="container">
+    <nav class="hero-breadcrumbs" aria-label="Breadcrumb">
+      <a href="{{ '/' | relative_url }}"><i class="ph-bold ph-house"></i> Home</a>
+      <span class="crumb-sep">/</span>
+      <span aria-current="page">{{ page.title | default: 'Page' }}</span>
+    </nav>
+
+    <div class="hero-grid hero-grid--page">
+      {% if page.feature_image %}
+      <!-- Image first on mobile -->
+      <figure class="hero-art">
+        <img src="{{ page.feature_image }}" alt="" loading="eager" />
+      </figure>
+      {% endif %}
+
+      <div class="hero-copy">
+        <div class="page-head">
+          <img
+            class="author-avatar"
+            src="{{ page.author_avatar | default: site.avatarurl | default: site.logo | default: 'https://i.pravatar.cc/96?u=author' }}"
+            alt="{{ page.author | default: site.author | default: 'Author' }}"
+            width="56" height="56" loading="eager" />
+          <div class="page-titleblock">
+            <h1 class="hero-title">{{ page.title }}</h1>
+            {% if page.subtitle %}<p class="hero-sub">{{ page.subtitle }}</p>{% endif %}
+
+            <div class="hero-badges">
+              {% if page.category %}
+                <span class="chip chip--soft"><i class="ph-bold ph-tag"></i>{{ page.category }}</span>
+              {% endif %}
+              {% if page.tags and page.tags.size > 0 %}
+                {% for t in page.tags %}
+                  <span class="chip chip--ghost"><i class="ph-bold ph-hash"></i>{{ t }}</span>
+                {% endfor %}
+              {% endif %}
+              {% assign author_name = page.author | default: site.author | default: site.social.name %}
+              {% if author_name %}
+                <span class="chip"><i class="ph-bold ph-user"></i>{{ author_name }}</span>
+              {% endif %}
+            </div>
           </div>
         </div>
-  
-        {% if page.feature_image %}
-        <figure class="hero-art">
-          <img src="{{ page.feature_image }}" alt="" loading="eager" />
-        </figure>
-        {% endif %}
       </div>
+
     </div>
-  </section>
-  
+  </div>
+</section>

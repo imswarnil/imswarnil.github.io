@@ -1,78 +1,60 @@
 <section class="site-hero hero--home" role="region" aria-label="Home hero">
-    <div class="hero-surface" aria-hidden="true"></div>
-  
-    <div class="container">
-      <div class="hero-grid hero-grid--home">
-        <!-- Copy -->
-        <div class="hero-copy">
-          <div class="home-head">
-            <img class="home-avatar"
-                 src="{{ site.avatarurl | default: site.logo | default: 'https://i.pravatar.cc/128?u=imswarnil' }}"
-                 alt="{{ site.title | default: 'Site' | escape }}" width="72" height="72" loading="eager" />
-            <div>
-              <h1 class="hero-title">
-                {{ page.title | default: site.title | default: "Welcome" }}
-              </h1>
-              {% if site.job_title or site.description %}
-                <p class="hero-sub">
-                  <strong>{{ site.job_title }}</strong>{% if site.job_title and site.description %} &middot; {% endif %}
-                  {{ site.description }}
-                </p>
-              {% endif %}
-            </div>
+  <div class="hero-surface" aria-hidden="true"></div>
+  <div class="container">
+    <div class="hero-grid hero-grid--home">
+
+      {%- assign hero_img = page.feature_image | default: site.collections.posts.feature_image -%}
+      {% if hero_img %}
+      <!-- Image first on mobile -->
+      <figure class="hero-art hero-art--home">
+        <img src="{{ hero_img }}" alt="" loading="eager" />
+      </figure>
+      {% endif %}
+
+      <div class="hero-copy">
+        <div class="home-head">
+          <img
+            class="home-avatar"
+            src="{{ site.avatarurl | default: site.logo | default: 'https://i.pravatar.cc/128?u=profile' }}"
+            alt="{{ site.title | default: 'Site' | escape }}" width="72" height="72" loading="eager" />
+          <div class="home-titleblock">
+            <h1 class="hero-title">{{ page.title | default: site.title | default: "Welcome" }}</h1>
+            {% if site.description %}
+              <p class="hero-sub">{{ site.description }}</p>
+            {% endif %}
           </div>
-  
-          <div class="home-chips">
-            {% if site.location %}
-              <span class="chip chip--soft"><i class="ph-bold ph-map-pin"></i>{{ site.location }}</span>
-            {% endif %}
-            {% if site.timezone %}
-              <span class="chip chip--soft"><i class="ph-bold ph-clock"></i>{{ site.timezone }}</span>
-            {% endif %}
-            {% if site.repo %}
-              <a class="chip chip--link" href="{{ site.repo }}" target="_blank" rel="noopener">
-                <i class="ph-bold ph-github-logo"></i>GitHub
+        </div>
+
+        <!-- Meta chips -->
+        <div class="home-chips">
+          {% if site.location %}<span class="chip chip--soft"><i class="ph-bold ph-map-pin"></i>{{ site.location }}</span>{% endif %}
+          {% if site.timezone %}<span class="chip chip--soft"><i class="ph-bold ph-clock"></i>{{ site.timezone }}</span>{% endif %}
+
+          {%- comment -%} Optional: site.work: {company, role, url} {%- endcomment -%}
+          {% if site.work and site.work.company %}
+            {% if site.work.url %}
+              <a class="chip chip--link" href="{{ site.work.url }}" target="_blank" rel="noopener">
+                <i class="ph-bold ph-briefcase"></i>{{ site.work.role | default: 'Role' }} @ {{ site.work.company }}
               </a>
+            {% else %}
+              <span class="chip chip--soft"><i class="ph-bold ph-briefcase"></i>{{ site.work.role | default: 'Role' }} @ {{ site.work.company }}</span>
             {% endif %}
-          </div>
-  
-          {% comment %} Optional CTAs if you add them to home.md front matter later {% endcomment %}
-          {% if page.cta_primary or page.cta_secondary %}
-          <div class="hero-ctas">
-            {% if page.cta_primary %}
-              <a class="btn-solid" href="{{ page.cta_primary.url | relative_url }}"><i class="ph-bold ph-rocket-launch"></i>{{ page.cta_primary.label }}</a>
-            {% endif %}
-            {% if page.cta_secondary %}
-              <a class="btn-outline" href="{{ page.cta_secondary.url | relative_url }}"><i class="ph-bold ph-chat-circle-dots"></i>{{ page.cta_secondary.label }}</a>
-            {% endif %}
-          </div>
           {% endif %}
-  
-          {% if site.social_links %}
-          <nav class="hero-social" aria-label="Social links">
-            {% if site.social_links.Twitter %}
-              <a href="{{ site.social_links.Twitter }}" aria-label="Twitter" target="_blank" rel="noopener"><i class="ph-bold ph-twitter-logo"></i></a>
-            {% endif %}
-            {% if site.social_links.LinkedIn %}
-              <a href="{{ site.social_links.LinkedIn }}" aria-label="LinkedIn" target="_blank" rel="noopener"><i class="ph-bold ph-linkedin-logo"></i></a>
-            {% endif %}
-            {% if site.social_links.GitHub %}
-              <a href="{{ site.social_links.GitHub }}" aria-label="GitHub" target="_blank" rel="noopener"><i class="ph-bold ph-github-logo"></i></a>
-            {% endif %}
-            {% if site.social_links.RSS %}
-              <a href="{{ site.baseurl }}{{ site.social_links.RSS }}" aria-label="RSS"><i class="ph-bold ph-rss"></i></a>
-            {% endif %}
-          </nav>
+
+          {% if site.repo %}
+            <a class="chip chip--link" href="{{ site.repo }}" target="_blank" rel="noopener"><i class="ph-bold ph-github-logo"></i>GitHub</a>
           {% endif %}
         </div>
-  
-        {% assign fallback_img = site.collections.posts.feature_image %}
-        {% if page.feature_image or fallback_img %}
-        <figure class="hero-art">
-          <img src="{{ page.feature_image | default: fallback_img }}" alt="" loading="eager" />
-        </figure>
+
+        {% if site.social_links %}
+        <nav class="hero-social" aria-label="Social links">
+          {% if site.social_links.Twitter %}<a href="{{ site.social_links.Twitter }}" aria-label="Twitter" target="_blank" rel="noopener"><i class="ph-bold ph-twitter-logo"></i></a>{% endif %}
+          {% if site.social_links.LinkedIn %}<a href="{{ site.social_links.LinkedIn }}" aria-label="LinkedIn" target="_blank" rel="noopener"><i class="ph-bold ph-linkedin-logo"></i></a>{% endif %}
+          {% if site.social_links.GitHub %}<a href="{{ site.social_links.GitHub }}" aria-label="GitHub" target="_blank" rel="noopener"><i class="ph-bold ph-github-logo"></i></a>{% endif %}
+          {% if site.social_links.RSS %}<a href="{{ site.baseurl }}{{ site.social_links.RSS }}" aria-label="RSS"><i class="ph-bold ph-rss"></i></a>{% endif %}
+        </nav>
         {% endif %}
       </div>
     </div>
-  </section>
-  
+  </div>
+</section>
