@@ -1,15 +1,194 @@
-{%- assign _hero_kind = 'default' -%}
+{%- comment -%}
+  Smart Hero (single include)
+  - Auto by page.layout / collection
+  - Variants: home / post / page / default
+  - Pulls meta from _config.yml:
+      site.avatarurl, site.job_title, site.description,
+      site.location, site.timezone, site.work {company, role, url},
+      site.social_links (Twitter, LinkedIn, GitHub, RSS)
+{%- endcomment -%}
+
+{%- assign _kind = 'default' -%}
 {%- if page.layout == 'home' -%}
-  {%- assign _hero_kind = 'home' -%}
+  {%- assign _kind = 'home' -%}
 {%- elsif page.layout == 'post' or page.collection == 'posts' -%}
-  {%- assign _hero_kind = 'post' -%}
+  {%- assign _kind = 'post' -%}
 {%- elsif page.layout == 'page' -%}
-  {%- assign _hero_kind = 'page' -%}
+  {%- assign _kind = 'page' -%}
 {%- endif -%}
 
-{%- case _hero_kind -%}
-  {%- when 'home' -%}{% include hero/home.html %}
-  {%- when 'post' -%}{% include hero/post.html %}
-  {%- when 'page' -%}{% include hero/page.html %}
-  {%- else -%}{% include hero/default.html %}
-{%- endcase -%}
+<section class="site-hero hero--{{ _kind }}" role="region" aria-label="Hero">
+  <div class="hero-surface" aria-hidden="true">
+    <div class="hero-gridlines" aria-hidden="true"></div>
+    <div class="hero-orbit" aria-hidden="true"></div>
+  </div>
+
+  {%- if _kind == 'home' -%}
+  <!-- ====================== HOME ====================== -->
+  <div class="container">
+    <div class="hero-grid hero-grid--home">
+      {%- assign home_img = page.feature_image | default: site.collections.posts.feature_image -%}
+      {%- if home_img -%}
+      <figure class="hero-art hero-art--home">
+        <img src="{{ home_img }}" alt="" loading="eager">
+      </figure>
+      {%- endif -%}
+
+      <div class="home-copy">
+        <header class="home-head">
+          <img class="home-avatar"
+               src="{{ site.avatarurl | default: site.logo | default: 'https://i.pravatar.cc/128?u=profile' }}"
+               alt="{{ site.title | default: 'Site' | escape }}" width="76" height="76" loading="eager">
+          <div>
+            <h1 class="hero-title">
+              <span class="accent">{{ page.title | default: site.title | default: "Welcome" }}</span>
+            </h1>
+            {%- if site.job_title or site.description -%}
+            <p class="hero-sub">
+              <strong>{{ site.job_title }}</strong>{% if site.job_title and site.description %} &middot; {% endif %}
+              {{ site.description }}
+            </p>
+            {%- endif -%}
+          </div>
+        </header>
+
+        <div class="home-meta">
+          {%- if site.location -%}
+            <span class="chip chip--soft"><i class="ph-bold ph-map-pin"></i>{{ site.location }}</span>
+          {%- endif -%}
+          {%- if site.timezone -%}
+            <span class="chip chip--soft"><i class="ph-bold ph-clock"></i>{{ site.timezone }}</span>
+          {%- endif -%}
+          {%- if site.work and site.work.company -%}
+            {%- if site.work.url -%}
+              <a class="chip chip--link" href="{{ site.work.url }}" target="_blank" rel="noopener">
+                <i class="ph-bold ph-briefcase"></i>{{ site.work.role | default: 'Role' }} @ {{ site.work.company }}
+              </a>
+            {%- else -%}
+              <span class="chip chip--soft"><i class="ph-bold ph-briefcase"></i>{{ site.work.role | default: 'Role' }} @ {{ site.work.company }}</span>
+            {%- endif -%}
+          {%- endif -%}
+          {%- if site.repo -%}
+            <a class="chip chip--link" href="{{ site.repo }}" target="_blank" rel="noopener"><i class="ph-bold ph-github-logo"></i>GitHub</a>
+          {%- endif -%}
+        </div>
+
+        {%- if site.social_links -%}
+        <nav class="hero-social" aria-label="Social links">
+          {%- if site.social_links.Twitter -%}<a href="{{ site.social_links.Twitter }}" aria-label="Twitter" target="_blank" rel="noopener"><i class="ph-bold ph-twitter-logo"></i></a>{%- endif -%}
+          {%- if site.social_links.LinkedIn -%}<a href="{{ site.social_links.LinkedIn }}" aria-label="LinkedIn" target="_blank" rel="noopener"><i class="ph-bold ph-linkedin-logo"></i></a>{%- endif -%}
+          {%- if site.social_links.GitHub -%}<a href="{{ site.social_links.GitHub }}" aria-label="GitHub" target="_blank" rel="noopener"><i class="ph-bold ph-github-logo"></i></a>{%- endif -%}
+          {%- if site.social_links.RSS -%}<a href="{{ site.baseurl }}{{ site.social_links.RSS }}" aria-label="RSS"><i class="ph-bold ph-rss"></i></a>{%- endif -%}
+        </nav>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  {%- elsif _kind == 'post' -%}
+  <!-- ====================== POST ====================== -->
+  <div class="container">
+    <div class="hero-grid hero-grid--post">
+      {%- if page.feature_image -%}
+      <figure class="hero-art hero-art--cover">
+        <img src="{{ page.feature_image }}" alt="" loading="eager">
+      </figure>
+      {%- endif -%}
+
+      <div class="post-copy">
+        <div class="post-head">
+          <img class="author-avatar"
+               src="{{ page.author_avatar | default: site.avatarurl | default: site.logo | default: 'https://i.pravatar.cc/96?u=author' }}"
+               alt="{{ page.author | default: site.author | default: 'Author' }}" width="56" height="56" loading="eager">
+          <div>
+            <h1 class="hero-title"><span class="accent">{{ page.title }}</span></h1>
+            <div class="hero-meta">
+              {%- assign date_format = site.date_format | default: "%d %b %Y" -%}
+              <time datetime="{{ page.date | date_to_xmlschema }}"><i class="ph-bold ph-calendar-blank"></i>{{ page.date | date: date_format }}</time>
+
+              {%- if page.categories and page.categories.size > 0 -%}
+                <span class="dot">•</span>
+                <span class="cats">
+                  {%- for c in page.categories -%}
+                    <a class="chip" href="{{ '/categories/#' | append: c | downcase | slugify | relative_url }}"><i class="ph-bold ph-tag"></i>{{ c }}</a>{% unless forloop.last %}<span>,</span>{% endunless %}
+                  {%- endfor -%}
+                </span>
+              {%- endif -%}
+
+              {%- if page.tags and page.tags.size > 0 -%}
+                <span class="dot">•</span>
+                <span class="cats">
+                  {%- for t in page.tags -%}
+                    <a class="chip chip--ghost" href="{{ '/tags/#' | append: t | downcase | slugify | relative_url }}"><i class="ph-bold ph-hash"></i>{{ t }}</a>{% unless forloop.last %}<span>,</span>{% endunless %}
+                  {%- endfor -%}
+                </span>
+              {%- endif -%}
+
+              {%- assign words = page.content | number_of_words -%}
+              {%- assign mins = words | divided_by:200 | plus:1 -%}
+              <span class="dot">•</span><span class="read"><i class="ph-bold ph-hourglass-low"></i>{{ mins }} min read</span>
+
+              {%- assign author_name = page.author | default: site.author | default: site.social.name -%}
+              {%- if author_name -%}
+                <span class="dot">•</span><span class="by"><i class="ph-bold ph-user"></i>{{ author_name }}</span>
+              {%- endif -%}
+            </div>
+            {%- if page.subtitle -%}<p class="hero-sub">{{ page.subtitle }}</p>{%- endif -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%- elsif _kind == 'page' -%}
+  <!-- ====================== PAGE ====================== -->
+  <div class="container">
+    <nav class="hero-breadcrumbs" aria-label="Breadcrumb">
+      <a href="{{ '/' | relative_url }}"><i class="ph-bold ph-house"></i> Home</a>
+      <span class="crumb-sep">/</span>
+      <span aria-current="page">{{ page.title | default: 'Page' }}</span>
+    </nav>
+
+    <div class="hero-grid hero-grid--page">
+      {%- if page.feature_image -%}
+      <figure class="hero-art">
+        <img src="{{ page.feature_image }}" alt="" loading="eager">
+      </figure>
+      {%- endif -%}
+
+      <div class="page-copy">
+        <div class="page-head">
+          <img class="author-avatar"
+               src="{{ page.author_avatar | default: site.avatarurl | default: site.logo | default: 'https://i.pravatar.cc/96?u=author' }}"
+               alt="{{ page.author | default: site.author | default: 'Author' }}" width="56" height="56" loading="eager">
+          <div>
+            <h1 class="hero-title"><span class="accent">{{ page.title }}</span></h1>
+            {%- if page.subtitle -%}<p class="hero-sub">{{ page.subtitle }}</p>{%- endif -%}
+            <div class="hero-badges">
+              {%- if page.category -%}<span class="chip chip--soft"><i class="ph-bold ph-tag"></i>{{ page.category }}</span>{%- endif -%}
+              {%- if page.tags and page.tags.size > 0 -%}
+                {%- for t in page.tags -%}<span class="chip chip--ghost"><i class="ph-bold ph-hash"></i>{{ t }}</span>{%- endfor -%}
+              {%- endif -%}
+              {%- assign author_name = page.author | default: site.author | default: site.social.name -%}
+              {%- if author_name -%}<span class="chip"><i class="ph-bold ph-user"></i>{{ author_name }}</span>{%- endif -%}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%- else -%}
+  <!-- ====================== DEFAULT ====================== -->
+  <div class="container">
+    <div class="hero-grid hero-grid--default">
+      <div class="default-copy">
+        <h1 class="hero-title"><span class="accent">{{ page.title | default: site.title }}</span></h1>
+        {%- if page.subtitle or site.description -%}
+          <p class="hero-sub">{{ page.subtitle | default: site.description }}</p>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+  {%- endif -%}
+</section>
