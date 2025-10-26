@@ -4,7 +4,6 @@
 // Depends on: _variables.scss
 // ======================================================================
 
-@use "variables" as *;
 
 /* Wrapper spacing + centering */
 .ad {
@@ -12,6 +11,7 @@
   display: grid;
   place-items: center;        // center the slot
   position: relative;
+  width: $container-gutter;
 }
 
 /* Small top label: "Advertisement" — sits on the border line */
