@@ -122,6 +122,7 @@
     z-index: $z-base;                          /* under modals, over content */
     width: 300px;                              /* AdSense vertical common width */
     max-width: 300px;
+    margin:10px;
     /* Let the ad component size itself; our wrapper just anchors it */
   }
 
