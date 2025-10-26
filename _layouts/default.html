@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 <html lang="{{ site.lang | default: 'en-US' }}">
-
 {% include head.html %}
-
 <body class="layout-{{ page.layout }}{% if page.title %} {{ page.title | slugify }}{% endif %}">
   {% include header.html %}
- 
   <main class="main">
   {% include adsense.html type="horizontal" %}
       {{ content }}
-  {% include footer.html %}
   {% include adsense.html type="horizontal" %}
+  {% include footer.html %}
   </main>
   {% if site.service_worker != false %}{% include site-sw.html %}{% endif %}
   {% include site-before-end.html %}

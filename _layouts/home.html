@@ -3,9 +3,29 @@ layout: default
 ---
 
 <!-- Home Hero -->
-<section class="home-hero">
+<section class="home-hero" data-video-id="{{ page.hero_bg_video_id | default: 'dQw4w9WgXcQ' }}">
+  <!-- ultra-faint background video -->
+  <div class="home-hero-bg" aria-hidden="true">
+    <div class="home-hero-bg__frame">
+      <iframe
+        title="Background video"
+        src=""
+        allow="autoplay; encrypted-media"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </div>
   <div class="container">
     <div class="home-hero-card">
+      <!-- Art (mobile first) -->
+      <figure class="home-hero-art">
+        <img
+          src="{{ page.hero_image | default: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRl6dqv_avIvyeanSyi6l7QBVBXK00cj2SZLA&s' }}"
+          alt="{{ page.hero_image_alt | default: 'Portrait illustration' }}"
+        />
+      </figure>
+
       <!-- Copy -->
       <div class="home-hero-copy">
         <p class="home-hero-kicker">
@@ -35,6 +55,9 @@ layout: default
           <a class="btn button-transparent" href="{{ '/portfolio/' | relative_url }}">
             <i class="ph-bold ph-squares-four"></i><span>View projects</span>
           </a>
+          <button class="btn button-ghost home-hero-watch" data-video="{{ page.story_video_id | default: 'dQw4w9WgXcQ' }}">
+            <i class="ph-bold ph-play-circle"></i><span>Watch my story</span>
+          </button>
         </div>
 
         <div class="home-hero-meta">
@@ -48,15 +71,68 @@ layout: default
           <span class="home-hero-time"><i class="ph-bold ph-clock"></i> {{ site.timezone | default: 'IST (UTC+5:30)' }}</span>
         </div>
       </div>
-
-      <!-- Art -->
-      <figure class="home-hero-art">
-        <img
-          src="{{ page.hero_image | default: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRl6dqv_avIvyeanSyi6l7QBVBXK00cj2SZLA&s' }}"
-          alt="{{ page.hero_image_alt | default: 'Portrait illustration' }}"
-        />
-      </figure>
     </div>
   </div>
 </section>
 
+<!-- Modal: Watch my story -->
+<div class="home-hero-modal" id="story-modal" aria-hidden="true">
+  <div class="home-hero-modal__backdrop"></div>
+  <div class="home-hero-modal__dialog" role="dialog" aria-modal="true" aria-label="Watch my story">
+    <button class="home-hero-modal__close" aria-label="Close">
+      <i class="ph-bold ph-x"></i>
+    </button>
+    <div class="home-hero-modal__frame">
+      <iframe
+        id="story-player"
+        title="My story"
+        src=""
+        allow="autoplay; encrypted-media"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </div>
+</div>
+
+<!-- Phosphor icons (once) -->
+<script defer src="https://unpkg.com/@phosphor-icons/web"></script>
+
+<script>
+(function(){
+  // Background video (ultra faint)
+  var hero = document.querySelector('.home-hero');
+  var bgFrame = document.querySelector('.home-hero-bg iframe');
+  if (hero && bgFrame) {
+    var id = hero.getAttribute('data-video-id');
+    if (id) {
+      bgFrame.src = "https://www.youtube.com/embed/" + encodeURIComponent(id) + "?autoplay=1&mute=1&controls=0&playsinline=1&loop=1&playlist=" + encodeURIComponent(id) + "&modestbranding=1&rel=0";
+    }
+  }
+
+  // Modal open/close
+  var openBtn = document.querySelector('.home-hero-watch');
+  var modal = document.getElementById('story-modal');
+  var closeBtn = modal ? modal.querySelector('.home-hero-modal__close') : null;
+  var player = document.getElementById('story-player');
+
+  function openModal(){
+    var vid = openBtn.getAttribute('data-video') || 'dQw4w9WgXcQ';
+    player.src = "https://www.youtube.com/embed/" + encodeURIComponent(vid) + "?autoplay=1&mute=0&playsinline=1&rel=0&modestbranding=1";
+    modal.setAttribute('aria-hidden', 'false');
+    document.documentElement.style.overflow = 'hidden';
+  }
+  function closeModal(){
+    modal.setAttribute('aria-hidden', 'true');
+    player.src = ""; // stop playback
+    document.documentElement.style.overflow = '';
+  }
+
+  if (openBtn && modal) {
+    openBtn.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e){ if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false'){ closeModal(); }});
+  }
+})();
+</script>
