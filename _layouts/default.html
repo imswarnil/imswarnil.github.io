@@ -6,10 +6,8 @@
 <body class="layout-{{ page.layout }}{% if page.title %} {{ page.title | slugify }}{% endif %}">
   {% include header.html %}
   <!-- Main content area -->
-  <main class="main{% if page.fluid %} wide{% endif %}{% if page.narrow %} narrow{% endif %}{% if page.offset_nav %} offset{% endif %}">
-    <div class="container{% if page.narrow %} narrow{% endif %}">
+  <main class="main{% if page.fluid %} wide{% endif %}{% if page.narrow %} narrow{% endif %}{% if page.offset_nav %} offset{% endif %} {% if page.narrow %} narrow{% endif %}">
       {{ content }}
-    </div>
   {% include site-footer.html %}
   </main>
   
