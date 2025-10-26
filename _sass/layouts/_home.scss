@@ -1,148 +1,193 @@
 // ======================================================================
-// home.scss — Responsive square hero (no container dependency)
-// Depends on: _variables.scss (tokens/mixins)
+// home.scss — Compact square hero with floating tags & ticker
+// Depends on: _variables.scss
 // ======================================================================
 
 @use "variables" as *;
 
-/* Section breathing room */
 .home-hero {
   padding-block: clamp($sp-12, 6vw, $sp-20);
 }
 
-/* Centers the hero and provides safe gutters without using .container */
+/* Self-centered wrapper with safe gutters (no .container dependency) */
 .home-hero-wrap {
   width: $island-width;
   max-width: calc(100% - 2 * #{$container-gutter});
   margin-inline: auto;
+
+  display: grid;
+  gap: $sp-12;
+  /* Mobile: image first, then details (source order already image first) */
+  @include mq-up($bp-md) {
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: $sp-14;
+  }
 }
 
-/* The square itself */
-.home-hero-box {
-  aspect-ratio: 1 / 1;              /* FORCE a perfect square */
-  display: grid;
-  gap: $sp-10;
+/* Square photo with floating tags */
+.home-hero-photo {
+  position: relative;
+  width: clamp(9rem, 32vw, 14rem);
+  aspect-ratio: 1 / 1;
   border-radius: $radius-6;
-  padding: clamp($sp-10, 2.4vw, $sp-16);
-  backdrop-filter: blur(10px);
-  overflow: hidden;                  /* keep media rounded inside */
+  overflow: hidden;
+  backdrop-filter: blur(6px);
 
   @include theme-block {
     background-color: tone(surface, light);
     border: 1px solid tone(border, light);
     box-shadow: $shadow-light;
-    color: tone(foreground, light);
   }
   @include theme-block-dark {
     background-color: tone(surface, dark);
     border: 1px solid tone(border, dark);
     box-shadow: $shadow-dark;
-    color: tone(foreground, dark);
   }
 
-  /* Layout inside the square */
-  grid-template-rows: auto 1fr;      /* text on top, media fills rest by default */
-
-  @include mq-up($bp-md) {
-    /* On md+, split square into two columns */
-    grid-template-rows: 1fr;
-    grid-template-columns: 1.05fr 0.95fr;
-    align-items: center;
+  img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
   }
 }
 
-/* Text column */
-.home-hero-body {
+/* Floating tag pills */
+.home-hero-tag {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: $sp-4;
+  padding: $sp-4 $sp-6;
+  font-size: $fs-2;
+  line-height: 1;
+  border-radius: $radius-pill;
+  white-space: nowrap;
+  backdrop-filter: blur(8px);
+
+  @include theme-block {
+    color: tone(contrast, light);
+    background-color: rgba(255,255,255,.6);
+    border: 1px solid tone(border, light);
+  }
+  @include theme-block-dark {
+    color: tone(contrast, dark);
+    background-color: rgba(0,0,0,.38);
+    border: 1px solid tone(border, dark);
+  }
+}
+
+/* Randomized positions (desktop) */
+@include mq-up($bp-md) {
+  .home-hero-photo {
+    .tag-1 { top: -$sp-6; left: -$sp-6; }
+    .tag-2 { top: $sp-4; right: -$sp-6; }
+    .tag-3 { bottom: $sp-6; left: -$sp-4; }
+    .tag-4 { bottom: -$sp-6; right: $sp-6; }
+    .tag-5 { top: 45%; left: -$sp-8; transform: translateY(-50%); }
+    .tag-6 { top: -$sp-6; right: 30%; }
+    .tag-7 { bottom: 35%; right: -$sp-8; }
+  }
+}
+
+/* On small screens, keep fewer pills snug near edges */
+@media (max-width: $bp-md) {
+  .home-hero-photo {
+    .home-hero-tag { font-size: $fs-2; transform: none; }
+    .tag-1 { top: $sp-4; left: $sp-4; }
+    .tag-2 { top: $sp-4; right: $sp-4; }
+    .tag-3 { bottom: $sp-4; left: $sp-4; }
+    .tag-4 { bottom: $sp-4; right: $sp-4; }
+    .tag-5, .tag-6, .tag-7 { display: none; } /* trim to 4 pills on mobile for clarity */
+  }
+}
+
+/* Details block */
+.home-hero-details {
   display: grid;
   gap: $sp-7;
+  min-width: 0;
 }
 
-.home-hero-eyebrow {
-  font-size: $fs-2;
-  letter-spacing: .02em;
-
-  @include theme-block  { color: tone(secondary, light); }
-  @include theme-block-dark { color: tone(secondary, dark); }
-}
-
-.home-hero-title {
+.home-hero-name {
   font-weight: $fw-bold;
   line-height: $lh-tight;
-  font-size: clamp($fs-7, 6.4vw, $fs-10);
+  font-size: clamp($fs-7, 5.6vw, $fs-10);
   margin: 0;
 }
 
-.home-hero-accent {
-  @include theme-block  { color: tone(accent, light); }
-  @include theme-block-dark { color: tone(accent, dark); }
+.home-hero-role {
+  margin: 0;
+  font-size: $fs-3;
+
+  @include theme-block { color: tone(foreground, light); }
+  @include theme-block-dark { color: tone(foreground, dark); }
+
+  .company { font-weight: $fw-semibold; }
+  .dot { margin-inline: $sp-6; opacity: .6; }
 }
 
-.home-hero-sub {
+.home-hero-meta {
+  display: inline-flex; align-items: center; gap: $sp-5;
+  margin: 0; font-size: $fs-2;
+
+  @include theme-block { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark); }
+}
+
+.home-hero-bio {
+  margin: 0;
   font-size: $fs-3;
   max-width: 60ch;
 
-  @include theme-block  { color: tone(foreground, light); }
+  @include theme-block { color: tone(foreground, light); }
   @include theme-block-dark { color: tone(foreground, dark); }
 }
 
-.home-hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: $sp-7;
-}
-
-/* Buttons */
+/* Actions */
+.home-hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: $sp-7; }
 .btn { @include button-base; }
-
 .btn-primary {
-  @include theme-block {
-    background-color: tone(accent, light);
-    color: tone(white, light);
-    border-color: tone(accent, light);
-  }
-  @include theme-block-dark {
-    background-color: tone(accent, dark);
-    color: tone(black, dark);
-    border-color: tone(accent, dark);
-  }
+  @include theme-block { background-color: tone(accent, light); color: tone(white, light); border-color: tone(accent, light); }
+  @include theme-block-dark { background-color: tone(accent, dark); color: tone(black, dark); border-color: tone(accent, dark); }
   &:hover { transform: translateY(-1px); }
 }
-
 .btn-ghost {
-  @include theme-block {
-    background-color: transparent;
-    color: tone(foreground, light);
-    border-color: tone(border, light);
-  }
-  @include theme-block-dark {
-    background-color: transparent;
-    color: tone(foreground, dark);
-    border-color: tone(border, dark);
-  }
+  @include theme-block { background-color: transparent; color: tone(foreground, light); border-color: tone(border, light); }
+  @include theme-block-dark { background-color: transparent; color: tone(foreground, dark); border-color: tone(border, dark); }
   &:hover {
     @include theme-block { background-color: tone(background-100, light); }
     @include theme-block-dark { background-color: tone(background-200, dark); }
   }
 }
 
-/* Media column: fills available space, keeps square feel */
-.home-hero-media {
-  margin: 0;
+/* Ticker */
+.home-hero-ticker {
+  border-radius: $radius-3;
+  overflow: hidden;
+  border: 1px solid transparent;
 
-  /* On mobile, put media below text; on md+, media sits to the right */
-  @include mq-up($bp-md) {
-    justify-self: stretch;
-    align-self: stretch;
+  @include theme-block { background: tone(background-100, light); border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(background-200, dark); border-color: tone(border, dark); }
+}
+
+.home-hero-track {
+  display: inline-flex;
+  gap: $sp-10;
+  padding: $sp-5 $sp-7;
+  min-width: 100%;
+  white-space: nowrap;
+  animation: heroMarquee 24s linear infinite;
+
+  span {
+    display: inline-flex; align-items: center; gap: $sp-5;
+    font-size: $fs-2;
+    @include theme-block { color: tone(foreground, light); }
+    @include theme-block-dark { color: tone(foreground, dark); }
   }
+}
 
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;              /* fill the area; stay cinematic */
-    border-radius: $radius-5;
-
-    @include theme-block { border: 1px solid tone(border, light); }
-    @include theme-block-dark { border: 1px solid tone(border, dark); }
-  }
+@keyframes heroMarquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
 }
