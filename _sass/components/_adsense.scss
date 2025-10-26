@@ -103,52 +103,56 @@
 
 
 // ======================================================================
-// ads-rails.scss — left/right skyscraper rails outside the main island
-// Depends on: _variables.scss, adsense.scss (for .ad variants)
+// ads-rails.scss — Floating left/right rails with 160x600 skyscrapers
+// Depends on: _variables.scss + adsense.scss
 // ======================================================================
 
+// Tweak how far from the screen edge the rails sit
+$rail-edge-gap: $sp-8; // ~1.25rem
 
-/* Hidden by default on small screens; we enable at wide widths */
+/* Hidden by default on smaller screens to avoid overlay */
 .ad-rails { display: none; }
 
-/* Show rails on large viewports so they don't overlap content.
-   Tune this threshold: 1400px is a good starting point. */
-@media (min-width: 1400px) {
+/* Show rails on wide viewports */
+@media (min-width: 1300px) {
   .ad-rails { display: block; }
 
   .ad-rail {
     position: fixed;
-    top: calc(#{$navbar-height} + #{$sp-8});  /* clear your header */
-    z-index: $z-base;                          /* under modals, over content */
-    width: 300px;                              /* AdSense vertical common width */
-    max-width: 300px;
-    margin:10px;
-    /* Let the ad component size itself; our wrapper just anchors it */
+    top: 0; bottom: 0;                // full-height rail
+    width: 160px;                      // classic "wide skyscraper" width
+    z-index: $z-base;
+    display: flex;                     // center the ad vertically
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;              // so rail doesn’t trap scroll/clicks
   }
 
-  /* Align outside the centered island:
-     50% to center, + half island, + container gutter, + small gap */
-  .ad-rail--left {
-    right: calc(50% + (#{$island-width} / 2) + #{$container-gutter} + #{$sp-8});
-  }
-  .ad-rail--right {
-    left:  calc(50% + (#{$island-width} / 2) + #{$container-gutter} + #{$sp-8});
-  }
+  /* Left/right offset from screen edges (not from the island) */
+  .ad-rail--left  { left:  $rail-edge-gap; }
+  .ad-rail--right { right: $rail-edge-gap; }
 
-  /* Make sure the contained ad never overflows its rail box */
-  .ad-rail .ad { width: 100%; max-width: 100%; margin-block: 0; }
-  .ad-rail .ad__slot { width: 100%; max-width: 100%; }
+  /* Let the ad be clickable inside the non-clickable rail */
+  .ad-rail .ad { pointer-events: auto; width: 160px; max-width: 160px; margin: 0; }
+  .ad-rail .ad__slot { width: 160px; max-width: 160px; }
 
-  /* Optional: keep the rail ad roughly within viewport height */
+  /* Force a clean 160x600 canvas (Google will fill it when eligible).
+     The placeholder from adsense.scss still applies. */
   .ad-rail .ad--vertical .ad__slot {
-    min-height: clamp(400px, 70vh, 700px);
+    height: 600px;
+    min-height: 600px;
+    aspect-ratio: auto;   // don't let aspect-ratio override our fixed size
+    overflow: hidden;
+  }
+
+  /* Keep the "Advertisement" label readable above the unit */
+  .ad-rail .ad::before {
+    transform: translate(-50%, -70%);
   }
 }
 
-/* If you need to nudge rails for ultra-wide or narrower thresholds, add more MQs: */
-/*
+/* Optional: on ultra-wide screens, nudge them a bit more in */
 @media (min-width: 1800px) {
-  .ad-rail--left  { right: calc(50% + (#{$island-width} / 2) + #{$container-gutter} + #{$sp-12}); }
-  .ad-rail--right { left:  calc(50% + (#{$island-width} / 2) + #{$container-gutter} + #{$sp-12}); }
+  .ad-rail--left  { left:  calc(#{$rail-edge-gap} + #{$sp-6}); }
+  .ad-rail--right { right: calc(#{$rail-edge-gap} + #{$sp-6}); }
 }
-*/
