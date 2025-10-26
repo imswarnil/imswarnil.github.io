@@ -21,5 +21,6 @@ hero_image:       "/assets/img/portrait.jpg"
 hero_title:       "Your go-to engineer for high-impact web"
 hero_subtitle:    "Fast, cinematic, and robust experiences—built right."
 rails : false
+story_video_id: "12o3Zgupu_8" # default already set in HTML; override if needed
 ---
 
