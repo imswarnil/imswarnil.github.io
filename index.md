@@ -15,5 +15,7 @@ cta_href: /contact/
 cta_label: Book me
 cta2_href: /projects/
 cta2_label: Projects
+hero_bg_video_id: "https://file-examples.com/wp-content/storage/2017/04/file_example_MP4_640_3MG.mp4"
+story_video_id: "https://file-examples.com/wp-content/storage/2017/04/file_example_MP4_640_3MG.mp4"
 ---
 
