@@ -1,32 +1,31 @@
 {%- comment -%}
-  Single Smart Hero
-  Variants auto by page.layout / page.collection: home / post / page / default
-  - Home: full-height media, grid lines (no dots), simple copy (no avatar)
-  - Post: compact, author bullet, cover or placeholder if missing
-  - Page: compact, breadcrumbs, author bullet, optional image
-  - All: dark-mode grid lines, responsive, image-first on mobile
+  Smart Hero (single include)
+  Auto variants via page.layout / collection:
+  - home-hero
+  - post-hero
+  - page-hero
+  - hero-default
 {%- endcomment -%}
 
-{%- assign _kind = 'default' -%}
+{%- assign _kind = 'hero-default' -%}
 {%- if page.layout == 'home' -%}
-  {%- assign _kind = 'home' -%}
+  {%- assign _kind = 'home-hero' -%}
 {%- elsif page.layout == 'post' or page.collection == 'posts' -%}
-  {%- assign _kind = 'post' -%}
+  {%- assign _kind = 'post-hero' -%}
 {%- elsif page.layout == 'page' -%}
-  {%- assign _kind = 'page' -%}
+  {%- assign _kind = 'page-hero' -%}
 {%- endif -%}
 
-<section class="site-hero hero--{{ _kind }}" role="region" aria-label="Hero">
-  <!-- Background surface with grid lines only -->
+<section class="site-hero {{ _kind }}" role="region" aria-label="Hero">
+  <!-- Grid-line background (no dots) -->
   <div class="hero-surface" aria-hidden="true">
     <div class="hero-gridlines" aria-hidden="true"></div>
   </div>
 
-  {%- if _kind == 'home' -%}
+  {%- if _kind == 'home-hero' -%}
   <!-- ====================== HOME ====================== -->
   <div class="container">
     <div class="hero-grid hero-grid--home">
-
       {%- assign home_img = page.feature_image | default: site.collections.posts.feature_image -%}
       <figure class="hero-media">
         {% if home_img %}
@@ -37,13 +36,11 @@
       </figure>
 
       <div class="home-copy">
-        <div class="home-head"> <!-- div, not header -->
-          <div class="home-titleblock">
-            <h1 class="hero-title">{{ page.title | default: site.title | default: "Welcome" }}</h1>
-            {% if site.description %}
-              <p class="hero-sub">{{ site.description }}</p>
-            {% endif %}
-          </div>
+        <div class="home-titleblock">
+          <h1 class="hero-title">{{ page.title | default: site.title | default: "Welcome" }}</h1>
+          {% if site.description %}
+            <p class="hero-sub">{{ site.description }}</p>
+          {% endif %}
         </div>
 
         <div class="home-meta">
@@ -76,25 +73,21 @@
         </nav>
         {% endif %}
 
-        {%- comment -%} Optional ad if space allows {%- endcomment -%}
         <div class="hero-ad">
           {% include adsense.html type="horizontal" %}
         </div>
       </div>
-
     </div>
   </div>
 
-  {%- elsif _kind == 'post' -%}
+  {%- elsif _kind == 'post-hero' -%}
   <!-- ====================== POST ====================== -->
-  <div class="container">
+  <div class="container container--narrow">
     <div class="hero-grid hero-grid--post">
-
       <figure class="hero-media hero-media--post">
         {% if page.feature_image %}
           <img src="{{ page.feature_image }}" alt="" loading="eager">
         {% else %}
-          <!-- Auto placeholder if no cover image -->
           <div class="media-placeholder" aria-hidden="true"></div>
         {% endif %}
       </figure>
@@ -143,13 +136,12 @@
           {% include adsense.html type="in_article" %}
         </div>
       </div>
-
     </div>
   </div>
 
-  {%- elsif _kind == 'page' -%}
+  {%- elsif _kind == 'page-hero' -%}
   <!-- ====================== PAGE ====================== -->
-  <div class="container">
+  <div class="container container--narrow">
     <nav class="hero-breadcrumbs" aria-label="Breadcrumb">
       <a href="{{ '/' | relative_url }}"><i class="ph-bold ph-house"></i> Home</a>
       <span class="crumb-sep">/</span>
@@ -184,13 +176,12 @@
           {% include adsense.html type="horizontal" %}
         </div>
       </div>
-
     </div>
   </div>
 
   {%- else -%}
   <!-- ====================== DEFAULT ====================== -->
-  <div class="container">
+  <div class="container container--narrow">
     <div class="hero-grid hero-grid--default">
       <div class="default-copy">
         <h1 class="hero-title">{{ page.title | default: site.title }}</h1>
