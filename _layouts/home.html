@@ -1,26 +1,18 @@
 ---
 layout: default
 ---
-
 <section class="home-hero">
   <div class="home-hero-shell">
     <div class="home-hero-card">
-      <!-- IMAGE SIDE (mobile-first first) -->
+      <!-- Left: square image -->
       <figure class="home-hero-photo">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRl6dqv_avIvyeanSyi6l7QBVBXK00cj2SZLA&s"
-             alt="{{ site.title | default: 'Profile image' }}" />
-        <figcaption class="home-hero-signature">— Swarnil</figcaption>
-
-        <!-- Floating pills (around image) -->
-        <span class="home-hero-tag t1"><i class="ph-bold ph-film-script"></i> Filmmaker</span>
-        <span class="home-hero-tag t2"><i class="ph-bold ph-code"></i> Engineer</span>
-        <span class="home-hero-tag t3"><i class="ph-bold ph-brain"></i> Story</span>
-        <span class="home-hero-tag t4"><i class="ph-bold ph-lightning"></i> Editor</span>
-        <span class="home-hero-tag t5"><i class="ph-bold ph-camera"></i> DP</span>
-        <span class="home-hero-tag t6"><i class="ph-bold ph-compass"></i> Traveler</span>
+        <img
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRl6dqv_avIvyeanSyi6l7QBVBXK00cj2SZLA&s"
+          alt="{{ site.title | default: 'Profile' }}"
+        />
       </figure>
 
-      <!-- DETAILS SIDE -->
+      <!-- Right: details -->
       <div class="home-hero-details">
         <h1 class="home-hero-name">{{ site.title | default: 'Your Name' }}</h1>
 
@@ -52,3 +44,5 @@ layout: default
   </div>
 </section>
 
+<!-- Ensure Phosphor icons are loaded in head.html -->
+<!-- <script defer src="https://unpkg.com/@phosphor-icons/web"></script> -->
