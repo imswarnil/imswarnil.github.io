@@ -1,193 +1,218 @@
 // ======================================================================
-// home.scss — Compact square hero with floating tags & ticker
-// Depends on: _variables.scss
+// Cinematic Footer — Light: white text/icons + black scrim + grid
+//                       Dark: dark text/icons + white scrim + grid
+// - Full-cover video (no blur), grid/scrim above video and below content
+// - Floating strip styled like navbar island
+// - Uses your tokens/mixins from _variables.scss
 // ======================================================================
 
-@use "variables" as *;
+/* Sticky shell so footer sits at bottom on short pages */
+.page-shell { display: flex; min-height: 100vh; flex-direction: column; }
+.page-shell > .site-footer { margin-top: auto; }
 
-.home-hero {
-  padding-block: clamp($sp-12, 6vw, $sp-20);
-}
+/* Root */
+.site-footer { position: relative; z-index: 1; margin-top: $sp-12; overflow: clip; }
 
-/* Self-centered wrapper with safe gutters (no .container dependency) */
-.home-hero-wrap {
-  width: $island-width;
-  max-width: calc(100% - 2 * #{$container-gutter});
-  margin-inline: auto;
+/* Dotted surface behind the island */
+.footer-surface {
+  position: absolute; inset: 0; z-index: 0;
+  background-image:
+    radial-gradient(rgba(0,0,0,.06) 1px, transparent 1px),
+    radial-gradient(rgba(0,0,0,.04) 1px, transparent 1px);
+  background-size: 16px 16px, 16px 16px;
+  background-position: 0 0, 8px 8px;
 
-  display: grid;
-  gap: $sp-12;
-  /* Mobile: image first, then details (source order already image first) */
-  @include mq-up($bp-md) {
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    gap: $sp-14;
+  @include theme-block-dark {
+    background-image:
+      radial-gradient(rgba(255,255,255,.09) 1px, transparent 1px),
+      radial-gradient(rgba(255,255,255,.07) 1px, transparent 1px);
   }
 }
 
-/* Square photo with floating tags */
-.home-hero-photo {
-  position: relative;
-  width: clamp(9rem, 32vw, 14rem);
-  aspect-ratio: 1 / 1;
-  border-radius: $radius-6;
-  overflow: hidden;
-  backdrop-filter: blur(6px);
+/* Island */
+.footer-island { position: relative; z-index: 1; border-radius: $radius-6; overflow: hidden; }
+
+/* Media stack */
+.footer-media { position: absolute; inset: 0; z-index: 0; pointer-events: none; border-radius: inherit; }
+
+/* Full-cover responsive iframe with soft mask on container */
+.footer-media__inner {
+  position: absolute; inset: 0; overflow: hidden; border-radius: inherit;
+  -webkit-mask-image: radial-gradient(120% 120% at 50% 40%, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
+  mask-image: radial-gradient(120% 120% at 50% 40%, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
+}
+.footer-yt {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  border: 0; display: block; pointer-events: none;
+  width: 177.78vh; height: 100vh; min-width: 100%; min-height: 100%;
+  @media (min-aspect-ratio: 16/9) { width: 100vw; height: 56.25vw; }
+  transition: transform $dur-2 $ease-in-out;
+}
+.footer-island:hover .footer-yt { transform: translate(-50%, -50%) scale(1.03); }
+
+/* Grid overlay (on top of video, below content) */
+.footer-grid {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none; border-radius: inherit;
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,.08) 1px, transparent 1px);
+  background-size: 32px 32px, 32px 32px;
+
+  @include theme-block-dark {
+    background-image:
+      linear-gradient(to right, rgba(0,0,0,.12) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0,0,0,.12) 1px, transparent 1px);
+  }
+}
+
+/* Scrim overlay for legibility (no blur, color-reversed by theme) */
+.footer-scrim {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none; border-radius: inherit;
+  background: rgba(0,0,0,.48);  // Light mode: black translucent
+  @include theme-block-dark { background: rgba(255,255,255,.42); } // Dark mode: white translucent
+}
+
+/* Container */
+.footer__container { @include container; }
+
+/* Content card (no bottom border; rounded top) */
+.footer__inner {
+  position: relative; z-index: 3; // above grid/scrim
+  display: grid; gap: $sp-8;
+  padding: clamp(#{$sp-8}, 5vw, #{$sp-12});
+  min-height: 440px;
+
+  border: 1px solid; border-bottom: 0;
+  border-radius: $radius-6 $radius-6 0 0;
+
+  // subtle card surfaces (no blur)
+  @include theme-block      { background: rgba(255,255,255,.08); border-color: tone(border, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: rgba(18,18,20,.10);   border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
+
+  @include mq-up($bp-md) { grid-template-columns: repeat(2, 1fr); }
+  @include mq-up($bp-lg) { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Typography & icon colors — Light: white; Dark: dark */
+.footer__title,
+.footer__text,
+.footer__list a,
+.footer__hint,
+.footer__credit,
+.footer-strip__inner p,
+.footer-strip__inner a,
+.footer__social a {
+  @include theme-block      { color: rgba(255,255,255,.98); }
+  @include theme-block-dark { color: tone(contrast, dark); }
+}
+.footer__list a i,
+.footer__title i,
+.footer__social a { @include theme-block { color: rgba(255,255,255,.98); } @include theme-block-dark { color: tone(contrast, dark); } }
+
+/* Title underline */
+.footer__title {
+  display: inline-flex; align-items: center; gap: .55rem;
+  font-size: $fs-4; font-weight: $fw-semibold; letter-spacing: -0.01em;
+  &::after { content:""; display:block; width:28px; height:2px; margin-top:$sp-2; border-radius:2px;
+    @include theme-block { background: rgba(255,255,255,.9); }
+    @include theme-block-dark { background: rgba(0,0,0,.75); } }
+}
+
+/* Lists */
+.footer__list { list-style:none; margin:0; padding:0; display:grid; gap:$sp-2; }
+.footer__list a {
+  display:inline-flex; align-items:center; gap:.55rem; text-decoration:none; font-size:$fs-3;
+  transition: transform $dur-1 $ease-in-out, text-decoration-color $dur-1;
+  &:hover { text-decoration: underline; transform: translateX(2px); }
+}
+
+/* Social */
+.footer__social { display:flex; align-items:center; gap:$sp-3; }
+.footer__social a {
+  display:inline-grid; place-items:center; width:2rem; height:2rem; border-radius:50%;
+  border: 1px solid;
+  @include theme-block      { border-color: rgba(255,255,255,.45); }
+  @include theme-block-dark { border-color: rgba(0,0,0,.25); }
+  font-size:$fs-4;
+  transition: transform $dur-1 $ease-in-out, background-color $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out;
+  &:hover {
+    transform: translateY(-2px);
+    @include theme-block      { background: rgba(255,255,255,.14); box-shadow: 0 10px 22px -10px rgba(0,0,0,.45); }
+    @include theme-block-dark { background: rgba(0,0,0,.08);  box-shadow: 0 10px 22px -10px rgba(0,0,0,.35); }
+  }
+}
+
+/* Newsletter */
+.footer__form { display:flex; flex-direction:column; gap:$sp-3; }
+.footer__field {
+  display:flex; align-items:center; gap:$sp-3;
+  border:1px solid; border-radius:$radius-pill; padding:.55rem .8rem;
+  background: transparent;
+
+  @include theme-block      { border-color: rgba(255,255,255,.55); }
+  @include theme-block-dark { border-color: rgba(0,0,0,.35); }
+
+  i { font-size:$fs-4; }
+  input {
+    flex:1; border:0; outline:0; background:transparent; font-size:$fs-3;
+    @include theme-block      { color: rgba(255,255,255,.98); &::placeholder { color: rgba(255,255,255,.75); } }
+    @include theme-block-dark { color: tone(contrast, dark);   &::placeholder { color: rgba(0,0,0,.55); } }
+  }
+  &:focus-within {
+    @include theme-block      { border-color: rgba(255,255,255,.9); }
+    @include theme-block-dark { border-color: rgba(0,0,0,.65); }
+  }
+}
+.footer__submit {
+  display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+  min-height: 40px; padding: .5rem 1rem;
+  border-radius: $radius-pill; border: 1px solid transparent; cursor:pointer; user-select:none;
+  font-size:$fs-3; font-weight:$fw-semibold;
+
+  @include theme-block      { background: rgba(255,255,255,1); color: tone(black, dark); }
+  @include theme-block-dark { background: rgba(0,0,0,.92);     color: rgba(255,255,255,.98); }
+
+  transition: transform $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out, opacity $dur-1;
+  i { font-size:$fs-4; }
+  &:hover { transform: translateY(-2px); box-shadow: 0 10px 22px -10px rgba(0,0,0,.45); }
+  &:active { transform: translateY(0); opacity: .92; }
+}
+.footer__hint {
+  margin:0; font-size:$fs-2;
+  @include theme-block      { color: rgba(255,255,255,.9); }
+  @include theme-block-dark { color: rgba(0,0,0,.7); }
+}
+
+/* Floating footer strip (navbar island vibe) */
+.footer-strip { position: relative; z-index: 2; margin-top: $sp-3; }
+.footer-strip .footer__container { @include container; }
+.footer-strip__inner {
+  display:flex; align-items:center; justify-content:space-between; gap:$sp-4; flex-wrap:wrap;
+  min-height: 56px; padding: .5rem clamp($sp-5, 4vw, $sp-8);
+  border: 1px solid; border-radius: $radius-pill;
 
   @include theme-block {
-    background-color: tone(surface, light);
-    border: 1px solid tone(border, light);
+    background: rgba(255,255,255,.92);
+    border-color: tone(border, light);
+    color: tone(contrast, light);
     box-shadow: $shadow-light;
   }
   @include theme-block-dark {
-    background-color: tone(surface, dark);
-    border: 1px solid tone(border, dark);
+    background: rgba(0,0,0,.82);
+    border-color: tone(border, dark);
+    color: tone(contrast, dark);
     box-shadow: $shadow-dark;
   }
 
-  img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    display: block;
-  }
+  p { margin: 0; font-size: $fs-3; }
+  a { text-decoration: none; font-weight: $fw-medium;
+      @include theme-block      { color: tone(contrast, light); }
+      @include theme-block-dark { color: tone(contrast, dark); }
+      &:hover { text-decoration: underline; } }
 }
 
-/* Floating tag pills */
-.home-hero-tag {
-  position: absolute;
-  display: inline-flex;
-  align-items: center;
-  gap: $sp-4;
-  padding: $sp-4 $sp-6;
-  font-size: $fs-2;
-  line-height: 1;
-  border-radius: $radius-pill;
-  white-space: nowrap;
-  backdrop-filter: blur(8px);
-
-  @include theme-block {
-    color: tone(contrast, light);
-    background-color: rgba(255,255,255,.6);
-    border: 1px solid tone(border, light);
-  }
-  @include theme-block-dark {
-    color: tone(contrast, dark);
-    background-color: rgba(0,0,0,.38);
-    border: 1px solid tone(border, dark);
-  }
-}
-
-/* Randomized positions (desktop) */
-@include mq-up($bp-md) {
-  .home-hero-photo {
-    .tag-1 { top: -$sp-6; left: -$sp-6; }
-    .tag-2 { top: $sp-4; right: -$sp-6; }
-    .tag-3 { bottom: $sp-6; left: -$sp-4; }
-    .tag-4 { bottom: -$sp-6; right: $sp-6; }
-    .tag-5 { top: 45%; left: -$sp-8; transform: translateY(-50%); }
-    .tag-6 { top: -$sp-6; right: 30%; }
-    .tag-7 { bottom: 35%; right: -$sp-8; }
-  }
-}
-
-/* On small screens, keep fewer pills snug near edges */
-@media (max-width: $bp-md) {
-  .home-hero-photo {
-    .home-hero-tag { font-size: $fs-2; transform: none; }
-    .tag-1 { top: $sp-4; left: $sp-4; }
-    .tag-2 { top: $sp-4; right: $sp-4; }
-    .tag-3 { bottom: $sp-4; left: $sp-4; }
-    .tag-4 { bottom: $sp-4; right: $sp-4; }
-    .tag-5, .tag-6, .tag-7 { display: none; } /* trim to 4 pills on mobile for clarity */
-  }
-}
-
-/* Details block */
-.home-hero-details {
-  display: grid;
-  gap: $sp-7;
-  min-width: 0;
-}
-
-.home-hero-name {
-  font-weight: $fw-bold;
-  line-height: $lh-tight;
-  font-size: clamp($fs-7, 5.6vw, $fs-10);
-  margin: 0;
-}
-
-.home-hero-role {
-  margin: 0;
-  font-size: $fs-3;
-
-  @include theme-block { color: tone(foreground, light); }
-  @include theme-block-dark { color: tone(foreground, dark); }
-
-  .company { font-weight: $fw-semibold; }
-  .dot { margin-inline: $sp-6; opacity: .6; }
-}
-
-.home-hero-meta {
-  display: inline-flex; align-items: center; gap: $sp-5;
-  margin: 0; font-size: $fs-2;
-
-  @include theme-block { color: tone(secondary, light); }
-  @include theme-block-dark { color: tone(secondary, dark); }
-}
-
-.home-hero-bio {
-  margin: 0;
-  font-size: $fs-3;
-  max-width: 60ch;
-
-  @include theme-block { color: tone(foreground, light); }
-  @include theme-block-dark { color: tone(foreground, dark); }
-}
-
-/* Actions */
-.home-hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: $sp-7; }
-.btn { @include button-base; }
-.btn-primary {
-  @include theme-block { background-color: tone(accent, light); color: tone(white, light); border-color: tone(accent, light); }
-  @include theme-block-dark { background-color: tone(accent, dark); color: tone(black, dark); border-color: tone(accent, dark); }
-  &:hover { transform: translateY(-1px); }
-}
-.btn-ghost {
-  @include theme-block { background-color: transparent; color: tone(foreground, light); border-color: tone(border, light); }
-  @include theme-block-dark { background-color: transparent; color: tone(foreground, dark); border-color: tone(border, dark); }
-  &:hover {
-    @include theme-block { background-color: tone(background-100, light); }
-    @include theme-block-dark { background-color: tone(background-200, dark); }
-  }
-}
-
-/* Ticker */
-.home-hero-ticker {
-  border-radius: $radius-3;
-  overflow: hidden;
-  border: 1px solid transparent;
-
-  @include theme-block { background: tone(background-100, light); border-color: tone(border, light); }
-  @include theme-block-dark { background: tone(background-200, dark); border-color: tone(border, dark); }
-}
-
-.home-hero-track {
-  display: inline-flex;
-  gap: $sp-10;
-  padding: $sp-5 $sp-7;
-  min-width: 100%;
-  white-space: nowrap;
-  animation: heroMarquee 24s linear infinite;
-
-  span {
-    display: inline-flex; align-items: center; gap: $sp-5;
-    font-size: $fs-2;
-    @include theme-block { color: tone(foreground, light); }
-    @include theme-block-dark { color: tone(foreground, dark); }
-  }
-}
-
-@keyframes heroMarquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+/* Responsive */
+@media (max-width: $bp-sm) {
+  .footer__inner { grid-template-columns: 1fr; gap: $sp-8; }
+  .footer-strip__inner { flex-direction: column; text-align: center; }
 }
