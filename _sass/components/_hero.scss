@@ -1,5 +1,5 @@
 // ======================================================================
-// Smart Hero (single include) — creative, minimal chrome, image-first mobile
+// Smart Hero — lighter chrome, grid-only background, image-first mobile
 // ======================================================================
 
 @function fluid-clamp($min, $fluid, $max) { @return unquote("clamp(#{$min}, #{$fluid}, #{$max})"); }
@@ -7,127 +7,116 @@
 /* Shell */
 .site-hero {
   position: relative;
-  padding: #{fluid-clamp($sp-8, 6vw, $sp-14)} 0 $sp-10;
+  padding: #{fluid-clamp($sp-6, 4vw, $sp-10)} 0 $sp-8; // tighter default
   overflow: clip;
 
-  /* dotted field + orbit rings (no heavy boxes) */
   .hero-surface {
     position: absolute; inset: 0; z-index: 0; pointer-events: none;
-    background-image:
-      radial-gradient(rgba(0,0,0,.06) 1px, transparent 1px),
-      radial-gradient(rgba(0,0,0,.03) 1px, transparent 1px);
-    background-size: 18px 18px, 18px 18px;
-    background-position: 0 0, 9px 9px;
 
-    @include theme-block-dark {
-      background-image:
-        radial-gradient(rgba(255,255,255,.11) 1px, transparent 1px),
-        radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px);
-    }
-
+    /* Grid lines only (no dots) */
     .hero-gridlines {
       position: absolute; inset: 0;
-      background-image: linear-gradient(to right, rgba(127,127,127,.15) 1px, transparent 1px),
-                        linear-gradient(to bottom, rgba(127,127,127,.12) 1px, transparent 1px);
-      background-size: 40px 40px;
-      mix-blend-mode: overlay;
-      @include theme-block-dark { opacity: .55; }
-      @include theme-block      { opacity: .35; }
-    }
-
-    .hero-orbit {
-      position: absolute; inset: -20% -10%;
-      background:
-        radial-gradient(closest-side, rgba(0,0,0,.08), transparent 60%) 20% 40%/60% 60% no-repeat,
-        radial-gradient(closest-side, rgba(0,0,0,.06), transparent 60%) 70% 20%/40% 40% no-repeat;
+      background-image:
+        linear-gradient(to right, rgba(120,120,120,.16) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(120,120,120,.14) 1px, transparent 1px);
+      background-size: 44px 44px;
       @include theme-block-dark {
-        background:
-          radial-gradient(closest-side, rgba(255,255,255,.12), transparent 60%) 20% 40%/60% 60% no-repeat,
-          radial-gradient(closest-side, rgba(255,255,255,.09), transparent 60%) 70% 20%/40% 40% no-repeat;
+        background-image:
+          linear-gradient(to right, rgba(255,255,255,.18) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(255,255,255,.16) 1px, transparent 1px);
       }
-      filter: blur(18px);
     }
   }
 }
 
-/* Grids */
-.hero-grid { position: relative; z-index: 1; display: grid; gap: $sp-8; }
-.hero-grid--home  { grid-template-columns: 1.15fr .85fr; @media (max-width: $bp-lg) { grid-template-columns: 1fr; } }
-.hero-grid--post  { grid-template-columns: 1fr; }
-.hero-grid--page  { grid-template-columns: 1fr .85fr; @media (max-width: $bp-lg) { grid-template-columns: 1fr; } }
+/* Layout grids */
+.hero-grid       { position: relative; z-index: 1; display: grid; gap: $sp-8; align-items: center; }
+.hero-grid--home { grid-template-columns: 1.05fr .95fr; @media (max-width: $bp-lg) { grid-template-columns: 1fr; gap: $sp-6; } }
+.hero-grid--post { grid-template-columns: 1fr; gap: $sp-6; }
+.hero-grid--page { grid-template-columns: 1fr .9fr; @media (max-width: $bp-lg) { grid-template-columns: 1fr; gap: $sp-6; } }
 .hero-grid--default { grid-template-columns: 1fr; }
 
-/* Put image first on mobile when present */
-.hero-art--home, .hero-art--cover, .hero-grid--page .hero-art { order: -1; }
-
-/* Media */
-.hero-art img {
-  width: 100%; height: auto; display: block; border-radius: $radius-6;
+/* Media blocks */
+.hero-media {
+  order: -1; /* image first on mobile naturally */
+  height: #{fluid-clamp(360px, 60vh, 720px)}; /* full-height feel on home */
+  width: 100%;
+  border-radius: $radius-6; overflow: hidden;
   box-shadow: 0 24px 60px -28px rgba(0,0,0,.35);
-  @include theme-block-dark { box-shadow: 0 28px 80px -30px rgba(0,0,0,.65); }
+  @include theme-block-dark { box-shadow: 0 28px 80px -30px rgba(0,0,0,.6); }
+
+  img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .media-placeholder {
+    width: 100%; height: 100%;
+    background: repeating-linear-gradient(45deg, rgba(0,0,0,.08) 0 12px, transparent 12px 24px);
+    @include theme-block-dark { background: repeating-linear-gradient(45deg, rgba(255,255,255,.12) 0 12px, transparent 12px 24px); }
+  }
 }
 
-/* Typography */
+/* Slightly shorter media on post/page to tighten hero height */
+.hero-media--post,
+.hero-media--page {
+  height: #{fluid-clamp(240px, 40vh, 520px)};
+}
+
+/* Copy groups — airy, not boxy */
+.home-copy, .post-copy, .page-copy, .default-copy { padding: #{fluid-clamp($sp-4, 2.6vw, $sp-8)} 0; }
+
+/* Titles / sub */
 .hero-title {
-  margin: 0 0 $sp-3;
-  font-size: #{fluid-clamp($fs-6, unquote("calc(2.2vw + 1.1rem)"), $fs-9)};
+  margin: 0 0 $sp-2;
+  font-size: #{fluid-clamp($fs-6, unquote("calc(2vw + 1rem)"), $fs-9)};
   line-height: 1.05; letter-spacing: -.01em;
   @include theme-block      { color: tone(contrast, light); }
   @include theme-block-dark { color: tone(contrast, dark);  }
-
-  .accent {
-    background:
-      linear-gradient(currentColor, currentColor) 0% 95% / 100% 8% no-repeat;
-    padding-bottom: .06em;
-  }
 }
-
 .hero-sub {
   margin: 0;
-  font-size: #{fluid-clamp($fs-3, unquote("calc(1vw + 0.85rem)"), $fs-5)};
+  font-size: #{fluid-clamp($fs-3, unquote("calc(.8vw + 0.9rem)"), $fs-5)};
   @include theme-block      { color: tone(secondary, light); }
   @include theme-block-dark { color: tone(secondary, dark);  }
 }
 
-/* “Cardless” copy groups (breathing space, no hard borders) */
-.home-copy, .post-copy, .page-copy, .default-copy {
-  padding: #{fluid-clamp($sp-6, 3.2vw, $sp-10)};
-}
+/* Home head (no avatar, no header element) */
+.home-head { display: block; margin-bottom: $sp-2; }
+.home-titleblock { display: grid; gap: $sp-2; }
 
-/* Heads */
-.home-head, .post-head, .page-head {
-  display: grid; grid-template-columns: auto 1fr; gap: $sp-5; align-items: center; margin-bottom: $sp-3;
+/* Chips / badges */
+.home-meta, .hero-badges {
+  display: flex; flex-wrap: wrap; gap: $sp-3; margin-top: $sp-3;
 }
-
-/* Avatars */
-.home-avatar, .author-avatar {
-  width: 76px; height: 76px; border-radius: 50%; object-fit: cover;
-  @media (max-width: $bp-sm) { width: 64px; height: 64px; }
-  outline: 2px solid transparent;
-  box-shadow: 0 10px 30px -14px rgba(0,0,0,.35);
-}
-
-/* Chips */
-.home-meta, .hero-badges { display: flex; flex-wrap: wrap; gap: $sp-3; margin-top: $sp-2; }
 .chip {
   display: inline-flex; align-items: center; gap: .45rem;
-  padding: .35rem .7rem; border-radius: $radius-pill; font-size: $fs-2; text-decoration: none;
+  padding: .35rem .75rem; border-radius: $radius-pill; font-size: $fs-2; text-decoration: none;
   @include theme-block      { color: tone(contrast, light); background: rgba(0,0,0,.06); }
-  @include theme-block-dark { color: tone(contrast, dark);  background: rgba(255,255,255,.10); }
+  @include theme-block-dark { color: tone(contrast, dark);  background: rgba(255,255,255,.12); }
+  i { font-size: $fs-3; line-height: 1; }
 }
-.chip i { font-size: $fs-3; line-height: 1; }
-.chip--soft  { @include theme-block { background: rgba(0,0,0,.06); } @include theme-block-dark { background: rgba(255,255,255,.10); } }
-.chip--ghost { @include theme-block { background: rgba(0,0,0,.045); } @include theme-block-dark { background: rgba(255,255,255,.08); } }
+.chip--soft  { @include theme-block { background: rgba(0,0,0,.06); } @include theme-block-dark { background: rgba(255,255,255,.12); } }
+.chip--ghost { @include theme-block { background: rgba(0,0,0,.04); } @include theme-block-dark { background: rgba(255,255,255,.10); } }
 .chip--link:hover { text-decoration: underline; }
 
-/* Social */
+/* Social (home) */
 .hero-social { margin-top: $sp-5; display: flex; gap: $sp-3;
-  a { display:inline-grid; place-items:center; width: 2rem; height: 2rem; border-radius: 50%; font-size: $fs-4;
-    transition: transform $dur-1 $ease-in-out, background-color $dur-1 $ease-in-out;
+  a {
+    display:inline-grid; place-items:center; width: 2rem; height: 2rem; border-radius: 50%;
+    font-size: $fs-4; transition: transform $dur-1 $ease-in-out, background-color $dur-1 $ease-in-out;
     @include theme-block      { color: tone(contrast, light); background: rgba(0,0,0,.06); }
-    @include theme-block-dark { color: tone(contrast, dark);  background: rgba(255,255,255,.10); }
+    @include theme-block-dark { color: tone(contrast, dark);  background: rgba(255,255,255,.12); }
     &:hover { transform: translateY(-2px); }
   }
+}
+
+/* Post / Page heads — author bullet instead of avatar */
+.post-head, .page-head {
+  display: grid; grid-template-columns: auto 1fr; gap: $sp-4; align-items: center; margin-bottom: $sp-2;
+}
+.author-bullet {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: linear-gradient(135deg, currentColor 0%, transparent 100%);
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  }
+  box-shadow: 0 6px 16px -6px rgba(0,0,0,.35);
 }
 
 /* Meta row (post) */
@@ -143,12 +132,17 @@
 
 /* Breadcrumbs (page) */
 .hero-breadcrumbs {
-  position: relative; z-index: 1; margin-bottom: $sp-4; font-size: $fs-2;
+  position: relative; z-index: 1; margin-bottom: $sp-3; font-size: $fs-2;
   display: flex; gap: $sp-2; align-items: center; flex-wrap: wrap;
-  a { text-decoration: none;
+  a {
+    text-decoration: none; display: inline-flex; align-items: center; gap: .4rem;
     @include theme-block      { color: tone(secondary, light); }
     @include theme-block-dark { color: tone(secondary, dark);  }
     &:hover { text-decoration: underline; }
   }
   .crumb-sep { opacity: .5; }
 }
+
+/* Ads block (optional) */
+.hero-ad { margin-top: $sp-5; }
+.hero-ad--below { margin-top: $sp-4; }
