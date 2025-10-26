@@ -1,0 +1,101 @@
+// ======================================================================
+// adsense.scss — Responsive sizing for AdSense blocks (no inline styles)
+// Depends on: _variables.scss
+// ======================================================================
+
+@use "variables" as *;
+
+/* Wrapper: simple spacing (no heavy borders/shadows by default) */
+.ad {
+  margin-block: clamp($sp-10, 4vw, $sp-16);
+}
+
+/* Core AdSense slot element */
+.adsbygoogle.ad__slot {
+  display: block;          // replaces inline style="display:block"
+  width: 100%;             // fluid width by default
+  min-height: 120px;       // safe default; overridden by variants below
+  // Prevent layout shifts while Google computes the iframe
+  // You can tune min-heights per variant (below).
+}
+
+/* ---------- Variants ---------- */
+/* Square — compact by default; expands gently on larger screens */
+.ad--square .ad__slot {
+  // Typical square inventory: 200x200 / 250x250 / 300x300 / 336x336
+  // We use aspect-ratio for stable placeholder and min-heights for tiny screens.
+  aspect-ratio: 1 / 1;
+  max-width: clamp(200px, 48vw, 336px);
+  margin-inline: auto;
+  min-height: clamp(180px, 40vw, 336px);
+}
+
+.ad--square-small .ad__slot {
+  aspect-ratio: 1 / 1;
+  max-width: clamp(180px, 42vw, 250px);
+  margin-inline: auto;
+  min-height: clamp(160px, 36vw, 250px);
+}
+
+.ad--square-large .ad__slot {
+  aspect-ratio: 1 / 1;
+  max-width: clamp(250px, 52vw, 420px);
+  margin-inline: auto;
+  min-height: clamp(220px, 46vw, 420px);
+}
+
+/* Horizontal — responsive leaderboard-like */
+.ad--horizontal .ad__slot {
+  // Typical: 320x50, 468x60, 728x90, 970x90
+  width: 100%;
+  min-height: clamp(50px, 9vw, 90px);
+  aspect-ratio: auto; // let Google pick height
+}
+
+/* Vertical — skyscraper-like */
+.ad--vertical .ad__slot {
+  // Typical: 120x600, 160x600, 300x600
+  max-width: clamp(120px, 40vw, 300px);
+  margin-inline: auto;
+  min-height: clamp(300px, 60vh, 600px);
+}
+
+/* In-article — fluid height with comfy spacing */
+.ad--in-article .ad__slot {
+  width: 100%;
+  min-height: 180px;
+  // If you want some separation inside articles:
+  // padding-block: $sp-8;
+}
+
+/* Fluid — give a flexible container, AdSense will adapt inside */
+.ad--fluid .ad__slot {
+  width: 100%;
+  min-height: 200px;
+}
+
+/* Auto-relaxed (multiplex) — let it fill available width with a reasonable height */
+.ad--autorelaxed .ad__slot {
+  width: 100%;
+  min-height: 240px;
+}
+
+/* ---------- Responsive refinements ---------- */
+@include mq-up($bp-md) {
+  .ad--horizontal .ad__slot { min-height: clamp(60px, 7vw, 90px); }
+  .ad--vertical   .ad__slot { min-height: clamp(400px, 60vh, 700px); }
+}
+
+@include mq-up($bp-lg) {
+  .ad--square        .ad__slot { max-width: 336px; }
+  .ad--square-small  .ad__slot { max-width: 250px; }
+  .ad--square-large  .ad__slot { max-width: 420px; }
+}
+
+/* ---------- Optional: subtle frame when ads are empty (dev) ---------- */
+/*
+.ad .ad__slot:empty {
+  outline: 1px dashed rgba(127,127,127,.35);
+  min-height: 160px;
+}
+*/
