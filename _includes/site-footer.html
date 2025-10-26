@@ -1,18 +1,12 @@
 <!-- ====================================================================== -->
-<!--  CINEMATIC FOOTER (CONTAINER-BOUND)                                     -->
-<!--  - Parent has .container (plus a helper)                                -->
-<!--  - Full-cover YouTube video inside the container                        -->
-<!--  - 4 responsive columns (About, Explore, Contact, Newsletter)           -->
-<!--  - Light/Dark theme aware; no blur; grid lines + soft scrim             -->
-<!--  - Floating footer strip below                                           -->
+<!--  CONTAINER-BOUND CINEMATIC FOOTER (MOBILE GRID + TV STATIC + OVERLAY)  -->
 <!-- ====================================================================== -->
 
 <div class="container footer-wrap">
   <footer class="site-footer">
-    <!-- Subtle dotted surface behind the island -->
     <div class="footer-surface" aria-hidden="true"></div>
 
-    <!-- Video stack (bounded by container) -->
+    <!-- Video + overlays (bounded to container box) -->
     <div class="footer-media" aria-hidden="true">
       <div class="footer-media__inner">
         <iframe
@@ -24,15 +18,16 @@
           referrerpolicy="strict-origin-when-cross-origin"
         ></iframe>
       </div>
-      <!-- Grid lines above video, below content -->
+
+      <!-- Layer order (low → high): grid → tv-static → scrim (all under content) -->
       <div class="footer-grid" aria-hidden="true"></div>
-      <!-- Soft scrim for legibility (theme-reversed) -->
+      <div class="footer-static" aria-hidden="true"></div>
       <div class="footer-scrim" aria-hidden="true"></div>
     </div>
 
-    <!-- Island content -->
+    <!-- Content (4 columns on desktop, 2 on mobile) -->
     <div class="footer-inner">
-      <!-- Column 1: About -->
+      <!-- About -->
       <section class="footer-col footer-about">
         <h4 class="footer-title"><i class="ph-bold ph-user"></i> About</h4>
         <p class="footer-text">
@@ -47,7 +42,7 @@
         </nav>
       </section>
 
-      <!-- Column 2: Explore -->
+      <!-- Explore -->
       <section class="footer-col">
         <h4 class="footer-title"><i class="ph-bold ph-compass"></i> Explore</h4>
         <ul class="footer-list">
@@ -58,7 +53,7 @@
         </ul>
       </section>
 
-      <!-- Column 3: Contact / Address -->
+      <!-- Contact / Address -->
       <section class="footer-col">
         <h4 class="footer-title"><i class="ph-bold ph-map-pin"></i> Contact</h4>
         <address class="footer-address">
@@ -75,7 +70,7 @@
         </ul>
       </section>
 
-      <!-- Column 4: Newsletter -->
+      <!-- Newsletter -->
       <section class="footer-col">
         <h4 class="footer-title"><i class="ph-bold ph-megaphone-simple"></i> Newsletter</h4>
         <p class="footer-text">Join the crew — stories, updates & creative chaos once a month.</p>
@@ -96,7 +91,7 @@
   </footer>
 </div>
 
-<!-- Floating strip (after the container footer) -->
+<!-- Floating strip (island vibe) -->
 <div class="container">
   <section class="footer-strip" aria-label="Site info">
     <div class="footer-strip-inner">

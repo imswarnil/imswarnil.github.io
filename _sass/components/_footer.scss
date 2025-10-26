@@ -1,31 +1,30 @@
 // ======================================================================
-// CONTAINER-BOUND CINEMATIC FOOTER (FULL-WIDTH VIDEO TO CONTAINER)
-// - Parent wrapper uses .container (plus .footer-wrap helper)
-// - Video covers container width & height (no blur), with grid + scrim
-// - 4 responsive columns; light/dark aware via theme tokens/mixins
-// - Floating footer strip styled like navbar island
+// CONTAINER-BOUND CINEMATIC FOOTER
+// - Mobile: real grid (2 cols), desktop: 4 cols
+// - TV static scanlines + grid overlay + scrim (over video, under content)
+// - Full-cover video inside container; light/dark aware (no blur)
+// - Floating strip like navbar island
 // ======================================================================
 
-/* Parent wrapper ensures container-bound width */
+/* Container-bound island box */
 .footer-wrap {
-  @include container; // keep your layout widths
+  @include container;
   position: relative;
   margin-top: $sp-12;
 }
 
-/* Footer island bounded by the container box */
 .site-footer {
   position: relative;
   width: 100%;
   border-radius: $radius-6;
-  overflow: hidden; // clip media layers to container shape
-  border: 1px solid;
-  border-bottom: 0; // island look (top-rounded)
+  overflow: hidden; // clip media to island shape
+  border: 1px solid; border-bottom: 0;
+
   @include theme-block      { border-color: tone(border, light); box-shadow: $shadow-light; }
   @include theme-block-dark { border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
 }
 
-/* Dotted surface behind the island */
+/* Surface dots behind everything */
 .footer-surface {
   position: absolute; inset: 0; z-index: 0; pointer-events: none;
   background-image:
@@ -40,40 +39,39 @@
   }
 }
 
-/* Background media fills the footer container */
-.footer-media {
-  position: absolute; inset: 0; z-index: 1; pointer-events: none;
-}
+/* Media stack */
+.footer-media { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
 
-/* Mask container — soft vignette edges without adding color */
+/* Soft mask (no tint) */
 .footer-media__inner {
   position: absolute; inset: 0; overflow: hidden; border-radius: inherit;
-  -webkit-mask-image: radial-gradient(135% 135% at 50% 40%, rgba(0,0,0,1) 62%, rgba(0,0,0,0) 100%);
-  mask-image: radial-gradient(135% 135% at 50% 40%, rgba(0,0,0,1) 62%, rgba(0,0,0,0) 100%);
+  -webkit-mask-image: radial-gradient(140% 140% at 50% 42%, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
+  mask-image: radial-gradient(140% 140% at 50% 42%, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
 }
 
-/* Full-cover responsive iframe (covers the footer box) */
+/* Full-cover responsive iframe inside container */
 .footer-yt {
   position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
   border: 0; display: block; pointer-events: none;
 
-  /* Cover by height for tall/narrow */
+  /* cover by height for tall/narrow */
   width: 177.78vh; height: 100vh; min-width: 100%; min-height: 100%;
 
-  /* Cover by width for wide screens */
+  /* cover by width for wide screens */
   @media (min-aspect-ratio: 16/9) { width: 100%; height: 56.25vw; }
 
   transition: transform $dur-2 $ease-in-out, filter $dur-2 $ease-in-out;
 }
 .site-footer:hover .footer-yt { transform: translate(-50%, -50%) scale(1.02); }
 
-/* Grid lines above video, below content */
+/* Grid overlay (on top of video, under content) */
 .footer-grid {
   position: absolute; inset: 0; z-index: 2; pointer-events: none; border-radius: inherit;
   background-image:
     linear-gradient(to right, rgba(255,255,255,.09) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255,255,255,.09) 1px, transparent 1px);
   background-size: 32px 32px, 32px 32px;
+
   @include theme-block-dark {
     background-image:
       linear-gradient(to right, rgba(0,0,0,.12) 1px, transparent 1px),
@@ -81,54 +79,82 @@
   }
 }
 
-/* Light scrim for readability; reversed by theme */
-.footer-scrim {
+/* TV static scanlines with gentle shimmer */
+@keyframes tvScan {
+  0%   { background-position: 0 0, 0 0; opacity: .55; }
+  50%  { background-position: 0 2px, 0 0; opacity: .65; }
+  100% { background-position: 0 0, 0 0; opacity: .55; }
+}
+.footer-static {
   position: absolute; inset: 0; z-index: 3; pointer-events: none; border-radius: inherit;
-  background: rgba(0,0,0,.22); // Light: gentle dark scrim
-  @include theme-block-dark { background: rgba(255,255,255,.18); } // Dark: gentle light scrim
+  background:
+    repeating-linear-gradient(to bottom, rgba(0,0,0,.35) 0px, rgba(0,0,0,.35) 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 3px),
+    repeating-linear-gradient(to right, rgba(0,0,0,.06) 0, rgba(0,0,0,.06) 1px, transparent 1px, transparent 4px);
+  opacity: .6;
+  mix-blend-mode: overlay;
+  animation: tvScan 3.2s linear infinite;
+
+  @include theme-block-dark {
+    background:
+      repeating-linear-gradient(to bottom, rgba(255,255,255,.28) 0px, rgba(255,255,255,.28) 1px, rgba(255,255,255,0) 1px, rgba(255,255,255,0) 3px),
+      repeating-linear-gradient(to right, rgba(255,255,255,.05) 0, rgba(255,255,255,.05) 1px, transparent 1px, transparent 4px);
+    opacity: .55;
+  }
 }
 
-/* Slight video brightening in dark mode for clarity */
-:root[data-color-scheme="dark"] .footer-yt { filter: brightness(1.10) contrast(1.0) saturate(1.06); }
+/* Scrim for legibility; reversed by theme */
+.footer-scrim {
+  position: absolute; inset: 0; z-index: 4; pointer-events: none; border-radius: inherit;
+  background: rgba(0,0,0,.22); // light mode
+  @include theme-block-dark { background: rgba(255,255,255,.18); }
+}
 
-/* Content layer (on top of overlays) */
+/* Slightly brighten video in dark mode */
+:root[data-color-scheme="dark"] .footer-yt { filter: brightness(1.10) contrast(.98) saturate(1.06); }
+
+/* CONTENT GRID (mobile-first: 2 columns) */
 .footer-inner {
-  position: relative; z-index: 4;
-  display: grid; gap: $sp-8;
+  position: relative; z-index: 5;
   padding: clamp(#{$sp-8}, 5vw, #{$sp-12});
-  background: transparent; // keep cinematic feel
-  grid-template-columns: 1fr;
-  @include mq-up($bp-md) { grid-template-columns: repeat(2, 1fr); }
-  @include mq-up($bp-lg) { grid-template-columns: repeat(4, 1fr); }
+
+  display: grid; gap: $sp-8;
+  grid-template-columns: repeat(2, minmax(0, 1fr)); // MOBILE 2 COLUMNS
+
+  /* Extra-small safety: single column under ~380px */
+  @media (max-width: 380px) { grid-template-columns: 1fr; }
+
+  /* Tablets */
+  @include mq-up($bp-md) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+  /* Desktop */
+  @include mq-up($bp-lg) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
-/* Columns */
 .footer-col { display: flex; flex-direction: column; gap: $sp-4; }
 
-/* Titles: match theme contrast; white in light mode per request */
+/* Typography colors */
+.footer-title,
+.footer-text,
+.footer-list a,
+.footer-address,
+.footer-hint,
+.footer-credit {
+  @include theme-block      { color: rgba(255,255,255,.98); }   // white in light mode as requested
+  @include theme-block-dark { color: tone(contrast, dark); }
+}
+
 .footer-title {
   display: inline-flex; align-items: center; gap: .55rem;
   font-size: $fs-4; font-weight: $fw-semibold; letter-spacing: -0.01em;
-  @include theme-block      { color: rgba(255,255,255,.98); }
-  @include theme-block-dark { color: tone(contrast, dark); }
   i { font-size: $fs-4; opacity: .95; }
   &::after { content:""; display:block; width:28px; height:2px; margin-top:$sp-2; border-radius:2px;
     @include theme-block      { background: rgba(255,255,255,.92); }
     @include theme-block-dark { background: rgba(0,0,0,.72); } }
 }
 
-/* Body copy, lists, icons */
-.footer-text,
-.footer-list a,
-.footer-address,
-.footer-hint {
-  @include theme-block      { color: rgba(255,255,255,.96); }
-  @include theme-block-dark { color: tone(contrast, dark); }
-}
-
 .footer-list {
   list-style: none; margin: 0; padding: 0; display: grid; gap: $sp-2;
-  li a {
+  a {
     display: inline-flex; align-items: center; gap: .55rem; text-decoration: none; font-size: $fs-3;
     i { font-size: $fs-4; }
     transition: transform $dur-1 $ease-in-out, text-decoration-color $dur-1;
@@ -199,11 +225,8 @@
   @include theme-block-dark { color: rgba(0,0,0,.7); }
 }
 
-/* Floating footer strip (navbar-island style) */
-.footer-strip {
-  position: relative;
-  margin: $sp-3 0 0 0;
-}
+/* Floating footer strip */
+.footer-strip { position: relative; margin: $sp-3 0 0 0; }
 .footer-strip-inner {
   border: 1px solid; border-radius: $radius-pill;
   min-height: 56px;
@@ -230,8 +253,7 @@
       &:hover { text-decoration: underline; } }
 }
 
-/* Mobile */
+/* Mobile niceties */
 @media (max-width: $bp-sm) {
-  .footer-inner      { grid-template-columns: 1fr; gap: $sp-8; }
-  .footer-strip-inner{ flex-direction: column; text-align: center; }
+  .footer-strip-inner { flex-direction: column; text-align: center; }
 }
