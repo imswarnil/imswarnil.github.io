@@ -1,18 +1,19 @@
 <!-- ====================================================================== -->
 <!--  CINEMATIC ISLAND FOOTER (FULL INCLUDE)                                -->
-<!--  - Page shell (sticky bottom)                                          -->
-<!--  - Floating island footer with full-cover YouTube background           -->
-<!--  - Mask edges + scanlines (NO BLUR)                                    -->
-<!--  - 4 columns + separate footer strip below                             -->
+<!--  - Sticky page shell                                                   -->
+<!--  - Floating island footer (YT bg: autoplay/muted/loop/no-controls)     -->
+<!--  - Masked edges + TV scanlines (NO BLUR)                               -->
+<!--  - 4 responsive columns                                                -->
+<!--  - Footer strip at bottom: 0                                           -->
 <!-- ====================================================================== -->
 
 <div class="page-shell">
   <footer class="site-footer">
-    <!-- Subtle background pattern behind island -->
+    <!-- Subtle dot pattern behind island -->
     <div class="footer-surface" aria-hidden="true"></div>
 
     <div class="footer-island">
-      <!-- Full-cover video background (no controls, muted, loop, autoplay) -->
+      <!-- Cinematic background video -->
       <div class="footer-media" aria-hidden="true">
         <div class="footer-media__inner">
           <iframe
@@ -24,14 +25,14 @@
             referrerpolicy="strict-origin-when-cross-origin"
           ></iframe>
         </div>
-        <!-- TV static scanlines for readability (no white overlay) -->
+        <!-- TV scanlines (no overlay tint) -->
         <div class="footer-static"></div>
-        <!-- NOTE: no blur layer by request -->
       </div>
 
-      <!-- Main island content -->
+      <!-- Island content -->
       <div class="footer__container">
         <div class="footer__inner">
+
           <!-- Column 1 -->
           <div class="footer__col footer__about">
             <h4 class="footer__title"><i class="ph-bold ph-user"></i> About</h4>
@@ -73,16 +74,27 @@
           <div class="footer__col">
             <h4 class="footer__title"><i class="ph-bold ph-megaphone-simple"></i> Newsletter</h4>
             <p class="footer__text">Join the crew — stories, updates & creative chaos once a month.</p>
-            <form class="footer__form" action="#" method="post">
-              <input type="email" name="email" placeholder="Your email" required />
-              <button type="submit" aria-label="Subscribe"><i class="ph-bold ph-paper-plane-tilt"></i></button>
+
+            <!-- Newsletter (progressive enhancement: just a form; hook your backend) -->
+            <form class="footer__form" action="#" method="post" novalidate>
+              <div class="footer__field">
+                <i class="ph-bold ph-at"></i>
+                <input type="email" name="email" placeholder="Your email" required
+                       aria-label="Email address" />
+              </div>
+              <button type="submit" class="footer__submit" aria-label="Subscribe">
+                <i class="ph-bold ph-paper-plane-tilt"></i>
+                <span>Subscribe</span>
+              </button>
+              <p class="footer__hint">No spam. Unsubscribe anytime.</p>
             </form>
           </div>
+
         </div>
       </div>
     </div>
 
-    <!-- Separate footer strip below island -->
+    <!-- Footer strip (flush bottom: 0) -->
     <section class="footer-strip">
       <div class="footer__container">
         <div class="footer-strip__inner">

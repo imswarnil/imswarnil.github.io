@@ -1,22 +1,16 @@
 // ======================================================================
-// Cinematic Footer (Full-Cover Video + Mask + TV Scanlines) — NO BLUR
-// Uses your tokens/mixins from _variables.scss only.
+// Cinematic Footer — Full-cover video + mask + TV scanlines (NO BLUR)
+// Dark mode via theme tokens; tasty hover; newsletter UX.
 // ======================================================================
 
-/* Sticky page shell so footer hugs the bottom on short pages */
-.page-shell {
-  display: flex; min-height: 100vh; flex-direction: column;
-}
+/* Sticky shell */
+.page-shell { display: flex; min-height: 100vh; flex-direction: column; }
 .page-shell > .site-footer { margin-top: auto; }
 
-/* Footer root */
-.site-footer {
-  position: relative; z-index: 1;
-  margin-top: $sp-12;
-  overflow: clip;
-}
+/* Root */
+.site-footer { position: relative; z-index: 1; margin-top: $sp-12; overflow: clip; }
 
-/* Subtle dotted background behind the island */
+/* Background pattern */
 .footer-surface {
   position: absolute; inset: 0; z-index: 0;
   background-image:
@@ -24,7 +18,6 @@
     radial-gradient(rgba(0,0,0,.04) 1px, transparent 1px);
   background-size: 16px 16px, 16px 16px;
   background-position: 0 0, 8px 8px;
-
   @include theme-block-dark {
     background-image:
       radial-gradient(rgba(255,255,255,.09) 1px, transparent 1px),
@@ -32,43 +25,36 @@
   }
 }
 
-/* Floating island wrapper (holds media and content) */
-.footer-island {
-  position: relative; z-index: 1; border-radius: $radius-6; overflow: hidden;
-}
+/* Island */
+.footer-island { position: relative; z-index: 1; border-radius: $radius-6; overflow: hidden; }
 
-/* Background media stack */
-.footer-media {
-  position: absolute; inset: 0; z-index: 0; pointer-events: none; border-radius: inherit;
-}
+/* Background video + effects */
+.footer-media { position: absolute; inset: 0; z-index: 0; pointer-events: none; border-radius: inherit; }
 
-/* Mask container fades edges of the video without coloring */
+/* Mask that fades edges (no tint/overlay) */
 .footer-media__inner {
   position: absolute; inset: 0; overflow: hidden; border-radius: inherit;
   -webkit-mask-image: radial-gradient(120% 120% at 50% 40%, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
   mask-image: radial-gradient(120% 120% at 50% 40%, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
 }
 
-/* Make the YouTube iframe fully COVER the container */
+/* Full-cover responsive iframe (16:9) */
 .footer-yt {
-  position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
   border: 0; display: block; pointer-events: none;
 
-  /* Cover by height (tall/narrow viewports) */
-  width: 177.78vh; /* 100 * (16/9) */
-  height: 100vh;
-  min-width: 100%;
-  min-height: 100%;
+  /* cover by height (tall/narrow) */
+  width: 177.78vh; height: 100vh; min-width: 100%; min-height: 100%;
 
-  /* Cover by width (wide viewports) */
-  @media (min-aspect-ratio: 16/9) {
-    width: 100vw;
-    height: 56.25vw; /* 100 * (9/16) */
-  }
+  /* cover by width (wide) */
+  @media (min-aspect-ratio: 16/9) { width: 100vw; height: 56.25vw; }
+
+  /* cinematic hover drift */
+  transition: transform $dur-2 $ease-in-out;
 }
+.footer-island:hover .footer-yt { transform: translate(-50%, -50%) scale(1.03); }
 
-/* TV scanlines (no white overlay) to boost readability on top of video */
+/* TV scanlines (no white overlay) */
 .footer-static {
   position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
   background:
@@ -79,7 +65,6 @@
     );
   opacity: .65;
   mix-blend-mode: overlay;
-
   @include theme-block-dark {
     background:
       repeating-linear-gradient(
@@ -91,125 +76,130 @@
   }
 }
 
-/* Container width helper */
+/* Container */
 .footer__container { @include container; }
 
-/* Island content card — NO bottom border; rounded top */
+/* Island content card (no bottom border; rounded top) */
 .footer__inner {
   position: relative; z-index: 1;
   display: grid; gap: $sp-8;
   padding: clamp(#{$sp-8}, 5vw, #{$sp-12});
-  min-height: 420px;
+  min-height: 440px;
 
   border: 1px solid; border-bottom: 0;
   border-radius: $radius-6 $radius-6 0 0;
 
-  // Glass card look without blur (light/dark surfaces)
+  /* glassy card surfaces without blur */
   @include theme-block      { background: rgba(255,255,255,.08); border-color: tone(border, light); box-shadow: $shadow-light; }
   @include theme-block-dark { background: rgba(18,18,20,.10);   border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
 
-  // readable text over busy video; subtle, not blur
   text-shadow: 0 1px 2px rgba(0,0,0,.35);
 
   @include mq-up($bp-md) { grid-template-columns: repeat(2, 1fr); }
   @include mq-up($bp-lg) { grid-template-columns: repeat(4, 1fr); }
 }
 
-/* Column stacks */
 .footer__col { display: flex; flex-direction: column; gap: $sp-4; }
 
-/* Titles with icons */
+/* Titles */
 .footer__title {
   display: inline-flex; align-items: center; gap: .55rem;
   font-size: $fs-4; font-weight: $fw-semibold; letter-spacing: -0.01em;
-  color: rgba(255,255,255,.95);
-  i { font-size: $fs-4; opacity: .9; }
+  color: rgba(255,255,255,.96);
+  i { font-size: $fs-4; opacity: .92; }
   &::after { content:""; display:block; width:28px; height:2px; margin-top:$sp-2; border-radius:2px; background:rgba(255,255,255,.85); }
 }
 
-/* Body copy */
-.footer__text {
-  font-size: $fs-3; line-height: 1.6; color: rgba(255,255,255,.96);
-}
+/* Body text */
+.footer__text { font-size:$fs-3; line-height:1.6; color:rgba(255,255,255,.96); }
 
-/* Link lists */
+/* Lists */
 .footer__list {
-  list-style: none; margin: 0; padding: 0; display: grid; gap: $sp-2;
+  list-style:none; margin:0; padding:0; display:grid; gap:$sp-2;
 
   li a {
-    display: inline-flex; align-items: center; gap: .55rem;
-    text-decoration: none; font-size: $fs-3; color: rgba(255,255,255,.96);
-    i { font-size: $fs-4; opacity: .9; }
-    &:hover { text-decoration: underline; }
+    display:inline-flex; align-items:center; gap:.55rem;
+    text-decoration:none; font-size:$fs-3; color:rgba(255,255,255,.96);
+    i { font-size:$fs-4; opacity:.92; transition: transform $dur-1 $ease-in-out; }
+    &:hover { text-decoration:underline; i { transform: translateX(2px); } }
   }
 }
 
-/* Social icons */
+/* Social */
 .footer__social {
-  display: flex; align-items: center; gap: $sp-3;
-
+  display:flex; align-items:center; gap:$sp-3;
   a {
-    display: inline-grid; place-items: center;
-    width: 2rem; height: 2rem; border-radius: 50%;
-    border: 1px solid rgba(255,255,255,.45);
-    color: rgba(255,255,255,.95); font-size: $fs-4;
-    transition: transform $dur-1 $ease-in-out, background-color $dur-1 $ease-in-out;
-
-    &:hover { transform: translateY(-2px); background: rgba(255,255,255,.14); }
+    display:inline-grid; place-items:center;
+    width:2rem; height:2rem; border-radius:50%;
+    border:1px solid rgba(255,255,255,.45);
+    color:rgba(255,255,255,.96); font-size:$fs-4;
+    transition: transform $dur-1 $ease-in-out, background-color $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out;
+    &:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,.14);
+      box-shadow: 0 10px 22px -10px rgba(0,0,0,.45);
+    }
   }
 }
 
 /* Newsletter */
-.footer__form {
-  display: flex; align-items: center; gap: $sp-3;
+.footer__form { display:flex; flex-direction:column; gap:$sp-3; }
+
+.footer__field {
+  display:flex; align-items:center; gap:$sp-3;
+  border:1px solid rgba(255,255,255,.45); border-radius:$radius-pill;
+  padding:.55rem .8rem; background: rgba(0,0,0,.28);
+
+  i { font-size:$fs-4; color:rgba(255,255,255,.9); }
 
   input {
-    flex: 1;
-    border: 1px solid rgba(255,255,255,.45);
-    border-radius: $radius-pill;
-    padding: .6rem .9rem;
-    font-size: $fs-3;
-    background: rgba(0,0,0,.30);
-    color: rgba(255,255,255,.98);
+    flex:1; border:0; outline:0; background:transparent;
+    color: rgba(255,255,255,.98); font-size:$fs-3;
 
-    &::placeholder { color: rgba(255,255,255,.78); }
-    &:focus { border-color: rgba(255,255,255,.9); }
+    &::placeholder { color: rgba(255,255,255,.75); }
   }
 
-  button {
-    width: 2.5rem; height: 2.5rem;
-    border-radius: 50%;
-    border: none;
-    display: inline-grid; place-items: center;
-    cursor: pointer;
-    background: rgba(255,255,255,.98);
-    color: tone(black, dark);
-    font-size: $fs-4;
-    transition: transform $dur-1 $ease-in-out;
-
-    &:hover { transform: translateY(-2px); }
-  }
+  &:focus-within { border-color: rgba(255,255,255,.9); }
 }
 
-/* Separate footer strip (own card) */
-.footer-strip { position: relative; z-index: 1; margin-top: $sp-3; }
+.footer__submit {
+  display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+  min-height: 38px; padding: .45rem .9rem;
+  border-radius: $radius-pill; border: 1px solid transparent;
+  cursor:pointer; user-select:none; font-size:$fs-3; font-weight:$fw-semibold;
+
+  @include theme-block      { background: tone(white, light); color: tone(black, dark); }
+  @include theme-block-dark { background: tone(white, dark);  color: tone(black, dark); }
+
+  transition: transform $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out, opacity $dur-1;
+  i { font-size:$fs-4; }
+  &:hover { transform: translateY(-2px); box-shadow: 0 10px 22px -10px rgba(0,0,0,.45); }
+  &:active { transform: translateY(0); opacity: .9; }
+}
+
+.footer__hint {
+  margin:0; font-size:$fs-2; color:rgba(255,255,255,.85);
+}
+
+/* Footer strip (flush bottom: 0) */
+.footer-strip { position: relative; z-index: 1; margin: $sp-3 0 0 0; }
 .footer-strip .footer__container { @include container; }
+
 .footer-strip__inner {
   border: 1px solid; border-radius: $radius-6;
   padding: $sp-5 clamp($sp-5, 5vw, $sp-8);
-  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: $sp-4;
+  display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:$sp-4;
+  margin-bottom: 0; // bottom: 0 look
 
   @include theme-block      { background: rgba(255,255,255,.08); border-color: tone(border, light); box-shadow: $shadow-light; }
   @include theme-block-dark { background: rgba(18,18,20,.10);   border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
 
-  p { margin: 0; font-size: $fs-3; color: rgba(255,255,255,.95); }
-  a { color: rgba(255,255,255,.98); text-decoration: none; font-weight: $fw-medium;
-      &:hover { text-decoration: underline; } }
+  p { margin:0; font-size:$fs-3; color:rgba(255,255,255,.96); }
+  a { color:rgba(255,255,255,.98); text-decoration:none; font-weight:$fw-medium; &:hover { text-decoration: underline; } }
 }
 
-/* Mobile stack */
+/* Mobile */
 @media (max-width: $bp-sm) {
   .footer__inner { grid-template-columns: 1fr; gap: $sp-8; }
-  .footer__form { flex-direction: column; align-items: stretch; }
   .footer-strip__inner { flex-direction: column; text-align: center; }
 }
