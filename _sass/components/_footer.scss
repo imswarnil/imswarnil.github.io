@@ -1,184 +1,136 @@
 // ======================================================================
-// CONTAINER-BOUND CINEMATIC FOOTER
-// - Mobile: real grid (2 cols), desktop: 4 cols
-// - TV static scanlines + grid overlay + scrim (over video, under content)
-// - Full-cover video inside container; light/dark aware (no blur)
+// SIMPLE, VIDEO-FREE, DARK-MODE FOOTER (CONTAINER PARENT)
+// - Mobile layout (grid areas):
+//   about = full; links = 1/2; contact = 1/2; newsletter = full
+// - Desktop: 4 columns
+// - Uses theme tokens/mixins only (no new vars)
 // - Floating strip like navbar island
 // ======================================================================
 
-/* Container-bound island box */
 .footer-wrap {
   @include container;
-  position: relative;
   margin-top: $sp-12;
 }
 
-.site-footer {
+.footer-island {
   position: relative;
-  width: 100%;
-  border-radius: $radius-6;
-  overflow: hidden; // clip media to island shape
   border: 1px solid; border-bottom: 0;
+  border-radius: $radius-6;
+  overflow: hidden;
 
-  @include theme-block      { border-color: tone(border, light); box-shadow: $shadow-light; }
-  @include theme-block-dark { border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
+  @include theme-block      { background: tone(surface, light);       border-color: tone(border, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: tone(background-100, dark); border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
 }
 
-/* Surface dots behind everything */
-.footer-surface {
-  position: absolute; inset: 0; z-index: 0; pointer-events: none;
-  background-image:
-    radial-gradient(rgba(0,0,0,.05) 1px, transparent 1px),
-    radial-gradient(rgba(0,0,0,.03) 1px, transparent 1px);
-  background-size: 16px 16px, 16px 16px;
-  background-position: 0 0, 8px 8px;
-  @include theme-block-dark {
-    background-image:
-      radial-gradient(rgba(255,255,255,.09) 1px, transparent 1px),
-      radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px);
-  }
-}
-
-/* Media stack */
-.footer-media { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
-
-/* Soft mask (no tint) */
-.footer-media__inner {
-  position: absolute; inset: 0; overflow: hidden; border-radius: inherit;
-  -webkit-mask-image: radial-gradient(140% 140% at 50% 42%, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
-  mask-image: radial-gradient(140% 140% at 50% 42%, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
-}
-
-/* Full-cover responsive iframe inside container */
-.footer-yt {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  border: 0; display: block; pointer-events: none;
-
-  /* cover by height for tall/narrow */
-  width: 177.78vh; height: 100vh; min-width: 100%; min-height: 100%;
-
-  /* cover by width for wide screens */
-  @media (min-aspect-ratio: 16/9) { width: 100%; height: 56.25vw; }
-
-  transition: transform $dur-2 $ease-in-out, filter $dur-2 $ease-in-out;
-}
-.site-footer:hover .footer-yt { transform: translate(-50%, -50%) scale(1.02); }
-
-/* Grid overlay (on top of video, under content) */
-.footer-grid {
-  position: absolute; inset: 0; z-index: 2; pointer-events: none; border-radius: inherit;
-  background-image:
-    linear-gradient(to right, rgba(255,255,255,.09) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255,255,255,.09) 1px, transparent 1px);
-  background-size: 32px 32px, 32px 32px;
-
-  @include theme-block-dark {
-    background-image:
-      linear-gradient(to right, rgba(0,0,0,.12) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(0,0,0,.12) 1px, transparent 1px);
-  }
-}
-
-/* TV static scanlines with gentle shimmer */
-@keyframes tvScan {
-  0%   { background-position: 0 0, 0 0; opacity: .55; }
-  50%  { background-position: 0 2px, 0 0; opacity: .65; }
-  100% { background-position: 0 0, 0 0; opacity: .55; }
-}
-.footer-static {
-  position: absolute; inset: 0; z-index: 3; pointer-events: none; border-radius: inherit;
-  background:
-    repeating-linear-gradient(to bottom, rgba(0,0,0,.35) 0px, rgba(0,0,0,.35) 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 3px),
-    repeating-linear-gradient(to right, rgba(0,0,0,.06) 0, rgba(0,0,0,.06) 1px, transparent 1px, transparent 4px);
-  opacity: .6;
-  mix-blend-mode: overlay;
-  animation: tvScan 3.2s linear infinite;
-
-  @include theme-block-dark {
-    background:
-      repeating-linear-gradient(to bottom, rgba(255,255,255,.28) 0px, rgba(255,255,255,.28) 1px, rgba(255,255,255,0) 1px, rgba(255,255,255,0) 3px),
-      repeating-linear-gradient(to right, rgba(255,255,255,.05) 0, rgba(255,255,255,.05) 1px, transparent 1px, transparent 4px);
-    opacity: .55;
-  }
-}
-
-/* Scrim for legibility; reversed by theme */
-.footer-scrim {
-  position: absolute; inset: 0; z-index: 4; pointer-events: none; border-radius: inherit;
-  background: rgba(0,0,0,.22); // light mode
-  @include theme-block-dark { background: rgba(255,255,255,.18); }
-}
-
-/* Slightly brighten video in dark mode */
-:root[data-color-scheme="dark"] .footer-yt { filter: brightness(1.10) contrast(.98) saturate(1.06); }
-
-/* CONTENT GRID (mobile-first: 2 columns) */
 .footer-inner {
-  position: relative; z-index: 5;
   padding: clamp(#{$sp-8}, 5vw, #{$sp-12});
-
   display: grid; gap: $sp-8;
-  grid-template-columns: repeat(2, minmax(0, 1fr)); // MOBILE 2 COLUMNS
 
-  /* Extra-small safety: single column under ~380px */
-  @media (max-width: 380px) { grid-template-columns: 1fr; }
+  // MOBILE GRID AREAS
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "about about"
+    "links contact"
+    "news news";
 
-  /* Tablets */
-  @include mq-up($bp-md) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  @media (max-width: 380px) {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "about"
+      "links"
+      "contact"
+      "news";
+  }
 
-  /* Desktop */
-  @include mq-up($bp-lg) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  // TABLET (3 cols)
+  @include mq-up($bp-md) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-areas:
+      "about about about"
+      "links contact news";
+  }
+
+  // DESKTOP (4 cols)
+  @include mq-up($bp-lg) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-areas: "about links contact news";
+  }
 }
+
+/* Area placements */
+.footer-about     { grid-area: about; }
+.footer-links     { grid-area: links; }
+.footer-contact   { grid-area: contact; }
+.footer-newsletter{ grid-area: news; }
 
 .footer-col { display: flex; flex-direction: column; gap: $sp-4; }
 
-/* Typography colors */
-.footer-title,
-.footer-text,
-.footer-list a,
-.footer-address,
-.footer-hint,
-.footer-credit {
-  @include theme-block      { color: rgba(255,255,255,.98); }   // white in light mode as requested
-  @include theme-block-dark { color: tone(contrast, dark); }
-}
-
+/* Headings */
 .footer-title {
   display: inline-flex; align-items: center; gap: .55rem;
   font-size: $fs-4; font-weight: $fw-semibold; letter-spacing: -0.01em;
-  i { font-size: $fs-4; opacity: .95; }
-  &::after { content:""; display:block; width:28px; height:2px; margin-top:$sp-2; border-radius:2px;
-    @include theme-block      { background: rgba(255,255,255,.92); }
-    @include theme-block-dark { background: rgba(0,0,0,.72); } }
+
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  }
+
+  i { font-size: $fs-4; opacity: .9; }
+
+  &::after {
+    content:""; display:block; width:28px; height:2px; margin-top:$sp-2; border-radius:2px;
+    @include theme-block      { background: tone(contrast, light); opacity: .15; }
+    @include theme-block-dark { background: tone(contrast, dark);  opacity: .2;  }
+  }
 }
 
+/* Text */
+.footer-text, .footer-hint, .footer-credit, .footer-address {
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  }
+  opacity: .9;
+}
+.footer-address p { margin: 0 0 .35rem; display:flex; align-items:center; gap:.5rem; }
+.footer-address a {
+  text-decoration:none;
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  }
+  &:hover { text-decoration: underline; }
+}
+
+/* Lists */
 .footer-list {
   list-style: none; margin: 0; padding: 0; display: grid; gap: $sp-2;
+
   a {
-    display: inline-flex; align-items: center; gap: .55rem; text-decoration: none; font-size: $fs-3;
+    display: inline-flex; align-items: center; gap: .55rem;
+    text-decoration: none; font-size: $fs-3;
+
+    @include theme-block      { color: tone(contrast, light); }
+    @include theme-block-dark { color: tone(contrast, dark);  }
+
     i { font-size: $fs-4; }
     transition: transform $dur-1 $ease-in-out, text-decoration-color $dur-1;
     &:hover { text-decoration: underline; transform: translateX(2px); }
   }
 }
-.footer-compact { gap: .35rem; li { font-size: $fs-2; } }
-.footer-address p { margin: 0 0 .35rem; display: flex; gap: .5rem; align-items: center; }
-.footer-address a { text-decoration: none; @include theme-block { color: rgba(255,255,255,.96); } @include theme-block-dark { color: tone(contrast, dark); } &:hover { text-decoration: underline; } }
+.footer-legal { margin-top: $sp-3; }
 
-/* Social */
+/* Social icons */
 .footer-social {
   display: flex; align-items: center; gap: $sp-3;
+
   a {
-    display: inline-grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%;
-    border: 1px solid;
-    @include theme-block      { border-color: rgba(255,255,255,.45); color: rgba(255,255,255,.98); }
-    @include theme-block-dark { border-color: rgba(0,0,0,.28);      color: tone(contrast, dark);  }
+    display:inline-grid; place-items:center;
+    width: 2rem; height: 2rem; border-radius: 50%; border: 1px solid;
     font-size: $fs-4;
     transition: transform $dur-1 $ease-in-out, background-color $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out;
+
+    @include theme-block      { color: tone(contrast, light); border-color: tone(border, light); }
+    @include theme-block-dark { color: tone(contrast, dark);  border-color: tone(border, dark);  }
+
     &:hover {
       transform: translateY(-2px);
-      @include theme-block      { background: rgba(255,255,255,.16); box-shadow: 0 10px 22px -10px rgba(0,0,0,.4); }
-      @include theme-block-dark { background: rgba(0,0,0,.08);       box-shadow: 0 10px 22px -10px rgba(0,0,0,.35); }
+      @include theme-block      { background: tone(background-100, light); box-shadow: $shadow-light; }
+      @include theme-block-dark { background: tone(background-100, dark);  box-shadow: $shadow-dark;  }
     }
   }
 }
@@ -190,18 +142,21 @@
   display: flex; align-items: center; gap: $sp-3;
   border: 1px solid; border-radius: $radius-pill; padding: .55rem .85rem; background: transparent;
 
-  @include theme-block      { border-color: rgba(255,255,255,.55); }
-  @include theme-block-dark { border-color: rgba(0,0,0,.35); }
+  @include theme-block      { border-color: tone(border, light); }
+  @include theme-block-dark { border-color: tone(border, dark);  }
 
-  i { font-size: $fs-4; }
+  i { font-size: $fs-4; opacity: .9; }
+
   input {
     flex: 1; border: 0; outline: 0; background: transparent; font-size: $fs-3;
-    @include theme-block      { color: rgba(255,255,255,.98); &::placeholder { color: rgba(255,255,255,.72); } }
-    @include theme-block-dark { color: tone(contrast, dark);   &::placeholder { color: rgba(0,0,0,.55); } }
+
+    @include theme-block      { color: tone(contrast, light); &::placeholder { color: tone(secondary, light); } }
+    @include theme-block-dark { color: tone(contrast, dark);  &::placeholder { color: tone(secondary, dark);  } }
   }
+
   &:focus-within {
-    @include theme-block      { border-color: rgba(255,255,255,.9); }
-    @include theme-block-dark { border-color: rgba(0,0,0,.62); }
+    @include theme-block      { border-color: tone(contrast, light); }
+    @include theme-block-dark { border-color: tone(contrast, dark);  }
   }
 }
 
@@ -211,45 +166,30 @@
   border-radius: $radius-pill; border: 1px solid transparent; cursor: pointer; user-select: none;
   font-size: $fs-3; font-weight: $fw-semibold;
 
-  @include theme-block      { background: rgba(255,255,255,1); color: tone(black, dark); }
-  @include theme-block-dark { background: rgba(0,0,0,.9);      color: rgba(255,255,255,.98); }
+  @include theme-block      { background: tone(contrast, light); color: tone(white, light); }
+  @include theme-block-dark { background: tone(contrast, dark);  color: tone(white, dark);  }
 
   transition: transform $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out, opacity $dur-1;
   i { font-size: $fs-4; }
-  &:hover { transform: translateY(-2px); box-shadow: 0 10px 22px -10px rgba(0,0,0,.4); }
+  &:hover { transform: translateY(-2px); box-shadow: 0 10px 22px -10px rgba(0,0,0,.35); }
   &:active { transform: translateY(0); opacity: .92; }
-}
-.footer-hint {
-  margin: 0; font-size: $fs-2;
-  @include theme-block      { color: rgba(255,255,255,.9); }
-  @include theme-block-dark { color: rgba(0,0,0,.7); }
 }
 
 /* Floating footer strip */
-.footer-strip { position: relative; margin: $sp-3 0 0 0; }
+.footer-strip { margin: $sp-3 0 0 0; }
 .footer-strip-inner {
   border: 1px solid; border-radius: $radius-pill;
   min-height: 56px;
   padding: .5rem clamp($sp-5, 4vw, $sp-8);
   display: flex; align-items: center; justify-content: space-between; gap: $sp-4; flex-wrap: wrap;
 
-  @include theme-block {
-    background: rgba(255,255,255,.94);
-    border-color: tone(border, light);
-    color: tone(contrast, light);
-    box-shadow: $shadow-light;
-  }
-  @include theme-block-dark {
-    background: rgba(0,0,0,.84);
-    border-color: tone(border, dark);
-    color: tone(contrast, dark);
-    box-shadow: $shadow-dark;
-  }
+  @include theme-block      { background: tone(background-100, light); border-color: tone(border, light); color: tone(contrast, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: tone(background-100, dark);  border-color: tone(border, dark);  color: tone(contrast, dark);  box-shadow: $shadow-dark;  }
 
   p { margin: 0; font-size: $fs-3; }
   a { text-decoration: none; font-weight: $fw-medium;
       @include theme-block      { color: tone(contrast, light); }
-      @include theme-block-dark { color: tone(contrast, dark); }
+      @include theme-block-dark { color: tone(contrast, dark);  }
       &:hover { text-decoration: underline; } }
 }
 
