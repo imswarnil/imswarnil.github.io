@@ -11,15 +11,21 @@ layout: default
         <p class="home-hero-kicker">
           {{ site.social.name | default: site.author | default: site.title }}
         </p>
+
         <h1 class="home-hero-title">
-          {{ page.hero_title
-            | default: "Your go-to " 
-            | append: (site.work.role | default: "engineer") 
-            | append: " for impactful projects" }}
+          {{
+            page.hero_title
+            | default: "Your go-to "
+            | append: (site.work.role | default: "engineer")
+            | append: " for impactful projects"
+          }}
         </h1>
+
         <p class="home-hero-lead">
-          {{ page.hero_subtitle
-            | default: "Bringing ideas to life with clean, efficient and scalable code. From building web apps to performance tuning and solving complex technical challenges." }}
+          {{
+            page.hero_subtitle
+            | default: "Bringing ideas to life with clean, efficient and scalable code. From building web apps to performance tuning and solving complex technical challenges."
+          }}
         </p>
 
         <div class="home-hero-actions">
@@ -30,6 +36,7 @@ layout: default
             <i class="ph-bold ph-squares-four"></i><span>View projects</span>
           </a>
         </div>
+
         <div class="home-hero-meta">
           <img class="home-hero-avatar" src="{{ site.avatarurl | default: site.logo | relative_url }}" alt="{{ site.author | default: site.title }}">
           <span class="home-hero-name">{{ site.social.name | default: site.author | default: site.title }}</span>
@@ -38,9 +45,11 @@ layout: default
           <span class="home-hero-dot">•</span>
           <span class="home-hero-loc"><i class="ph-bold ph-map-pin"></i> {{ site.location | default: 'Bengaluru, India' }}</span>
           <span class="home-hero-dot">•</span>
-          <span class="home-hero-time"><i class="ph-bold ph-clock'></i> {{ site.timezone | default: 'IST' }}</span>
+          <span class="home-hero-time"><i class="ph-bold ph-clock"></i> {{ site.timezone | default: 'IST (UTC+5:30)' }}</span>
         </div>
       </div>
+
+      <!-- Art -->
       <figure class="home-hero-art">
         <img
           src="{{ page.hero_image | default: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRl6dqv_avIvyeanSyi6l7QBVBXK00cj2SZLA&s' }}"
@@ -50,3 +59,4 @@ layout: default
     </div>
   </div>
 </section>
+
