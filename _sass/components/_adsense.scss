@@ -1,6 +1,5 @@
 // ======================================================================
-// adsense.scss — Responsive AdSense + theme-aware placeholder
-// No inline styles or data-ad-format/layout. CSS controls sizing.
+// adsense.scss — Responsive AdSense + theme-aware placeholder (fixed)
 // Depends on: _variables.scss
 // ======================================================================
 
@@ -9,22 +8,36 @@
 /* Wrapper spacing + centering */
 .ad {
   margin-block: clamp($sp-10, 4vw, $sp-16);
-  display: grid;
-  place-items: center;        // center the slot
+
+  /* Constrain to parent; don't bleed past gutters */
+  width: 100%;
+  max-width: 100%;
+
+  /* Create space for the top ribbon label */
+  padding-top: $sp-7;
+
+  /* Layer context for the ribbon */
   position: relative;
+
+  /* Center the slot without forcing extra width */
+  display: grid;
+  place-items: center;
 }
 
-/* Small top label: "Advertisement" — sits on the border line */
+/* Small top label: "Advertisement" — sits above the ad */
 .ad::before {
   content: "Advertisement";
   position: absolute;
-  top: 0; left: 50%;
-  transform: translate(-50%, -50%);
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -60%); /* float a bit higher */
   padding: $sp-2 $sp-5;
   font-size: $fs-2;
   border-radius: $radius-pill;
   line-height: 1;
   white-space: nowrap;
+  z-index: 2;               /* ensure above iframe */
+  pointer-events: none;     /* avoid trapping clicks */
 
   @include theme-block {
     color: tone(secondary, light);
@@ -38,12 +51,17 @@
   }
 }
 
-/* Core slot: fluid, centered, with a calm placeholder look */
+/* Core slot: fluid within parent, no overflow */
 .adsbygoogle.ad__slot {
   display: block;
   width: 100%;
+  max-width: 100%;          /* never exceed wrapper width */
   border-radius: $radius-3;
-  // Placeholder surface while AdSense loads:
+  overflow: hidden;         /* safety if iframe tries to overflow */
+  position: relative;
+  z-index: 1;               /* under the ribbon */
+
+  /* Placeholder surface while loading */
   @include theme-block {
     background: linear-gradient(180deg, tone(background-100, light), tone(surface, light));
     border: 1px solid rgba(0,0,0,.08);
@@ -52,8 +70,6 @@
     background: linear-gradient(180deg, tone(background-200, dark), tone(surface, dark));
     border: 1px solid rgba(255,255,255,.12);
   }
-  // Prevent overflow/layout shift:
-  overflow: hidden;
 }
 
 /* ---------- Responsive variants (pure CSS) ---------- */
@@ -80,9 +96,11 @@
   min-height: clamp(220px, 50vw, 420px);
 }
 
-/* Horizontal (leaderboard-like) */
+/* Horizontal (leaderboard-like) — fluid inside parent, but capped */
 .ad--horizontal .ad__slot {
   width: 100%;
+  max-width: 970px;                   /* typical cap for large leaderboards */
+  margin-inline: auto;
   min-height: clamp(50px, 10vw, 90px);
 }
 
@@ -93,10 +111,10 @@
   min-height: clamp(300px, 60vh, 600px);
 }
 
-/* Fluid / In-article / Autorelaxed */
-.ad--fluid .ad__slot      { width: 100%; min-height: 200px; }
-.ad--in_article .ad__slot { width: 100%; min-height: 180px; }
-.ad--autorelaxed .ad__slot{ width: 100%; min-height: 240px; }
+/* Fluid / In-article / Autorelaxed — let height breathe, width = parent */
+.ad--fluid .ad__slot      { width: 100%; max-width: 100%; min-height: 200px; }
+.ad--in_article .ad__slot { width: 100%; max-width: 100%; min-height: 180px; }
+.ad--autorelaxed .ad__slot{ width: 100%; max-width: 100%; min-height: 240px; }
 
 /* Slightly tweak at breakpoints */
 @include mq-up($bp-md) {
