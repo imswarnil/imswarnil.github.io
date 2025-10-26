@@ -1,37 +1,40 @@
 ---
 layout: default
 ---
-<section class="home-hero">
-  <div class="home-hero-shell">
-    <div class="home-hero-card">
+<!-- HERO -->
+<section class="hero">
+  <div class="section-inner">
+    <div class="hero-card">
       <!-- Left: square image -->
-      <figure class="home-hero-photo">
+      <figure class="hero-media">
         <img
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRl6dqv_avIvyeanSyi6l7QBVBXK00cj2SZLA&s"
-          alt="{{ site.title | default: 'Profile' }}"
+          alt="{{ site.title | default: 'Profile image' }}"
         />
       </figure>
 
       <!-- Right: details -->
-      <div class="home-hero-details">
-        <h1 class="home-hero-name">{{ site.title | default: 'Your Name' }}</h1>
+      <div class="hero-body">
+        <h1 class="title">
+          {{ site.title | default: 'Your Name' }}
+        </h1>
 
-        <p class="home-hero-role">
+        <p class="subtitle">
           <span class="job">{{ site.job_title | default: 'Creative Developer' }}</span>
           <span class="dot">•</span>
           <span class="company">{{ site.company | default: 'Freelance' }}</span>
         </p>
 
-        <p class="home-hero-meta">
+        <p class="meta">
           <i class="ph-bold ph-map-pin"></i>
-          <span class="location">{{ site.location | default: 'Bengaluru, IN' }}</span>
+          <span>{{ site.location | default: 'Bengaluru, IN' }}</span>
         </p>
 
-        <p class="home-hero-bio">
-          {{ site.bio | default: 'I craft cinematic, lightweight web experiences — equal parts filmmaker and engineer.' }}
+        <p class="lead">
+          {{ site.bio | default: 'I craft cinematic, lightweight web experiences with a filmmaker’s timing and an engineer’s rigor.' }}
         </p>
 
-        <div class="home-hero-actions">
+        <div class="actions">
           <a class="btn btn-primary" href="{{ '/projects/' | relative_url }}">
             <i class="ph-bold ph-squares-four"></i><span>Projects</span>
           </a>
@@ -44,52 +47,52 @@ layout: default
   </div>
 </section>
 
-<!-- ABOUT / INTRO -->
-<section class="home-about">
-  <div class="home-about-shell">
-    <div class="home-about-card">
-      <div class="home-about-text">
-        <h2 class="home-about-title"><i class="ph-bold ph-user"></i> About</h2>
-        <p class="home-about-lead">
-          I blend filmmaking with engineering to craft lightweight, cinematic web experiences.
-          Focused on clarity, timing, and story.
+<!-- ABOUT -->
+<section class="section about">
+  <div class="section-inner">
+    <div class="about-card">
+      <div class="about-text">
+        <h2 class="title-2"><i class="ph-bold ph-user"></i><span>About</span></h2>
+        <p class="copy">
+          I blend filmmaking with engineering to build fast, expressive products.
+          My work focuses on clarity, pacing, and story-driven UX.
         </p>
-        <ul class="home-about-stats">
-          <li><i class="ph-bold ph-video"></i><span>100+ videos</span></li>
-          <li><i class="ph-bold ph-rocket"></i><span>7+ years dev</span></li>
-          <li><i class="ph-bold ph-globe"></i><span>Clients worldwide</span></li>
+        <ul class="stats">
+          <li><i class="ph-bold ph-video"></i> 100+ videos</li>
+          <li><i class="ph-bold ph-rocket"></i> 7+ years dev</li>
+          <li><i class="ph-bold ph-globe"></i> Clients worldwide</li>
         </ul>
       </div>
-      <div class="home-about-media">
-        <img src="{{ '/assets/img/about.jpg' | relative_url }}" alt="Behind the scenes">
+      <div class="about-media">
+        <img src="{{ '/assets/img/about.jpg' | relative_url }}" alt="Behind the scenes" />
       </div>
     </div>
   </div>
 </section>
 
-<!-- PROJECTS / WORK -->
-<section class="home-projects">
-  <div class="home-projects-shell">
-    <div class="home-section-head">
-      <h2 class="home-section-title"><i class="ph-bold ph-sparkle"></i> Featured Projects</h2>
-      <a href="{{ '/projects/' | relative_url }}" class="home-link">View all →</a>
+<!-- PROJECTS -->
+<section class="section projects">
+  <div class="section-inner">
+    <div class="section-head">
+      <h2 class="title-2"><i class="ph-bold ph-sparkle"></i><span>Featured Projects</span></h2>
+      <a class="link" href="{{ '/projects/' | relative_url }}">View all →</a>
     </div>
 
-    <div class="home-projects-grid">
+    <div class="grid grid-3">
       {% assign items = site.projects | default: site.posts %}
       {% for p in items limit:6 %}
-      <article class="home-project">
-        <a class="home-project-link" href="{{ p.url | relative_url }}">
-          <div class="home-project-thumb">
+      <article class="card">
+        <a class="card-link" href="{{ p.url | relative_url }}">
+          <div class="thumb">
             {% if p.cover %}
               <img src="{{ p.cover | relative_url }}" alt="{{ p.title }}">
             {% else %}
-              <div class="home-project-thumb-fallback"><i class="ph-bold ph-image"></i></div>
+              <div class="thumb-fallback"><i class="ph-bold ph-image"></i></div>
             {% endif %}
           </div>
-          <div class="home-project-body">
-            <h3 class="home-project-title">{{ p.title }}</h3>
-            <p class="home-project-desc">{{ p.excerpt | strip_html | truncate: 120 }}</p>
+          <div class="card-body">
+            <h3 class="card-title">{{ p.title }}</h3>
+            <p class="card-desc">{{ p.excerpt | strip_html | truncate: 120 }}</p>
           </div>
         </a>
       </article>
@@ -98,34 +101,33 @@ layout: default
   </div>
 </section>
 
-<!-- EXPERIENCE / TIMELINE -->
-<section class="home-experience">
-  <div class="home-experience-shell">
-    <h2 class="home-section-title"><i class="ph-bold ph-briefcase"></i> Experience</h2>
-
-    <ol class="home-timeline">
-      <li class="home-timeline-item">
+<!-- EXPERIENCE -->
+<section class="section experience">
+  <div class="section-inner">
+    <h2 class="title-2"><i class="ph-bold ph-briefcase"></i><span>Experience</span></h2>
+    <ol class="timeline">
+      <li class="item">
         <div class="dot"></div>
         <div class="content">
           <h3 class="role">Creative Developer · {{ site.company | default: 'Freelance' }}</h3>
-          <p class="meta">2022 — Present · Bengaluru, IN</p>
-          <p class="desc">Building cinematic, fast web for creators & brands. Product design, front-end systems, and narrative.</p>
+          <p class="small">2022 — Present · Bengaluru, IN</p>
+          <p class="copy">Cinematic, fast web for creators & brands. Product design, front-end systems, narrative.</p>
         </div>
       </li>
-      <li class="home-timeline-item">
+      <li class="item">
         <div class="dot"></div>
         <div class="content">
           <h3 class="role">Software Engineer · {{ site.prev_company | default: 'Acme' }}</h3>
-          <p class="meta">2019 — 2022</p>
-          <p class="desc">Shipped UI platforms, design tokens, and performance pipelines across teams.</p>
+          <p class="small">2019 — 2022</p>
+          <p class="copy">Shipped UI platforms, design tokens, and performance pipelines across teams.</p>
         </div>
       </li>
-      <li class="home-timeline-item">
+      <li class="item">
         <div class="dot"></div>
         <div class="content">
           <h3 class="role">Filmmaker · Imswarnil</h3>
-          <p class="meta">2017 — 2019</p>
-          <p class="desc">Wrote, shot, and edited films & series; grew channel with story-led content.</p>
+          <p class="small">2017 — 2019</p>
+          <p class="copy">Wrote, shot, and edited films & series; grew channel with story-led content.</p>
         </div>
       </li>
     </ol>
@@ -133,10 +135,10 @@ layout: default
 </section>
 
 <!-- SKILLS -->
-<section class="home-skills">
-  <div class="home-skills-shell">
-    <h2 class="home-section-title"><i class="ph-bold ph-wrench"></i> Skills</h2>
-    <ul class="home-skill-chips">
+<section class="section skills">
+  <div class="section-inner">
+    <h2 class="title-2"><i class="ph-bold ph-wrench"></i><span>Skills</span></h2>
+    <ul class="chips">
       <li>React</li><li>Next.js</li><li>TypeScript</li><li>Node</li>
       <li>GSAP</li><li>Framer Motion</li><li>Figma</li><li>Design Systems</li>
       <li>Color Grading</li><li>DaVinci Resolve</li><li>Premiere Pro</li>
@@ -144,13 +146,13 @@ layout: default
   </div>
 </section>
 
-<!-- CONTACT / CTA -->
-<section class="home-cta">
-  <div class="home-cta-shell">
-    <div class="home-cta-card">
-      <h3 class="home-cta-title">Let’s build something beautiful.</h3>
-      <p class="home-cta-sub">Available for selected projects, collaborations, and consulting.</p>
-      <div class="home-cta-actions">
+<!-- CTA -->
+<section class="section cta">
+  <div class="section-inner">
+    <div class="cta-card">
+      <h3 class="title-2">Let’s build something beautiful.</h3>
+      <p class="copy">Available for selected projects, collaborations, and consulting.</p>
+      <div class="actions">
         <a class="btn btn-primary" href="{{ '/contact/' | relative_url }}">
           <i class="ph-bold ph-handshake"></i><span>Collaborate</span>
         </a>
@@ -161,4 +163,3 @@ layout: default
     </div>
   </div>
 </section>
-

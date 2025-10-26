@@ -1,347 +1,229 @@
 // ======================================================================
-// home.scss — Simple, responsive two-column hero (image left)
+// home.scss — Generic, minimal, responsive home (hero + sections)
 // Depends on: _variables.scss
 // ======================================================================
 
+@use "variables" as *;
 
-.home-hero {
+/* ---------- Shared primitives ---------- */
+
+.section,
+.hero {
   padding-block: clamp($sp-12, 6vw, $sp-20);
 }
 
-/* Local shell: centered using your container mixin (no global class needed) */
-.home-hero-shell {
-  @include container; // width: $island-width; safe side gutters
+.section-inner,
+.hero .section-inner {
+  @include container; // centered column, safe gutters
 }
 
-/* Card: mobile-first grid — two columns even on phones (image left) */
-.home-hero-card {
-  display: grid;
-  gap: $sp-10;
+.title   { font-weight: $fw-bold; line-height: $lh-tight; margin: 0; }
+.title-2 { font-weight: $fw-semibold; line-height: $lh-tight; margin: 0 0 $sp-7 0; font-size: $fs-6; display: inline-flex; gap: $sp-6; align-items: center; }
+.subtitle{ margin: 0; font-size: $fs-3; }
+.meta    { margin: 0; font-size: $fs-2; display: inline-flex; gap: $sp-5; align-items: center; }
+.copy    { margin: 0; font-size: $fs-3; line-height: $lh-base; }
+.small   { margin: 0; font-size: $fs-2; opacity: .85; }
 
-  /* Two columns at all sizes, but keep image column compact with clamp */
-  grid-template-columns: minmax(7.5rem, clamp(8.5rem, 30vw, 12rem)) 1fr;
-  align-items: stretch; // equal column heights
-
-  border-radius: $radius-6;
-  padding: clamp($sp-10, 2.4vw, $sp-16);
-  backdrop-filter: blur(8px);
-
-  @include theme-block {
-    background-color: tone(surface, light);
-    border: 1px solid tone(border, light);
-    box-shadow: $shadow-light;
-    color: tone(foreground, light);
-  }
-  @include theme-block-dark {
-    background-color: tone(surface, dark);
-    border: 1px solid tone(border, dark);
-    box-shadow: $shadow-dark;
-    color: tone(foreground, dark);
-  }
-
-  /* On larger screens, breathe a bit more */
-  @include mq-up($bp-md) { gap: $sp-12; }
-  @include mq-up($bp-lg) {
-    grid-template-columns: minmax(10rem, 14rem) 1fr;
-    gap: $sp-14;
-  }
-}
-
-/* Square image column */
-.home-hero-photo {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1 / 1;       // keep perfect square
-  border-radius: $radius-6;
-  overflow: hidden;
-  align-self: stretch;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-}
-
-/* Details column */
-.home-hero-details {
-  display: grid;
-  gap: $sp-7;
-  min-width: 0;              // allow text to wrap, prevent overflow
-  align-self: stretch;
-}
-
-.home-hero-name {
-  margin: 0;
-  font-weight: $fw-bold;
-  line-height: $lh-tight;
-  font-size: clamp($fs-6, 5.2vw, $fs-9);
-}
-
-.home-hero-role {
-  margin: 0;
-  font-size: $fs-3;
-
-  @include theme-block      { color: tone(foreground, light); }
-  @include theme-block-dark { color: tone(foreground, dark); }
-
-  .job { font-weight: $fw-semibold; }
-  .company { font-weight: $fw-semibold; }
-  .dot { margin-inline: $sp-6; opacity: .6; }
-}
-
-.home-hero-meta {
-  margin: 0;
-  display: inline-flex;
-  gap: $sp-5;
-  align-items: center;
-  font-size: $fs-2;
-
-  @include theme-block      { color: tone(secondary, light); }
-  @include theme-block-dark { color: tone(secondary, dark); }
-}
-
-.home-hero-bio {
-  margin: 0;
-  font-size: $fs-3;
-  line-height: $lh-base;
-  max-width: 58ch;
-
-  @include theme-block      { color: tone(foreground, light); }
-  @include theme-block-dark { color: tone(foreground, dark); }
-}
-
-/* Actions: compact buttons */
-.home-hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: $sp-7;
-}
-
-.btn { @include button-base; }
-
-.btn-primary {
-  @include theme-block {
-    background-color: tone(accent, light);
-    color: tone(white, light);
-    border-color: tone(accent, light);
-  }
-  @include theme-block-dark {
-    background-color: tone(accent, dark);
-    color: tone(black, dark);
-    border-color: tone(accent, dark);
-  }
-  &:hover { transform: translateY(-1px); }
-}
-
-.btn-ghost {
-  @include theme-block {
-    background-color: transparent;
-    color: tone(foreground, light);
-    border-color: tone(border, light);
-  }
-  @include theme-block-dark {
-    background-color: transparent;
-    color: tone(foreground, dark);
-    border-color: tone(border, dark);
-  }
-  &:hover {
-    @include theme-block      { background-color: tone(background-100, light); }
-    @include theme-block-dark { background-color: tone(background-200, dark); }
-  }
-}
-
-/* Safety: images/tables/code inside hero never cause horizontal scroll */
-.home-hero :where(img, video, svg, canvas) { max-width: 100%; height: auto; }
-.home-hero table { width: 100%; border-collapse: collapse; display: block; overflow-x: auto; }
-.home-hero pre {
-  overflow: auto;
-  font-family: $ff-mono;
-  font-size: $fs-2;
-  padding: $code-pad-y $code-pad-x;
-  border-radius: $code-radius;
-
-  @include theme-block      { background: tone(background-100, light); border: 1px solid tone(border, light); color: tone(foreground, light); }
-  @include theme-block-dark { background: tone(background-100, dark);  border: 1px solid tone(border, dark);  color: tone(foreground, dark); }
-}
-
-
-// ======================================================================
-// home-sections.scss — About, Projects, Experience, Skills, CTA
-// Depends on: _variables.scss
-// ======================================================================
-
-
-/* ---------- Shared section utilities ---------- */
-.home-section-title {
-  display: inline-flex; align-items: center; gap: $sp-6;
-  margin: 0 0 $sp-7 0;
-  font-size: $fs-6; font-weight: $fw-semibold; line-height: $lh-tight;
-}
-
-.home-section-head {
-  display: flex; align-items: baseline; justify-content: space-between;
-  gap: $sp-7; margin-bottom: $sp-7;
-}
-
-.home-link {
-  font-size: $fs-2; font-weight: $fw-medium; text-decoration: none;
+.link {
+  font-size: $fs-2; text-decoration: none;
   @include theme-block      { color: tone(foreground, light); }
   @include theme-block-dark { color: tone(foreground, dark); }
   &:hover { text-decoration: underline; }
 }
 
-/* ---------- ABOUT ---------- */
-.home-about { padding-block: clamp($sp-12, 6vw, $sp-20); }
-.home-about-shell { @include container; }
-.home-about-card {
-  display: grid; gap: $sp-10;
-  grid-template-columns: 1fr; border-radius: $radius-6;
-  padding: clamp($sp-10, 2.4vw, $sp-16); backdrop-filter: blur(10px);
+.actions { display: flex; flex-wrap: wrap; gap: $sp-7; align-items: center; }
 
-  @include theme-block {
-    background-color: tone(surface, light);
-    border: 1px solid tone(border, light);
-    box-shadow: $shadow-light; color: tone(foreground, light);
-  }
-  @include theme-block-dark {
-    background-color: tone(surface, dark);
-    border: 1px solid tone(border, dark);
-    box-shadow: $shadow-dark; color: tone(foreground, dark);
-  }
-
-  @include mq-up($bp-md) { grid-template-columns: 1.25fr .75fr; align-items: center; gap: $sp-14; }
-}
-
-.home-about-title { margin: 0 0 $sp-6 0; font-size: $fs-6; font-weight: $fw-semibold; }
-.home-about-lead  { margin: 0; font-size: $fs-3; }
-.home-about-text  { display: grid; gap: $sp-7; }
-.home-about-stats {
-  display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: $sp-7; padding: 0; margin: 0; list-style: none;
-  li { display: inline-flex; gap: $sp-5; align-items: center; font-size: $fs-3; }
-}
-
-.home-about-media {
-  width: 100%; border-radius: $radius-6; overflow: hidden;
-  img { display: block; width: 100%; height: auto; }
-}
-
-/* ---------- PROJECTS ---------- */
-.home-projects { padding-block: clamp($sp-12, 6vw, $sp-20); }
-.home-projects-shell { @include container; }
-
-.home-projects-grid {
-  display: grid; gap: $sp-8;
-  grid-template-columns: 1fr;
-  @include mq-up($bp-md) { grid-template-columns: repeat(2, 1fr); }
-  @include mq-up($bp-lg) { grid-template-columns: repeat(3, 1fr); }
-}
-
-.home-project {
-  border-radius: $radius-6; overflow: hidden; min-width: 0;
-  @include theme-block { border: 1px solid tone(border, light); box-shadow: $shadow-light; background: tone(surface, light); }
-  @include theme-block-dark { border: 1px solid tone(border, dark); box-shadow: $shadow-dark; background: tone(surface, dark); }
-}
-
-.home-project-link { text-decoration: none; color: inherit; display: grid; gap: 0; }
-.home-project-thumb {
-  aspect-ratio: 16/9; background: tone(background-100, light);
-  @include theme-block-dark { background: tone(background-200, dark); }
-  img { display: block; width: 100%; height: 100%; object-fit: cover; }
-  .home-project-thumb-fallback {
-    display: grid; place-items: center; width: 100%; height: 100%;
-    @include theme-block { color: tone(secondary, light); }
-    @include theme-block-dark { color: tone(secondary, dark); }
-  }
-}
-.home-project-body { padding: clamp($sp-8, 1.6vw, $sp-16); display: grid; gap: $sp-6; }
-.home-project-title { font-size: $fs-5; font-weight: $fw-semibold; margin: 0; line-height: $lh-tight; }
-.home-project-desc  { font-size: $fs-3; margin: 0; }
-
-/* ---------- EXPERIENCE (Timeline) ---------- */
-.home-experience { padding-block: clamp($sp-12, 6vw, $sp-20); }
-.home-experience-shell { @include container; }
-
-.home-timeline {
-  position: relative; margin: $sp-10 0 0 0; padding: 0; list-style: none;
-  display: grid; gap: $sp-12;
-
-  &::before {
-    content: ""; position: absolute; left: 12px; top: 0; bottom: 0; width: 2px;
-    @include theme-block { background: tone(border, light); }
-    @include theme-block-dark { background: tone(border, dark); }
-  }
-}
-
-.home-timeline-item {
-  position: relative; display: grid; gap: $sp-4; padding-left: $sp-12;
-
-  .dot {
-    position: absolute; left: 3px; top: 2px; width: 18px; height: 18px; border-radius: 50%;
-    @include theme-block { background: tone(background, light); border: 2px solid tone(border, light); }
-    @include theme-block-dark { background: tone(background, dark); border: 2px solid tone(border, dark); }
-  }
-
-  .role { margin: 0; font-size: $fs-5; font-weight: $fw-semibold; }
-  .meta { margin: 0; font-size: $fs-2; @include theme-block { color: tone(secondary, light); } @include theme-block-dark { color: tone(secondary, dark); } }
-  .desc { margin: 0; font-size: $fs-3; }
-}
-
-/* ---------- SKILLS ---------- */
-.home-skills { padding-block: clamp($sp-12, 6vw, $sp-20); }
-.home-skills-shell { @include container; }
-
-.home-skill-chips {
-  display: flex; flex-wrap: wrap; gap: $sp-6; margin: $sp-7 0 0 0; padding: 0; list-style: none;
-
-  li {
-    padding: $sp-4 $sp-7; border-radius: $radius-pill; font-size: $fs-2; line-height: 1;
-    @include theme-block { background: tone(background-100, light); border: 1px solid tone(border, light); color: tone(foreground, light); }
-    @include theme-block-dark { background: tone(background-200, dark); border: 1px solid tone(border, dark); color: tone(foreground, dark); }
-  }
-}
-
-/* ---------- CTA ---------- */
-.home-cta { padding-block: clamp($sp-12, 6vw, $sp-20); }
-.home-cta-shell { @include container; }
-
-.home-cta-card {
-  border-radius: $radius-6; padding: clamp($sp-12, 3vw, $sp-20); text-align: center; backdrop-filter: blur(10px);
-
-  @include theme-block {
-    background-color: tone(surface, light);
-    border: 1px solid tone(border, light);
-    box-shadow: $shadow-light; color: tone(foreground, light);
-  }
-  @include theme-block-dark {
-    background-color: tone(surface, dark);
-    border: 1px solid tone(border, dark);
-    box-shadow: $shadow-dark; color: tone(foreground, dark);
-  }
-}
-
-.home-cta-title { margin: 0 0 $sp-6 0; font-size: $fs-6; font-weight: $fw-semibold; }
-.home-cta-sub   { margin: 0 0 $sp-8 0; font-size: $fs-3; }
-
-.home-cta-actions { display: flex; flex-wrap: wrap; gap: $sp-7; justify-content: center; }
+/* Buttons */
 .btn { @include button-base; }
 .btn-primary {
-  @include theme-block   { background-color: tone(accent, light); color: tone(white, light); border-color: tone(accent, light); }
-  @include theme-block-dark { background-color: tone(accent, dark); color: tone(black, dark); border-color: tone(accent, dark); }
+  @include theme-block   { background: tone(accent, light); color: tone(white, light); border-color: tone(accent, light); }
+  @include theme-block-dark { background: tone(accent, dark);  color: tone(black, dark); border-color: tone(accent, dark); }
   &:hover { transform: translateY(-1px); }
 }
 .btn-ghost {
   @include theme-block   { background: transparent; color: tone(foreground, light); border-color: tone(border, light); }
   @include theme-block-dark { background: transparent; color: tone(foreground, dark); border-color: tone(border, dark); }
   &:hover {
-    @include theme-block { background: tone(background-100, light); }
+    @include theme-block      { background: tone(background-100, light); }
     @include theme-block-dark { background: tone(background-200, dark); }
   }
 }
 
-/* ---------- Safety ---------- */
-:where(.home-about, .home-projects, .home-experience, .home-skills, .home-cta) :where(img, video, canvas, svg) {
-  max-width: 100%; height: auto; display: block;
+/* media safety */
+:where(.hero, .section) :where(img, video, canvas, svg) { max-width: 100%; height: auto; display: block; }
+
+/* ---------- HERO ---------- */
+
+.hero-card {
+  display: grid;
+  gap: $sp-10;
+  grid-template-columns: minmax(7.5rem, clamp(8.5rem, 30vw, 12rem)) 1fr; // image | text
+  align-items: stretch; // equal heights
+  border-radius: $radius-6;
+  padding: clamp($sp-10, 2.4vw, $sp-16);
+
+  // Minimal surfaces (no heavy borders or full shadows)
+  @include theme-block {
+    background: tone(surface, light);
+    border: 1px solid rgba(0,0,0,.05);
+  }
+  @include theme-block-dark {
+    background: tone(surface, dark);
+    border: 1px solid rgba(255,255,255,.08);
+  }
+
+  @include mq-up($bp-md) { gap: $sp-12; }
+  @include mq-up($bp-lg) { grid-template-columns: minmax(10rem, 14rem) 1fr; gap: $sp-14; }
+}
+
+.hero-media {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: $radius-6;
+  overflow: hidden;
+  align-self: stretch;
+
+  img { width: 100%; height: 100%; object-fit: cover; }
+}
+
+.hero .title {
+  font-size: clamp($fs-7, 6vw, $fs-10);
+}
+
+.hero .subtitle {
+  @include theme-block      { color: tone(foreground, light); }
+  @include theme-block-dark { color: tone(foreground, dark); }
+  .dot { margin-inline: $sp-6; opacity: .6; }
+  .job, .company { font-weight: $fw-semibold; }
+}
+
+.hero .meta {
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark); }
+}
+
+.hero .lead {
+  max-width: 60ch;
+  @include theme-block      { color: tone(foreground, light); }
+  @include theme-block-dark { color: tone(foreground, dark); }
+}
+
+/* ---------- ABOUT ---------- */
+
+.about-card {
+  display: grid; gap: $sp-10; grid-template-columns: 1fr;
+  border-radius: $radius-6; padding: clamp($sp-10, 2.4vw, $sp-16);
+
+  @include theme-block {
+    background: tone(surface, light);
+    border: 1px solid rgba(0,0,0,.05);
+  }
+  @include theme-block-dark {
+    background: tone(surface, dark);
+    border: 1px solid rgba(255,255,255,.08);
+  }
+
+  @include mq-up($bp-md) { grid-template-columns: 1.25fr .75fr; align-items: center; gap: $sp-14; }
+}
+
+.about-text { display: grid; gap: $sp-7; }
+
+.stats {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: $sp-7;
+  li { font-size: $fs-3; display: inline-flex; align-items: center; gap: $sp-5; }
+}
+
+.about-media { width: 100%; border-radius: $radius-6; overflow: hidden; }
+
+/* ---------- PROJECTS ---------- */
+
+.section-head { display: flex; justify-content: space-between; align-items: baseline; gap: $sp-7; margin-bottom: $sp-7; }
+
+.grid {
+  display: grid; gap: $sp-8; grid-template-columns: 1fr;
+  @include mq-up($bp-md) { grid-template-columns: repeat(2, 1fr); }
+}
+.grid-3 { @include mq-up($bp-lg) { grid-template-columns: repeat(3, 1fr); } }
+
+.card {
+  border-radius: $radius-6; overflow: hidden; min-width: 0;
+  // keep surfaces calm; elevate only on hover
+  @include theme-block      { background: tone(surface, light); border: 1px solid rgba(0,0,0,.05); }
+  @include theme-block-dark { background: tone(surface, dark); border: 1px solid rgba(255,255,255,.08); }
+
+  transition: transform $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out;
+  &:hover {
+    transform: translateY(-2px);
+    @include theme-block      { box-shadow: $shadow-light; }
+    @include theme-block-dark { box-shadow: $shadow-dark; }
+  }
+}
+
+.card-link { color: inherit; text-decoration: none; display: grid; gap: 0; }
+
+.thumb {
+  aspect-ratio: 16/9;
+  @include theme-block      { background: tone(background-100, light); }
+  @include theme-block-dark { background: tone(background-200, dark); }
+  img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .thumb-fallback {
+    display: grid; place-items: center; width: 100%; height: 100%;
+    @include theme-block      { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark); }
+  }
+}
+
+.card-body { padding: clamp($sp-8, 1.6vw, $sp-16); display: grid; gap: $sp-6; }
+.card-title { margin: 0; font-weight: $fw-semibold; font-size: $fs-5; line-height: $lh-tight; }
+.card-desc  { margin: 0; font-size: $fs-3; }
+
+/* ---------- EXPERIENCE ---------- */
+
+.timeline {
+  position: relative; margin: $sp-10 0 0 0; padding: 0; list-style: none;
+  display: grid; gap: $sp-12;
+
+  &::before {
+    content: ""; position: absolute; left: 12px; top: 0; bottom: 0; width: 2px;
+    @include theme-block      { background: rgba(0,0,0,.08); }
+    @include theme-block-dark { background: rgba(255,255,255,.12); }
+  }
+}
+
+.timeline .item {
+  position: relative; display: grid; gap: $sp-4; padding-left: $sp-12;
+
+  .dot {
+    position: absolute; left: 3px; top: 2px; width: 18px; height: 18px; border-radius: 50%;
+    @include theme-block      { background: tone(background, light); border: 2px solid rgba(0,0,0,.1); }
+    @include theme-block-dark { background: tone(background, dark);  border: 2px solid rgba(255,255,255,.2); }
+  }
+
+  .role { margin: 0; font-size: $fs-5; font-weight: $fw-semibold; }
+}
+
+/* ---------- SKILLS ---------- */
+
+.chips {
+  list-style: none; margin: $sp-7 0 0 0; padding: 0;
+  display: flex; flex-wrap: wrap; gap: $sp-6;
+
+  li {
+    padding: $sp-4 $sp-7; border-radius: $radius-pill; font-size: $fs-2; line-height: 1;
+    @include theme-block      { background: tone(background-100, light); color: tone(foreground, light); }
+    @include theme-block-dark { background: tone(background-200, dark);  color: tone(foreground, dark); }
+    // no borders; minimal look
+  }
+}
+
+/* ---------- CTA ---------- */
+
+.cta-card {
+  text-align: center;
+  border-radius: $radius-6;
+  padding: clamp($sp-12, 3vw, $sp-20);
+
+  @include theme-block      { background: tone(surface, light); border: 1px solid rgba(0,0,0,.05); }
+  @include theme-block-dark { background: tone(surface, dark);  border: 1px solid rgba(255,255,255,.08); }
 }
