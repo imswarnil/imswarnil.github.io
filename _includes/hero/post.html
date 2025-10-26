@@ -1,0 +1,52 @@
+<section class="site-hero hero--post" role="region" aria-label="Post hero">
+    <div class="hero-surface" aria-hidden="true"></div>
+  
+    <div class="container">
+      <div class="hero-grid hero-grid--post">
+        <div class="hero-copy">
+          <h1 class="hero-title">{{ page.title }}</h1>
+  
+          <div class="hero-meta">
+            {% assign date_format = site.date_format | default: "%d %b %Y" %}
+            <time datetime="{{ page.date | date_to_xmlschema }}"><i class="ph-bold ph-calendar-blank"></i>{{ page.date | date: date_format }}</time>
+  
+            {% if page.categories and page.categories.size > 0 %}
+              <span class="dot">•</span>
+              <span class="cats">
+                {% for c in page.categories %}
+                  <a class="chip" href="{{ '/categories/#' | append: c | downcase | slugify | relative_url }}"><i class="ph-bold ph-tag"></i>{{ c }}</a>{% unless forloop.last %}<span>,</span>{% endunless %}
+                {% endfor %}
+              </span>
+            {% endif %}
+  
+            {% if page.tags and page.tags.size > 0 %}
+              <span class="dot">•</span>
+              <span class="cats">
+                {% for t in page.tags %}
+                  <a class="chip chip--ghost" href="{{ '/tags/#' | append: t | downcase | slugify | relative_url }}"><i class="ph-bold ph-hash"></i>{{ t }}</a>{% unless forloop.last %}<span>,</span>{% endunless %}
+                {% endfor %}
+              </span>
+            {% endif %}
+  
+            {% assign words = page.content | number_of_words %}
+            {% assign mins = words | divided_by:200 | plus:1 %}
+            <span class="dot">•</span><span class="read"><i class="ph-bold ph-hourglass-low"></i>{{ mins }} min read</span>
+  
+            {% assign author_name = page.author | default: site.author | default: site.social.name %}
+            {% if author_name %}
+              <span class="dot">•</span><span class="by"><i class="ph-bold ph-user"></i>{{ author_name }}</span>
+            {% endif %}
+          </div>
+  
+          {% if page.subtitle %}<p class="hero-sub">{{ page.subtitle }}</p>{% endif %}
+        </div>
+  
+        {% if page.feature_image %}
+        <figure class="hero-art hero-art--cover">
+          <img src="{{ page.feature_image }}" alt="" loading="eager" />
+        </figure>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+  

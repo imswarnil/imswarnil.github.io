@@ -1,0 +1,15 @@
+<section class="site-hero hero--default" role="region" aria-label="Hero">
+    <div class="hero-surface" aria-hidden="true"></div>
+  
+    <div class="container">
+      <div class="hero-grid hero-grid--default">
+        <div class="hero-copy">
+          <h1 class="hero-title">{{ page.title | default: site.title }}</h1>
+          {% if page.subtitle or site.description %}
+            <p class="hero-sub">{{ page.subtitle | default: site.description }}</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+  
