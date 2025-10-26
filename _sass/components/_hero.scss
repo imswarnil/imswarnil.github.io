@@ -146,3 +146,108 @@
 /* Ads block (optional) */
 .hero-ad { margin-top: $sp-5; }
 .hero-ad--below { margin-top: $sp-4; }
+
+/* ===========================================================
+   HERO FIXES — alignment + responsive widths
+   Append AFTER your existing _hero.scss
+   =========================================================== */
+
+/* 1) HOME: image should sit perfectly on mobile and feel full-height on larger screens */
+.hero--home .hero-grid {
+  align-items: stretch; /* image and copy align nicely */
+}
+
+/* The media wrapper: good height on desktop, sane on mobile */
+.hero--home .hero-media {
+  /* Desktop/tablet: tall, immersive */
+  height: #{unquote("clamp(420px, 68vh, 860px)")};
+  border-radius: $radius-6;
+  overflow: hidden;
+  box-shadow: 0 24px 60px -28px rgba(0,0,0,.35);
+  @include theme-block-dark { box-shadow: 0 28px 80px -30px rgba(0,0,0,.6); }
+
+  /* Mobile: stable aspect & centered crop */
+  @media (max-width: $bp-lg) {
+    height: auto;                /* let aspect-ratio control height */
+    aspect-ratio: 16 / 9;        /* avoids super-tall mobile headers */
+    border-radius: $radius-5;
+  }
+
+  img {
+    width: 100%; height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center center; /* adjust if you want: center top, etc. */
+  }
+
+  .media-placeholder {
+    width: 100%; height: 100%;
+    @media (max-width: $bp-lg) { aspect-ratio: 16/9; }
+  }
+}
+
+/* Keep the copy comfy but not boxy; ensure spacing below image on mobile */
+.hero--home .home-copy {
+  padding: #{unquote("clamp(#{$sp-4}, 2.6vw, #{$sp-8})")} 0;
+  @media (max-width: $bp-lg) { padding-top: $sp-4; }
+}
+
+/* 2) NARROWER CONTENT for post / page / default
+      (Home stays wide & immersive, others read-friendly) */
+.hero--post > .container,
+.hero--page > .container,
+.hero--default > .container {
+  /* Narrow while respecting global gutters */
+  max-width: 860px;   /* tune if you want tighter */
+}
+
+/* 3) POST / PAGE media should be shorter than home (read-first) */
+.hero--post .hero-media,
+.hero--page .hero-media {
+  height: #{unquote("clamp(220px, 40vh, 520px)")};
+  @media (max-width: $bp-lg) {
+    height: auto;
+    aspect-ratio: 16/9;
+    border-radius: $radius-5;
+  }
+  img { object-fit: cover; object-position: center center; }
+}
+
+/* 4) Tighten vertical rhythm on post/page heroes */
+.hero--post .post-copy,
+.hero--page .page-copy,
+.hero--default .default-copy {
+  padding: #{unquote("clamp(#{$sp-3}, 2vw, #{$sp-6})")} 0;
+}
+
+/* 5) Author bullet & meta spacing — compact & aligned */
+.post-head, .page-head {
+  gap: $sp-3;
+  align-items: center;
+  margin-bottom: $sp-1;
+}
+.author-bullet {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: currentColor;
+  opacity: .85;
+  box-shadow: 0 6px 16px -6px rgba(0,0,0,.35);
+}
+
+/* 6) Background: GRID LINES ONLY (no dots), ensure visibility on both themes */
+.site-hero .hero-surface .hero-gridlines {
+  background-image:
+    linear-gradient(to right, rgba(120,120,120,.16) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(120,120,120,.14) 1px, transparent 1px);
+  background-size: 44px 44px;
+
+  @include theme-block-dark {
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,.18) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.16) 1px, transparent 1px);
+  }
+}
+
+/* 7) Small polish: make chips wrap nicely on narrow screens */
+.home-meta, .hero-badges, .hero-meta {
+  row-gap: $sp-2;
+}
