@@ -1,4 +1,5 @@
 ---
+title: About Alembic
 layout : home
 feature_text: |
   ## Alembic
@@ -14,11 +15,5 @@ cta_href: /contact/
 cta_label: Book me
 cta2_href: /projects/
 cta2_label: Projects
-hero_style: home # or post | page | default
-title: "Hello, internet."
-subtitle: "Cinema × Code × Chaos."
-cta_primary:  { label: "Get started", url: "/start/" }
-cta_secondary:{ label: "Contact",    url: "/#contact" }
-
 ---
 

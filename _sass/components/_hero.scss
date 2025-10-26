@@ -1,122 +1,178 @@
 // ======================================================================
-// Generic Smart Hero (Home / Post / Page / Default)
-// - Uses your tokens & theme mixins only
-// - Patterned background, island-ish cards, responsive grids
+// home-sections.scss — About, Projects, Experience, Skills, CTA
+// Depends on: _variables.scss
 // ======================================================================
 
-.site-hero {
-  position: relative;
-  padding: clamp(#{$sp-8}, 6vw, #{$sp-14}) 0 #{$sp-10};
-  overflow: clip;
+@use "variables" as *;
 
-  .hero-surface {
-    position: absolute; inset: 0; z-index: 0; pointer-events: none;
-    background-image:
-      radial-gradient(rgba(0,0,0,.05) 1px, transparent 1px),
-      radial-gradient(rgba(0,0,0,.03) 1px, transparent 1px);
-    background-size: 16px 16px, 16px 16px;
-    background-position: 0 0, 8px 8px;
-
-    @include theme-block-dark {
-      background-image:
-        radial-gradient(rgba(255,255,255,.09) 1px, transparent 1px),
-        radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px);
-    }
-  }
+/* ---------- Shared section utilities ---------- */
+.home-section-title {
+  display: inline-flex; align-items: center; gap: $sp-6;
+  margin: 0 0 $sp-7 0;
+  font-size: $fs-6; font-weight: $fw-semibold; line-height: $lh-tight;
 }
 
-/* Base grid */
-.hero-grid {
-  position: relative; z-index: 1;
+.home-section-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: $sp-7; margin-bottom: $sp-7;
+}
+
+.home-link {
+  font-size: $fs-2; font-weight: $fw-medium; text-decoration: none;
+  @include theme-block      { color: tone(foreground, light); }
+  @include theme-block-dark { color: tone(foreground, dark); }
+  &:hover { text-decoration: underline; }
+}
+
+/* ---------- ABOUT ---------- */
+.home-about { padding-block: clamp($sp-12, 6vw, $sp-20); }
+.home-about-shell { @include container; }
+.home-about-card {
+  display: grid; gap: $sp-10;
+  grid-template-columns: 1fr; border-radius: $radius-6;
+  padding: clamp($sp-10, 2.4vw, $sp-16); backdrop-filter: blur(10px);
+
+  @include theme-block {
+    background-color: tone(surface, light);
+    border: 1px solid tone(border, light);
+    box-shadow: $shadow-light; color: tone(foreground, light);
+  }
+  @include theme-block-dark {
+    background-color: tone(surface, dark);
+    border: 1px solid tone(border, dark);
+    box-shadow: $shadow-dark; color: tone(foreground, dark);
+  }
+
+  @include mq-up($bp-md) { grid-template-columns: 1.25fr .75fr; align-items: center; gap: $sp-14; }
+}
+
+.home-about-title { margin: 0 0 $sp-6 0; font-size: $fs-6; font-weight: $fw-semibold; }
+.home-about-lead  { margin: 0; font-size: $fs-3; }
+.home-about-text  { display: grid; gap: $sp-7; }
+.home-about-stats {
+  display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: $sp-7; padding: 0; margin: 0; list-style: none;
+  li { display: inline-flex; gap: $sp-5; align-items: center; font-size: $fs-3; }
+}
+
+.home-about-media {
+  width: 100%; border-radius: $radius-6; overflow: hidden;
+  img { display: block; width: 100%; height: auto; }
+}
+
+/* ---------- PROJECTS ---------- */
+.home-projects { padding-block: clamp($sp-12, 6vw, $sp-20); }
+.home-projects-shell { @include container; }
+
+.home-projects-grid {
   display: grid; gap: $sp-8;
-}
-
-/* Variants */
-.hero-grid--home {
-  grid-template-columns: 1.2fr .8fr;
-  @media (max-width: $bp-lg) { grid-template-columns: 1fr; }
-}
-.hero-grid--post {
   grid-template-columns: 1fr;
-}
-.hero-grid--page {
-  grid-template-columns: 1fr .8fr;
-  @media (max-width: $bp-lg) { grid-template-columns: 1fr; }
-}
-.hero-grid--default {
-  grid-template-columns: 1fr;
+  @include mq-up($bp-md) { grid-template-columns: repeat(2, 1fr); }
+  @include mq-up($bp-lg) { grid-template-columns: repeat(3, 1fr); }
 }
 
-/* Copy block */
-.hero-copy {
-  border: 1px solid; border-radius: $radius-6; padding: clamp(#{$sp-6}, 3.5vw, #{$sp-10});
-  @include theme-block      { background: tone(surface, light);       border-color: tone(border, light); box-shadow: $shadow-light; }
-  @include theme-block-dark { background: tone(background-100, dark); border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
+.home-project {
+  border-radius: $radius-6; overflow: hidden; min-width: 0;
+  @include theme-block { border: 1px solid tone(border, light); box-shadow: $shadow-light; background: tone(surface, light); }
+  @include theme-block-dark { border: 1px solid tone(border, dark); box-shadow: $shadow-dark; background: tone(surface, dark); }
 }
 
-/* Title + subtitle */
-.hero-title {
-  margin: 0 0 $sp-3;
-  font-size: clamp(#{$fs-6}, 2.4vw + 1.2rem, #{$fs-9});
-  line-height: 1.05; letter-spacing: -.01em;
-  @include theme-block      { color: tone(contrast, light); }
-  @include theme-block-dark { color: tone(contrast, dark);  }
-}
-.hero-sub {
-  margin: 0;
-  font-size: clamp(#{$fs-3}, 1vw + .85rem, #{$fs-5});
-  @include theme-block      { color: tone(secondary, light); }
-  @include theme-block-dark { color: tone(secondary, dark);  }
-}
-
-/* CTAs */
-.hero-ctas { margin-top: $sp-5; display: flex; flex-wrap: wrap; gap: $sp-3; }
-.btn-solid, .btn-outline {
-  display: inline-flex; align-items: center; gap: .6rem;
-  min-height: 42px; padding: .55rem 1rem;
-  border-radius: $radius-pill; text-decoration: none; font-weight: $fw-semibold;
-  transition: transform $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out;
-  i { font-size: $fs-4; }
-  &:hover { transform: translateY(-2px); }
-}
-.btn-solid {
-  border: 1px solid transparent;
-  @include theme-block      { background: tone(contrast, light); color: tone(white, light); }
-  @include theme-block-dark { background: tone(contrast, dark);  color: tone(white, dark);  }
-}
-.btn-outline {
-  border: 1px solid;
-  @include theme-block      { color: tone(contrast, light); border-color: tone(border, light); }
-  @include theme-block-dark { color: tone(contrast, dark);  border-color: tone(border, dark);  }
-}
-
-/* Art / cover */
-.hero-art img {
-  width: 100%; height: auto; display: block;
-  border: 1px solid; border-radius: $radius-6;
-  @include theme-block      { border-color: tone(border, light); box-shadow: $shadow-light; }
-  @include theme-block-dark { border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
-}
-.hero-art--cover img {
-  border-radius: $radius-5;
-}
-
-/* Post meta row */
-.hero-meta {
-  display: flex; align-items: center; gap: $sp-2; flex-wrap: wrap;
-  margin-bottom: $sp-4; font-size: $fs-2;
-  @include theme-block      { color: tone(secondary, light); }
-  @include theme-block-dark { color: tone(secondary, dark);  }
-
-  time, .read { display: inline-flex; align-items: center; gap: .4rem; }
-  .dot { opacity: .5; }
-  .cats { display: inline-flex; align-items: center; gap: .25rem; }
-
-  .chip {
-    display: inline-flex; align-items: center; gap: .35rem;
-    padding: .2rem .5rem; border-radius: $radius-pill; border: 1px solid; text-decoration: none;
-    @include theme-block      { color: tone(contrast, light); border-color: tone(border, light); }
-    @include theme-block-dark { color: tone(contrast, dark);  border-color: tone(border, dark);  }
-    &:hover { text-decoration: underline; }
+.home-project-link { text-decoration: none; color: inherit; display: grid; gap: 0; }
+.home-project-thumb {
+  aspect-ratio: 16/9; background: tone(background-100, light);
+  @include theme-block-dark { background: tone(background-200, dark); }
+  img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .home-project-thumb-fallback {
+    display: grid; place-items: center; width: 100%; height: 100%;
+    @include theme-block { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark); }
   }
+}
+.home-project-body { padding: clamp($sp-8, 1.6vw, $sp-16); display: grid; gap: $sp-6; }
+.home-project-title { font-size: $fs-5; font-weight: $fw-semibold; margin: 0; line-height: $lh-tight; }
+.home-project-desc  { font-size: $fs-3; margin: 0; }
+
+/* ---------- EXPERIENCE (Timeline) ---------- */
+.home-experience { padding-block: clamp($sp-12, 6vw, $sp-20); }
+.home-experience-shell { @include container; }
+
+.home-timeline {
+  position: relative; margin: $sp-10 0 0 0; padding: 0; list-style: none;
+  display: grid; gap: $sp-12;
+
+  &::before {
+    content: ""; position: absolute; left: 12px; top: 0; bottom: 0; width: 2px;
+    @include theme-block { background: tone(border, light); }
+    @include theme-block-dark { background: tone(border, dark); }
+  }
+}
+
+.home-timeline-item {
+  position: relative; display: grid; gap: $sp-4; padding-left: $sp-12;
+
+  .dot {
+    position: absolute; left: 3px; top: 2px; width: 18px; height: 18px; border-radius: 50%;
+    @include theme-block { background: tone(background, light); border: 2px solid tone(border, light); }
+    @include theme-block-dark { background: tone(background, dark); border: 2px solid tone(border, dark); }
+  }
+
+  .role { margin: 0; font-size: $fs-5; font-weight: $fw-semibold; }
+  .meta { margin: 0; font-size: $fs-2; @include theme-block { color: tone(secondary, light); } @include theme-block-dark { color: tone(secondary, dark); } }
+  .desc { margin: 0; font-size: $fs-3; }
+}
+
+/* ---------- SKILLS ---------- */
+.home-skills { padding-block: clamp($sp-12, 6vw, $sp-20); }
+.home-skills-shell { @include container; }
+
+.home-skill-chips {
+  display: flex; flex-wrap: wrap; gap: $sp-6; margin: $sp-7 0 0 0; padding: 0; list-style: none;
+
+  li {
+    padding: $sp-4 $sp-7; border-radius: $radius-pill; font-size: $fs-2; line-height: 1;
+    @include theme-block { background: tone(background-100, light); border: 1px solid tone(border, light); color: tone(foreground, light); }
+    @include theme-block-dark { background: tone(background-200, dark); border: 1px solid tone(border, dark); color: tone(foreground, dark); }
+  }
+}
+
+/* ---------- CTA ---------- */
+.home-cta { padding-block: clamp($sp-12, 6vw, $sp-20); }
+.home-cta-shell { @include container; }
+
+.home-cta-card {
+  border-radius: $radius-6; padding: clamp($sp-12, 3vw, $sp-20); text-align: center; backdrop-filter: blur(10px);
+
+  @include theme-block {
+    background-color: tone(surface, light);
+    border: 1px solid tone(border, light);
+    box-shadow: $shadow-light; color: tone(foreground, light);
+  }
+  @include theme-block-dark {
+    background-color: tone(surface, dark);
+    border: 1px solid tone(border, dark);
+    box-shadow: $shadow-dark; color: tone(foreground, dark);
+  }
+}
+
+.home-cta-title { margin: 0 0 $sp-6 0; font-size: $fs-6; font-weight: $fw-semibold; }
+.home-cta-sub   { margin: 0 0 $sp-8 0; font-size: $fs-3; }
+
+.home-cta-actions { display: flex; flex-wrap: wrap; gap: $sp-7; justify-content: center; }
+.btn { @include button-base; }
+.btn-primary {
+  @include theme-block   { background-color: tone(accent, light); color: tone(white, light); border-color: tone(accent, light); }
+  @include theme-block-dark { background-color: tone(accent, dark); color: tone(black, dark); border-color: tone(accent, dark); }
+  &:hover { transform: translateY(-1px); }
+}
+.btn-ghost {
+  @include theme-block   { background: transparent; color: tone(foreground, light); border-color: tone(border, light); }
+  @include theme-block-dark { background: transparent; color: tone(foreground, dark); border-color: tone(border, dark); }
+  &:hover {
+    @include theme-block { background: tone(background-100, light); }
+    @include theme-block-dark { background: tone(background-200, dark); }
+  }
+}
+
+/* ---------- Safety ---------- */
+:where(.home-about, .home-projects, .home-experience, .home-skills, .home-cta) :where(img, video, canvas, svg) {
+  max-width: 100%; height: auto; display: block;
 }
