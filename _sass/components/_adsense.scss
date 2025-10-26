@@ -121,6 +121,7 @@ $rail-edge-gap: $sp-8; // ~1.25rem
   /* Full-height rails, centered content, non-interfering with page clicks */
   .ad-rail {
     position: fixed;
+    height: 100%;
     top: 0;
     bottom: 0;                 // full height
     width: 160px;              // wide skyscraper width
@@ -141,7 +142,7 @@ $rail-edge-gap: $sp-8; // ~1.25rem
     width: 160px;
     max-width: 160px;
     height: 600px;
-    max-height: 600px;
+    max-height: 100%;
     margin: 0;
     display: grid;
     place-items: center;
@@ -151,8 +152,7 @@ $rail-edge-gap: $sp-8; // ~1.25rem
   .ad-rail .ad__slot {
     width: 160px;
     max-width: 160px;
-    height: 600px;
-    min-height: 600px;
+    height: 100%;
     aspect-ratio: auto;        // don’t let aspect-ratio override fixed size
     overflow: hidden;
   }
