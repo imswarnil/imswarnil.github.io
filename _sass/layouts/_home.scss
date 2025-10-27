@@ -1,5 +1,5 @@
 // ======================================================================
-// home-hero.scss — Compact hero w/ tilted image + modal story (blur)
+// home-hero.scss — 9:16 tilted portrait, inline Shorts player on click
 // Depends on: _variables.scss
 // ======================================================================
 
@@ -7,9 +7,10 @@
 
 .home-hero {
   position: relative;
-  padding-block: clamp($sp-12, 6vw, $sp-16); // compact height
+  padding-block: clamp($sp-12, 6vw, $sp-16); // compact hero height
 }
 
+/* Card */
 .home-hero-card {
   position: relative;
   display: grid;
@@ -17,6 +18,7 @@
   gap: clamp($sp-10, 3.5vw, $sp-16);
   border-radius: $radius-6;
   padding: clamp($sp-10, 3vw, $sp-16);
+
   @include theme-block      { background: tone(surface, light);  border: 1px solid rgba(0,0,0,.08); }
   @include theme-block-dark { background: tone(surface, dark);   border: 1px solid rgba(255,255,255,.12); }
 
@@ -30,10 +32,16 @@
 .home-hero-art { order: -1; }
 @include mq-up($bp-lg) { .home-hero-art { order: initial; } }
 
-/* Tilted portrait (3D perspective) */
+/* 9:16 tilted portrait, swappable to video */
 .home-hero-art {
-  position: relative; margin: 0; width: 100%; max-width: 520px; aspect-ratio: 1 / 1;
-  border-radius: $radius-6; overflow: hidden; justify-self: center;
+  position: relative;
+  margin: 0;
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 9 / 16;               // portrait
+  border-radius: $radius-6;
+  overflow: hidden;
+  justify-self: center;
   transform: perspective(1000px) rotateY(-8deg) rotateX(2deg);
   transform-origin: center;
   transition: transform $dur-2 $ease-in-out, box-shadow $dur-2 $ease-in-out;
@@ -41,39 +49,50 @@
   @include theme-block      { background: tone(background-100, light); box-shadow: $shadow-light; }
   @include theme-block-dark { background: tone(background-200, dark);  box-shadow: $shadow-dark;  }
 
-  &:hover {
-    transform: perspective(1000px) rotateY(-4deg) rotateX(1deg) translateY(-2px);
-  }
-
-  img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-  /* subtle scanlines + dust for vintage vibe */
-  &::before {
-    content: ""; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: overlay;
-    background:
-      repeating-linear-gradient(to bottom, rgba(255,255,255,.08) 0px, rgba(255,255,255,.08) 1px, transparent 2px, transparent 3px);
-    animation: hh-scan 6s linear infinite;
-  }
-  &::after {
-    content: ""; position: absolute; inset: 0; pointer-events: none;
-    background:
-      radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,.08) 50%, transparent 51%) repeat,
-      radial-gradient(1px 1px at 70% 60%, rgba(255,255,255,.06) 50%, transparent 51%) repeat,
-      radial-gradient(1px 1px at 40% 80%, rgba(255,255,255,.05) 50%, transparent 51%) repeat;
-    background-size: 120px 120px, 140px 140px, 160px 160px;
-    opacity: .45;
-    animation: hh-dust 3.5s steps(2) infinite;
-  }
+  &:hover { transform: perspective(1000px) rotateY(-4deg) rotateX(1deg) translateY(-2px); }
 }
-@keyframes hh-scan {
-  0%   { transform: translateY(-8%); opacity: .22; }
-  50%  { transform: translateY(8%);  opacity: .30; }
-  100% { transform: translateY(-8%); opacity: .22; }
+
+/* Media fills the box */
+.home-hero-art__media,
+.home-hero-art__img,
+.home-hero-art__video {
+  position: absolute; inset: 0; width: 100%; height: 100%; display: block;
 }
-@keyframes hh-dust {
-  0% { filter: brightness(1); }
-  50% { filter: brightness(1.08); }
-  100% { filter: brightness(1); }
+.home-hero-art__img { object-fit: cover; }
+
+/* Subtle vintage vibe (scanlines + dust) on the art container */
+.home-hero-art::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: overlay;
+  background:
+    repeating-linear-gradient(to bottom,
+      rgba(255,255,255,.08) 0px,
+      rgba(255,255,255,.08) 1px,
+      transparent 2px,
+      transparent 3px);
+  animation: hh-scan 6s linear infinite;
+}
+.home-hero-art::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,.08) 50%, transparent 51%) repeat,
+    radial-gradient(1px 1px at 70% 60%, rgba(255,255,255,.06) 50%, transparent 51%) repeat,
+    radial-gradient(1px 1px at 40% 80%, rgba(255,255,255,.05) 50%, transparent 51%) repeat;
+  background-size: 120px 120px, 140px 140px, 160px 160px;
+  opacity: .45;
+  animation: hh-dust 3.5s steps(2) infinite;
+}
+@keyframes hh-scan { 0% { transform: translateY(-8%); opacity:.22 } 50% { transform: translateY(8%); opacity:.30 } 100% { transform: translateY(-8%); opacity:.22 } }
+@keyframes hh-dust { 0% { filter: brightness(1) } 50% { filter: brightness(1.08) } 100% { filter: brightness(1) } }
+
+/* Video hidden until play */
+.home-hero-art__video { border: 0; opacity: 0; pointer-events: none; transition: opacity $dur-2 $ease-in-out; }
+
+/* When playing: hide image, reveal video */
+.home-hero.is-inline-playing {
+  .home-hero-art__img { opacity: 0; pointer-events: none; transition: opacity $dur-1 $ease-in-out; }
+  .home-hero-art__video { opacity: 1; pointer-events: auto; }
+  .home-hero-art::before { opacity: .08; }  /* soften overlays during video */
+  .home-hero-art::after  { opacity: .12; }
 }
 
 /* Copy */
@@ -85,9 +104,10 @@
   @include theme-block      { color: tone(foreground, light); }
   @include theme-block-dark { color: tone(foreground, dark); }
 }
+
 .home-hero-actions { display: flex; flex-wrap: wrap; gap: $sp-7; align-items: center; .btn { gap: .5em; } }
 
-/* Meta */
+/* Meta row */
 .home-hero-meta {
   margin: 0;
   display: inline-flex; flex-wrap: wrap; align-items: center; gap: $sp-6; font-size: $fs-2; opacity: .9;
@@ -97,7 +117,7 @@
   .home-hero-loc i { margin-right: $sp-4; }
 }
 
-/* Buttons (use your site tokens) */
+/* Buttons: ensure primary stays readable on hover */
 .btn { @include button-base; }
 .button {
   @include theme-block      { background: tone(accent, light); color: tone(white, light); }
@@ -128,33 +148,6 @@
     @include theme-block-dark { background: tone(background-200, dark); }
   }
 }
-
-/* Modal (blur) */
-.home-hero-modal { position: fixed; inset: 0; z-index: $z-modal; display: none; }
-.home-hero-modal[aria-hidden="false"] { display: block; }
-.home-hero-modal__backdrop {
-  position: absolute; inset: 0; backdrop-filter: blur(8px);
-  @include theme-block      { background: rgba(255,255,255,.25); }
-  @include theme-block-dark { background: rgba(0,0,0,.45); }
-}
-.home-hero-modal__dialog {
-  position: relative; z-index: $z-modal + 1;
-  width: calc(100% - 2 * #{$container-gutter});
-  max-width: 960px;
-  margin: 10vh auto;
-  border-radius: $radius-6; overflow: hidden;
-  @include theme-block      { background: tone(surface, light); border: 1px solid rgba(0,0,0,.08); }
-  @include theme-block-dark { background: tone(surface, dark);  border: 1px solid rgba(255,255,255,.12); }
-}
-.home-hero-modal__close {
-  position: absolute; top: $sp-6; right: $sp-6; z-index: 2;
-  @include button-base; min-height: $btn-height-sm; width: $btn-height-sm; padding: 0; border-radius: 50%;
-  @include theme-block      { background: transparent; border-color: tone(border, light); }
-  @include theme-block-dark { background: transparent; border-color: tone(border, dark);  }
-}
-.home-hero-modal__frame,
-.home-hero-modal__frame iframe { width: 100%; aspect-ratio: 16 / 9; display: block; }
-.home-hero-modal__frame iframe { border: 0; }
 
 /* Media safety */
 .home-hero :where(img, video, svg, canvas) { max-width: 100%; height: auto; display: block; }
