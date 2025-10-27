@@ -153,8 +153,8 @@ navigation_header:
   - title: Elements
     url: /elements/
     icon: squares-four
-  - title: Blog
-    url: /blog/
+  - title: Archive
+    url: /archive/
     icon: article
   - title: Categories
     url: /categories/
