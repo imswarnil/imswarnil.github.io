@@ -5,25 +5,12 @@ layout: default
 <section class="home-hero" itemscope itemtype="https://schema.org/Person">
   <div class="container">
     <div class="home-hero-card">
-      <!-- Art FIRST on mobile; 9:16 tilted and swappable to video -->
-      <figure class="home-hero-art" data-story-id="{{ page.story_video_id | default: 'jh89stOKbaw' }}" itemprop="image">
-        <div class="home-hero-art__media">
-          <!-- Image (shown by default) -->
-          <img
-            class="home-hero-art__img"
-            src="{{ page.hero_image | default: 'https://images.pexels.com/photos/10570189/pexels-photo-10570189.jpeg' }}"
-            alt="{{ page.hero_image_alt | default: 'Portrait of the creator' }}"
-            width="720" height="1280" loading="eager" fetchpriority="high" />
-          <!-- Inline player (hidden until play) -->
-          <iframe
-            class="home-hero-art__video"
-            title="My story"
-            src=""
-            allow="autoplay; encrypted-media"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade">
-          </iframe>
-        </div>
+      <!-- Image (first on mobile) -->
+      <figure class="home-hero-art" itemprop="image">
+        <img
+          src="{{ page.hero_image | default: 'https://images.pexels.com/photos/10570189/pexels-photo-10570189.jpeg' }}"
+          alt="{{ page.hero_image_alt | default: 'Portrait of the creator' }}"
+          width="800" height="800" loading="eager" fetchpriority="high" />
       </figure>
 
       <!-- Copy -->
@@ -37,10 +24,7 @@ layout: default
         </h1>
 
         <p class="home-hero-lead" itemprop="description">
-          {{
-            page.hero_subtitle
-            | default: "I build fast, cinematic, and robust experiences—pairing engineering with storytelling."
-          }}
+          {{ page.hero_subtitle | default: "I build fast, cinematic, and robust experiences—pairing engineering with storytelling." }}
         </p>
 
         <nav class="home-hero-actions" aria-label="Primary actions">
@@ -50,20 +34,11 @@ layout: default
           <a class="btn button-transparent" href="{{ '/projects/' | relative_url }}">
             <i class="ph-bold ph-squares-four" aria-hidden="true"></i><span>View projects</span>
           </a>
-          <button
-            class="btn button-ghost home-hero-watch"
-            data-video="{{ page.story_video_id | default: 'jh89stOKbaw' }}"
-            aria-controls="inline-story">
-            <i class="ph-bold ph-play-circle" aria-hidden="true"></i><span>Watch my story</span>
-          </button>
         </nav>
 
         <p class="home-hero-meta" aria-label="Profile details">
-          <img class="home-hero-avatar" src="{{ site.avatarurl | default: site.logo | relative_url }}"
-               alt="" width="28" height="28" loading="lazy">
-          <span class="home-hero-name">
-            {{ site.social.name | default: site.author | default: site.title }}
-          </span>
+          <img class="home-hero-avatar" src="{{ site.avatarurl | default: site.logo | relative_url }}" alt="" width="28" height="28" loading="lazy">
+          <span class="home-hero-name">{{ site.social.name | default: site.author | default: site.title }}</span>
           <span class="home-hero-dot">•</span>
           <span class="home-hero-role">{{ site.work.role | default: 'Software Engineer' }} @ {{ site.work.company | default: 'Imswarnil Studio' }}</span>
           <span class="home-hero-dot">•</span>
@@ -73,31 +48,3 @@ layout: default
     </div>
   </div>
 </section>
-
-<!-- Icons (once per page if not already loaded) -->
-<script defer src="https://unpkg.com/@phosphor-icons/web"></script>
-
-<script>
-(function(){
-  var watchBtn = document.querySelector('.home-hero-watch');
-  var hero     = document.querySelector('.home-hero');
-  var art      = document.querySelector('.home-hero-art');
-  var iframe   = document.querySelector('.home-hero-art__video');
-  var img      = document.querySelector('.home-hero-art__img');
-
-  if (!watchBtn || !hero || !art || !iframe || !img) return;
-
-  function playInline(){
-    var id = watchBtn.getAttribute('data-video') || art.getAttribute('data-story-id') || 'jh89stOKbaw';
-    // Shorts embed works like a normal YT embed with the ID
-    iframe.src = "https://www.youtube.com/embed/" + encodeURIComponent(id) +
-                 "?autoplay=1&mute=0&playsinline=1&rel=0&modestbranding=1";
-    hero.classList.add('is-inline-playing');
-    art.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }
-
-  watchBtn.addEventListener('click', playInline);
-  // Optional: let users tap the image to play too
-  img.addEventListener('click', playInline);
-})();
-</script>
