@@ -175,25 +175,3 @@
   &:active { transform: translateY(0); opacity: .92; }
 }
 
-/* Floating footer strip */
-.footer-strip { margin: $sp-3 0 0 0; }
-.footer-strip-inner {
-  border: 1px solid; border-radius: $radius-pill;
-  min-height: 56px;
-  padding: .5rem clamp($sp-5, 4vw, $sp-8);
-  display: flex; align-items: center; justify-content: space-between; gap: $sp-4; flex-wrap: wrap;
-
-  @include theme-block      { background: tone(background-100, light); border-color: tone(border, light); color: tone(contrast, light); box-shadow: $shadow-light; }
-  @include theme-block-dark { background: tone(background-100, dark);  border-color: tone(border, dark);  color: tone(contrast, dark);  box-shadow: $shadow-dark;  }
-
-  p { margin: 0; font-size: $fs-3; }
-  a { text-decoration: none; font-weight: $fw-medium;
-      @include theme-block      { color: tone(contrast, light); }
-      @include theme-block-dark { color: tone(contrast, dark);  }
-      &:hover { text-decoration: underline; } }
-}
-
-/* Mobile niceties */
-@media (max-width: $bp-sm) {
-  .footer-strip-inner { flex-direction: column; text-align: center; }
-}
