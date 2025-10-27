@@ -1,10 +1,111 @@
 ---
 layout: default
 ---
+
 <div class="container">
-  <article class="article  article--page  content  typeset">
-    <h1>{{ page.title }}</h1>
-    {{ content }}
-  </article>
-  {% if page.aside == true %}{% include site-aside.html %}{% endif %}
+  <div class="page">
+    <div class="page-layout">
+      <!-- Main -->
+      <main class="page-main">
+        <article class="page-article typeset">
+          <h1 class="page-title">{{ page.title }}</h1>
+          {{ content }}
+        </article>
+      </main>
+
+      {% if page.aside != false %}
+      <!-- Aside (sticky on desktop) -->
+      <aside class="page-aside" aria-label="Page sidebar">
+        <!-- About -->
+        <section class="page-card page-card--about">
+          <h3 class="page-card__title">About this site</h3>
+          <p class="page-card__text">{{ site.description }}</p>
+        </section>
+
+        <!-- On this page (auto TOC from h2/h3) -->
+        <section class="page-card page-card--toc" id="page-toc" hidden>
+          <h3 class="page-card__title">On this page</h3>
+          <nav class="page-toc-nav" aria-label="On this page">
+            <ul class="page-toc-list"></ul>
+          </nav>
+        </section>
+
+        <!-- Social -->
+        {% if site.social_links %}
+        <section class="page-card page-card--social">
+          <h3 class="page-card__title">Connect</h3>
+          <ul class="page-social">
+            {% for pair in site.social_links %}
+              {% assign name = pair[0] %}
+              {% assign url  = pair[1] %}
+              {% assign icon = 'link' %}
+              {% case name %}
+                {% when 'Twitter'  %}{% assign icon = 'twitter-logo'  %}
+                {% when 'LinkedIn' %}{% assign icon = 'linkedin-logo' %}
+                {% when 'GitHub'   %}{% assign icon = 'github-logo'   %}
+                {% when 'RSS'      %}{% assign icon = 'rss'           %}
+              {% endcase %}
+              <li class="page-social__item">
+                <a class="page-social__link" href="{{ url }}" target="_blank" rel="me noopener">
+                  <i class="ph-bold ph-{{ icon }}" aria-hidden="true"></i>
+                  <span>{{ name }}</span>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endif %}
+
+        <!-- CTA -->
+        <section class="page-card page-card--cta">
+          <h3 class="page-card__title">Work with me</h3>
+          <p class="page-card__text">Have a project or idea? Let’s make it real.</p>
+          <a class="btn button" href="mailto:{{ site.email | default: 'hello@example.com' }}">
+            <i class="ph-bold ph-paper-plane-tilt" aria-hidden="true"></i>
+            <span>Contact</span>
+          </a>
+        </section>
+      </aside>
+      {% endif %}
+    </div>
+  </div>
 </div>
+
+<!-- Phosphor icons once (if not already loaded globally) -->
+<script defer src="https://unpkg.com/@phosphor-icons/web"></script>
+
+<!-- Tiny TOC generator (h2/h3) -->
+<script>
+(function(){
+  var article = document.querySelector('.page-article');
+  var toc     = document.getElementById('page-toc');
+  if(!article || !toc) return;
+
+  var targets = article.querySelectorAll('h2, h3');
+  if(!targets.length) return;
+
+  var list = toc.querySelector('.page-toc-list');
+  var makeId = function(txt){
+    return String(txt || '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g,'-')
+      .replace(/(^-|-$)/g,'');
+  };
+
+  Array.prototype.forEach.call(targets, function(h){
+    if(!h.id){
+      h.id = makeId(h.textContent);
+    }
+    var li  = document.createElement('li');
+    li.className = 'page-toc-item ' + (h.tagName === 'H3' ? 'is-sub' : 'is-top');
+    var a   = document.createElement('a');
+    a.className = 'page-toc-link';
+    a.href = '#' + h.id;
+    a.textContent = h.textContent;
+    li.appendChild(a);
+    list.appendChild(li);
+  });
+
+  toc.hidden = false;
+})();
+</script>

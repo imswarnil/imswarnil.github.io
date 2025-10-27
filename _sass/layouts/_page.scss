@@ -1,0 +1,152 @@
+// ======================================================================
+// page.scss — Page layout with sticky aside & auto TOC
+// Depends on: _variables.scss
+// ======================================================================
+
+@use "variables" as *;
+
+.page {
+  padding-block: clamp($sp-10, 4vw, $sp-16);
+}
+
+/* Grid: main + optional aside */
+.page-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp($sp-10, 3vw, $sp-16);
+
+  @include mq-up($bp-lg) {
+    grid-template-columns: minmax(0, 1fr) 320px; // main | aside
+    align-items: start;
+  }
+}
+
+/* Main article */
+.page-main { min-width: 0; }
+.page-article {
+  display: block;
+  border-radius: $radius-6;
+  padding: clamp($sp-10, 3vw, $sp-16);
+  border: 1px solid;
+
+  @include theme-block      { background: tone(surface, light);  border-color: tone(border, light);  box-shadow: $shadow-light; }
+  @include theme-block-dark { background: tone(surface, dark);   border-color: tone(border, dark);   box-shadow: $shadow-dark; }
+
+  .page-title {
+    margin: 0 0 $sp-8 0;
+    font-size: clamp($fs-8, 5.6vw, $fs-10);
+    line-height: $lh-tight;
+    font-weight: $fw-bold;
+  }
+
+  /* ensure media never overflows article */
+  :where(img, video, svg, canvas) { max-width: 100%; height: auto; display: block; }
+  table { display: block; overflow-x: auto; }
+}
+
+/* Aside (sticky on desktop) */
+.page-aside {
+  display: none;
+
+  @include mq-up($bp-lg) {
+    display: grid;
+    gap: $sp-8;
+    position: sticky;
+    top: calc(#{$navbar-height} + #{$sp-8});
+    align-self: start;
+  }
+}
+
+/* Reusable glass card */
+.page-card {
+  border-radius: $radius-5;
+  padding: $sp-8;
+  border: 1px solid;
+  box-shadow: $shadow-light;
+
+  @include theme-block      { background: tone(surface, light);  border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(surface, dark);   border-color: tone(border, dark);  box-shadow: $shadow-dark; }
+
+  &__title {
+    margin: 0 0 $sp-6 0;
+    font-size: $fs-5;
+    font-weight: $fw-semibold;
+    line-height: $lh-tight;
+  }
+  &__text {
+    margin: 0 0 $sp-6 0;
+    font-size: $fs-3;
+    @include theme-block      { color: tone(foreground, light); }
+    @include theme-block-dark { color: tone(foreground, dark);  }
+  }
+}
+
+/* TOC */
+.page-toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: $sp-4;
+}
+.page-toc-item.is-sub { padding-left: $sp-6; }
+.page-toc-link {
+  display: block;
+  padding: $sp-4 $sp-5;
+  border-radius: $radius-3;
+  border: 1px solid transparent;
+  text-decoration: none;
+  font-size: $fs-2;
+
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  }
+
+  &:hover {
+    @include theme-block      { background: tone(background-100, light); border-color: tone(border, light); }
+    @include theme-block-dark { background: tone(background-200, dark);  border-color: tone(border, dark);  }
+  }
+}
+
+/* Social list */
+.page-social {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: $sp-5;
+}
+.page-social__link {
+  display: inline-flex;
+  align-items: center;
+  gap: $sp-5;
+  padding: $sp-5 $sp-6;
+  border: 1px solid transparent;
+  border-radius: $radius-3;
+  text-decoration: none;
+  font-size: $fs-3;
+
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  }
+
+  i { font-size: 1.1em; }
+
+  &:hover {
+    @include theme-block      { background: tone(background-100, light); border-color: tone(border, light); }
+    @include theme-block-dark { background: tone(background-200, dark);  border-color: tone(border, dark);  }
+  }
+}
+
+/* CTA button reuse your button tokens */
+.btn { @include button-base; }
+.button {
+  @include theme-block      { background: tone(accent, light); color: tone(white, light); }
+  @include theme-block-dark { background: tone(white, dark);  color: tone(black, dark); }
+  border-color: transparent;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    @include theme-block      { color: tone(white, light); }
+    @include theme-block-dark { color: tone(black, dark); }
+  }
+}
