@@ -1,6 +1,7 @@
 ---
 layout: resume
 title: "Resume — Raja Swarnil Singhai"
+permalink : /resume
 # Identity
 name: "Raja Swarnil Singhai"
 role: "Software Engineer • Filmmaker • Creative Strategist"
@@ -12,7 +13,6 @@ website: "https://imswarnil.com"
 linkedin: "https://www.linkedin.com/in/imswarnil"
 github: "https://github.com/imswarnil"
 youtube: "https://www.youtube.com/@imswarnil"
-
 # Experience timeline
 timeline_hint: "Impact > titles"
 timeline:
