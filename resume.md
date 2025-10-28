@@ -2,6 +2,7 @@
 layout: resume
 title: "Resume — Raja Swarnil Singhai"
 # Identity
+aside : false
 name: "Raja Swarnil Singhai"
 role: "Software Engineer • Filmmaker • Creative Strategist"
 brand_line: "Creative chaos, engineered clean."
