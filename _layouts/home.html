@@ -31,7 +31,7 @@ layout: default
           </div>
         </div>
 
-        <!-- Compact Stats -->
+        <!-- Three square stats -->
         <ul class="home-hero__stats" role="list" aria-label="Quick stats">
           <li class="stat">
             <span class="stat__val">{{ page.stats_youtube | default: '17K+' }}</span>
@@ -45,21 +45,19 @@ layout: default
             <span class="stat__val">{{ page.stats_views | default: '2.4M' }}</span>
             <span class="stat__label">Video Views</span>
           </li>
-          <li class="stat">
-            <span class="stat__val">{{ page.stats_blog | default: '180K' }}</span>
-            <span class="stat__label">Blog Reads</span>
-          </li>
         </ul>
       </div>
 
-      <!-- Art + SOCIAL RAIL -->
-      <figure class="home-hero__art" itemprop="image">
-        <img
-          src="{{ page.hero_image | default: 'https://images.pexels.com/photos/10570189/pexels-photo-10570189.jpeg' }}"
-          alt="{{ page.hero_image_alt | default: 'Portrait of Swarnil Singhai' }}"
-          width="900" height="1200" loading="eager" fetchpriority="high">
+      <!-- Art WRAP (prevents clipping of social rail) -->
+      <div class="home-hero__art-wrap">
+        <figure class="home-hero__art" itemprop="image">
+          <img
+            src="{{ page.hero_image | default: 'https://images.pexels.com/photos/10570189/pexels-photo-10570189.jpeg' }}"
+            alt="{{ page.hero_image_alt | default: 'Portrait of Swarnil Singhai' }}"
+            width="900" height="1200" loading="eager" fetchpriority="high">
+        </figure>
 
-        <!-- Overlapping square islands -->
+        <!-- Social rail positioned relative to WRAP (not clipped) -->
         <ul class="home-hero__social" role="list" aria-label="Social links">
           <li><a href="mailto:{{ site.email | default: 'hello@example.com' }}" aria-label="Email"><i class="ph-bold ph-envelope"></i></a></li>
           <li><a href="{{ site.social_links.GitHub | default: 'https://github.com' }}" aria-label="GitHub"><i class="ph-bold ph-github-logo"></i></a></li>
@@ -67,7 +65,8 @@ layout: default
           <li><a href="{{ site.social_links.Twitter | default: 'https://twitter.com' }}" aria-label="Twitter"><i class="ph-bold ph-twitter-logo"></i></a></li>
           <li><a href="{{ site.social_links.Youtube | default: '/videos/' }}" aria-label="YouTube"><i class="ph-bold ph-youtube-logo"></i></a></li>
         </ul>
-      </figure>
+      </div>
     </div>
   </div>
 </section>
+
