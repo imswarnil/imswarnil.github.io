@@ -1,152 +1,138 @@
 ---
 layout: default
 ---
-
-<!-- ===== HOME: HERO + QUICK LINKS ===== -->
+<!-- Include once if not already on the page -->
 <section class="home-hero" itemscope itemtype="https://schema.org/Person">
   <div class="container">
     <div class="home-hero__grid">
-      <!-- Copy (left) -->
-      <div class="home-hero__copy">
-        <p class="home-hero__kicker" aria-live="polite" aria-atomic="true">
-          <span class="home-hero__hello" id="hello-rotator">Hi, I’m Swarnil Singhai</span>
-          <span class="home-hero__cursor" aria-hidden="true"></span>
-        </p>
-
-        <h1 class="home-hero__title" itemprop="name">
-          Creative Engineer & Filmmaker crafting fast, cinematic experiences.
-        </h1>
-
-        <p class="home-hero__lead" itemprop="description">
-          I blend product thinking, performance-first code, and story to ship work that actually moves metrics—and people.
-        </p>
-
-        <nav class="home-hero__actions" aria-label="Primary actions">
-          <a class="button" href="mailto:{{ site.email | default: 'hello@example.com' }}">
-            <i class="ph-bold ph-paper-plane-tilt" aria-hidden="true"></i><span>Let’s talk</span>
-          </a>
-          <a class="button-transparent" href="{{ '/projects/' | relative_url }}">
-            <i class="ph-bold ph-squares-four" aria-hidden="true"></i><span>View projects</span>
-          </a>
-        </nav>
-
-        <ul class="home-hero__meta" role="list">
-          <li><i class="ph-bold ph-map-pin" aria-hidden="true"></i> {{ site.location | default: 'Bengaluru, India' }}</li>
-          <li><i class="ph-bold ph-briefcase" aria-hidden="true"></i> {{ site.work.role | default: 'Software Engineer' }} @ {{ site.work.company | default: 'Imswarnil Studio' }}</li>
-        </ul>
-      </div>
-
-      <!-- Image (right, tilted toward content side) -->
+      <!-- Art (first on mobile) -->
       <figure class="home-hero__art" itemprop="image">
         <img
           src="{{ page.hero_image | default: 'https://images.pexels.com/photos/10570189/pexels-photo-10570189.jpeg' }}"
           alt="{{ page.hero_image_alt | default: 'Portrait of Swarnil Singhai' }}"
           width="900" height="1200" loading="eager" fetchpriority="high">
       </figure>
+
+      <!-- Copy -->
+      <div class="home-hero__copy">
+        <!-- Rotating “Hi,” only -->
+        <p class="home-hero__hello">
+          <span id="hello-rotator">Hi,</span>
+          <span class="home-hero__cursor" aria-hidden="true"></span>
+        </p>
+
+        <!-- Big name, then smaller descriptor line -->
+        <h1 class="home-hero__name" itemprop="name">I’m Swarnil Singhai</h1>
+        <p class="home-hero__sub">Creative Engineer & Filmmaker</p>
+
+        <!-- Two CTAs as role chips -->
+        <div class="home-hero__chips" role="list">
+          <a class="chip chip--solid" role="listitem" href="{{ '/about/' | relative_url }}">
+            <i class="ph-bold ph-briefcase"></i><span>Software Engineer</span>
+          </a>
+          <a class="chip chip--ghost" role="listitem" href="{{ '/videos/' | relative_url }}">
+            <i class="ph-bold ph-film-slate"></i><span>Creator</span>
+          </a>
+        </div>
+
+        <!-- Bio + description -->
+        <p class="home-hero__lead" itemprop="description">
+          I design and ship fast, cinematic web experiences—where performance, clarity, and story work together.
+        </p>
+
+        <!-- Meta: two lines -->
+        <div class="home-hero__meta">
+          <div class="home-hero__meta-row">
+            <i class="ph-bold ph-identification-badge" aria-hidden="true"></i>
+            <span>Software Engineer @ {{ site.work.company | default: 'Imswarnil Studio' }}</span>
+          </div>
+          <div class="home-hero__meta-row">
+            <i class="ph-bold ph-map-pin" aria-hidden="true"></i>
+            <span>{{ site.location | default: 'Bengaluru, India' }}</span>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Bento quick links -->
+    <!-- Quick links bento (platform-styled) -->
     <section class="home-bento" aria-label="Quick links">
+      <!-- GitHub-style project card -->
+      <a class="home-bento__card home-bento__card--github" href="{{ '/projects/' | relative_url }}">
+        <div class="pl-header">
+          <i class="ph-bold ph-github-logo"></i>
+          <span class="repo">imswarnil/awesome-project</span>
+          <span class="lang"><i class="dot"></i> JS</span>
+        </div>
+        <div class="pl-body">
+          <h3>View my projects</h3>
+          <p>Minimal, fast, and documented builds.</p>
+        </div>
+        <div class="pl-footer">
+          <span><i class="ph ph-star"></i> 1.2k</span>
+          <span><i class="ph ph-git-branch"></i> 84</span>
+          <span><i class="ph ph-clock"></i> Updated recently</span>
+        </div>
+      </a>
+
+      <!-- YouTube-style video card -->
+      <a class="home-bento__card home-bento__card--youtube" href="{{ '/videos/' | relative_url }}">
+        <div class="yt-thumb">
+          <img src="https://picsum.photos/seed/ytnail/640/360" alt="">
+          <span class="yt-duration">08:12</span>
+          <i class="ph-bold ph-play yt-play" aria-hidden="true"></i>
+        </div>
+        <div class="yt-body">
+          <h3>Watch videos</h3>
+          <p>Shorts, docs, and BTS edits.</p>
+        </div>
+      </a>
+
+      <!-- Blog card -->
       <a class="home-bento__card home-bento__card--blog" href="{{ '/blog/' | relative_url }}">
-        <div class="home-bento__icon"><i class="ph-bold ph-article"></i></div>
-        <div class="home-bento__body">
-          <h3>Read the blog</h3>
-          <p>Stories, breakdowns, and experiments.</p>
-        </div>
-        <img class="home-bento__thumb" src="https://picsum.photos/seed/blog/640/360" alt="" loading="lazy">
+        <div class="bl-head"><i class="ph-bold ph-article"></i><span>Read blog</span></div>
+        <h3>Stories & breakdowns</h3>
+        <p>Notes on building, filming, and shipping.</p>
       </a>
 
+      <!-- Resume card -->
       <a class="home-bento__card home-bento__card--resume" href="{{ '/resume/' | relative_url }}">
-        <div class="home-bento__icon"><i class="ph-bold ph-file-text"></i></div>
-        <div class="home-bento__body">
-          <h3>Resume</h3>
-          <p>Experience & wins in one page.</p>
-        </div>
-        <img class="home-bento__thumb" src="https://picsum.photos/seed/resume/640/360" alt="" loading="lazy">
+        <div class="cv-icon"><i class="ph-bold ph-file-text"></i></div>
+        <h3>Resume</h3>
+        <p>Experience, wins, and stack.</p>
       </a>
 
-      <a class="home-bento__card home-bento__card--videos" href="{{ '/videos/' | relative_url }}">
-        <div class="home-bento__icon"><i class="ph-bold ph-youtube-logo"></i></div>
-        <div class="home-bento__body">
-          <h3>Videos</h3>
-          <p>Shorts, docs, and behind-the-scenes.</p>
+      <!-- Shop-style “Products I use” card -->
+      <a class="home-bento__card home-bento__card--shop" href="{{ '/uses/' | relative_url }}">
+        <div class="shop-media">
+          <img src="https://picsum.photos/seed/gear/480/360" alt="">
         </div>
-        <img class="home-bento__thumb" src="https://picsum.photos/seed/video/640/360" alt="" loading="lazy">
-      </a>
-
-      <a class="home-bento__card home-bento__card--contact" href="{{ '/contact/' | relative_url }}">
-        <div class="home-bento__icon"><i class="ph-bold ph-chat-centered-dots"></i></div>
-        <div class="home-bento__body">
-          <h3>Work with me</h3>
-          <p>Consulting, design, and builds.</p>
+        <div class="shop-body">
+          <h3>Products I use</h3>
+          <p>Daily driver gear & apps.</p>
+          <span class="price-tag">Curated list</span>
         </div>
-        <img class="home-bento__thumb" src="https://picsum.photos/seed/work/640/360" alt="" loading="lazy">
       </a>
     </section>
   </div>
-
-  <!-- Type sound (plays at start/end of each language) -->
-  <audio id="type-sfx" preload="auto">
-    <source src="https://www.soundjay.com/communication/typewriter-1.mp3" type="audio/mpeg">
-  </audio>
 </section>
 
 <script>
-  (function () {
-    const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Rotate just the word “Hi,” across languages (no sound)
+  (function(){
     const el = document.getElementById('hello-rotator');
     const cursor = document.querySelector('.home-hero__cursor');
-    const sfx = document.getElementById('type-sfx');
+    if(!el) return;
 
-    if (!el) return;
+    const words = ['Hi,', 'Hola,', 'नमस्ते,', 'ہیلو،', 'Bonjour,', 'Ciao,', 'こんにちは、'];
+    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    const greetings = [
-      'Hi, I’m Swarnil Singhai',
-      'Hola, soy Swarnil Singhai',
-      'नमस्ते, मैं स्वर्णिल सिंहई हूँ',
-      'ہیلو، میں سوارنل سنگھائی ہوں',
-      'Bonjour, je suis Swarnil',
-      'Ciao, sono Swarnil',
-      'こんにちは、スワルニルです'
-    ];
+    if(reduced){ el.textContent = words[0]; if(cursor) cursor.style.display='none'; return; }
 
-    if (prefersReduced) {
-      el.textContent = greetings[0];
-      if (cursor) cursor.style.display = 'none';
-      return;
-    }
-
-    let i = 0, char = 0, typing = true, hold = 900;
-
-    function playClick() {
-      try { sfx.currentTime = 0; sfx.play().catch(()=>{}); } catch(e){}
-    }
-    function stopClick() {
-      try { sfx.pause(); sfx.currentTime = 0; } catch(e){}
-    }
-
-    function tick() {
-      const text = greetings[i];
-
-      if (typing) {
-        if (char === 0) playClick();
-        el.textContent = text.slice(0, char++);
-        if (char <= text.length) return setTimeout(tick, 28);     // typing speed
-        typing = false; stopClick();
-        return setTimeout(tick, hold);
-      } else {
-        // delete
-        el.textContent = text.slice(0, --char);
-        if (char >= 0) return setTimeout(tick, 18);               // delete speed
-        typing = true;
-        i = (i + 1) % greetings.length;
-        return setTimeout(tick, 120);
-      }
-    }
-    setTimeout(tick, 400);
+    let i=0, shown=true;
+    setInterval(()=>{
+      shown = !shown;
+      if(!shown){ el.style.opacity = 0; }
+      else { i=(i+1)%words.length; el.textContent = words[i]; el.style.opacity = 1; }
+    }, 1350);
   })();
 </script>
-
-
-{% include adsense.html type="horizontal" %}
-
