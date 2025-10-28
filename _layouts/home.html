@@ -1,15 +1,13 @@
 ---
 layout: default
 ---
-<!-- Phosphor icons (once per page) -->
-
+<!-- Phosphor icons (only once per page) -->
 <section class="home-hero" itemscope itemtype="https://schema.org/Person">
   <div class="container">
     <div class="home-hero__grid">
-      <!-- Copy (left on desktop) -->
+      <!-- Copy -->
       <div class="home-hero__copy">
         <p class="home-hero__hello">Hi,</p>
-
         <h1 class="home-hero__name" itemprop="name">I’m Swarnil Singhai</h1>
         <p class="home-hero__sub">Creative Engineer &amp; Filmmaker</p>
 
@@ -26,7 +24,7 @@ layout: default
           I build fast, cinematic web experiences—clear UX, measured performance, and a storyteller’s touch.
         </p>
 
-        <!-- Meta (two lines) -->
+        <!-- Meta (company + location) -->
         <div class="home-hero__meta">
           <div class="home-hero__meta-row">
             <i class="ph-bold ph-identification-badge" aria-hidden="true"></i>
@@ -38,29 +36,36 @@ layout: default
           </div>
         </div>
 
-        <!-- Social / contact -->
-        <ul class="home-hero__social" aria-label="Social links" role="list">
-          <li><a href="mailto:{{ site.email | default: 'hello@example.com' }}"><i class="ph-bold ph-envelope"></i>Email</a></li>
-          <li><a href="{{ site.social_links.GitHub | default: 'https://github.com' }}"><i class="ph-bold ph-github-logo"></i>GitHub</a></li>
-          <li><a href="{{ site.social_links.LinkedIn | default: 'https://www.linkedin.com' }}"><i class="ph-bold ph-linkedin-logo"></i>LinkedIn</a></li>
-          <li><a href="{{ site.social_links.Twitter | default: 'https://twitter.com' }}"><i class="ph-bold ph-twitter-logo"></i>Twitter</a></li>
-          <li><a href="{{ site.social_links.Youtube | default: '/videos/' }}"><i class="ph-bold ph-youtube-logo"></i>YouTube</a></li>
+        <!-- Stats -->
+        <ul class="home-hero__stats" role="list" aria-label="Quick stats">
+          <li><i class="ph ph-youtube-logo"></i><span>{{ page.stats_youtube | default: '17K+' }}</span><small>YT Subs</small></li>
+          <li><i class="ph ph-briefcase"></i><span>{{ page.stats_experience | default: '5+ yrs' }}</span><small>Total Exp</small></li>
+          <li><i class="ph ph-eye"></i><span>{{ page.stats_views | default: '2.4M' }}</span><small>Video Views</small></li>
+          <li><i class="ph ph-article"></i><span>{{ page.stats_blog | default: '180K' }}</span><small>Blog Reads</small></li>
         </ul>
       </div>
 
-      <!-- Art (right on desktop, first on mobile) -->
+      <!-- Art + vertical socials -->
       <figure class="home-hero__art" itemprop="image">
         <img
           src="{{ page.hero_image | default: 'https://images.pexels.com/photos/10570189/pexels-photo-10570189.jpeg' }}"
           alt="{{ page.hero_image_alt | default: 'Portrait of Swarnil Singhai' }}"
           width="900" height="1200" loading="eager" fetchpriority="high">
+        <!-- Vertical social rail (sticks to image edge) -->
+        <ul class="home-hero__social" role="list" aria-label="Social links">
+          <li><a href="mailto:{{ site.email | default: 'hello@example.com' }}" aria-label="Email"><i class="ph-bold ph-envelope"></i></a></li>
+          <li><a href="{{ site.social_links.GitHub | default: 'https://github.com' }}" aria-label="GitHub"><i class="ph-bold ph-github-logo"></i></a></li>
+          <li><a href="{{ site.social_links.LinkedIn | default: 'https://www.linkedin.com' }}" aria-label="LinkedIn"><i class="ph-bold ph-linkedin-logo"></i></a></li>
+          <li><a href="{{ site.social_links.Twitter | default: 'https://twitter.com' }}" aria-label="Twitter"><i class="ph-bold ph-twitter-logo"></i></a></li>
+          <li><a href="{{ site.social_links.Youtube | default: '/videos/' }}" aria-label="YouTube"><i class="ph-bold ph-youtube-logo"></i></a></li>
+        </ul>
       </figure>
     </div>
 
-    <!-- QUICK LINKS — two rows, uniform tiles -->
+    <!-- Mosaic quick cards -->
     <section class="home-bento" aria-label="Quick links">
       <!-- Row 1 -->
-      <a class="home-card gh" href="{{ '/projects/' | relative_url }}">
+      <a class="home-card gh span-2" href="{{ '/projects/' | relative_url }}">
         <header class="gh__head">
           <i class="ph-bold ph-github-logo"></i>
           <span class="repo">imswarnil/awesome-project</span>
@@ -78,10 +83,18 @@ layout: default
       </a>
 
       <a class="home-card yt" href="{{ '/videos/' | relative_url }}">
-        <div class="yt__thumb">
-          <img src="https://picsum.photos/seed/yt/640/360" alt="">
-          <span class="yt__duration">08:12</span>
-          <i class="ph-bold ph-play yt__play" aria-hidden="true"></i>
+        <div class="yt__player">
+          <div class="yt__screen">
+            <img src="https://picsum.photos/seed/yt/640/360" alt="">
+            <i class="ph-bold ph-play yt__play" aria-hidden="true"></i>
+            <span class="yt__duration">08:12</span>
+          </div>
+          <div class="yt__controls">
+            <span class="bar"><i style="--val:42%"></i></span>
+            <span class="dots">
+              <i></i><i></i><i></i>
+            </span>
+          </div>
         </div>
         <div class="yt__body">
           <h3>Watch videos</h3>
@@ -106,11 +119,18 @@ layout: default
         <div class="cv__grid">
           <div class="cv__col">
             <h3>Resume</h3>
-            <p>Experience, wins &amp; stack.</p>
+            <p class="small">Experience &nbsp;•&nbsp; Wins &nbsp;•&nbsp; Stack</p>
+            <ul class="cv__bullets" role="list">
+              <li>Twilio — CRM Analytics</li>
+              <li>CPQ automations</li>
+              <li>Story-driven UX</li>
+            </ul>
           </div>
-          <ul class="cv__col cv__list" role="list">
-            <li><i class="ph ph-briefcase"></i> Twilio — CRM Analytics</li>
-            <li><i class="ph ph-rocket"></i> CPQ automations</li>
+          <ul class="cv__col cv__skills" role="list" aria-label="Skills">
+            <li>CRM Analytics</li>
+            <li>SAQL</li>
+            <li>Apex/LWC</li>
+            <li>Next.js</li>
           </ul>
         </div>
       </a>
@@ -128,12 +148,24 @@ layout: default
         </div>
       </a>
 
-      <a class="home-card post" href="{{ '/categories/' | relative_url }}">
-        <div class="post__head">
-          <i class="ph-bold ph-folders"></i><span>Categories</span>
+      <a class="home-card archive" href="{{ '/archive/' | relative_url }}">
+        <div class="archive__wrap">
+          <i class="ph-bold ph-files"></i>
+          <div>
+            <h3>Archive</h3>
+            <p>All posts, neatly indexed.</p>
+          </div>
         </div>
-        <h3 class="post__title">Find by topic</h3>
-        <p class="post__desc">Guides, reviews, trips, &amp; more.</p>
+      </a>
+
+      <a class="home-card about" href="{{ '/about/' | relative_url }}">
+        <div class="about__wrap">
+          <img src="{{ site.avatarurl | default: site.logo | relative_url }}" alt="" class="about__avatar">
+          <div>
+            <h3>About</h3>
+            <p>Who I am &amp; what I’m building.</p>
+          </div>
+        </div>
       </a>
     </section>
   </div>
