@@ -1,6 +1,7 @@
-// home-hero.scss — refined hero; social icons no longer clipped; 3 square stats
+// home.scss — Hero + Bento grid with border-badged icons & perspective hover
 @use "variables" as *;
 
+/* ----------------- HERO ----------------- */
 .home-hero { padding-block: clamp($sp-10, 4.5vw, $sp-14); }
 
 .home-hero__grid {
@@ -67,43 +68,32 @@
   .stat__label { font-size:$fs-1; opacity:.8; }
 }
 
-/* --- Art wrap fixes clipping --- */
-.home-hero__art-wrap{
-  position: relative; /* anchor for social rail */
-  /* create a little breathing room so the rail can overhang without touching content */
-  padding-right: $sp-8;
-
-  @include mq-up($bp-lg){
-    padding-right: $sp-10;
-  }
+/* Art + social */
+.home-hero__art-wrap{ position: relative; padding-right: $sp-8;
+  @include mq-up($bp-lg){ padding-right: $sp-10; }
 }
-
 .home-hero__art{
   margin:0; justify-self:center;
   width: min(92%, 520px); aspect-ratio: 3/4;
-  border-radius: $radius-6;
-  overflow: hidden; /* keeps image nicely masked */
-
+  border-radius: $radius-6; overflow: hidden;
   @include theme-block      { background:tone(background-100, light); border:1px solid tone(border, light); box-shadow:$shadow-light; }
   @include theme-block-dark { background:tone(background-200, dark);  border:1px solid tone(border, dark);  box-shadow:$shadow-dark;  }
-
   img{ width:100%; height:100%; object-fit:cover; object-position:center; display:block; }
 }
-
 @media (min-width: $bp-lg) {
   .home-hero__art { transform: perspective(1200px) rotateY(-4deg); transform-origin:center left; }
   .home-hero__art:hover { transform: perspective(1200px) rotateY(-3deg) translateY(-2px); }
 }
 @media (max-width: $bp-lg) { .home-hero__art { transform:none; } }
 
-/* Overlapping social rail — now positioned on the WRAP (not clipped) */
+/* Overlapping social rail */
 .home-hero__social{
   position:absolute;
-  inset:auto 0 0 auto; /* default bottom-right relative to wrap */
+  inset:auto 0 0 auto;
   display:flex; gap:$sp-5; list-style:none; margin:0; padding:0;
 
-  /* Mobile: sit centered on bottom */
-  left:50%; right:auto; transform:translateX(-50%); bottom:-0.9rem;
+  /* Mobile: center bottom */
+  left:50%; right:auto; transform:translateX(-50%); bottom:-1rem;
 
   li { margin:0; padding:0; }
   a{
@@ -116,21 +106,14 @@
     &:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,.12); }
   }
 }
-
-/* Desktop: vertical rail on right side of image, centered */
 @media (min-width: $bp-lg){
   .home-hero__social{
     top:50%; bottom:auto; left:auto; right:-1.1rem; transform:translateY(-50%);
-    flex-direction:column; gap:$sp-5;
+    flex-direction:column;
   }
 }
 
-/* Media safety */
-.home-hero :where(img,video,svg,canvas){ max-width:100%; height:auto; display:block; }
-
-
-// home-bento.scss — compact 4-tile bento (same size), 2-up mobile, 4-up desktop
-
+/* ----------------- BENTO ----------------- */
 .home-bento { margin-block: clamp($sp-12, 6vw, $sp-16); }
 
 .home-bento__grid {
@@ -144,11 +127,11 @@
 
 .home-bento__tile {
   position: relative;
-  display: grid; grid-template-rows: auto auto auto;
-  justify-items: start; align-content: center; gap: $sp-4;
-  min-height: clamp(110px, 22vw, 150px);
-  padding: clamp($sp-7, 2.5vw, $sp-12);
+  display: grid; gap: $sp-5;
+  min-height: clamp(120px, 22vw, 160px);
+  padding: clamp($sp-8, 2.6vw, $sp-12);
   border-radius: $radius-5; border: 1px solid; text-decoration: none;
+  transform-style: preserve-3d;
 
   transition:
     transform $dur-1 $ease-in-out,
@@ -159,28 +142,68 @@
   @include theme-block      { background: tone(surface, light);  border-color: tone(border, light);  color: tone(contrast, light); box-shadow: $shadow-light; }
   @include theme-block-dark { background: tone(surface, dark);   border-color: tone(border, dark);   color: tone(contrast, dark);  box-shadow: $shadow-dark;  }
 
-  &:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(0,0,0,.12); }
-
-  i{
-    font-size: clamp(1.25rem, 3.5vw, 1.5rem);
-    inline-size: 2.25rem; block-size: 2.25rem; display:grid; place-items:center;
-    border-radius: $radius-3; border: 1px solid;
-
-    @include theme-block      { background: tone(background-100, light); border-color: tone(border, light); color: tone(contrast, light); }
-    @include theme-block-dark { background: tone(background-200, dark);  border-color: tone(border, dark);  color: tone(contrast, dark);  }
-
-    transition: transform $dur-1 $ease-in-out;
+  &:hover {
+    transform: perspective(900px) rotateX(2deg) rotateY(-3deg) translateY(-2px);
+    box-shadow: 0 12px 28px rgba(0,0,0,.16);
   }
-  &:hover i { transform: translateY(-1px); }
 }
 
-.home-bento__title { font-size: clamp($fs-3, 2.2vw, $fs-4); font-weight: $fw-semibold; line-height: $lh-tight; }
-.home-bento__hint  {
-  font-size: $fs-2;
-  @include theme-block      { color: tone(secondary, light); }
-  @include theme-block-dark { color: tone(secondary, dark); }
+/* Corner badge that sits ON the border */
+.home-bento__badge{
+  position:absolute; top:-.85rem; right:-.85rem;
+  inline-size:2.4rem; block-size:2.4rem;
+  display:grid; place-items:center;
+  border-radius:$radius-4; border:1px solid;
+  @include theme-block      { background:tone(background-100, light); border-color:tone(border, light); color:tone(contrast, light); }
+  @include theme-block-dark { background:tone(background-200, dark);  border-color:tone(border, dark);  color:tone(contrast, dark);  }
+  box-shadow: 0 6px 16px rgba(0,0,0,.12);
+  pointer-events:none;
 }
 
+/* --- GitHub style --- */
+.home-bento__tile--github{
+  .gh-head{ display:flex; align-items:center; gap:$sp-5; font-weight:$fw-semibold; }
+  .gh-repo{ font-size:$fs-4; }
+  .gh-meta{ display:flex; align-items:center; gap:$sp-6; font-size:$fs-2; opacity:.9; }
+  .dot{ inline-size:.5rem; block-size:.5rem; border-radius:50%; background: currentColor; display:inline-block; }
+  .spacer{ inline-size:1px; block-size:1rem; background: currentColor; opacity:.2; margin-inline:$sp-4; }
+}
+
+/* --- YouTube style --- */
+.home-bento__tile--video{
+  .yt-frame{ border-radius:$radius-4; overflow:hidden; border:1px solid;
+    @include theme-block      { border-color:tone(border, light); background: tone(background-100, light); }
+    @include theme-block-dark { border-color:tone(border, dark);  background: tone(background-200, dark);  }
+  }
+  .yt-thumb{ aspect-ratio:16/9; background: linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.18)); }
+  .yt-bar{ display:flex; gap:$sp-3; padding:$sp-4; align-items:center; }
+  .yt-dot{ inline-size:.5rem; block-size:.5rem; border-radius:50%; background: currentColor; opacity:.5; }
+  .yt-title{ font-weight:$fw-medium; }
+}
+
+/* --- Blog style --- */
+.home-bento__tile--blog{
+  .blog-head{ display:flex; align-items:center; gap:$sp-5; }
+  .dot{ inline-size:.6rem; block-size:.6rem; border-radius:50%; }
+  .red{   background:#ff5f57; }
+  .amber{ background:#ffbd2e; }
+  .green{ background:#28c840; }
+  .blog-title{ font-weight:$fw-semibold; }
+  .blog-excerpt{
+    margin:0; font-size:$fs-2;
+    @include theme-block      { color:tone(secondary, light); }
+    @include theme-block-dark { color:tone(secondary, dark); }
+  }
+}
+
+/* --- Résumé style --- */
+.home-bento__tile--resume{
+  .cv-two{ display:grid; grid-template-columns:1fr 1fr; gap:$sp-7; }
+  h4{ margin:0 0 $sp-4 0; font-size:$fs-3; }
+  ul{ margin:0; padding-left:1rem; font-size:$fs-2; }
+}
+
+/* Small tweak for very narrow screens */
 @media (max-width: 380px) {
-  .home-bento__tile { padding: $sp-7; min-height: 120px; }
+  .home-bento__tile { padding: $sp-7; min-height: 130px; }
 }

@@ -1,6 +1,3 @@
----
-layout: default
----
 <section class="home-hero" itemscope itemtype="https://schema.org/Person">
   <div class="container">
     <div class="home-hero__grid">
@@ -57,7 +54,7 @@ layout: default
             width="900" height="1200" loading="eager" fetchpriority="high">
         </figure>
 
-        <!-- Social rail positioned relative to WRAP (not clipped) -->
+        <!-- Social rail positioned relative to WRAP -->
         <ul class="home-hero__social" role="list" aria-label="Social links">
           <li><a href="mailto:{{ site.email | default: 'hello@example.com' }}" aria-label="Email"><i class="ph-bold ph-envelope"></i></a></li>
           <li><a href="{{ site.social_links.GitHub | default: 'https://github.com' }}" aria-label="GitHub"><i class="ph-bold ph-github-logo"></i></a></li>
@@ -70,38 +67,79 @@ layout: default
   </div>
 </section>
 
-
+<!-- Quick Actions Bento -->
 <section class="home-bento" aria-label="Quick actions">
   <div class="container">
     <ul class="home-bento__grid" role="list">
+      <!-- GitHub-like Project card -->
       <li class="home-bento__item">
-        <a class="home-bento__tile" href="{{ '/projects/' | relative_url }}">
-          <i class="ph-bold ph-squares-four" aria-hidden="true"></i>
-          <span class="home-bento__title">View Projects</span>
-          <span class="home-bento__hint">GitHub-style overview</span>
+        <a class="home-bento__tile home-bento__tile--github" href="{{ '/projects/' | relative_url }}">
+          <span class="home-bento__badge"><i class="ph-bold ph-squares-four"></i></span>
+          <div class="gh-head">
+            <i class="ph-bold ph-github-logo"></i>
+            <span class="gh-repo">imswarnil / portfolio</span>
+          </div>
+          <div class="gh-meta">
+            <span class="dot"></span> TypeScript • SCSS
+            <span class="spacer"></span>
+            <i class="ph-bold ph-star"></i> 1.2k
+            <i class="ph-bold ph-git-fork"></i> 87
+          </div>
         </a>
       </li>
+
+      <!-- YouTube-like Video card -->
       <li class="home-bento__item">
-        <a class="home-bento__tile" href="{{ '/videos/' | relative_url }}">
-          <i class="ph-bold ph-youtube-logo" aria-hidden="true"></i>
-          <span class="home-bento__title">Watch Videos</span>
-          <span class="home-bento__hint">YouTube-like player</span>
+        <a class="home-bento__tile home-bento__tile--video" href="{{ '/videos/' | relative_url }}">
+          <span class="home-bento__badge"><i class="ph-bold ph-youtube-logo"></i></span>
+          <div class="yt-frame">
+            <div class="yt-thumb"></div>
+            <div class="yt-bar">
+              <span class="yt-dot"></span>
+              <span class="yt-dot"></span>
+              <span class="yt-dot"></span>
+            </div>
+          </div>
+          <div class="yt-title">Latest short: "Script in 60s"</div>
         </a>
       </li>
+
+      <!-- Blog-like Article card -->
       <li class="home-bento__item">
-        <a class="home-bento__tile" href="{{ '/blog/' | relative_url }}">
-          <i class="ph-bold ph-article" aria-hidden="true"></i>
-          <span class="home-bento__title">Read Blog</span>
-          <span class="home-bento__hint">Latest posts & guides</span>
+        <a class="home-bento__tile home-bento__tile--blog" href="{{ '/blog/' | relative_url }}">
+          <span class="home-bento__badge"><i class="ph-bold ph-article"></i></span>
+          <div class="blog-head">
+            <div class="dot red"></div><div class="dot amber"></div><div class="dot green"></div>
+            <span class="blog-title">Cinematic Dev: pacing UI like scenes</span>
+          </div>
+          <p class="blog-excerpt">A filmmaker’s approach to interfaces—beats, transitions, and rhythm.</p>
         </a>
       </li>
+
+      <!-- Resume-like card -->
       <li class="home-bento__item">
-        <a class="home-bento__tile" href="{{ '/resume/' | relative_url }}">
-          <i class="ph-bold ph-identification-badge" aria-hidden="true"></i>
-          <span class="home-bento__title">My Résumé</span>
-          <span class="home-bento__hint">Skills & experience</span>
+        <a class="home-bento__tile home-bento__tile--resume" href="{{ '/resume/' | relative_url }}">
+          <span class="home-bento__badge"><i class="ph-bold ph-identification-badge"></i></span>
+          <div class="cv-two">
+            <div class="cv-col">
+              <h4>Work Summary</h4>
+              <ul>
+                <li>5+ yrs — Salesforce/CPQ</li>
+                <li>50+ dashboards shipped</li>
+              </ul>
+            </div>
+            <div class="cv-col">
+              <h4>Skills</h4>
+              <ul>
+                <li>CRM Analytics</li>
+                <li>Next.js • LWC</li>
+              </ul>
+            </div>
+          </div>
         </a>
       </li>
     </ul>
   </div>
 </section>
+
+<!-- Phosphor (if not already loaded globally) -->
