@@ -2,7 +2,7 @@
 layout: resume
 title: Resume
 permalink: /resume/
-# Optional: override site.data.resume by providing page.resume here.
+
 resume:
   name: Raja Swarnil Singhai
   tagline: Software Engineer • Filmmaker • Creator
@@ -12,41 +12,59 @@ resume:
     email: hello@imswarnil.com
     site: imswarnil.com
     linkedin: /in/imswarnil
-  timeline:
+    github: imswarnil
+    youtube: @ImSwarnil
+
+  experience:
     - icon: ph-buildings
+      company_icon: ph-buildings
+      company_logo: /assets/logos/twilio.png
       role: Software Engineer
       org: Twilio
       when: 2021 — Present
       where: Bangalore
       body: Built AE Quote Dashboards, Conga CPQ automations, and CPQEmbeddedAI prototype to reduce quote time ~28%.
+      points:
+        - Designed reusable CRM Analytics dashboards with SAQL and advanced filtering
+        - Optimized Quote-to-Agreement flow for speed and UX
+        - Partnered with RevOps & Finance; delivered enablement playbooks
       tags: [SAQL, Conga CPQ, Apex, UX]
+
     - icon: ph-film-slate
+      company_icon: ph-film-slate
       role: Filmmaker & Creator
       org: Imswarnil
       when: 2018 — Present
       where: YouTube (17K legacy)
-      body: Travel films and brand stories; relaunching to 1M with Scripts & Trips.
+      body: Travel films and brand stories with Deadpool-style wit and clean cinematic pacing; relaunching to 1M.
+      points:
+        - Directed 20+ films; built thumbnail/ poster system with consistent gridline fades
+        - Audience-focused hooks and narrative beats; “Scripts & Trips” series
       tags: [Story, Editing, Motion]
+
+  education:
     - icon: ph-graduation-cap
-      role: B.Tech, Computer Science
-      org: LNCT
+      degree: B.Tech in Computer Science
+      school: Lakshmi Narain College of Technology
       when: 2016 — 2020
       where: Bhopal
       body: Led film society; built student analytics tools; festival wins.
       tags: [Salesforce, DSA, Cinematics]
+
   steps:
     - title: Discover & Align
-      text: Clarify problem, KPIs, and definition of done.
-      bullets: ["Stakeholder interviews", "Scope & risks mapped"]
+      text: Clarify problem, KPIs, definition of done.
+      bullets: [Stakeholder interviews, Scope & risks mapped]
     - title: Design & Prototype
       text: Low-noise UI and analytics mocks.
-      bullets: ["Wireframes • SAQL sketch", "Accessibility checks"]
+      bullets: [Wireframes • SAQL sketch, Accessibility checks]
     - title: Build & Validate
       text: Iterative shipping with measurement.
-      bullets: ["Dashboards + CPQ automations", "Telemetry & success metrics"]
+      bullets: [Dashboards + CPQ automations, Telemetry & success metrics]
     - title: Rollout & Scale
       text: Documentation and enablement.
-      bullets: ["Playbooks • Training clips", "Post-launch review"]
+      bullets: [Playbooks • Training clips, Post-launch review]
+
   skills:
     - name: Salesforce CRM Analytics
       level: Advanced
@@ -66,6 +84,7 @@ resume:
     - name: Brand & Visual Systems
       level: Advanced
       percent: 84
+
   stats:
     - icon: ph-chart-line-up
       k: Analytics Dashboards
@@ -76,6 +95,7 @@ resume:
     - icon: ph-youtube-logo
       k: YT Subs (legacy)
       v: 17K
+
   links:
     - icon: ph-globe
       label: imswarnil.com
@@ -89,6 +109,7 @@ resume:
     - icon: ph-youtube-logo
       label: YouTube
       href: https://youtube.com/@ImSwarnil
+
   awards:
     - icon: ph-trophy
       title: Trailhead Ranger
@@ -96,10 +117,32 @@ resume:
     - icon: ph-medal
       title: “Wise Owl” (Internal)
       meta: CPQ/Quote Analytics Excellence
+
+  projects:
+    - title: CRM Analytics Academy
+      cover: /assets/projects/academy.jpg
+      meta: Site • Curriculum
+      desc: Membership-ready pages with compact tables and code blocks.
+      tags: [Web, Analytics]
+      demo: https://crm-analytics-academy.com
+      repo: https://github.com/imswarnil/crma-academy
+      time: May 2025
+    - title: Docs Theme (Island UI)
+      cover: /assets/projects/docs.jpg
+      meta: Jekyll • Islands
+      desc: Sticky header, fixed mobile bar, bento panel with keyboard escape.
+      tags: [Web, Jekyll]
+      repo: https://github.com/imswarnil/imswarnil.github.io
+      time: Aug 2025
+    - title: Quote-to-Agreement UX
+      cover: /assets/projects/qta.jpg
+      meta: Flow • UX
+      desc: Guided steps with compact controls and accessible validation.
+      tags: [App, UX]
+      time: Jul 2025
+
   lines:
     - Shipped analytics that reduced quote time by ~28%.
     - Built thumbnail/poster system with consistent gridline fades.
     - Mentors newcomers via Namaste Salesforce Academy.
 ---
-
-

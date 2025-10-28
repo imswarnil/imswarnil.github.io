@@ -2,171 +2,255 @@
 layout: default
 ---
 
-<section class="resume" aria-label="Resume">
-  <h2 class="resume__title">{{ page.title | default: "Resume" }}</h2>
+  <section class="resume" aria-label="Resume">
 
-  <!-- Identity Strip -->
-  <header class="island--strip resume__head">
-    <div class="resume__id">
-      <div class="resume__avatar">
-        <img src="{{ page.resume.avatar | default: site.avatarurl | default: '/assets/avatar.jpg' | relative_url }}" alt="{{ page.resume.name | default: site.title }}">
-      </div>
-      <div class="resume__who">
-        <h1>{{ page.resume.name | default: site.title }}</h1>
-        <p>{{ page.resume.tagline | default: site.job_title | default: "Software Engineer • Filmmaker • Creator" }}</p>
-      </div>
-    </div>
-
-    <div class="resume__meta" role="contentinfo" aria-label="Contact">
-      {%- assign contact = page.resume.contact | default: site.data.resume.contact -%}
-      {%- if contact.location -%}<span><i class="ph ph-map-pin"></i> {{ contact.location }}</span>{%- endif -%}
-      {%- if contact.email -%}<span><i class="ph ph-envelope"></i> {{ contact.email }}</span>{%- endif -%}
-      {%- if contact.site -%}<span><i class="ph ph-globe"></i> {{ contact.site }}</span>{%- endif -%}
-      {%- if contact.linkedin -%}<span><i class="ph ph-linkedin-logo"></i> {{ contact.linkedin }}</span>{%- endif -%}
-    </div>
-  </header>
-
-  <div class="resume__grid">
-    <!-- LEFT: Timeline -->
-    <section class="island" aria-label="Experience Timeline">
-      <div class="sec-head">
-        <i class="ph ph-briefcase"></i>
-        <h3>Experience Timeline</h3>
-        <span class="hint">impact &nbsp;•&nbsp; outcomes</span>
-      </div>
-
-      {%- assign tl = page.resume.timeline | default: site.data.resume.timeline -%}
-      <div class="timeline">
-        <div class="timeline__rail" aria-hidden="true"></div>
-
-        {%- for item in tl -%}
-        <article class="t-item">
-          <span class="t-dot" aria-hidden="true"></span>
-          <span class="t-icon" aria-hidden="true"><i class="ph {{ item.icon | default: 'ph-buildings' }}"></i></span>
-          <div class="t-head">
-            <h4 class="t-role">{{ item.role }}</h4>
-            <span class="t-org"> · {{ item.org }}</span>
-          </div>
-          <div class="t-meta">{{ item.when }} · {{ item.where }}</div>
-          {%- if item.body -%}<div class="t-body">{{ item.body }}</div>{%- endif -%}
-          {%- if item.tags -%}
-          <div class="t-tags">
-            {%- for tg in item.tags -%}<span class="tag">{{ tg }}</span>{%- endfor -%}
-          </div>
-          {%- endif -%}
-        </article>
-        {%- endfor -%}
-      </div>
-    </section>
-
-    <!-- RIGHT: Sidebar -->
-    <aside class="side">
-      <!-- Stats -->
-      <section class="island--soft" aria-label="Quick Stats">
-        {%- assign stats = page.resume.stats | default: site.data.resume.stats -%}
-        {%- for s in stats -%}
-        <div class="fact-row">
-          <div class="fact"><i class="ph {{ s.icon | default: 'ph-chart-line-up' }}"></i></div>
-          <div class="kv">
-            <div class="k">{{ s.k }}</div>
-            <div class="v">{{ s.v }}</div>
-          </div>
+    <!-- ===== Identity / Header ===== -->
+    <header class="resume__head island stack--tight">
+      <div class="resume__id">
+        <div class="resume__avatar">
+          <img src="{{ page.resume.avatar | default: site.avatarurl | default: '/assets/avatar.jpg' | relative_url }}" alt="{{ page.resume.name | default: site.title }}">
         </div>
-        {%- endfor -%}
-      </section>
-
-      <!-- Links -->
-      <section class="island" aria-label="Links">
-        <div class="sec-head" style="padding-bottom:0;border-bottom:none">
-          <h3>Links</h3>
+        <div class="resume__who">
+          <h1>{{ page.resume.name | default: site.title }}</h1>
+          <p>{{ page.resume.tagline | default: site.job_title | default: "Software Engineer • Filmmaker • Creator" }}</p>
         </div>
-        <nav class="links" aria-label="Profiles">
-          {%- assign links = page.resume.links | default: site.data.resume.links -%}
-          {%- for l in links -%}
-          <a href="{{ l.href }}" target="_blank" rel="noopener">
-            <i class="ph {{ l.icon | default: 'ph-link-simple' }}"></i> {{ l.label }}
-          </a>
-          {%- endfor -%}
-        </nav>
-      </section>
+      </div>
 
-      <!-- Awards -->
-      <section class="island" aria-label="Awards">
-        <div class="sec-head" style="padding-bottom:0;border-bottom:none">
-          <h3>Awards</h3>
-        </div>
-        <div class="awards">
-          {%- assign awards = page.resume.awards | default: site.data.resume.awards -%}
-          {%- for a in awards -%}
-          <div class="award">
-            <i class="ph {{ a.icon | default: 'ph-trophy' }}"></i>
-            <div>
-              <p class="title">{{ a.title }}</p>
-              <p class="meta">{{ a.meta }}</p>
+      <div class="resume__meta" role="contentinfo" aria-label="Contact">
+        {%- assign contact = page.resume.contact | default: site.data.resume.contact -%}
+        {%- if contact.location -%}<span><i class="ph ph-map-pin icon-sm"></i> {{ contact.location }}</span>{%- endif -%}
+        {%- if contact.email -%}<span><i class="ph ph-envelope icon-sm"></i> {{ contact.email }}</span>{%- endif -%}
+        {%- if contact.site -%}<span><i class="ph ph-globe icon-sm"></i> {{ contact.site }}</span>{%- endif -%}
+        {%- if contact.linkedin -%}<span><i class="ph ph-linkedin-logo icon-sm"></i> {{ contact.linkedin }}</span>{%- endif -%}
+        {%- if contact.github -%}<span><i class="ph ph-github-logo icon-sm"></i> {{ contact.github }}</span>{%- endif -%}
+        {%- if contact.youtube -%}<span><i class="ph ph-youtube-logo icon-sm"></i> {{ contact.youtube }}</span>{%- endif -%}
+      </div>
+    </header>
+
+    <!-- ===== Main Grid ===== -->
+    <div class="resume__grid">
+      <!-- LEFT COLUMN -->
+      <div class="resume__row">
+
+        <!-- Experience -->
+        <section class="island">
+          <div class="section-head">
+            <i class="ph ph-briefcase icon"></i>
+            <h3>Experience</h3>
+            <span class="hint">impact • outcomes</span>
+          </div>
+          <div class="section-body">
+            {%- assign exp = page.resume.experience | default: site.data.resume.experience -%}
+            <div class="timeline">
+              <div class="timeline__rail" aria-hidden="true"></div>
+
+              {%- for item in exp -%}
+              <article class="t-item">
+                <span class="t-dot" aria-hidden="true"></span>
+                <span class="t-icon" aria-hidden="true"><i class="ph {{ item.icon | default: 'ph-buildings' }}"></i></span>
+
+                <div class="cluster">
+                  {%- if item.company_logo -%}
+                    <span class="company"><img src="{{ item.company_logo | relative_url }}" alt=""><span class="c-name">{{ item.org }}</span></span>
+                  {%- else -%}
+                    <span class="company"><i class="ph {{ item.company_icon | default: 'ph-buildings' }}"></i><span class="c-name">{{ item.org }}</span></span>
+                  {%- endif -%}
+                </div>
+
+                <div class="t-head">
+                  <h4 class="t-role">{{ item.role }}</h4>
+                  <span class="t-org"> · {{ item.org }}</span>
+                </div>
+                <div class="t-meta">{{ item.when }} · {{ item.where }}</div>
+
+                {%- if item.body -%}
+                  <div class="t-body">{{ item.body }}</div>
+                {%- endif -%}
+
+                {%- if item.points -%}
+                  <ul style="margin:0;padding-left:1.25rem">
+                    {%- for p in item.points -%}<li>{{ p }}</li>{%- endfor -%}
+                  </ul>
+                {%- endif -%}
+
+                {%- if item.tags -%}
+                  <div class="t-tags">
+                    {%- for tg in item.tags -%}<span class="tag">{{ tg }}</span>{%- endfor -%}
+                  </div>
+                {%- endif -%}
+              </article>
+              {%- endfor -%}
             </div>
           </div>
-          {%- endfor -%}
-        </div>
-      </section>
-    </aside>
+        </section>
 
-    <!-- Process stepper -->
-    <section class="island" aria-label="Workflow">
-      <div class="sec-head">
-        <i class="ph ph-rocket-launch"></i>
-        <h3>Workflow</h3>
-        <span class="hint">light motion • clear stages</span>
+        <!-- Education -->
+        <section class="island">
+          <div class="section-head">
+            <i class="ph ph-graduation-cap icon"></i>
+            <h3>Education</h3>
+          </div>
+          <div class="section-body">
+            {%- assign edu = page.resume.education | default: site.data.resume.education -%}
+            <div class="timeline">
+              <div class="timeline__rail" aria-hidden="true"></div>
+              {%- for e in edu -%}
+              <article class="t-item">
+                <span class="t-dot" aria-hidden="true"></span>
+                <span class="t-icon" aria-hidden="true"><i class="ph {{ e.icon | default: 'ph-graduation-cap' }}"></i></span>
+                <div class="t-head"><h4 class="t-role">{{ e.degree }}</h4><span class="t-org"> · {{ e.school }}</span></div>
+                <div class="t-meta">{{ e.when }} · {{ e.where }}</div>
+                {%- if e.body -%}<div class="t-body">{{ e.body }}</div>{%- endif -%}
+                {%- if e.tags -%}<div class="t-tags">{% for tg in e.tags %}<span class="tag">{{ tg }}</span>{% endfor %}</div>{%- endif -%}
+              </article>
+              {%- endfor -%}
+            </div>
+          </div>
+        </section>
+
+        <!-- Workflow (Stepper) -->
+        <section class="island">
+          <div class="section-head">
+            <i class="ph ph-rocket-launch icon"></i>
+            <h3>Workflow</h3>
+            <span class="hint">light motion • clear stages</span>
+          </div>
+          <div class="stepper">
+            <ol class="steps" role="list">
+              {%- assign steps = page.resume.steps | default: site.data.resume.steps -%}
+              {%- for st in steps -%}
+              <li class="step">
+                <span class="badge-num">{{ forloop.index }}</span>
+                <div>
+                  <h4>{{ st.title }}</h4>
+                  {%- if st.text -%}<p>{{ st.text }}</p>{%- endif -%}
+                  {%- if st.bullets -%}
+                  <ul style="list-style:disc;margin:$sp-6 0 0;padding-left:1.25rem">
+                    {%- for b in st.bullets -%}<li>{{ b }}</li>{%- endfor -%}
+                  </ul>
+                  {%- endif -%}
+                </div>
+              </li>
+              {%- endfor -%}
+            </ol>
+          </div>
+        </section>
+
       </div>
-      <div class="stepper">
-        <ol class="steps" role="list">
-          {%- assign steps = page.resume.steps | default: site.data.resume.steps -%}
-          {%- for st in steps -%}
-          <li class="step">
-            <span class="badge-num">{{ forloop.index }}</span>
-            <div>
-              <h4>{{ st.title }}</h4>
-              {%- if st.text -%}<p>{{ st.text }}</p>{%- endif -%}
-              {%- if st.bullets -%}
-              <ul class="steps__bullets" style="list-style:none;margin:0;padding:0;display:grid;gap:.4rem;font-size:{{ $fs-2 }};">
-                {%- for b in st.bullets -%}<li>• {{ b }}</li>{%- endfor -%}
-              </ul>
+
+      <!-- RIGHT SIDEBAR -->
+      <aside class="resume__row">
+        <!-- Quick Stats -->
+        <section class="island--soft">
+          <div class="section-head" style="border-bottom:none;padding-bottom:0">
+            <i class="ph ph-chart-line-up icon"></i>
+            <h3>Quick Stats</h3>
+          </div>
+          <div class="stats">
+            {%- assign stats = page.resume.stats | default: site.data.resume.stats -%}
+            {%- for s in stats -%}
+            <div class="stat">
+              <i class="ph {{ s.icon | default: 'ph-sparkle' }} icon"></i>
+              <div class="kv">
+                <div class="k">{{ s.k }}</div>
+                <div class="v">{{ s.v }}</div>
+              </div>
+            </div>
+            {%- endfor -%}
+          </div>
+        </section>
+
+        <!-- Links -->
+        <section class="island">
+          <div class="section-head" style="border-bottom:none;padding-bottom:0">
+            <i class="ph ph-link-simple icon"></i>
+            <h3>Links</h3>
+          </div>
+          <nav class="links" aria-label="Profiles">
+            {%- assign links = page.resume.links | default: site.data.resume.links -%}
+            {%- for l in links -%}
+            <a href="{{ l.href }}" target="_blank" rel="noopener">
+              <i class="ph {{ l.icon | default: 'ph-link-simple' }}"></i> {{ l.label }}
+            </a>
+            {%- endfor -%}
+          </nav>
+        </section>
+
+        <!-- Awards -->
+        <section class="island">
+          <div class="section-head" style="border-bottom:none;padding-bottom:0">
+            <i class="ph ph-trophy icon"></i>
+            <h3>Awards</h3>
+          </div>
+          <div class="awards">
+            {%- assign awards = page.resume.awards | default: site.data.resume.awards -%}
+            {%- for a in awards -%}
+            <div class="award">
+              <i class="ph {{ a.icon | default: 'ph-medal' }} icon"></i>
+              <div>
+                <p class="award__title">{{ a.title }}</p>
+                <p class="award__meta">{{ a.meta }}</p>
+              </div>
+            </div>
+            {%- endfor -%}
+          </div>
+        </section>
+      </aside>
+    </div>
+
+    <!-- PROJECTS ROW (full width) -->
+    <section class="island">
+      <div class="section-head">
+        <i class="ph ph-folders icon"></i>
+        <h3>Projects</h3>
+        <span class="hint">selected work</span>
+      </div>
+      <div class="projects">
+        <div class="projects__grid">
+          {%- assign projects = page.resume.projects | default: site.data.resume.projects -%}
+          {%- for pr in projects -%}
+          <article class="project">
+            {%- if pr.cover -%}
+            <div class="project__media"><img class="project__img" src="{{ pr.cover | relative_url }}" alt=""></div>
+            {%- endif -%}
+            <div class="project__body">
+              <h4 class="project__title">
+                {%- if pr.url -%}<a href="{{ pr.url }}" target="_blank" rel="noopener">{{ pr.title }}</a>{%- else -%}{{ pr.title }}{%- endif -%}
+              </h4>
+              {%- if pr.meta -%}<p class="project__meta">{{ pr.meta }}</p>{%- endif -%}
+              {%- if pr.desc -%}<p>{{ pr.desc }}</p>{%- endif -%}
+              {%- if pr.tags -%}
+              <div class="project__tags">
+                {%- for tg in pr.tags -%}<span class="tag">{{ tg }}</span>{%- endfor -%}
+              </div>
               {%- endif -%}
             </div>
-          </li>
-          {%- endfor -%}
-        </ol>
-      </div>
-    </section>
-
-    <!-- Skills -->
-    <section class="island" aria-label="Skills">
-      <div class="sec-head">
-        <i class="ph ph-seal-check"></i>
-        <h3>Skills</h3>
-        <span class="hint">compact bars</span>
-      </div>
-      <div class="skills">
-        <div class="skill-grid">
-          {%- assign skills = page.resume.skills | default: site.data.resume.skills -%}
-          {%- for sk in skills -%}
-          <div class="skill">
-            <div class="skill__label"><span>{{ sk.name }}</span><span>{{ sk.level }}</span></div>
-            <div class="bar"><i style="--val: {{ sk.percent | default: 60 }}%"></i></div>
-          </div>
+            <div class="project__foot">
+              <span class="cluster">
+                {%- if pr.repo -%}<a href="{{ pr.repo }}" target="_blank" rel="noopener" class="button-transparent"><i class="ph ph-github-logo"></i><span>Repo</span></a>{%- endif -%}
+                {%- if pr.demo -%}<a href="{{ pr.demo }}" target="_blank" rel="noopener" class="button-transparent"><i class="ph ph-arrow-up-right"></i><span>Live</span></a>{%- endif -%}
+              </span>
+              {%- if pr.time -%}<time class="small">{{ pr.time }}</time>{%- endif -%}
+            </div>
+          </article>
           {%- endfor -%}
         </div>
       </div>
     </section>
 
-    <!-- Extras -->
-    <section class="island--soft" aria-label="One-liners">
-      <div class="sec-head" style="padding-bottom:0;border-bottom:none">
+    <!-- One-liners -->
+    <section class="island--soft">
+      <div class="section-head" style="border-bottom:none;padding-bottom:0">
+        <i class="ph ph-sparkle icon"></i>
         <h3>One-liners</h3>
       </div>
-      <ul style="list-style:none;margin:$sp-7 0 0;padding:0;display:grid;gap:$sp-4;">
-        {%- assign lines = page.resume.lines | default: site.data.resume.lines -%}
-        {%- for li in lines -%}<li>• {{ li }}</li>{%- endfor -%}
-      </ul>
+      <div class="section-body" style="padding-top:0">
+        <ul style="list-style:disc;margin:$sp-6 0 0;padding-left:1.25rem">
+          {%- assign lines = page.resume.lines | default: site.data.resume.lines -%}
+          {%- for li in lines -%}<li>{{ li }}</li>{%- endfor -%}
+        </ul>
+      </div>
     </section>
-  </div>
-</section>
+
+  </section>
+
