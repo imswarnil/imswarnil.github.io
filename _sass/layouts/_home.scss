@@ -99,3 +99,101 @@
 */
 
 /* Keep previous hero grid & text styles you already had */
+// ======================================================================
+// home-bento-grid.scss — 4 quick-action tiles, small/equal height
+// Depends on: _variables.scss
+// ======================================================================
+
+
+.home-bento {
+  margin-block: clamp($sp-12, 6vw, $sp-16);
+}
+
+.home-bento__grid {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  display: grid;
+  gap: $sp-7;
+
+  // Mobile: 2-up
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  // Desktop: 4-up
+  @include mq-up($bp-lg) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.home-bento__item { min-width: 0; }
+
+.home-bento__tile {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto auto;
+  justify-items: start;
+  align-content: center;
+  gap: $sp-4;
+
+  // Same smaller height across all cards (responsive)
+  // Not using aspect-ratio so text never overflows vertically.
+  min-height: clamp(110px, 22vw, 160px);
+  padding: clamp($sp-7, 2.5vw, $sp-12);
+
+  border-radius: $radius-5;
+  border: 1px solid;
+  text-decoration: none;
+  transition:
+    transform $dur-1 $ease-in-out,
+    box-shadow $dur-1 $ease-in-out,
+    background-color $dur-1 $ease-in-out,
+    border-color $dur-1 $ease-in-out;
+
+  @include theme-block      { background: tone(surface, light);  border-color: tone(border, light);  color: tone(contrast, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: tone(surface, dark);   border-color: tone(border, dark);   color: tone(contrast, dark);  box-shadow: $shadow-dark;  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(0,0,0,.12);
+  }
+
+  // Icon
+  i {
+    font-size: clamp(1.25rem, 3.5vw, 1.5rem);
+    inline-size: 2.25rem;
+    block-size: 2.25rem;
+    display: grid;
+    place-items: center;
+    border-radius: $radius-3;
+    border: 1px solid;
+
+    @include theme-block      { background: tone(background-100, light); border-color: tone(border, light); color: tone(contrast, light); }
+    @include theme-block-dark { background: tone(background-200, dark);  border-color: tone(border, dark);  color: tone(contrast, dark);  }
+
+    // Subtle icon wiggle on hover
+    transition: transform $dur-1 $ease-in-out;
+  }
+
+  &:hover i { transform: translateY(-1px); }
+}
+
+.home-bento__title {
+  font-size: clamp($fs-3, 2.2vw, $fs-4);
+  font-weight: $fw-semibold;
+  line-height: $lh-tight;
+}
+
+.home-bento__hint {
+  font-size: $fs-2;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+}
+
+/* Tighten spacing on very small screens */
+@media (max-width: 380px) {
+  .home-bento__tile {
+    padding: $sp-7;
+    min-height: 120px;
+  }
+}

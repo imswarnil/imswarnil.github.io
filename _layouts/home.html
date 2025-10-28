@@ -53,3 +53,45 @@ layout: default
     </div>
   </div>
 </section>
+
+
+<section class="home-bento" aria-label="Quick actions">
+  <div class="container">
+    <ul class="home-bento__grid" role="list">
+      <li class="home-bento__item">
+        <a class="home-bento__tile" href="{{ '/projects/' | relative_url }}">
+          <i class="ph-bold ph-squares-four" aria-hidden="true"></i>
+          <span class="home-bento__title">View Projects</span>
+          <span class="home-bento__hint">GitHub-style overview</span>
+        </a>
+      </li>
+
+      <li class="home-bento__item">
+        <a class="home-bento__tile" href="{{ '/videos/' | relative_url }}">
+          <i class="ph-bold ph-youtube-logo" aria-hidden="true"></i>
+          <span class="home-bento__title">Watch Videos</span>
+          <span class="home-bento__hint">YouTube-like player</span>
+        </a>
+      </li>
+
+      <li class="home-bento__item">
+        <a class="home-bento__tile" href="{{ '/blog/' | relative_url }}">
+          <i class="ph-bold ph-article" aria-hidden="true"></i>
+          <span class="home-bento__title">Read Blog</span>
+          <span class="home-bento__hint">Latest posts & guides</span>
+        </a>
+      </li>
+
+      <li class="home-bento__item">
+        <a class="home-bento__tile" href="{{ '/resume/' | relative_url }}">
+          <i class="ph-bold ph-identification-badge" aria-hidden="true"></i>
+          <span class="home-bento__title">My Résumé</span>
+          <span class="home-bento__hint">Skills & experience</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- Include if not already present -->
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
