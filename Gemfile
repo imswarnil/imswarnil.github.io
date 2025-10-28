@@ -4,12 +4,6 @@ source "https://rubygems.org"
 # Core
 gem "jekyll", "~> 4.1"
 
-# Theme (choose one)
-# If this repo is the theme itself and you’re building the example site from it:
-gem "alembic-jekyll-theme", path: "."
-# Or if consuming the published theme:
-# gem "alembic-jekyll-theme", "~> 4.1"
-
 # Plugins (pins from your gemspec)
 group :jekyll_plugins do
   gem "jekyll-sitemap",         "~> 1.4.0"
