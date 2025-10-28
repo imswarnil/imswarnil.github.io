@@ -6,9 +6,17 @@ layout: default
     <div class="home-hero__grid">
       <!-- Copy -->
       <div class="home-hero__copy">
-        <p class="home-hero__hello">Hi,</p>
+        <p class="home-hero__hello">
+          <i class="ph-bold ph-hand-waving" aria-hidden="true"></i>
+          <span>Hi,</span>
+        </p>
+
         <h1 class="home-hero__name" itemprop="name">I’m Swarnil Singhai</h1>
         <p class="home-hero__sub">Creative Engineer &amp; Filmmaker</p>
+        <p class="home-hero__bio">
+          I blend product sense with filmmaking—shipping clean, scalable interfaces and telling
+          stories that actually move people. Bengaluru-based. Coffee-powered. Legacy-chasing.
+        </p>
 
         <nav class="home-hero__cta" aria-label="Primary actions">
           <a class="button" href="mailto:{{ site.email | default: 'hello@example.com' }}">
@@ -31,7 +39,7 @@ layout: default
           </div>
         </div>
 
-        <!-- Three square stats -->
+        <!-- Compact square stats -->
         <ul class="home-hero__stats" role="list" aria-label="Quick stats">
           <li class="stat">
             <span class="stat__val">{{ page.stats_youtube | default: '17K+' }}</span>
@@ -48,16 +56,16 @@ layout: default
         </ul>
       </div>
 
-      <!-- Art WRAP (prevents clipping of social rail) -->
+      <!-- Art WRAP (lets social badges overlap on image border) -->
       <div class="home-hero__art-wrap">
-        <figure class="home-hero__art" itemprop="image">
+        <figure class="home-hero__art" itemprop="image" aria-label="Portrait">
           <img
             src="{{ page.hero_image | default: 'https://images.pexels.com/photos/10570189/pexels-photo-10570189.jpeg' }}"
             alt="{{ page.hero_image_alt | default: 'Portrait of Swarnil Singhai' }}"
             width="900" height="1200" loading="eager" fetchpriority="high">
         </figure>
 
-        <!-- Social rail positioned relative to WRAP -->
+        <!-- Social rail: EXACTLY on the border -->
         <ul class="home-hero__social" role="list" aria-label="Social links">
           <li><a href="mailto:{{ site.email | default: 'hello@example.com' }}" aria-label="Email"><i class="ph-bold ph-envelope"></i></a></li>
           <li><a href="{{ site.social_links.GitHub | default: 'https://github.com' }}" aria-label="GitHub"><i class="ph-bold ph-github-logo"></i></a></li>
@@ -77,9 +85,9 @@ layout: default
       <!-- GitHub-like Project card -->
       <li class="home-bento__item">
         <a class="home-bento__tile home-bento__tile--github" href="{{ '/projects/' | relative_url }}">
-          <span class="home-bento__badge"><i class="ph-bold ph-squares-four"></i></span>
+          <span class="home-bento__badge" aria-hidden="true"><i class="ph-bold ph-github-logo"></i></span>
           <div class="gh-head">
-            <i class="ph-bold ph-github-logo"></i>
+            <i class="ph-bold ph-git-branch"></i>
             <span class="gh-repo">imswarnil / portfolio</span>
           </div>
           <div class="gh-meta">
@@ -94,13 +102,11 @@ layout: default
       <!-- YouTube-like Video card -->
       <li class="home-bento__item">
         <a class="home-bento__tile home-bento__tile--video" href="{{ '/videos/' | relative_url }}">
-          <span class="home-bento__badge"><i class="ph-bold ph-youtube-logo"></i></span>
+          <span class="home-bento__badge" aria-hidden="true"><i class="ph-bold ph-youtube-logo"></i></span>
           <div class="yt-frame">
             <div class="yt-thumb"></div>
             <div class="yt-bar">
-              <span class="yt-dot"></span>
-              <span class="yt-dot"></span>
-              <span class="yt-dot"></span>
+              <span class="yt-dot"></span><span class="yt-dot"></span><span class="yt-dot"></span>
             </div>
           </div>
           <div class="yt-title">Latest short: "Script in 60s"</div>
@@ -110,7 +116,7 @@ layout: default
       <!-- Blog-like Article card -->
       <li class="home-bento__item">
         <a class="home-bento__tile home-bento__tile--blog" href="{{ '/blog/' | relative_url }}">
-          <span class="home-bento__badge"><i class="ph-bold ph-article"></i></span>
+          <span class="home-bento__badge" aria-hidden="true"><i class="ph-bold ph-article"></i></span>
           <div class="blog-head">
             <div class="dot red"></div><div class="dot amber"></div><div class="dot green"></div>
             <span class="blog-title">Cinematic Dev: pacing UI like scenes</span>
@@ -122,10 +128,10 @@ layout: default
       <!-- Resume-like card -->
       <li class="home-bento__item">
         <a class="home-bento__tile home-bento__tile--resume" href="{{ '/resume/' | relative_url }}">
-          <span class="home-bento__badge"><i class="ph-bold ph-identification-badge"></i></span>
+          <span class="home-bento__badge" aria-hidden="true"><i class="ph-bold ph-identification-badge"></i></span>
           <div class="cv-two">
             <div class="cv-col">
-              <h4>Work Summary</h4>
+              <h4>Work</h4>
               <ul>
                 <li>5+ yrs — Salesforce/CPQ</li>
                 <li>50+ dashboards shipped</li>
@@ -145,4 +151,3 @@ layout: default
   </div>
 </section>
 
-<!-- Phosphor (if not already loaded globally) -->
