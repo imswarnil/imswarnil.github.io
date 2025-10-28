@@ -1,155 +1,178 @@
 // ======================================================================
-// home-hero.scss — Clean, compact, responsive hero (no tilt/video)
-// Depends on: _variables.scss
+// home.scss — responsive homepage sections (island style)
+// Depends on: _variables.scss (tokens + mixins)
 // ======================================================================
 
 @use "variables" as *;
 
-.home-hero {
-  position: relative;
-  margin: 0; // kill any accidental top gap
-  padding-block: clamp($sp-10, 4vw, $sp-14); // tighter than before
-
-  &--grid {
-    /* optional subtle grid background */
-    background-image:
-      linear-gradient(to right, rgba(0,0,0,.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(0,0,0,.05) 1px, transparent 1px);
-    background-size: 24px 24px, 24px 24px;
-    background-position: 0 0, 0 0;
-
-    html[data-color-scheme="dark"] & {
-      background-image:
-        linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,.06) 1px, transparent 1px);
-    }
-  }
-
-  /* If your mobile header is fixed and overlaps, add .has-fixed-header to the section */
-  &.has-fixed-header { padding-top: calc(#{$navbar-height} + #{$sp-8}); }
-}
-
-/* Card layout — airy but not boxy */
-.home-hero-card {
-  display: grid;
-  grid-template-columns: 1fr; // mobile
-  gap: clamp($sp-8, 3vw, $sp-12);
+/* Shared island */
+.home-island{
   border-radius: $radius-6;
-  padding: clamp($sp-8, 3vw, $sp-12);
+  border: 1px solid;
+  padding: clamp($sp-10, 3vw, $sp-16);
+  box-shadow: $shadow-light;
 
-  // No heavy "island" slab; keep it light
-  @include theme-block      { background: transparent; border: 0; box-shadow: none; }
-  @include theme-block-dark { background: transparent; border: 0; box-shadow: none; }
-
-  @include mq-up($bp-lg) {
-    grid-template-columns: 1.05fr .95fr; // copy | image
-    align-items: center;
-  }
+  @include theme-block      { background: tone(surface, light);  border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(surface, dark);   border-color: tone(border, dark);  box-shadow: $shadow-dark; }
 }
+.home-island--mini{ padding: clamp($sp-8, 2.4vw, $sp-12); }
 
-/* Image first on mobile */
-.home-hero-art {
-  order: -1;
-  margin: 0;
-  width: 100%;
-  max-width: clamp(240px, 38vw, 420px);
-  aspect-ratio: 1 / 1; // small square keeps height in check
-  border-radius: $radius-6;
-  overflow: hidden;
-  justify-self: center;
+.home-head{
+  display:flex; flex-wrap:wrap; align-items:end; gap:$sp-7; margin-bottom: clamp($sp-7, 2.2vw, $sp-10);
+  .home-title{ margin:0; font-size: clamp($fs-6, 4.8vw, $fs-8); line-height:$lh-tight; }
+  .home-sub{ margin:0; font-size:$fs-3; opacity:.85; }
+}
+.home-link{ margin-left:auto; font-size:$fs-2; }
 
-  @include theme-block      { background: tone(background-100, light); }
+/* Utilities */
+.container { @include container; }
+.home-prose{ display:grid; gap:$sp-6; }
+.home-grid-2{ display:grid; gap: clamp($sp-8, 3vw, $sp-12); grid-template-columns: 1fr; @include mq-up($bp-lg){ grid-template-columns: 1.1fr .9fr; align-items:center; } }
+.home-media img{ width:100%; height:auto; border-radius:$radius-4; display:block; }
+
+/* ---------- HERO ---------- */
+.home-hero{ padding-block: clamp($sp-12, 5vw, $sp-16); }
+.home-hero-card{
+  display:grid; grid-template-columns:1fr; gap: clamp($sp-8, 3vw, $sp-12); align-items:center;
+  @include mq-up($bp-lg){ grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); }
+}
+.home-hero-art{
+  order:-1; margin:0; width:100%; max-width: clamp(300px, 64vw, 640px); aspect-ratio:1/1;
+  border-radius:$radius-6; overflow:hidden; justify-self:center; background: tone(background-100, light);
   @include theme-block-dark { background: tone(background-200, dark); }
-
-  img {
-    width: 100%; height: 100%;
-    object-fit: cover; object-position: center;
-    display: block;
-  }
-
-  @include mq-up($bp-lg) {
-    order: 0; // put after copy on desktop
-    justify-self: end;
-  }
+  img{ width:100%; height:100%; object-fit:cover; object-position:center; display:block; }
+  @include mq-up($bp-lg){ order:0; justify-self:end; }
+}
+.home-hero-copy{ display:grid; gap: clamp($sp-6, 1.6vw, $sp-10); max-width: clamp(36ch, 52vw, 54ch); min-width:0; }
+.home-hero-kicker{ margin:0; font-size:$fs-2; letter-spacing:.04em; text-transform:uppercase; opacity:.85; }
+.home-hero-title{ margin:0; font-weight:$fw-bold; line-height:$lh-tight; font-size: clamp($fs-7, 5.6vw, $fs-10); }
+.home-hero-lead{ margin:0; font-size: clamp($fs-3, 2.2vw, $fs-5); }
+.home-hero-actions{ display:flex; flex-wrap:wrap; gap:$sp-6; }
+.home-hero-meta{
+  display:flex; flex-wrap:wrap; gap:.5rem .75rem; align-items:center; margin:0; font-size:$fs-2; opacity:.9;
+  .home-hero-avatar{ width:28px; height:28px; border-radius:50%; object-fit:cover; }
+  .home-hero-dot{ opacity:.5; }
 }
 
-/* Copy column */
-.home-hero-copy {
-  display: grid;
-  gap: clamp($sp-6, 1.6vw, $sp-10);
-  min-width: 0; // prevent overflow in grid
-}
-.home-hero-kicker {
-  margin: 0;
-  font-size: $fs-2;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-  opacity: .85;
-}
-.home-hero-title {
-  margin: 0;
-  font-weight: $fw-bold;
-  line-height: $lh-tight;
-  font-size: clamp($fs-7, 5.8vw, $fs-10);
-}
-.home-hero-lead {
-  margin: 0;
-  max-width: 60ch;
-  font-size: clamp($fs-3, 2.2vw, $fs-5);
-  @include theme-block      { color: tone(foreground, light); }
-  @include theme-block-dark { color: tone(foreground, dark); }
-}
-
-/* Actions */
-.home-hero-actions {
-  display: flex; flex-wrap: wrap; gap: $sp-6; align-items: center;
-
-  .btn { gap: .5em; }
-}
-
-/* Buttons — keep primary readable; transparent hover fixed */
-.btn { @include button-base; }
-.button {
+/* Buttons (use your button-base) */
+.btn{ @include button-base; }
+.button{
   @include theme-block      { background: tone(accent, light); color: tone(white, light); }
   @include theme-block-dark { background: tone(white, dark);  color: tone(black, dark); }
-  border-color: transparent;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-    @include theme-block      { color: tone(white, light); }
-    @include theme-block-dark { color: tone(black, dark); }
-  }
+  &:hover{ transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,.12); }
 }
-.button-transparent {
+.button-transparent{
   @include button-base; background: transparent;
-
   @include theme-block      { border-color: tone(border, light); color: tone(contrast, light); }
   @include theme-block-dark { border-color: tone(border, dark);  color: tone(contrast, dark);  }
-
-  &:hover {
-    @include theme-block      { background: tone(background-100, light); color: tone(contrast, light); }
-    @include theme-block-dark { background: tone(background-200, dark);  color: tone(contrast, dark);  }
+  &:hover{
+    @include theme-block      { background: tone(background-100, light); }
+    @include theme-block-dark { background: tone(background-200, dark); }
   }
 }
 
-/* Meta row */
-.home-hero-meta {
-  margin: 0;
-  display: inline-flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: $sp-6;
-  font-size: $fs-2;
-  opacity: .9;
+/* ---------- PORTFOLIO ---------- */
+.home-cards{ display:grid; gap: clamp($sp-8, 2.4vw, $sp-12); grid-template-columns: 1fr; @include mq-up($bp-md){ grid-template-columns: repeat(2, minmax(0,1fr)); } @include mq-up($bp-lg){ grid-template-columns: repeat(3, minmax(0,1fr)); } }
+.home-card{ list-style:none; }
+.home-card__link{ display:grid; border-radius:$radius-5; border:1px solid; overflow:hidden; transition:transform $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out;
+  @include theme-block      { background: tone(surface, light);  border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(surface, dark);   border-color: tone(border, dark); }
+}
+.home-card__link:hover{ transform: translateY(-3px); box-shadow:$shadow-light; }
+.home-card__media img{ width:100%; aspect-ratio:16/10; object-fit:cover; display:block; }
+.home-card__body{ padding:$sp-8; display:grid; gap:$sp-4; }
+.home-card__title{ margin:0; font-size:$fs-5; }
+.home-card__meta{ margin:0; font-size:$fs-2; opacity:.7; }
 
-  .home-hero-avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
-  .home-hero-name   { font-weight: $fw-semibold; }
-  .home-hero-dot    { opacity: .55; }
-  .home-hero-loc i  { margin-right: $sp-4; }
+/* ---------- BLOG ---------- */
+.home-list{ list-style:none; margin:0; padding:0; display:grid; gap:$sp-8; }
+.home-post{ display:block; padding:$sp-8; border-radius:$radius-4; border:1px solid;
+  @include theme-block      { background: tone(surface, light);  border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(surface, dark);   border-color: tone(border, dark); }
+}
+.home-post__title{ margin:0 0 $sp-3; font-size:$fs-5; }
+.home-post__meta{ color: tone(secondary, light); @include theme-block-dark { color: tone(secondary, dark); } }
+.home-post__excerpt{ margin:$sp-3 0 0; }
+
+/* ---------- SERVICES ---------- */
+.home-features{ list-style:none; margin:0; padding:0; display:grid; gap:$sp-8; grid-template-columns:1fr;
+  @include mq-up($bp-md){ grid-template-columns: repeat(3, minmax(0,1fr)); }
+}
+.home-features li{ border:1px solid; border-radius:$radius-4; padding:$sp-8; display:grid; gap:$sp-4;
+  @include theme-block      { background: tone(surface, light);  border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(surface, dark);   border-color: tone(border, dark); }
+}
+.home-features i{ font-style:normal; }
+
+/* ---------- SKILLS ---------- */
+.home-tags{ list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:$sp-6; }
+.home-tags li{ padding:.35rem .7rem; border-radius:$radius-pill; border:1px solid;
+  @include theme-block      { background: tone(background-100, light); border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(background-100, dark);  border-color: tone(border, dark); }
 }
 
-/* Media safety */
-.home-hero :where(img, video, svg, canvas) {
-  max-width: 100%; height: auto; display: block;
+/* ---------- TESTIMONIALS ---------- */
+.home-quotes{ list-style:none; margin:0; padding:0; display:grid; gap:$sp-8; grid-template-columns:1fr;
+  @include mq-up($bp-md){ grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+.home-quotes li{ border:1px solid; border-radius:$radius-4; padding:$sp-8;
+  @include theme-block      { background: tone(surface, light);  border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(surface, dark);   border-color: tone(border, dark); }
+}
+.home-quotes blockquote{ margin:0 0 $sp-4; font-size:$fs-4; line-height:$lh-base; }
+.home-quotes cite{ font-size:$fs-2; opacity:.8; }
+
+/* ---------- TIMELINE ---------- */
+.home-steps{ list-style:none; margin:0; padding:0; display:grid; gap:$sp-8; counter-reset: step; }
+.home-steps li{ display:grid; gap:$sp-3; border-left:2px solid; padding-left:$sp-8;
+  @include theme-block      { border-color: tone(border, light); }
+  @include theme-block-dark { border-color: tone(border, dark);  }
+}
+.home-steps li span{ font-weight:$fw-semibold; }
+
+/* ---------- STATS ---------- */
+.home-metrics{ list-style:none; margin:0; padding:0; display:grid; gap:$sp-8; grid-template-columns: repeat(3, minmax(0,1fr)); text-align:center; }
+.home-metrics strong{ display:block; font-size: clamp($fs-7, 6vw, $fs-10); line-height:$lh-tight; }
+.home-metrics span{ display:block; font-size:$fs-2; opacity:.75; }
+
+/* ---------- SPONSORS ---------- */
+.home-logos{ list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:$sp-8; align-items:center; }
+.home-logos img{ display:block; width:auto; height:28px; opacity:.9; }
+
+/* ---------- NEWSLETTER ---------- */
+.home-newsletter__form{ display:flex; flex-wrap:wrap; gap:$sp-6; align-items:center; }
+.home-newsletter__form input{
+  @include input-base;
+  flex:1 1 260px;
+}
+.home-newsletter__form .button{ white-space:nowrap; }
+
+/* ---------- HIRE ---------- */
+.home-cta{ display:grid; gap:$sp-6; text-align:center; }
+.home-cta__actions{ display:flex; gap:$sp-6; justify-content:center; flex-wrap:wrap; }
+
+/* ---------- FAQ ---------- */
+.home-qa{ border:1px solid; border-radius:$radius-4; padding:$sp-6; margin-bottom:$sp-6;
+  @include theme-block      { background: tone(surface, light);  border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(surface, dark);   border-color: tone(border, dark); }
+}
+.home-qa > summary{ cursor:pointer; font-weight:$fw-semibold; margin:-$sp-6; padding:$sp-6; border-radius:$radius-4; }
+.home-qa > p{ margin:$sp-6 0 0; }
+
+/* ---------- CONTACT ---------- */
+.home-socials{ list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:$sp-6; }
+.home-socials a{ display:inline-flex; gap:.5rem; align-items:center; border:1px solid; padding:.5rem .8rem; border-radius:$radius-pill;
+  @include theme-block      { border-color: tone(border, light); }
+  @include theme-block-dark { border-color: tone(border, dark);  }
+}
+
+/* ---------- BRIDGE ---------- */
+.home-bridge__text{ margin:0; font-size:$fs-2; opacity:.8; }
+
+/* Safety: media */
+:where(.home-hero, .home-story, .home-portfolio, .home-video, .home-blog,
+       .home-services, .home-skills, .home-testimonials, .home-timeline,
+       .home-stats, .home-sponsors, .home-newsletter, .home-hire, .home-faq,
+       .home-contact, .home-bridge) :where(img, video, svg, canvas){
+  max-width:100%; height:auto; display:block;
 }
