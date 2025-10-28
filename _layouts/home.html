@@ -1,261 +1,169 @@
 ---
 layout: default
 ---
-<!-- ============================
-HOME — SECTIONS ONLY
-============================ -->
+<!-- HERO — centered, airy, no grid bg, social handles on photo -->
+<section class="home-hero" itemscope itemtype="https://schema.org/Person">
+  <div class="container">
+    <div class="home-hero__wrap">
+      <figure class="home-hero__art" itemprop="image">
+        <img
+          src="{{ page.hero_image | default: 'https://images.pexels.com/photos/10570189/pexels-photo-10570189.jpeg' }}"
+          alt="{{ page.hero_image_alt | default: 'Portrait' }}"
+          width="1200" height="1200" loading="eager" fetchpriority="high">
+        <!-- Social chips around the photo -->
+        {% if site.social_links %}
+        <ul class="home-hero__chips" aria-label="Social links">
+          {% if site.social_links.LinkedIn %}
+          <li><a href="{{ site.social_links.LinkedIn }}" target="_blank" rel="noopener">
+            <i class="ph-bold ph-linkedin-logo" aria-hidden="true"></i><span>LinkedIn</span></a></li>
+          {% endif %}
+          {% if site.social_links.GitHub %}
+          <li><a href="{{ site.social_links.GitHub }}" target="_blank" rel="noopener">
+            <i class="ph-bold ph-github-logo" aria-hidden="true"></i><span>GitHub</span></a></li>
+          {% endif %}
+          {% if site.social_links.Twitter %}
+          <li><a href="{{ site.social_links.Twitter }}" target="_blank" rel="noopener">
+            <i class="ph-bold ph-twitter-logo" aria-hidden="true"></i><span>Twitter</span></a></li>
+          {% endif %}
+        </ul>
+        {% endif %}
+      </figure>
 
-<!-- 0) Hero (no island, subtle grid background) -->
-<section class="home-section home-hero home-bg--grid" itemscope itemtype="https://schema.org/Person">
-<div class="container">
-<div class="home-hero__grid">
- <figure class="home-hero__art" itemprop="image">
-   <img src="{{ page.hero_image | default: 'https://images.pexels.com/photos/10570189/pexels-photo-10570189.jpeg' }}"
-        alt="{{ page.hero_image_alt | default: 'Portrait of the creator' }}"
-        width="1200" height="1200" loading="eager" fetchpriority="high">
- </figure>
-
- <div class="home-hero__copy">
-   <p class="home-hero__kicker" itemprop="jobTitle">
-     {{ site.work.role | default: 'Software Engineer & Filmmaker' }}
-   </p>
-   <h1 class="home-hero__title" itemprop="name">
-     {{ page.hero_title | default: 'Your go-to engineer for impactful projects' }}
-   </h1>
-   <p class="home-hero__lead" itemprop="description">
-     {{ page.hero_subtitle | default: "Fast, cinematic, and robust experiences—built right." }}
-   </p>
-   <nav class="home-hero__actions" aria-label="Primary actions">
-     <a class="btn button" href="mailto:{{ site.email | default: 'hello@example.com' }}">
-       <i class="ph-bold ph-paper-plane-tilt" aria-hidden="true"></i><span>Contact me</span>
-     </a>
-     <a class="btn button-transparent" href="{{ '/projects/' | relative_url }}">
-       <i class="ph-bold ph-squares-four" aria-hidden="true"></i><span>View projects</span>
-     </a>
-   </nav>
-   <p class="home-hero__meta">
-     <img class="home-hero__avatar" src="{{ site.avatarurl | default: site.logo | relative_url }}" alt="" width="28" height="28" loading="lazy">
-     <span class="home-hero__name">{{ site.social.name | default: site.author | default: site.title }}</span>
-     <span class="home-dot">•</span>
-     <span class="home-hero__role">{{ site.work.role | default: 'Software Engineer' }} @ {{ site.work.company | default: 'Imswarnil Studio' }}</span>
-     <span class="home-dot">•</span>
-     <span class="home-hero__loc"><i class="ph-bold ph-map-pin"></i> {{ site.location | default: 'Bengaluru, India' }}</span>
-   </p>
- </div>
-</div>
-</div>
+      <div class="home-hero__copy">
+        <p class="home-hero__kicker" itemprop="jobTitle">
+          {{ site.work.role | default: 'Software Engineer & Filmmaker' }}
+        </p>
+        <h1 class="home-hero__title" itemprop="name">
+          {{ page.hero_title | default: 'Crafting fast, cinematic web experiences' }}
+        </h1>
+        <p class="home-hero__lead" itemprop="description">
+          {{ page.hero_subtitle | default: "Engineering with a filmmaker’s eye—clean systems, sharp stories." }}
+        </p>
+        <nav class="home-hero__actions" aria-label="Primary actions">
+          <a class="btn button" href="mailto:{{ site.email | default: 'hello@example.com' }}">
+            <i class="ph-bold ph-paper-plane-tilt" aria-hidden="true"></i><span>Contact</span>
+          </a>
+          <a class="btn button-transparent" href="{{ '/projects/' | relative_url }}">
+            <i class="ph-bold ph-squares-four" aria-hidden="true"></i><span>Projects</span>
+          </a>
+        </nav>
+        <p class="home-hero__meta">
+          <span class="home-hero__name">{{ site.social.name | default: site.author | default: site.title }}</span>
+          <span class="home-dot">•</span>
+          <span class="home-hero__role">{{ site.work.role | default: 'Software Engineer' }} @ {{ site.work.company | default: 'Imswarnil Studio' }}</span>
+          <span class="home-dot">•</span>
+          <span class="home-hero__loc"><i class="ph-bold ph-map-pin" aria-hidden="true"></i> {{ site.location | default: 'Bengaluru, India' }}</span>
+        </p>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- 1) Story (island) -->
-<section class="home-section home-story">
-<div class="container">
-<article class="home-island">
- <header class="home-head">
-   <h2 class="home-title">Story</h2>
-   <p class="home-sub">Filmmaker brain. Engineer hands. Chaos with purpose.</p>
- </header>
- <div class="home-split-2">
-   <div class="home-prose">
-     <p>{{ page.story_intro | default: "I design experiences that move—balancing performance, storytelling, and clean systems." }}</p>
-     <a class="btn button-transparent" href="{{ '/about/' | relative_url }}"><i class="ph-bold ph-user"></i><span>Read my story</span></a>
-   </div>
-   <figure class="home-media">
-     <img src="{{ page.story_image | default: 'https://picsum.photos/800/600?random=101' }}" alt="About visual" loading="lazy">
-   </figure>
- </div>
-</article>
-</div>
+<!-- WORK SUMMARY — asymmetric split, bullet bars (no card) -->
+<section class="home-work">
+  <div class="container">
+    <header class="home-head">
+      <h2 class="home-title">What I do</h2>
+      <p class="home-sub">Small surface, strong core.</p>
+    </header>
+    <div class="home-work__grid">
+      <ul class="home-bars">
+        <li><span>Design Systems</span><em>Deep tokens, tidy UI</em></li>
+        <li><span>Web Apps</span><em>Next.js / Jekyll / Supabase</em></li>
+        <li><span>CRM Analytics</span><em>Dashboards, data stories</em></li>
+        <li><span>Video</span><em>Script, edit, color</em></li>
+      </ul>
+      <div class="home-work__note">
+        <p>Engineer by trade, filmmaker by obsession. I ship fast, refine faster, and keep the aesthetic tight.</p>
+        <a class="btn button-transparent" href="{{ '/services/' | relative_url }}"><i class="ph-bold ph-briefcase"></i><span>Services</span></a>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- 2) Portfolio (cards on plain background, no island) -->
-<section class="home-section home-portfolio">
-<div class="container">
-<header class="home-head home-head--inline">
- <h2 class="home-title">Selected Projects</h2>
- <a class="home-link" href="{{ '/projects/' | relative_url }}">All projects</a>
-</header>
-<ul class="home-cards">
- {% assign projects = site.projects | default: site.posts | slice: 0,6 %}
- {% for p in projects %}
- <li class="home-card">
-   <a class="home-card__link" href="{{ p.url | relative_url }}">
-     <figure class="home-card__media">
-       <img src="{{ p.image | default: 'https://picsum.photos/640/420?random=' | append: forloop.index }}" alt="{{ p.title | escape }}">
-     </figure>
-     <div class="home-card__body">
-       <h3 class="home-card__title">{{ p.title | default: 'Untitled Project' }}</h3>
-       <p class="home-card__meta">{{ p.tags | array_to_sentence_string }}</p>
-     </div>
-   </a>
- </li>
- {% endfor %}
-</ul>
-</div>
+<!-- PORTFOLIO — masonry via CSS columns (unique look) -->
+<section class="home-portfolio-masonry">
+  <div class="container">
+    <header class="home-head home-head--inline">
+      <h2 class="home-title">Selected Work</h2>
+      <a class="home-link" href="{{ '/projects/' | relative_url }}">All projects</a>
+    </header>
+    <div class="home-masonry" role="list">
+      {% assign projects = site.projects | default: site.posts | slice: 0,9 %}
+      {% for p in projects %}
+      <article class="home-masonry__item" role="listitem">
+        <a href="{{ p.url | relative_url }}">
+          <img src="{{ p.image | default: 'https://picsum.photos/640/420?random=' | append: forloop.index }}"
+               alt="{{ p.title | escape }}">
+          <h3>{{ p.title | default: 'Untitled Project' }}</h3>
+        </a>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
 </section>
 
-<!-- 3) Video Reel (soft band background) -->
-<section class="home-section home-video home-band">
-<div class="container">
-<header class="home-head">
- <h2 class="home-title">Latest Video</h2>
- <p class="home-sub">Cinematic, compact, and to the point.</p>
-</header>
-<div class="home-video__frame">
- <iframe title="YouTube video" loading="lazy" allow="autoplay; encrypted-media"
-   src="https://www.youtube.com/embed/{{ page.reel_id | default: '12o3Zgupu_8' }}?rel=0&modestbranding=1&playsinline=1"></iframe>
-</div>
-</div>
+<!-- CASE SPOTLIGHT — full-bleed stripe with angled mask -->
+<section class="home-spotlight">
+  <div class="container">
+    <div class="home-spotlight__wrap">
+      <figure class="home-spotlight__media">
+        <img src="{{ page.spot_image | default: 'https://picsum.photos/1200/700?random=88' }}" alt="Case visual" loading="lazy">
+      </figure>
+      <div class="home-spotlight__copy">
+        <h2 class="home-title">Case Study: Cinematic Docs</h2>
+        <p class="home-sub">Turning dry docs into watchable, shippable UI.</p>
+        <a class="btn button" href="{{ '/case/cinematic-docs/' | relative_url }}"><i class="ph-bold ph-arrow-right"></i><span>Read</span></a>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- 4) Blog (list, no island) -->
-<section class="home-section home-blog">
-<div class="container">
-<header class="home-head home-head--inline">
- <h2 class="home-title">Latest Writing</h2>
- <a class="home-link" href="{{ '/blog/' | relative_url }}">All posts</a>
-</header>
-<ul class="home-list home-list--posts">
- {% for post in site.posts limit:5 %}
- <li class="home-list__item">
-   <a href="{{ post.url | relative_url }}" class="home-post">
-     <h3 class="home-post__title">{{ post.title }}</h3>
-     <small class="home-post__meta">{{ post.date | date: site.date_format | default: "%d %b %Y" }}</small>
-     <p class="home-post__excerpt">{{ post.excerpt | strip_html | truncatewords: 22 }}</p>
-   </a>
- </li>
- {% endfor %}
-</ul>
-</div>
+<!-- BLOG — horizontal cards with peek (not islands) -->
+<section class="home-blog">
+  <div class="container">
+    <header class="home-head home-head--inline">
+      <h2 class="home-title">Fresh Writing</h2>
+      <a class="home-link" href="{{ '/blog/' | relative_url }}">All posts</a>
+    </header>
+    <ul class="home-blog__list">
+      {% for post in site.posts limit:5 %}
+      <li class="home-blog__item">
+        <a href="{{ post.url | relative_url }}" class="home-blog__card">
+          <h3>{{ post.title }}</h3>
+          <p>{{ post.excerpt | strip_html | truncatewords: 22 }}</p>
+          <small>{{ post.date | date: site.date_format | default: "%d %b %Y" }}</small>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
 </section>
 
-<!-- 5) Services (striped pattern band with mini cards) -->
-<section class="home-section home-services home-bg--stripes">
-<div class="container">
-<header class="home-head"><h2 class="home-title">Services</h2><p class="home-sub">Compact scopes. High impact.</p></header>
-<ul class="home-features">
- <li><i class="ph-bold ph-lightning"></i><h3>Rapid Prototypes</h3><p>Clickable concepts in days.</p></li>
- <li><i class="ph-bold ph-rocket-launch"></i><h3>Launch MVP</h3><p>Small surface, solid core.</p></li>
- <li><i class="ph-bold ph-git-merge"></i><h3>Revamp & Perf</h3><p>Refactors, polish, speed wins.</p></li>
-</ul>
-</div>
+<!-- NEWSLETTER — ribbon -->
+<section class="home-news">
+  <div class="container">
+    <div class="home-news__ribbon">
+      <h2>Newsletter</h2>
+      <form action="#" method="post" class="home-news__form">
+        <input type="email" name="email" placeholder="you@domain.com" required>
+        <button class="btn button" type="submit"><i class="ph-bold ph-envelope"></i><span>Subscribe</span></button>
+      </form>
+    </div>
+  </div>
 </section>
 
-<!-- 6) Skills (chips; plain) -->
-<section class="home-section home-skills">
-<div class="container">
-<header class="home-head"><h2 class="home-title">Skills</h2></header>
-<ul class="home-tags">
- <li>Next.js</li><li>Jekyll</li><li>Supabase</li><li>CRM Analytics</li><li>Salesforce</li>
- <li>Design Systems</li><li>Storytelling</li><li>Video Editing</li>
-</ul>
-</div>
-</section>
-
-<!-- 7) Testimonials (island) -->
-<section class="home-section home-testimonials">
-<div class="container">
-<article class="home-island">
- <header class="home-head"><h2 class="home-title">What people say</h2></header>
- <ul class="home-quotes">
-   <li><blockquote>“Ship-fast energy with filmmaker finesse.”</blockquote><cite>— A Happy Client</cite></li>
-   <li><blockquote>“Design system whisperer. Knows when to cut, when to color.”</blockquote><cite>— Product Lead</cite></li>
- </ul>
-</article>
-</div>
-</section>
-
-<!-- 8) Timeline (line list; plain) -->
-<section class="home-section home-timeline">
-<div class="container">
-<header class="home-head"><h2 class="home-title">Timeline</h2></header>
-<ol class="home-steps">
- <li><span>Now</span><p>Building a lightweight, island-style portfolio.</p></li>
- <li><span>2024</span><p>Shipped client MVPs & internal design systems.</p></li>
- <li><span>Earlier</span><p>Documented software + filmmaking journey.</p></li>
-</ol>
-</div>
-</section>
-
-<!-- 9) Stats (narrow band counters) -->
-<section class="home-section home-stats home-band">
-<div class="container">
-<ul class="home-metrics">
- <li><strong>17k+</strong><span>YT Subscribers</span></li>
- <li><strong>50+</strong><span>Projects</span></li>
- <li><strong>10yrs</strong><span>Across stacks</span></li>
-</ul>
-</div>
-</section>
-
-<!-- 10) Sponsors (logos; plain) -->
-<section class="home-section home-sponsors">
-<div class="container">
-<header class="home-head"><h2 class="home-title">Sponsors</h2></header>
-<ul class="home-logos">
- <li><img src="https://dummyimage.com/120x40/000/fff&text=Brand" alt="Brand 1"></li>
- <li><img src="https://dummyimage.com/120x40/000/fff&text=Brand" alt="Brand 2"></li>
- <li><img src="https://dummyimage.com/120x40/000/fff&text=Brand" alt="Brand 3"></li>
-</ul>
-</div>
-</section>
-
-<!-- 11) Newsletter (island mini) -->
-<section class="home-section home-newsletter">
-<div class="container">
-<article class="home-island home-island--mini">
- <header class="home-head"><h2 class="home-title">Newsletter</h2><p class="home-sub">Short, useful, no spam.</p></header>
- <form class="home-newsletter__form" action="#" method="post">
-   <input type="email" name="email" placeholder="you@domain.com" required>
-   <button class="btn button" type="submit"><i class="ph-bold ph-envelope"></i><span>Subscribe</span></button>
- </form>
-</article>
-</div>
-</section>
-
-<!-- 12) Hire me (large CTA band) -->
-<section class="home-section home-hire home-bg--dots">
-<div class="container">
-<div class="home-cta">
- <h2 class="home-title">Available for select projects</h2>
- <p class="home-sub">Let’s ship something sharp.</p>
- <div class="home-cta__actions">
-   <a class="btn button" href="{{ '/contact/' | relative_url }}"><i class="ph-bold ph-calendar"></i><span>Book a call</span></a>
-   <a class="btn button-transparent" href="{{ '/services/' | relative_url }}"><i class="ph-bold ph-briefcase"></i><span>View services</span></a>
- </div>
-</div>
-</div>
-</section>
-
-<!-- 13) FAQ (plain) -->
-<section class="home-section home-faq">
-<div class="container">
-<header class="home-head"><h2 class="home-title">FAQs</h2></header>
-<details class="home-qa"><summary>How do we start?</summary><p>Quick discovery, scope, and a kickoff sprint.</p></details>
-<details class="home-qa"><summary>What’s your turnaround?</summary><p>Depends on scope; I prefer fast, iterative cycles.</p></details>
-</div>
-</section>
-
-<!-- 14) Contact (chips; plain) -->
-<section class="home-section home-contact">
-<div class="container">
-<header class="home-head"><h2 class="home-title">Contact</h2></header>
-<ul class="home-socials">
- {% if site.social_links.LinkedIn %}<li><a href="{{ site.social_links.LinkedIn }}" target="_blank" rel="noopener"><i class="ph-bold ph-linkedin-logo"></i> LinkedIn</a></li>{% endif %}
- {% if site.social_links.GitHub %}<li><a href="{{ site.social_links.GitHub }}" target="_blank" rel="noopener"><i class="ph-bold ph-github-logo"></i> GitHub</a></li>{% endif %}
- {% if site.social_links.Twitter %}<li><a href="{{ site.social_links.Twitter }}" target="_blank" rel="noopener"><i class="ph-bold ph-twitter-logo"></i> Twitter</a></li>{% endif %}
- <li><a href="mailto:{{ site.email | default: 'hello@example.com' }}"><i class="ph-bold ph-envelope"></i> Email</a></li>
-</ul>
-</div>
-</section>
-
-<!-- 15) Bridge (tiny island) -->
-<section class="home-section home-bridge">
-<div class="container">
-<article class="home-island home-island--mini home-bridge__card">
- <p class="home-bridge__text">Made with craft in {{ site.location | default: 'Bengaluru' }}.</p>
- <a class="btn button-transparent" href="{{ site.repo | default: '#' }}"><i class="ph-bold ph-github-logo"></i><span>Star on GitHub</span></a>
-</article>
-</div>
+<!-- CTA — minimal -->
+<section class="home-cta">
+  <div class="container">
+    <div class="home-cta__box">
+      <h2>Available for select builds</h2>
+      <div class="home-cta__actions">
+        <a class="btn button" href="{{ '/contact/' | relative_url }}"><i class="ph-bold ph-calendar"></i><span>Book a call</span></a>
+        <a class="btn button-transparent" href="{{ '/services/' | relative_url }}"><i class="ph-bold ph-briefcase"></i><span>View services</span></a>
+      </div>
+    </div>
+  </div>
 </section>
 
 

@@ -1,276 +1,203 @@
 // ======================================================================
-// home.scss — airy sections, real spacing, tasteful background patterns
-// Depends on: _variables.scss (tokens + mixins)
+// home.scss — asymmetric, de-boxed sections; centered hero; social chips
+// Depends on: _variables.scss
 // ======================================================================
 
 @use "variables" as *;
 
-/* ------------------ Section rhythm & spacing ------------------ */
-.home-section {
-  padding-block: clamp($sp-12, 6vw, $sp-20);
-}
-.home-section + .home-section {
-  /* consistent space between blocks */
-  margin-top: clamp($sp-10, 4vw, $sp-16);
-}
+/* global spacing between sections */
+.home-hero,
+.home-work,
+.home-portfolio-masonry,
+.home-spotlight,
+.home-blog,
+.home-news,
+.home-cta { padding-block: clamp($sp-12, 6vw, $sp-20); }
 
-/* band: soft tinted backdrop using current theme surface */
-.home-band {
-  position: relative;
-  @include theme-block      { background: tone(background-100, light); }
-  @include theme-block-dark { background: tone(background-100, dark);  }
-}
-
-/* background: subtle grid lines */
-.home-bg--grid {
-  background-image:
-    linear-gradient(to right, rgba(0,0,0,.06) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0,0,0,.06) 1px, transparent 1px);
-  background-size: 22px 22px, 22px 22px;
-  background-position: 0 0, 0 0;
-
-  html[data-color-scheme="dark"] & {
-    background-image:
-      linear-gradient(to right, rgba(255,255,255,.07) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255,255,255,.07) 1px, transparent 1px);
-  }
-}
-
-/* background: gentle diagonal stripes */
-.home-bg--stripes {
-  background-image:
-    repeating-linear-gradient(
-      135deg,
-      rgba(0,0,0,.035) 0 12px,
-      transparent 12px 24px
-    );
-  html[data-color-scheme="dark"] & {
-    background-image:
-      repeating-linear-gradient(
-        135deg,
-        rgba(255,255,255,.035) 0 12px,
-        transparent 12px 24px
-      );
-  }
-}
-
-/* background: dotted field */
-.home-bg--dots {
-  background-image:
-    radial-gradient(currentColor 1px, transparent 1px);
-  background-size: 18px 18px;
-  opacity: .98;
-  @include theme-block      { color: rgba(0,0,0,.08); }
-  @include theme-block-dark { color: rgba(255,255,255,.12); }
-}
-
-/* ------------------ Island card (used selectively) ------------------ */
-.home-island {
-  border-radius: $radius-6;
-  border: 1px solid;
-  padding: clamp($sp-10, 3vw, $sp-16);
-  box-shadow: $shadow-light;
-
-  @include theme-block      { background: tone(surface, light);  border-color: tone(border, light); }
-  @include theme-block-dark { background: tone(surface, dark);   border-color: tone(border, dark);  box-shadow: $shadow-dark; }
-}
-.home-island--mini { padding: clamp($sp-8, 2.4vw, $sp-12); }
-
-/* ------------------ Shared headers & helpers ------------------ */
 .container { @include container; }
-.home-head {
-  display:flex; flex-wrap:wrap; align-items:end; gap:$sp-7;
-  margin-bottom: clamp($sp-7, 2.2vw, $sp-10);
 
-  .home-title { margin:0; font-size: clamp($fs-6, 4.8vw, $fs-8); line-height:$lh-tight; }
-  .home-sub   { margin:0; font-size:$fs-3; opacity:.85; }
+/* ---------------- HERO ---------------- */
+.home-hero {
+  /* soft radial fade (subtle, not a pattern) */
+  background:
+    radial-gradient(1200px 600px at 50% -10%, rgba(0,0,0,.06), transparent 60%);
+  html[data-color-scheme="dark"] & {
+    background:
+      radial-gradient(1200px 600px at 50% -10%, rgba(255,255,255,.06), transparent 60%);
+  }
 }
-.home-head--inline { justify-content: space-between; align-items: end; }
-.home-link { font-size:$fs-2; }
 
-/* split 2 cols */
-.home-split-2 {
-  display:grid; gap: clamp($sp-8, 3vw, $sp-12); grid-template-columns: 1fr;
-  @include mq-up($bp-lg){ grid-template-columns: 1.1fr .9fr; align-items:center; }
-}
-.home-prose { display:grid; gap:$sp-6; }
-.home-media img { width:100%; height:auto; border-radius:$radius-4; display:block; }
+.home-hero__wrap {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp($sp-10, 3.5vw, $sp-16);
+  align-items: center;
+  justify-items: center;
+  text-align: center;
 
-/* ------------------ HERO (no card slab) ------------------ */
-.home-hero { /* background via .home-bg--grid */ }
-.home-hero__grid {
-  display:grid; grid-template-columns: 1fr; gap: clamp($sp-8, 3vw, $sp-12); align-items:center;
-  @include mq-up($bp-lg){ grid-template-columns: minmax(0,.9fr) minmax(0,1.1fr); }
+  @include mq-up($bp-lg) {
+    grid-template-columns: .9fr 1.1fr; /* asymmetry */
+    text-align: left;
+    justify-items: stretch;
+  }
 }
+
+/* centered square image with floating social chips */
 .home-hero__art {
-  order:-1; margin:0; width:100%;
-  max-width: clamp(280px, 62vw, 620px);
+  position: relative;
+  margin: 0;
+  width: 100%;
+  max-width: clamp(280px, 52vw, 520px);
   aspect-ratio: 1 / 1;
-  border-radius:$radius-6; overflow:hidden; justify-self:center;
+  border-radius: $radius-6;
+  overflow: hidden;
   @include theme-block      { background: tone(background-100, light); }
   @include theme-block-dark { background: tone(background-200, dark);  }
-  img { width:100%; height:100%; object-fit:cover; display:block; }
-  @include mq-up($bp-lg){ order:0; justify-self:end; }
-}
-.home-hero__copy { display:grid; gap: clamp($sp-6, 1.6vw, $sp-10); max-width: clamp(36ch, 50vw, 56ch); min-width:0; }
-.home-hero__kicker { margin:0; font-size:$fs-2; letter-spacing:.04em; text-transform:uppercase; opacity:.85; }
-.home-hero__title  { margin:0; font-weight:$fw-bold; line-height:$lh-tight; font-size: clamp($fs-7, 5.6vw, $fs-10); }
-.home-hero__lead   { margin:0; font-size: clamp($fs-3, 2.2vw, $fs-5); opacity:.95; }
-.home-hero__actions { display:flex; flex-wrap:wrap; gap:$sp-6; }
-.home-hero__meta {
-  display:flex; flex-wrap:wrap; gap:.5rem .75rem; align-items:center; margin:0; font-size:$fs-2; opacity:.9;
-  .home-hero__avatar { width:28px; height:28px; border-radius:50%; object-fit:cover; }
-}
-.home-dot { opacity:.5; }
 
-/* Buttons */
-.btn{ @include button-base; }
-.button{
+  img { width: 100%; height: 100%; object-fit: cover; display: block; }
+}
+
+/* social chips arranged around the image */
+.home-hero__chips {
+  position: absolute; inset: 0; pointer-events: none;
+  list-style: none; margin: 0; padding: 0;
+}
+.home-hero__chips li {
+  position: absolute; pointer-events: auto;
+  display: inline-flex; align-items: center; gap: .45rem;
+  font-size: $fs-2; white-space: nowrap;
+  padding: .4rem .7rem; border-radius: $radius-pill; border: 1px solid;
+  backdrop-filter: blur(6px);
+
+  @include theme-block      { background: rgba(255,255,255,.65); border-color: rgba(0,0,0,.12); color: tone(contrast, light); }
+  @include theme-block-dark { background: rgba(20,20,22,.55);    border-color: rgba(255,255,255,.14); color: tone(contrast, dark); }
+}
+
+/* positions (mobile stacked closer) */
+.home-hero__chips li:nth-child(1){ top: 6%;  left: 8%;  }
+.home-hero__chips li:nth-child(2){ top: 12%; right: 6%; }
+.home-hero__chips li:nth-child(3){ bottom: 8%; left: 50%; transform: translateX(-50%); }
+
+@include mq-up($bp-lg) {
+  .home-hero__chips li:nth-child(1){ top: 8%;  left: -6%; }
+  .home-hero__chips li:nth-child(2){ top: 16%; right: -8%; }
+  .home-hero__chips li:nth-child(3){ bottom: 10%; left: 110%; transform: none; }
+}
+
+.home-hero__copy { display: grid; gap: clamp($sp-6, 1.6vw, $sp-10); }
+.home-hero__kicker { margin: 0; font-size: $fs-2; letter-spacing: .04em; text-transform: uppercase; opacity: .85; }
+.home-hero__title  { margin: 0; font-weight: $fw-bold; line-height: $lh-tight; font-size: clamp($fs-7, 5.4vw, $fs-10); }
+.home-hero__lead   { margin: 0; font-size: clamp($fs-3, 2.2vw, $fs-5); opacity: .95; max-width: 60ch; }
+.home-hero__actions { display: flex; gap: $sp-6; flex-wrap: wrap; justify-content: center;
+  @include mq-up($bp-lg){ justify-content: flex-start; }
+}
+.home-hero__meta { margin: 0; display: inline-flex; gap: .6rem .8rem; flex-wrap: wrap; font-size: $fs-2; opacity: .9; }
+.home-dot { opacity: .55; }
+
+/* buttons: ensure primary stays readable on hover */
+.btn { @include button-base; }
+.button {
   @include theme-block      { background: tone(accent, light); color: tone(white, light); }
   @include theme-block-dark { background: tone(white, dark);  color: tone(black, dark); }
-  &:hover{ transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,.12); }
+  &:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,.12); }
 }
-.button-transparent{
+.button-transparent {
   @include button-base; background: transparent;
   @include theme-block      { border-color: tone(border, light); color: tone(contrast, light); }
-  @include theme-block-dark { border-color: tone(border, dark);  color: tone(contrast, dark);  }
-  &:hover{
-    @include theme-block      { background: tone(background-100, light); }
-    @include theme-block-dark { background: tone(background-200, dark); }
-  }
+  @include theme-block-dark { border-color: tone(border, dark);  color: tone(contrast, dark); }
+  &:hover { @include theme-block{ background: tone(background-100, light); }
+            @include theme-block-dark{ background: tone(background-200, dark); } }
 }
 
-/* ------------------ PORTFOLIO (cards, no big box) ------------------ */
-.home-cards {
-  list-style:none; margin:0; padding:0;
-  display:grid; gap: clamp($sp-8, 2.4vw, $sp-12);
-  grid-template-columns: 1fr;
-  @include mq-up($bp-md){ grid-template-columns: repeat(2, minmax(0,1fr)); }
-  @include mq-up($bp-lg){ grid-template-columns: repeat(3, minmax(0,1fr)); }
+/* ---------------- WORK SUMMARY ---------------- */
+.home-work .home-head { margin-bottom: clamp($sp-8, 3vw, $sp-12); }
+.home-work__grid {
+  display: grid; gap: clamp($sp-8, 3vw, $sp-12); grid-template-columns: 1fr;
+  @include mq-up($bp-lg){ grid-template-columns: 1.1fr .9fr; align-items: start; }
 }
-.home-card { list-style:none; }
-.home-card__link {
-  display:grid; border-radius:$radius-5; border:1px solid; overflow:hidden;
-  transition:transform $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out;
-  @include theme-block      { background: tone(surface, light);  border-color: tone(border, light); }
-  @include theme-block-dark { background: tone(surface, dark);   border-color: tone(border, dark); }
+.home-bars {
+  list-style: none; margin: 0; padding: 0; display: grid; gap: $sp-6;
 }
-.home-card__link:hover { transform: translateY(-3px); box-shadow:$shadow-light; }
-.home-card__media img { width:100%; aspect-ratio:16/10; object-fit:cover; display:block; }
-.home-card__body { padding:$sp-8; display:grid; gap:$sp-4; }
-.home-card__title { margin:0; font-size:$fs-5; }
-.home-card__meta  { margin:0; font-size:$fs-2; opacity:.7; }
-
-/* ------------------ VIDEO (within band) ------------------ */
-.home-video__frame {
-  border-radius:$radius-5; overflow:hidden; border:1px solid;
-  @include theme-block      { border-color: tone(border, light); background: tone(surface, light); }
-  @include theme-block-dark { border-color: tone(border, dark);  background: tone(surface, dark);  }
-  iframe { aspect-ratio:16/9; width:100%; height:auto; display:block; border:0; }
+.home-bars li {
+  display: grid; gap: .25rem;
 }
-
-/* ------------------ BLOG ------------------ */
-.home-list{ list-style:none; margin:0; padding:0; display:grid; gap:$sp-8; }
-.home-post{
-  display:block; padding:$sp-8; border-radius:$radius-4; border:1px solid;
-  @include theme-block      { background: tone(surface, light);  border-color: tone(border, light); }
-  @include theme-block-dark { background: tone(surface, dark);   border-color: tone(border, dark); }
-}
-.home-post__title{ margin:0 0 $sp-3; font-size:$fs-5; }
-.home-post__meta{ color: tone(secondary, light); @include theme-block-dark{ color: tone(secondary, dark); } }
-.home-post__excerpt{ margin:$sp-3 0 0; }
-
-/* ------------------ SERVICES (mini cards inside band) ------------------ */
-.home-features{
-  list-style:none; margin:0; padding:0;
-  display:grid; gap:$sp-8; grid-template-columns:1fr;
-  @include mq-up($bp-md){ grid-template-columns: repeat(3, minmax(0,1fr)); }
-}
-.home-features li{
-  border:1px solid; border-radius:$radius-4; padding:$sp-8; display:grid; gap:$sp-4;
-  @include theme-block      { background: tone(surface, light);  border-color: tone(border, light); }
-  @include theme-block-dark { background: tone(surface, dark);   border-color: tone(border, dark); }
-}
-.home-features i{ font-style:normal; }
-
-/* ------------------ SKILLS ------------------ */
-.home-tags{ list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:$sp-6; }
-.home-tags li{
-  padding:.35rem .7rem; border-radius:$radius-pill; border:1px solid;
+.home-bars li span {
+  display: inline-block;
+  border-radius: $radius-pill;
+  padding: .45rem .75rem;
+  border: 1px solid;
   @include theme-block      { background: tone(background-100, light); border-color: tone(border, light); }
   @include theme-block-dark { background: tone(background-100, dark);  border-color: tone(border, dark); }
 }
+.home-bars li em { font-size: $fs-2; opacity: .75; }
+.home-work__note { display: grid; gap: $sp-6; }
 
-/* ------------------ TESTIMONIALS (island) ------------------ */
-.home-quotes{
-  list-style:none; margin:0; padding:0;
-  display:grid; gap:$sp-8; grid-template-columns:1fr;
-  @include mq-up($bp-md){ grid-template-columns: repeat(2, minmax(0,1fr)); }
+/* ---------------- PORTFOLIO MASONRY ---------------- */
+.home-masonry {
+  column-count: 1;
+  column-gap: clamp($sp-8, 2.4vw, $sp-12);
+  @include mq-up($bp-md){ column-count: 2; }
+  @include mq-up($bp-lg){ column-count: 3; }
 }
-.home-quotes li{
-  border:1px solid; border-radius:$radius-4; padding:$sp-8;
-  @include theme-block      { background: tone(surface, light);  border-color: tone(border, light); }
-  @include theme-block-dark { background: tone(surface, dark);   border-color: tone(border, dark); }
-}
-.home-quotes blockquote{ margin:0 0 $sp-4; font-size:$fs-4; line-height:$lh-base; }
-.home-quotes cite{ font-size:$fs-2; opacity:.8; }
+.home-masonry__item {
+  break-inside: avoid; margin: 0 0 clamp($sp-8, 2.4vw, $sp-12);
+  border-radius: $radius-5; overflow: hidden; border: 1px solid;
+  transition: transform $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out;
 
-/* ------------------ TIMELINE ------------------ */
-.home-steps{
-  list-style:none; margin:0; padding:0; display:grid; gap:$sp-8; counter-reset: step;
+  @include theme-block      { background: tone(surface, light); border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(surface, dark);  border-color: tone(border, dark); }
 }
-.home-steps li{
-  display:grid; gap:$sp-3; border-left:2px solid; padding-left:$sp-8;
+.home-masonry__item:hover { transform: translateY(-3px); box-shadow: $shadow-light; }
+.home-masonry__item img { width: 100%; height: auto; display: block; }
+.home-masonry__item h3 { margin: $sp-6; font-size: $fs-4; }
+
+/* ---------------- CASE SPOTLIGHT ---------------- */
+.home-spotlight__wrap {
+  position: relative; display: grid; gap: $sp-8;
+  @include theme-block      { background: linear-gradient(180deg, tone(surface, light), transparent); }
+  @include theme-block-dark { background: linear-gradient(180deg, tone(surface, dark), transparent); }
+  border-radius: $radius-6; overflow: hidden; border: 1px solid;
   @include theme-block      { border-color: tone(border, light); }
   @include theme-block-dark { border-color: tone(border, dark);  }
+  padding: clamp($sp-10, 3vw, $sp-16);
 }
-.home-steps li span{ font-weight:$fw-semibold; }
+.home-spotlight__media img { width: 100%; display: block; aspect-ratio: 16/9; object-fit: cover; border-radius: $radius-4; }
+.home-spotlight__copy { display: grid; gap: $sp-6; }
 
-/* ------------------ STATS (band) ------------------ */
-.home-metrics{
-  list-style:none; margin:0; padding:0;
-  display:grid; gap:$sp-8; grid-template-columns: repeat(3, minmax(0,1fr)); text-align:center;
+/* ---------------- BLOG ---------------- */
+.home-blog__list { list-style: none; margin: 0; padding: 0; display: grid; gap: $sp-8; }
+.home-blog__card {
+  display: block; padding: $sp-8; border-radius: $radius-4; border: 1px solid;
+  @include theme-block      { background: tone(surface, light); border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(surface, dark);  border-color: tone(border, dark); }
 }
-.home-metrics strong{ display:block; font-size: clamp($fs-7, 6vw, $fs-10); line-height:$lh-tight; }
-.home-metrics span{ display:block; font-size:$fs-2; opacity:.75; }
+.home-blog__card h3 { margin: 0 0 $sp-3; font-size: $fs-5; }
+.home-blog__card p  { margin: 0 0 $sp-4; }
+.home-blog__card small { opacity: .7; }
 
-/* ------------------ SPONSORS ------------------ */
-.home-logos{
-  list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:$sp-8; align-items:center;
+/* ---------------- NEWSLETTER — ribbon ---------------- */
+.home-news__ribbon {
+  border-radius: $radius-6; padding: clamp($sp-10, 3vw, $sp-16);
+  border: 1px dashed;
+  @include theme-block      { background: tone(background-100, light); border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(background-100, dark);  border-color: tone(border, dark); }
+  display: grid; gap: $sp-6;
 }
-.home-logos img{ width:auto; height:28px; opacity:.9; display:block; }
+.home-news__form { display: flex; flex-wrap: wrap; gap: $sp-6; }
+.home-news__form input { @include input-base; flex: 1 1 260px; }
+.home-news__form .button { white-space: nowrap; }
 
-/* ------------------ NEWSLETTER ------------------ */
-.home-newsletter__form{ display:flex; flex-wrap:wrap; gap:$sp-6; align-items:center; }
-.home-newsletter__form input{ @include input-base; flex:1 1 260px; }
-.home-newsletter__form .button{ white-space:nowrap; }
-
-/* ------------------ HIRE (centered CTA in dotted bg) ------------------ */
-.home-cta{ display:grid; gap:$sp-6; text-align:center; }
-.home-cta__actions{ display:flex; gap:$sp-6; justify-content:center; flex-wrap:wrap; }
-
-/* ------------------ FAQ ------------------ */
-.home-qa{
-  border:1px solid; border-radius:$radius-4; padding:$sp-6; margin-bottom:$sp-6;
-  @include theme-block      { background: tone(surface, light);  border-color: tone(border, light); }
-  @include theme-block-dark { background: tone(surface, dark);   border-color: tone(border, dark); }
+/* ---------------- CTA ---------------- */
+.home-cta__box {
+  text-align: center; display: grid; gap: $sp-6;
+  padding: clamp($sp-10, 3vw, $sp-16);
+  border-radius: $radius-6; border: 1px solid;
+  @include theme-block      { background: tone(surface, light); border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(surface, dark);  border-color: tone(border, dark); }
 }
-.home-qa > summary{ cursor:pointer; font-weight:$fw-semibold; margin:-$sp-6; padding:$sp-6; border-radius:$radius-4; }
-.home-qa > p{ margin:$sp-6 0 0; }
+.home-cta__actions { display: flex; gap: $sp-6; justify-content: center; flex-wrap: wrap; }
 
-/* ------------------ CONTACT ------------------ */
-.home-socials{ list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:$sp-6; }
-.home-socials a{
-  display:inline-flex; gap:.5rem; align-items:center; border:1px solid; padding:.5rem .8rem; border-radius:$radius-pill;
-  @include theme-block      { border-color: tone(border, light); }
-  @include theme-block-dark { border-color: tone(border, dark);  }
-}
-
-/* ------------------ BRIDGE ------------------ */
-.home-bridge__card { display:flex; align-items:center; justify-content:space-between; gap:$sp-8; flex-wrap:wrap; }
-.home-bridge__text { margin:0; font-size:$fs-2; opacity:.8; }
-
-/* safety */
-:where(.home-section) :where(img,video,svg,canvas){
+/* media safety */
+:where(.home-hero, .home-work, .home-portfolio-masonry, .home-spotlight, .home-blog, .home-news, .home-cta) :where(img,video,svg,canvas){
   max-width:100%; height:auto; display:block;
 }
