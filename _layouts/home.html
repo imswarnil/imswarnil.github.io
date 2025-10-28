@@ -1,219 +1,152 @@
 ---
 layout: default
 ---
-<!-- Requires: Phosphor Icons (once on the page) -->
-<script src="https://unpkg.com/@phosphor-icons/web"></script>
 
-<!-- Swiper CSS/JS (carousel) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-<script defer src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<!-- ===== HOME: HERO + QUICK LINKS ===== -->
+<section class="home-hero" itemscope itemtype="https://schema.org/Person">
+  <div class="container">
+    <div class="home-hero__grid">
+      <!-- Copy (left) -->
+      <div class="home-hero__copy">
+        <p class="home-hero__kicker" aria-live="polite" aria-atomic="true">
+          <span class="home-hero__hello" id="hello-rotator">Hi, I’m Swarnil Singhai</span>
+          <span class="home-hero__cursor" aria-hidden="true"></span>
+        </p>
 
-<!-- GSAP + ScrollTrigger -->
-<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+        <h1 class="home-hero__title" itemprop="name">
+          Creative Engineer & Filmmaker crafting fast, cinematic experiences.
+        </h1>
 
-<!-- Optional smooth scrolling (Lenis) -->
-<script defer src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.38/bundled/lenis.min.js"></script>
+        <p class="home-hero__lead" itemprop="description">
+          I blend product thinking, performance-first code, and story to ship work that actually moves metrics—and people.
+        </p>
 
-<main id="home">
-  <!-- ================== HERO ================== -->
-  <section class="home-hero" itemscope itemtype="https://schema.org/Person">
-    <div class="container">
-      <div class="home-hero__wrap" data-stagger="y">
-        <figure class="home-hero__art" itemprop="image">
-          <img
-            src="{{ page.hero_image | default: 'https://images.pexels.com/photos/10570189/pexels-photo-10570189.jpeg' }}"
-            alt="{{ page.hero_image_alt | default: 'Portrait of the creator' }}"
-            width="1200" height="1200" loading="eager" fetchpriority="high" />
-          <ul class="home-hero__chips" aria-label="Social links">
-            {% if site.social_links.LinkedIn %}
-            <li><a href="{{ site.social_links.LinkedIn }}" target="_blank" rel="noopener">
-              <i class="ph-bold ph-linkedin-logo" aria-hidden="true"></i><span>LinkedIn</span>
-            </a></li>{% endif %}
-            {% if site.social_links.GitHub %}
-            <li><a href="{{ site.social_links.GitHub }}" target="_blank" rel="noopener">
-              <i class="ph-bold ph-github-logo" aria-hidden="true"></i><span>GitHub</span>
-            </a></li>{% endif %}
-            {% if site.social_links.Twitter %}
-            <li><a href="{{ site.social_links.Twitter }}" target="_blank" rel="noopener">
-              <i class="ph-bold ph-twitter-logo" aria-hidden="true"></i><span>Twitter</span>
-            </a></li>{% endif %}
-          </ul>
-        </figure>
-
-        <div class="home-hero__copy">
-          <p class="home-hero__kicker" itemprop="jobTitle">
-            {{ site.work.role | default: 'Software Engineer & Filmmaker' }}
-          </p>
-          <h1 class="home-hero__title" itemprop="name">
-            {{ page.hero_title | default: 'Cinematic web, engineered clean' }}
-          </h1>
-          <p class="home-hero__lead" itemprop="description">
-            {{ page.hero_subtitle | default: "Fast builds, sharp UX, and stories that stick." }}
-          </p>
-          <nav class="home-hero__actions" aria-label="Primary actions">
-            <a class="btn button" href="mailto:{{ site.email | default: 'hello@example.com' }}">
-              <i class="ph-bold ph-paper-plane-tilt" aria-hidden="true"></i><span>Contact</span>
-            </a>
-            <a class="btn button-transparent" href="{{ '/projects/' | relative_url }}">
-              <i class="ph-bold ph-squares-four" aria-hidden="true"></i><span>Projects</span>
-            </a>
-          </nav>
-          <p class="home-hero__meta">
-            <span class="home-hero__name">{{ site.social.name | default: site.author | default: site.title }}</span>
-            <span class="home-dot">•</span>
-            <span class="home-hero__role">{{ site.work.role | default: 'Software Engineer' }} @ {{ site.work.company | default: 'Imswarnil Studio' }}</span>
-            <span class="home-dot">•</span>
-            <span class="home-hero__loc"><i class="ph-bold ph-map-pin" aria-hidden="true"></i> {{ site.location | default: 'Bengaluru, India' }}</span>
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ STATS (subtle count-ins) ============ -->
-  <section class="home-stats">
-    <div class="container">
-      <ul class="home-stats__list" data-stagger="y">
-        <li>
-          <h3 data-count="120">120+</h3>
-          <p>Production features shipped</p>
-        </li>
-        <li>
-          <h3 data-count="35">35</h3>
-          <p>Films & edits</p>
-        </li>
-        <li>
-          <h3 data-count="9">9</h3>
-          <p>Years building on the web</p>
-        </li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- ============ PROJECTS CAROUSEL (Swiper) ============ -->
-  <section class="home-projects">
-    <div class="container">
-      <header class="home-head">
-        <h2 class="home-title">Selected Work</h2>
-        <p class="home-sub">Swipe to peek, click to dive in.</p>
-      </header>
-
-      <div class="swiper home-swiper" data-fade-in>
-        <div class="swiper-wrapper">
-          {% assign projects = site.projects | default: site.posts | slice: 0,8 %}
-          {% for p in projects %}
-          <a class="swiper-slide home-card" href="{{ p.url | relative_url }}">
-            <figure class="home-card__media">
-              <img src="{{ p.image | default: 'https://picsum.photos/800/500?random=' | append: forloop.index }}"
-                   alt="{{ p.title | escape }}" loading="lazy">
-            </figure>
-            <div class="home-card__body">
-              <h3>{{ p.title | default: 'Untitled Project' }}</h3>
-              <p>{{ p.excerpt | strip_html | truncatewords: 16 }}</p>
-            </div>
+        <nav class="home-hero__actions" aria-label="Primary actions">
+          <a class="button" href="mailto:{{ site.email | default: 'hello@example.com' }}">
+            <i class="ph-bold ph-paper-plane-tilt" aria-hidden="true"></i><span>Let’s talk</span>
           </a>
-          {% endfor %}
-        </div>
-
-        <!-- Swiper Controls -->
-        <div class="home-swiper__nav">
-          <button class="button-transparent home-swiper__prev" aria-label="Previous"><i class="ph-bold ph-caret-left"></i></button>
-          <button class="button-transparent home-swiper__next" aria-label="Next"><i class="ph-bold ph-caret-right"></i></button>
-        </div>
-        <div class="home-swiper__pagination"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ ARTICLE STRIPE (scroll reveal) ============ -->
-  <section class="home-articles">
-    <div class="container">
-      <header class="home-head home-head--inline">
-        <h2 class="home-title">Fresh Writing</h2>
-        <a class="home-link" href="{{ '/blog/' | relative_url }}">All posts</a>
-      </header>
-
-      <ul class="home-articles__list" data-stagger="y">
-        {% for post in site.posts limit:6 %}
-        <li class="home-articles__item">
-          <a href="{{ post.url | relative_url }}" class="home-article">
-            <h3>{{ post.title }}</h3>
-            <p>{{ post.excerpt | strip_html | truncatewords: 22 }}</p>
-            <small>{{ post.date | date: site.date_format | default: "%d %b %Y" }}</small>
+          <a class="button-transparent" href="{{ '/projects/' | relative_url }}">
+            <i class="ph-bold ph-squares-four" aria-hidden="true"></i><span>View projects</span>
           </a>
-        </li>
-        {% endfor %}
-      </ul>
-    </div>
-  </section>
+        </nav>
 
-  <!-- ============ CTA ============ -->
-  <section class="home-cta">
-    <div class="container">
-      <div class="home-cta__box" data-fade-in>
-        <h2>Open for select builds</h2>
-        <div class="home-cta__actions">
-          <a class="btn button" href="{{ '/contact/' | relative_url }}"><i class="ph-bold ph-calendar"></i><span>Book a call</span></a>
-          <a class="btn button-transparent" href="{{ '/services/' | relative_url }}"><i class="ph-bold ph-briefcase"></i><span>Services</span></a>
-        </div>
+        <ul class="home-hero__meta" role="list">
+          <li><i class="ph-bold ph-map-pin" aria-hidden="true"></i> {{ site.location | default: 'Bengaluru, India' }}</li>
+          <li><i class="ph-bold ph-briefcase" aria-hidden="true"></i> {{ site.work.role | default: 'Software Engineer' }} @ {{ site.work.company | default: 'Imswarnil Studio' }}</li>
+        </ul>
       </div>
-    </div>
-  </section>
-</main>
 
-<!-- ====== Minimal motion wiring (kept inline for portability) ====== -->
+      <!-- Image (right, tilted toward content side) -->
+      <figure class="home-hero__art" itemprop="image">
+        <img
+          src="{{ page.hero_image | default: 'https://images.pexels.com/photos/10570189/pexels-photo-10570189.jpeg' }}"
+          alt="{{ page.hero_image_alt | default: 'Portrait of Swarnil Singhai' }}"
+          width="900" height="1200" loading="eager" fetchpriority="high">
+      </figure>
+    </div>
+
+    <!-- Bento quick links -->
+    <section class="home-bento" aria-label="Quick links">
+      <a class="home-bento__card home-bento__card--blog" href="{{ '/blog/' | relative_url }}">
+        <div class="home-bento__icon"><i class="ph-bold ph-article"></i></div>
+        <div class="home-bento__body">
+          <h3>Read the blog</h3>
+          <p>Stories, breakdowns, and experiments.</p>
+        </div>
+        <img class="home-bento__thumb" src="https://picsum.photos/seed/blog/640/360" alt="" loading="lazy">
+      </a>
+
+      <a class="home-bento__card home-bento__card--resume" href="{{ '/resume/' | relative_url }}">
+        <div class="home-bento__icon"><i class="ph-bold ph-file-text"></i></div>
+        <div class="home-bento__body">
+          <h3>Resume</h3>
+          <p>Experience & wins in one page.</p>
+        </div>
+        <img class="home-bento__thumb" src="https://picsum.photos/seed/resume/640/360" alt="" loading="lazy">
+      </a>
+
+      <a class="home-bento__card home-bento__card--videos" href="{{ '/videos/' | relative_url }}">
+        <div class="home-bento__icon"><i class="ph-bold ph-youtube-logo"></i></div>
+        <div class="home-bento__body">
+          <h3>Videos</h3>
+          <p>Shorts, docs, and behind-the-scenes.</p>
+        </div>
+        <img class="home-bento__thumb" src="https://picsum.photos/seed/video/640/360" alt="" loading="lazy">
+      </a>
+
+      <a class="home-bento__card home-bento__card--contact" href="{{ '/contact/' | relative_url }}">
+        <div class="home-bento__icon"><i class="ph-bold ph-chat-centered-dots"></i></div>
+        <div class="home-bento__body">
+          <h3>Work with me</h3>
+          <p>Consulting, design, and builds.</p>
+        </div>
+        <img class="home-bento__thumb" src="https://picsum.photos/seed/work/640/360" alt="" loading="lazy">
+      </a>
+    </section>
+  </div>
+
+  <!-- Type sound (plays at start/end of each language) -->
+  <audio id="type-sfx" preload="auto">
+    <source src="https://www.soundjay.com/communication/typewriter-1.mp3" type="audio/mpeg">
+  </audio>
+</section>
+
 <script>
-  // Smooth scroll (optional)
-  window.addEventListener('load', () => {
-    if (window.Lenis) {
-      const lenis = new Lenis({ smoothWheel: true, lerp: 0.12 });
-      function raf(t){ lenis.raf(t); requestAnimationFrame(raf); }
-      requestAnimationFrame(raf);
+  (function () {
+    const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const el = document.getElementById('hello-rotator');
+    const cursor = document.querySelector('.home-hero__cursor');
+    const sfx = document.getElementById('type-sfx');
+
+    if (!el) return;
+
+    const greetings = [
+      'Hi, I’m Swarnil Singhai',
+      'Hola, soy Swarnil Singhai',
+      'नमस्ते, मैं स्वर्णिल सिंहई हूँ',
+      'ہیلو، میں سوارنل سنگھائی ہوں',
+      'Bonjour, je suis Swarnil',
+      'Ciao, sono Swarnil',
+      'こんにちは、スワルニルです'
+    ];
+
+    if (prefersReduced) {
+      el.textContent = greetings[0];
+      if (cursor) cursor.style.display = 'none';
+      return;
     }
 
-    if (!window.gsap) return;
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    gsap.registerPlugin(ScrollTrigger);
+    let i = 0, char = 0, typing = true, hold = 900;
 
-    // generic fade-in
-    gsap.utils.toArray('[data-fade-in]').forEach(el => {
-      gsap.from(el, {
-        autoAlpha: 0, y: 20, duration: prefersReduced ? 0 : 0.8, ease: 'power2.out',
-        scrollTrigger: { trigger: el, start: 'top 85%' }
-      });
-    });
-
-    // staggered children
-    gsap.utils.toArray('[data-stagger="y"]').forEach(group => {
-      const kids = [...group.children];
-      gsap.from(kids, {
-        autoAlpha: 0, y: 20, duration: prefersReduced ? 0 : 0.8, ease: 'power2.out', stagger: prefersReduced ? 0 : 0.08,
-        scrollTrigger: { trigger: group, start: 'top 85%' }
-      });
-    });
-
-    // Swiper init
-    if (window.Swiper) {
-      new Swiper('.home-swiper', {
-        slidesPerView: 1.08,
-        spaceBetween: 12,
-        centeredSlides: false,
-        breakpoints: {
-          540: { slidesPerView: 1.2, spaceBetween: 14 },
-          768: { slidesPerView: 2.1, spaceBetween: 16 },
-          992: { slidesPerView: 2.6, spaceBetween: 18 },
-          1200:{ slidesPerView: 3.1, spaceBetween: 20 }
-        },
-        navigation: {
-          nextEl: '.home-swiper__next',
-          prevEl: '.home-swiper__prev'
-        },
-        pagination: { el: '.home-swiper__pagination', clickable: true }
-      });
+    function playClick() {
+      try { sfx.currentTime = 0; sfx.play().catch(()=>{}); } catch(e){}
     }
-  });
+    function stopClick() {
+      try { sfx.pause(); sfx.currentTime = 0; } catch(e){}
+    }
+
+    function tick() {
+      const text = greetings[i];
+
+      if (typing) {
+        if (char === 0) playClick();
+        el.textContent = text.slice(0, char++);
+        if (char <= text.length) return setTimeout(tick, 28);     // typing speed
+        typing = false; stopClick();
+        return setTimeout(tick, hold);
+      } else {
+        // delete
+        el.textContent = text.slice(0, --char);
+        if (char >= 0) return setTimeout(tick, 18);               // delete speed
+        typing = true;
+        i = (i + 1) % greetings.length;
+        return setTimeout(tick, 120);
+      }
+    }
+    setTimeout(tick, 400);
+  })();
 </script>
+
 
 {% include adsense.html type="horizontal" %}
 
