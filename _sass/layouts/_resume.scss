@@ -1,0 +1,250 @@
+// ======================================================================
+// resume.scss — Responsive resume layout (inherits default styles)
+// Depends on: _variables.scss
+// Prefix: .resume*
+// ======================================================================
+
+@use "variables" as *;
+
+/* Container */
+.resume__wrap {
+  @include container;
+  margin-block: $sp-16;
+}
+
+/* Grid */
+.resume__grid {
+  display: grid;
+  gap: $sp-12;
+  grid-template-columns: 1fr;
+
+  @include mq-up($bp-lg) {
+    grid-template-columns: 1.6fr .9fr; // main | side
+    gap: $sp-16;
+  }
+}
+
+/* Islands (variants) */
+.resume__island,
+.resume__island--soft,
+.resume__island--ghost,
+.resume__island--strip {
+  border-radius: $radius-6;
+  border: 1px solid;
+  box-shadow: $shadow-light;
+
+  @include theme-block      { border-color: tone(border, light); background: tone(surface, light); }
+  @include theme-block-dark { border-color: tone(border, dark);  background: tone(surface, dark);  box-shadow: $shadow-dark; }
+}
+
+.resume__island--soft {
+  @include theme-block      { background: linear-gradient(180deg, tone(surface, light), color-mix(in oklab, tone(surface, light), transparent 14%)); }
+  @include theme-block-dark { background: linear-gradient(180deg, tone(surface, dark),  color-mix(in oklab, tone(surface, dark),  transparent 14%)); }
+}
+
+.resume__island--ghost {
+  background: transparent;
+  border-style: dashed;
+  box-shadow: none;
+}
+
+.resume__island--strip {
+  overflow: hidden;
+}
+
+/* Head (identity strip) */
+.resume__head {
+  display: grid;
+  gap: $sp-8;
+  padding: $sp-12;
+
+  @include mq-up($bp-lg) {
+    grid-template-columns: auto 1fr;
+    align-items: center;
+  }
+}
+
+.resume__id { display: flex; gap: $sp-8; align-items: center; }
+.resume__avatar {
+  inline-size: 64px; block-size: 64px; border-radius: 50%;
+  border: 1px solid;
+  @include theme-block      { background: tone(background-100, light); border-color: tone(border, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: tone(background-100, dark);  border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
+}
+
+.resume__who {}
+.resume__title    { margin: 0; font-size: $fs-6; line-height: $lh-tight; font-weight: $fw-bold;
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  }
+}
+.resume__subtitle { margin: $sp-3 0 0; font-size: $fs-3;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+}
+
+.resume__meta {
+  display: flex; flex-wrap: wrap; gap: $sp-6;
+  padding-inline: $sp-12; padding-bottom: $sp-10;
+  font-size: $fs-2;
+
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+
+  a {
+    text-decoration: none;
+    @include theme-block      { color: tone(contrast, light); }
+    @include theme-block-dark { color: tone(contrast, dark);  }
+  }
+}
+
+/* Section head */
+.resume__sec-head {
+  display: flex; align-items: center; gap: .6rem;
+  padding: $sp-8 $sp-12;
+  background: linear-gradient(180deg, rgba(0,0,0,.04), transparent);
+  border-bottom: 1px solid;
+
+  @include theme-block      { border-color: tone(border, light); }
+  @include theme-block-dark { border-color: tone(border, dark);  background: linear-gradient(180deg, rgba(255,255,255,.05), transparent); }
+
+  h3 {
+    margin: 0; font-size: $fs-5; line-height: $lh-tight; font-weight: $fw-bold;
+    @include theme-block      { color: tone(contrast, light); }
+    @include theme-block-dark { color: tone(contrast, dark);  }
+  }
+
+  i { font-size: 1.15em; }
+}
+
+.resume__sec-head--plain { padding: 0 0 $sp-7 0; background: none; border-bottom: none; }
+
+.resume__hint {
+  margin-left: auto; font-size: $fs-2;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+}
+
+/* Padding helper */
+.resume__pad { padding: $sp-12; }
+
+/* Timeline */
+.resume__timeline { position: relative; padding: $sp-12; }
+.resume__t-rail   { position: absolute; inset: 0 0 0 1.15rem; border-left: 2px solid;
+  @include theme-block      { border-color: tone(border, light); }
+  @include theme-block-dark { border-color: tone(border, dark);  }
+}
+
+.resume__t-item { position: relative; display: grid; gap: $sp-5; padding-left: 2.5rem; }
+.resume__t-item + .resume__t-item { margin-top: $sp-12; }
+
+.resume__t-dot  { position: absolute; left: .65rem; top: .35rem; inline-size: 1rem; block-size: 1rem; border-radius: 50%;
+  border: 2px solid;
+  @include theme-block      { background: tone(surface, light); border-color: tone(border, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: tone(surface, dark);  border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
+}
+.resume__t-icon { position: absolute; left: -.05rem; top: -.05rem; inline-size: 1.2rem; block-size: 1.2rem; display: grid; place-items: center;
+  border-radius: 50%; border: 1px solid;
+  @include theme-block      { background: tone(background-100, light); border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(background-100, dark);  border-color: tone(border, dark);  }
+}
+
+.resume__t-head { display: flex; align-items: center; gap: .5rem; }
+.resume__role   { margin: 0; font-size: $fs-4; line-height: $lh-tight; font-weight: $fw-semibold;
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  }
+}
+.resume__org    { font-size: $fs-2;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+}
+.resume__t-meta { font-size: $fs-2;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+}
+.resume__t-body { font-size: $fs-3;
+  @include theme-block      { color: tone(foreground, light); }
+  @include theme-block-dark { color: tone(foreground, dark);  }
+}
+.resume__t-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .2rem; }
+.resume__tag    { font-size: $fs-2; padding: .25rem .6rem; border-radius: $radius-pill;
+  @include theme-block      { background: tone(muted, light); color: tone(foreground, light); }
+  @include theme-block-dark { background: tone(muted, dark);  color: tone(foreground, dark);  }
+}
+
+/* Stepper */
+.resume__stepper { padding: $sp-12; display: grid; gap: $sp-8; }
+.resume__steps   { display: grid; gap: $sp-7; margin: 0; padding: 0; list-style: none; }
+.resume__step    { display: grid; grid-template-columns: auto 1fr; gap: $sp-7; align-items: start; }
+.resume__badge-num {
+  inline-size: 2rem; block-size: 2rem; border-radius: $radius-pill; display: grid; place-items: center;
+  font-size: $fs-2; font-weight: $fw-bold; border: 1px solid;
+
+  @include theme-block      { background: tone(background-200, light); color: tone(contrast, light); border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(background-200, dark);  color: tone(contrast, dark);  border-color: tone(border, dark);  }
+}
+.resume__step h4 { margin: .1rem 0 0; font-size: $fs-4; line-height: $lh-tight; }
+.resume__step p  { margin: .25rem 0 0; font-size: $fs-3; }
+
+.resume__list { margin: 0; padding: 0; list-style: none; display: grid; gap: .35rem; }
+.resume__small { font-size: $fs-2; }
+.resume__muted {
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+}
+
+/* Skills */
+.resume__skills     { padding: $sp-12; display: grid; gap: $sp-8; }
+.resume__skill-grid { display: grid; grid-template-columns: 1fr; gap: $sp-6;
+  @media (min-width: $bp-sm) { grid-template-columns: 1fr 1fr; gap: $sp-8; }
+}
+.resume__skill       { display: grid; gap: .35rem; }
+.resume__skill-label { display: flex; justify-content: space-between; font-size: $fs-2;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+}
+.resume__bar         { inline-size: 100%; block-size: .45rem; border-radius: 999px; overflow: hidden; border: 1px solid;
+  @include theme-block      { background: tone(background-200, light); border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(background-200, dark);  border-color: tone(border, dark);  }
+}
+.resume__bar > i     { position: relative; display: block; inline-size: var(--val, 60%); block-size: 100%;
+  @include theme-block      { background: linear-gradient(90deg, tone(background-100, light), tone(surface, light)); }
+  @include theme-block-dark { background: linear-gradient(90deg, tone(background-100, dark),  tone(surface, dark));  }
+}
+
+/* Sidebar blocks */
+.resume__side      { display: grid; gap: $sp-12; }
+.resume__fact-row  { display: flex; gap: $sp-7; align-items: center; }
+.resume__fact i    { font-size: 1.1rem; }
+.resume__kv        { display: grid; gap: .1rem; }
+.resume__k         { font-size: $fs-2;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+}
+.resume__v         { font-size: $fs-4; font-weight: $fw-semibold; }
+
+.resume__links     { display: grid; gap: .4rem; font-size: $fs-3; }
+.resume__links a   { display: inline-flex; gap: .5rem; align-items: center; padding: .3rem .6rem; border-radius: $radius-pill; text-decoration: none; border: 1px solid;
+  @include theme-block      { color: tone(contrast, light); border-color: tone(border, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  border-color: tone(border, dark);  }
+
+  &:hover {
+    @include theme-block      { background: tone(background-100, light); }
+    @include theme-block-dark { background: tone(background-100, dark);  }
+  }
+}
+
+.resume__awards { display: grid; gap: $sp-6; }
+.resume__award  { display: flex; gap: .75rem; align-items: flex-start; }
+.resume__award i { font-size: 1.25rem; }
+.resume__meta-line {
+  @include theme-block      { color: tone(secondary, light); font-size: $fs-2; }
+  @include theme-block-dark { color: tone(secondary, dark);  font-size: $fs-2; }
+}
+
+/* Media safety */
+.resume :where(img,video,svg,canvas){ max-width:100%; height:auto; display:block; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .resume__links a:hover { background: none; }
+}
