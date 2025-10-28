@@ -1,31 +1,18 @@
 ---
 layout: default
 ---
-<!-- Include once if not already on the page -->
+<!-- Phosphor icons (once per page) -->
+
 <section class="home-hero" itemscope itemtype="https://schema.org/Person">
   <div class="container">
     <div class="home-hero__grid">
-      <!-- Art (first on mobile) -->
-      <figure class="home-hero__art" itemprop="image">
-        <img
-          src="{{ page.hero_image | default: 'https://images.pexels.com/photos/10570189/pexels-photo-10570189.jpeg' }}"
-          alt="{{ page.hero_image_alt | default: 'Portrait of Swarnil Singhai' }}"
-          width="900" height="1200" loading="eager" fetchpriority="high">
-      </figure>
-
-      <!-- Copy -->
+      <!-- Copy (left on desktop) -->
       <div class="home-hero__copy">
-        <!-- Rotating “Hi,” only -->
-        <p class="home-hero__hello">
-          <span id="hello-rotator">Hi,</span>
-          <span class="home-hero__cursor" aria-hidden="true"></span>
-        </p>
+        <p class="home-hero__hello">Hi,</p>
 
-        <!-- Big name, then smaller descriptor line -->
         <h1 class="home-hero__name" itemprop="name">I’m Swarnil Singhai</h1>
-        <p class="home-hero__sub">Creative Engineer & Filmmaker</p>
+        <p class="home-hero__sub">Creative Engineer &amp; Filmmaker</p>
 
-        <!-- Two CTAs as role chips -->
         <div class="home-hero__chips" role="list">
           <a class="chip chip--solid" role="listitem" href="{{ '/about/' | relative_url }}">
             <i class="ph-bold ph-briefcase"></i><span>Software Engineer</span>
@@ -35,12 +22,11 @@ layout: default
           </a>
         </div>
 
-        <!-- Bio + description -->
         <p class="home-hero__lead" itemprop="description">
-          I design and ship fast, cinematic web experiences—where performance, clarity, and story work together.
+          I build fast, cinematic web experiences—clear UX, measured performance, and a storyteller’s touch.
         </p>
 
-        <!-- Meta: two lines -->
+        <!-- Meta (two lines) -->
         <div class="home-hero__meta">
           <div class="home-hero__meta-row">
             <i class="ph-bold ph-identification-badge" aria-hidden="true"></i>
@@ -51,88 +37,104 @@ layout: default
             <span>{{ site.location | default: 'Bengaluru, India' }}</span>
           </div>
         </div>
+
+        <!-- Social / contact -->
+        <ul class="home-hero__social" aria-label="Social links" role="list">
+          <li><a href="mailto:{{ site.email | default: 'hello@example.com' }}"><i class="ph-bold ph-envelope"></i>Email</a></li>
+          <li><a href="{{ site.social_links.GitHub | default: 'https://github.com' }}"><i class="ph-bold ph-github-logo"></i>GitHub</a></li>
+          <li><a href="{{ site.social_links.LinkedIn | default: 'https://www.linkedin.com' }}"><i class="ph-bold ph-linkedin-logo"></i>LinkedIn</a></li>
+          <li><a href="{{ site.social_links.Twitter | default: 'https://twitter.com' }}"><i class="ph-bold ph-twitter-logo"></i>Twitter</a></li>
+          <li><a href="{{ site.social_links.Youtube | default: '/videos/' }}"><i class="ph-bold ph-youtube-logo"></i>YouTube</a></li>
+        </ul>
       </div>
+
+      <!-- Art (right on desktop, first on mobile) -->
+      <figure class="home-hero__art" itemprop="image">
+        <img
+          src="{{ page.hero_image | default: 'https://images.pexels.com/photos/10570189/pexels-photo-10570189.jpeg' }}"
+          alt="{{ page.hero_image_alt | default: 'Portrait of Swarnil Singhai' }}"
+          width="900" height="1200" loading="eager" fetchpriority="high">
+      </figure>
     </div>
 
-    <!-- Quick links bento (platform-styled) -->
+    <!-- QUICK LINKS — two rows, uniform tiles -->
     <section class="home-bento" aria-label="Quick links">
-      <!-- GitHub-style project card -->
-      <a class="home-bento__card home-bento__card--github" href="{{ '/projects/' | relative_url }}">
-        <div class="pl-header">
+      <!-- Row 1 -->
+      <a class="home-card gh" href="{{ '/projects/' | relative_url }}">
+        <header class="gh__head">
           <i class="ph-bold ph-github-logo"></i>
           <span class="repo">imswarnil/awesome-project</span>
           <span class="lang"><i class="dot"></i> JS</span>
-        </div>
-        <div class="pl-body">
+        </header>
+        <div class="gh__body">
           <h3>View my projects</h3>
           <p>Minimal, fast, and documented builds.</p>
         </div>
-        <div class="pl-footer">
+        <footer class="gh__foot">
           <span><i class="ph ph-star"></i> 1.2k</span>
           <span><i class="ph ph-git-branch"></i> 84</span>
-          <span><i class="ph ph-clock"></i> Updated recently</span>
-        </div>
+          <span><i class="ph ph-clock"></i> Updated</span>
+        </footer>
       </a>
 
-      <!-- YouTube-style video card -->
-      <a class="home-bento__card home-bento__card--youtube" href="{{ '/videos/' | relative_url }}">
-        <div class="yt-thumb">
-          <img src="https://picsum.photos/seed/ytnail/640/360" alt="">
-          <span class="yt-duration">08:12</span>
-          <i class="ph-bold ph-play yt-play" aria-hidden="true"></i>
+      <a class="home-card yt" href="{{ '/videos/' | relative_url }}">
+        <div class="yt__thumb">
+          <img src="https://picsum.photos/seed/yt/640/360" alt="">
+          <span class="yt__duration">08:12</span>
+          <i class="ph-bold ph-play yt__play" aria-hidden="true"></i>
         </div>
-        <div class="yt-body">
+        <div class="yt__body">
           <h3>Watch videos</h3>
-          <p>Shorts, docs, and BTS edits.</p>
+          <p>Shorts, docs &amp; BTS.</p>
         </div>
       </a>
 
-      <!-- Blog card -->
-      <a class="home-bento__card home-bento__card--blog" href="{{ '/blog/' | relative_url }}">
-        <div class="bl-head"><i class="ph-bold ph-article"></i><span>Read blog</span></div>
-        <h3>Stories & breakdowns</h3>
-        <p>Notes on building, filming, and shipping.</p>
-      </a>
-
-      <!-- Resume card -->
-      <a class="home-bento__card home-bento__card--resume" href="{{ '/resume/' | relative_url }}">
-        <div class="cv-icon"><i class="ph-bold ph-file-text"></i></div>
-        <h3>Resume</h3>
-        <p>Experience, wins, and stack.</p>
-      </a>
-
-      <!-- Shop-style “Products I use” card -->
-      <a class="home-bento__card home-bento__card--shop" href="{{ '/uses/' | relative_url }}">
-        <div class="shop-media">
-          <img src="https://picsum.photos/seed/gear/480/360" alt="">
+      <a class="home-card blog" href="{{ '/blog/' | relative_url }}">
+        <aside class="blog__rail">
+          <i class="ph-bold ph-article"></i>
+          <i class="ph-bold ph-bookmarks"></i>
+          <i class="ph-bold ph-tag"></i>
+        </aside>
+        <div class="blog__body">
+          <h3>Read the blog</h3>
+          <p>Stories, breakdowns &amp; notes on shipping.</p>
         </div>
-        <div class="shop-body">
+      </a>
+
+      <!-- Row 2 -->
+      <a class="home-card cv" href="{{ '/resume/' | relative_url }}">
+        <div class="cv__grid">
+          <div class="cv__col">
+            <h3>Resume</h3>
+            <p>Experience, wins &amp; stack.</p>
+          </div>
+          <ul class="cv__col cv__list" role="list">
+            <li><i class="ph ph-briefcase"></i> Twilio — CRM Analytics</li>
+            <li><i class="ph ph-rocket"></i> CPQ automations</li>
+          </ul>
+        </div>
+      </a>
+
+      <a class="home-card shop" href="{{ '/uses/' | relative_url }}">
+        <div class="shop__media"><img src="https://picsum.photos/seed/gear/480/360" alt=""></div>
+        <div class="shop__body">
           <h3>Products I use</h3>
-          <p>Daily driver gear & apps.</p>
-          <span class="price-tag">Curated list</span>
+          <ul class="shop__grid" role="list">
+            <li><i class="ph ph-camera"></i> Camera</li>
+            <li><i class="ph ph-laptop"></i> Laptop</li>
+            <li><i class="ph ph-headphones"></i> Audio</li>
+          </ul>
+          <span class="shop__tag">Curated list</span>
         </div>
+      </a>
+
+      <a class="home-card post" href="{{ '/categories/' | relative_url }}">
+        <div class="post__head">
+          <i class="ph-bold ph-folders"></i><span>Categories</span>
+        </div>
+        <h3 class="post__title">Find by topic</h3>
+        <p class="post__desc">Guides, reviews, trips, &amp; more.</p>
       </a>
     </section>
   </div>
 </section>
-
-<script>
-  // Rotate just the word “Hi,” across languages (no sound)
-  (function(){
-    const el = document.getElementById('hello-rotator');
-    const cursor = document.querySelector('.home-hero__cursor');
-    if(!el) return;
-
-    const words = ['Hi,', 'Hola,', 'नमस्ते,', 'ہیلو،', 'Bonjour,', 'Ciao,', 'こんにちは、'];
-    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if(reduced){ el.textContent = words[0]; if(cursor) cursor.style.display='none'; return; }
-
-    let i=0, shown=true;
-    setInterval(()=>{
-      shown = !shown;
-      if(!shown){ el.style.opacity = 0; }
-      else { i=(i+1)%words.length; el.textContent = words[i]; el.style.opacity = 1; }
-    }, 1350);
-  })();
-</script>
