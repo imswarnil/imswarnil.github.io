@@ -1,108 +1,77 @@
-// Uses your tokens/mixins from _variables.scss and base helpers
+// Uses your tokens/mixins from _variables.scss and base.scss
 
-.search {
+.search-page {
   @include container;
-  // section already has island styling from your .section class via page wrapper;
-  // we refine inner layout here:
-  &__head { margin-bottom: $sp-8; }
-  &__title { font-size: $fs-6; margin: 0; display: flex; align-items: center; gap: $sp-6; }
-  &__hint { margin-top: $sp-3; }
+  margin-top: $sp-12;
+  margin-bottom: $sp-16;
+  padding-inline: $container-gutter;
 
   &__grid {
-    display: grid; gap: $sp-12;
+    display: grid; gap: $sp-16;
     grid-template-columns: 1fr;
-    @include mq-up($bp-lg) { grid-template-columns: 1.8fr .9fr; gap: $sp-16; }
+    @include mq-up($bp-lg) { grid-template-columns: 1.8fr .9fr; }
   }
 
-  &__form { margin-bottom: $sp-8; }
-  &__field {
-    display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: $sp-6;
-    padding: $sp-4 $sp-6; border: 1px solid; border-radius: $radius-6;
-    @include theme-block      { background: tone(surface, light); border-color: tone(border, light); }
-    @include theme-block-dark { background: tone(surface, dark);  border-color: tone(border, dark);  }
+  &__head { margin-bottom: $sp-8; }
+  &__title { display:flex; align-items:center; gap:$sp-6; margin:0; font-size: $fs-6; }
+  &__hint  { @include theme-block { color:tone(secondary,light);} @include theme-block-dark{color:tone(secondary,dark);} }
 
-    .input {
-      border: 0; background: transparent; padding: 0;
-      &:focus { outline: none; }
-      @include theme-block      { color: tone(contrast, light); }
-      @include theme-block-dark { color: tone(contrast, dark);  }
-    }
-  }
-
-  &__clear { margin-left: auto; }
-
-  &__status {
-    min-height: 1em;
-    @include theme-block      { color: tone(secondary, light); }
-    @include theme-block-dark { color: tone(secondary, dark);  }
-  }
-
-  &__list {
-    display: grid; gap: $sp-8; list-style: none; margin: 0; padding: 0;
-  }
-
-  // Result card
-  .result {
-    border: 1px solid; border-radius: $radius-6; overflow: hidden;
+  // Form "island"
+  .island {
+    border: 1px solid; border-radius: $radius-6; padding: $sp-12;
     @include theme-block      { background: tone(surface, light); border-color: tone(border, light); box-shadow: $shadow-light; }
-    @include theme-block-dark { background: tone(surface, dark);  border-color: tone(border, dark);  box-shadow: $shadow-dark; }
+    @include theme-block-dark { background: tone(surface, dark);  border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
+  }
 
-    &__inner { padding: $sp-8; display: grid; gap: $sp-5; }
-    &__title {
-      margin: 0; font-size: $fs-4; line-height: $lh-tight; font-weight: $fw-semibold;
-      a { text-decoration: none; }
+  &__field {
+    display:grid; grid-template-columns:auto 1fr auto; gap:$sp-6; align-items:center;
+    padding: $sp-4 $sp-6; border:1px solid; border-radius:$radius-6; margin-bottom:$sp-8;
+
+    @include theme-block      { background:tone(surface,light); border-color:tone(border,light); }
+    @include theme-block-dark { background:tone(surface,dark);  border-color:tone(border,dark);  }
+
+    .input { border:0; background:transparent; padding:0; font:inherit; line-height:$lh-base;
+      @include theme-block      { color:tone(contrast,light); }
+      @include theme-block-dark { color:tone(contrast,dark);  }
+      &:focus { outline:none; }
     }
-    &__meta { font-size: $fs-2;
-      @include theme-block      { color: tone(secondary, light); }
-      @include theme-block-dark { color: tone(secondary, dark);  }
-    }
-    &__excerpt { margin: 0; font-size: $fs-3; line-height: $lh-base; }
   }
 
-  // Keyboard focus on items
-  .result[tabindex="0"] { outline: $focus-ring-width solid rgba(106,166,255,.35); outline-offset: 2px; }
-
-  // Highlighted match
-  mark {
-    padding: 0 .15em; border-radius: $radius-1;
-    @include theme-block      { background: rgba(255, 211, 0, .35); color: tone(contrast, light); }
-    @include theme-block-dark { background: rgba(255, 211, 0, .25); color: tone(contrast, dark);  }
+  // Results list
+  &__list {
+    display:grid; gap:$sp-8; list-style:none; margin:0; padding:0;
   }
 
-  // Skeletons
-  &__skeleton { display: grid; gap: $sp-8; }
-  .s-card {
-    height: 96px; border-radius: $radius-6;
-    @include theme-block      { background: tone(background-100, light); }
-    @include theme-block-dark { background: tone(background-100, dark);  }
-    position: relative; overflow: hidden;
+  &__result {
+    border:1px solid; border-radius:$radius-6; overflow:hidden;
+    @include theme-block      { background:tone(surface,light); border-color:tone(border,light); box-shadow:$shadow-light; }
+    @include theme-block-dark { background:tone(surface,dark);  border-color:tone(border,dark);  box-shadow:$shadow-dark;  }
+    .article { padding:$sp-8; display:grid; gap:$sp-5; }
   }
-  .s-card::after {
-    content: ""; position: absolute; inset: 0; transform: translateX(-100%);
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
-    animation: shimmer 1.6s infinite;
+  &__result-title { margin:0; font-size:$fs-4; line-height:$lh-tight; font-weight:$fw-semibold; }
+  &__result-excerpt { margin:0; font-size:$fs-3; }
+
+  &__empty {
+    padding:$sp-8; text-align:center; border:1px dashed; border-radius:$radius-6;
+    @include theme-block      { border-color:tone(border,light); color:tone(secondary,light); }
+    @include theme-block-dark { border-color:tone(border,dark);  color:tone(secondary,dark);  }
   }
-  @keyframes shimmer { to { transform: translateX(100%); } }
 
   // Sidebar
-  &__side { display: grid; gap: $sp-12; }
-  &__side-card { padding: 0; }
+  &__side { display:grid; gap:$sp-12; }
+  &__card { padding:0; } // section-head + section-body control inner padding
 
   // Ads
-  .ad {
-    border-radius: $radius-6; overflow: hidden; border: 1px dashed;
-    @include theme-block      { border-color: tone(border, light); }
-    @include theme-block-dark { border-color: tone(border, dark);  }
-    padding: $sp-6;
-    &--banner { margin-bottom: $sp-8; }
-    &--side { }
-    &--infeed { }
+  &__ad {
+    border-radius:$radius-6; overflow:hidden; border:1px dashed; padding:$sp-6;
+    @include theme-block      { border-color:tone(border,light); background:tone(background-100,light); }
+    @include theme-block-dark { border-color:tone(border,dark);  background:tone(background-100,dark);  }
+    &--banner { margin-bottom:$sp-8; }
+    &--infeed { margin-top:$sp-8; }
+    &--side   { }
   }
 
-  // In-feed ad wrapper to match results grid rhythm
-  .infeed-wrapper {
-    border: 1px solid; border-radius: $radius-6; padding: $sp-6; text-align: center;
-    @include theme-block      { background: tone(background-100, light); border-color: tone(border, light); }
-    @include theme-block-dark { background: tone(background-100, dark);  border-color: tone(border, dark);  }
-  }
+  // Icon sizing helpers
+  .icon { font-size:$fs-4; line-height:1; }
+  .icon-sm { font-size:$fs-3; line-height:1; }
 }
