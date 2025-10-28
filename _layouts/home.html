@@ -1,70 +1,28 @@
 ---
 layout: default
 ---
-<section class="home-hero home-hero--grid" itemscope itemtype="https://schema.org/Person">
+<!-- Home Hero -->
+<section class="home-hero" itemscope itemtype="https://schema.org/Person">
   <div class="container">
     <div class="home-hero-card">
-      <!-- Visual first on mobile -->
       <figure class="home-hero-art" itemprop="image">
-        <img
-          src="{{ page.hero_image | default: 'https://images.pexels.com/photos/10570189/pexels-photo-10570189.jpeg' }}"
-          alt="{{ page.hero_image_alt | default: 'Portrait of the creator' }}"
-          width="1200" height="1200" loading="eager" fetchpriority="high" />
-
-        <!-- Floating socials (overlay, desktop shows on hover; mobile always visible) -->
-        <ul class="home-hero-socials" aria-label="Social links">
-          {% if site.social_links.Twitter %}<li><a href="{{ site.social_links.Twitter }}" target="_blank" rel="noopener"><i class="ph-bold ph-twitter-logo"></i><span>Twitter</span></a></li>{% endif %}
-          {% if site.social_links.LinkedIn %}<li><a href="{{ site.social_links.LinkedIn }}" target="_blank" rel="noopener"><i class="ph-bold ph-linkedin-logo"></i><span>LinkedIn</span></a></li>{% endif %}
-          {% if site.social_links.GitHub %}<li><a href="{{ site.social_links.GitHub }}" target="_blank" rel="noopener"><i class="ph-bold ph-github-logo"></i><span>GitHub</span></a></li>{% endif %}
-        </ul>
-
-        <!-- CTA group over image on desktop -->
-        <div class="home-hero-onimage-ctas" aria-label="Primary actions on image">
-          <a class="btn button" href="mailto:{{ site.email | default: 'hello@example.com' }}">
-            <i class="ph-bold ph-paper-plane-tilt" aria-hidden="true"></i><span>Contact</span>
-          </a>
-          <a class="btn button-transparent" href="{{ '/projects/' | relative_url }}">
-            <i class="ph-bold ph-squares-four" aria-hidden="true"></i><span>Projects</span>
-          </a>
-        </div>
-
-        <!-- Meta Ticker overlay (role • company • location) -->
-        <div class="home-hero-ticker" aria-hidden="true">
-          <div class="home-hero-ticker__track">
-            <span>{{ site.work.role | default: 'Software Engineer & Filmmaker' }}</span>
-            <em>•</em>
-            <span>@ {{ site.work.company | default: 'Imswarnil Studio' }}</span>
-            <em>•</em>
-            <span>{{ site.location | default: 'Bengaluru, India' }}</span>
-            <em>•</em>
-            <span>{{ site.social.name | default: site.author | default: site.title }}</span>
-            <em>•</em>
-          </div>
-        </div>
+        <img src="{{ page.hero_image | default: 'https://images.pexels.com/photos/10570189/pexels-photo-10570189.jpeg' }}"
+             alt="{{ page.hero_image_alt | default: 'Portrait of the creator' }}"
+             width="1000" height="1000" loading="eager" fetchpriority="high">
       </figure>
 
-      <!-- Copy (narrower column for readability) -->
       <div class="home-hero-copy">
         <p class="home-hero-kicker" itemprop="jobTitle">
           {{ site.work.role | default: 'Software Engineer & Filmmaker' }}
         </p>
-
         <h1 class="home-hero-title" itemprop="name">
           {{ page.hero_title | default: 'Your go-to engineer for impactful projects' }}
         </h1>
-
         <p class="home-hero-lead" itemprop="description">
-          {{ page.hero_subtitle | default: "I build fast, cinematic, and robust experiences—pairing engineering with storytelling." }}
+          {{ page.hero_subtitle | default: "Fast, cinematic, and robust experiences—built right." }}
         </p>
 
-        <!-- Under-image “Read my story” (shows below image on mobile; inline here for markup simplicity) -->
-        <a class="home-hero-story" href="{{ page.story_href | default: '/about/' | relative_url }}">
-          <i class="ph-bold ph-play-circle" aria-hidden="true"></i>
-          <span>Read my story</span>
-        </a>
-
-        <!-- Redundant actions (mobile shows here; desktop uses on-image) -->
-        <nav class="home-hero-actions" aria-label="Primary actions (mobile)">
+        <nav class="home-hero-actions" aria-label="Primary actions">
           <a class="btn button" href="mailto:{{ site.email | default: 'hello@example.com' }}">
             <i class="ph-bold ph-paper-plane-tilt" aria-hidden="true"></i><span>Contact me</span>
           </a>
@@ -73,7 +31,7 @@ layout: default
           </a>
         </nav>
 
-        <p class="home-hero-meta" aria-label="Profile details">
+        <p class="home-hero-meta">
           <img class="home-hero-avatar" src="{{ site.avatarurl | default: site.logo | relative_url }}" alt="" width="28" height="28" loading="lazy">
           <span class="home-hero-name">{{ site.social.name | default: site.author | default: site.title }}</span>
           <span class="home-hero-dot">•</span>
@@ -86,170 +44,255 @@ layout: default
   </div>
 </section>
 
-<style>
-/* ================================================================
-   home-hero — Wider canvas, narrower text column, on-image socials,
-   image-first mobile, meta ticker, and “Read my story” under image.
-   Uses compact, airy sizing; no unit-mix inside calc().
-================================================================ */
+<!-- 1) Story / About -->
+<section class="home-story">
+  <div class="container">
+    <article class="home-island">
+      <header class="home-head">
+        <h2 class="home-title">Story</h2>
+        <p class="home-sub">Filmmaker brain. Engineer hands. Chaos with purpose.</p>
+      </header>
+      <div class="home-grid-2">
+        <div class="home-prose">
+          <p>{{ page.story_intro | default: "I design experiences that move—balancing performance, storytelling, and clean systems. From Bangalore to the world." }}</p>
+          <a class="btn button-transparent" href="{{ '/about/' | relative_url }}"><i class="ph-bold ph-user"></i><span>Read my story</span></a>
+        </div>
+        <figure class="home-media">
+          <img src="{{ page.story_image | default: 'https://picsum.photos/800/600?random=1' }}" alt="About visual" loading="lazy">
+        </figure>
+      </div>
+    </article>
+  </div>
+</section>
 
-/* Section: a bit “wider” feel via increased padding */
-.home-hero{
-  position:relative;
-  padding-block: clamp(1.25rem, 4vw, 3rem);
-}
-.home-hero--grid{
-  background-image:
-    linear-gradient(to right, rgba(0,0,0,.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0,0,0,.05) 1px, transparent 1px);
-  background-size: 24px 24px, 24px 24px;
-}
-html[data-color-scheme="dark"] .home-hero--grid{
-  background-image:
-    linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255,255,255,.06) 1px, transparent 1px);
-}
+<!-- 2) Portfolio / Projects -->
+<section class="home-portfolio">
+  <div class="container">
+    <article class="home-island">
+      <header class="home-head">
+        <h2 class="home-title">Selected Projects</h2>
+        <a class="home-link" href="{{ '/projects/' | relative_url }}">All projects</a>
+      </header>
 
-/* Card layout: make the visual area feel expansive, keep copy narrow */
-.home-hero-card{
-  display:grid;
-  grid-template-columns: 1fr;
-  gap: clamp(1rem, 3vw, 1.75rem);
-  align-items:center;
-}
+      <ul class="home-cards">
+        {% assign projects = site.projects | default: site.posts | slice: 0,6 %}
+        {% for p in projects %}
+        <li class="home-card">
+          <a class="home-card__link" href="{{ p.url | relative_url }}">
+            <figure class="home-card__media">
+              <img src="{{ p.image | default: 'https://picsum.photos/640/420?random=' | append: forloop.index }}" alt="{{ p.title | escape }}">
+            </figure>
+            <div class="home-card__body">
+              <h3 class="home-card__title">{{ p.title | default: 'Untitled Project' }}</h3>
+              <p class="home-card__meta">{{ p.tags | array_to_sentence_string }}</p>
+            </div>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </article>
+  </div>
+</section>
 
-/* Image first on mobile; generous but height-controlled square */
-.home-hero-art{
-  order:-1;
-  margin:0;
-  position:relative;
-  width:100%;
-  max-width: clamp(300px, 70vw, 640px);  /* “wider” feel */
-  aspect-ratio: 1 / 1;
-  border-radius: 18px;
-  overflow:hidden;
-  justify-self:center;
-  background: #e9e9e9;
-}
-html[data-color-scheme="dark"] .home-hero-art{ background:#1a1a1c; }
-.home-hero-art img{
-  width:100%; height:100%; object-fit:cover; object-position:center; display:block;
-}
+<!-- 3) Video Reel -->
+<section class="home-video">
+  <div class="container">
+    <article class="home-island">
+      <header class="home-head">
+        <h2 class="home-title">Latest Video</h2>
+        <p class="home-sub">Cinematic, compact, and to the point.</p>
+      </header>
+      <div class="home-video__frame">
+        <iframe title="YouTube video" loading="lazy" allow="autoplay; encrypted-media"
+          src="https://www.youtube.com/embed/{{ page.reel_id | default: '12o3Zgupu_8' }}?rel=0&modestbranding=1&playsinline=1"></iframe>
+      </div>
+    </article>
+  </div>
+</section>
 
-/* Overlay socials (top-right) */
-.home-hero-socials{
-  list-style:none; margin:0; padding:0;
-  position:absolute; top:12px; right:12px; display:grid; gap:8px;
-}
-.home-hero-socials li a{
-  display:inline-flex; gap:.4rem; align-items:center;
-  padding:.4rem .6rem; border-radius:999px; font-size:.8125rem; line-height:1;
-  border:1px solid rgba(0,0,0,.15); background: rgba(255,255,255,.85); color:#111;
-  backdrop-filter: blur(8px);
-}
-.home-hero-socials i{ font-style:normal; }
-html[data-color-scheme="dark"] .home-hero-socials li a{
-  border-color: rgba(255,255,255,.18); background: rgba(20,20,22,.72); color:#fff;
-}
+<!-- 4) Blog -->
+<section class="home-blog">
+  <div class="container">
+    <article class="home-island">
+      <header class="home-head">
+        <h2 class="home-title">Latest Writing</h2>
+        <a class="home-link" href="{{ '/blog/' | relative_url }}">All posts</a>
+      </header>
+      <ul class="home-list home-list--posts">
+        {% for post in site.posts limit:5 %}
+        <li class="home-list__item">
+          <a href="{{ post.url | relative_url }}" class="home-post">
+            <h3 class="home-post__title">{{ post.title }}</h3>
+            <small class="home-post__meta">{{ post.date | date: site.date_format | default: "%d %b %Y" }}</small>
+            <p class="home-post__excerpt">{{ post.excerpt | strip_html | truncatewords: 22 }}</p>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </article>
+  </div>
+</section>
 
-/* CTA group over the image (bottom-left on desktop) */
-.home-hero-onimage-ctas{
-  position:absolute; left:12px; bottom:12px; display:none; gap:.5rem; flex-wrap:wrap;
-}
-.home-hero-onimage-ctas .btn{ border-radius:999px; padding:.55rem 1rem; line-height:1; }
+<!-- 5) Services -->
+<section class="home-services">
+  <div class="container">
+    <article class="home-island">
+      <header class="home-head">
+        <h2 class="home-title">Services</h2>
+        <p class="home-sub">Compact scopes. High impact.</p>
+      </header>
+      <ul class="home-features">
+        <li><i class="ph-bold ph-lightning"></i><h3>Rapid Prototypes</h3><p>Clickable concepts in days, not weeks.</p></li>
+        <li><i class="ph-bold ph-rocket-launch"></i><h3>Launch MVP</h3><p>Small surface, solid core, real users.</p></li>
+        <li><i class="ph-bold ph-git-merge"></i><h3>Revamp & Perf</h3><p>Refactors, UX polish, speed wins.</p></li>
+      </ul>
+    </article>
+  </div>
+</section>
 
-/* Meta ticker across the bottom of the image */
-.home-hero-ticker{
-  position:absolute; left:0; right:0; bottom:0; height:36px; overflow:hidden;
-  border-top:1px solid rgba(0,0,0,.10);
-  background: linear-gradient(180deg, rgba(255,255,255,.80), rgba(255,255,255,.60));
-  backdrop-filter: blur(6px);
-}
-.home-hero-ticker__track{
-  position:absolute; white-space:nowrap; will-change: transform;
-  display:inline-flex; gap:.75rem; align-items:center; padding-inline:12px;
-  animation: heroTicker 18s linear infinite;
-  color:#222; font-size:.875rem;
-}
-.home-hero-ticker__track em{ opacity:.5; font-style:normal; }
-html[data-color-scheme="dark"] .home-hero-ticker{
-  border-top:1px solid rgba(255,255,255,.14);
-  background: linear-gradient(180deg, rgba(26,26,28,.75), rgba(26,26,28,.55));
-}
-html[data-color-scheme="dark"] .home-hero-ticker__track{ color:#ddd; }
-@keyframes heroTicker{
-  from{ transform: translateX(0); }
-  to  { transform: translateX(-50%); }
-}
+<!-- 6) Skills -->
+<section class="home-skills">
+  <div class="container">
+    <article class="home-island">
+      <header class="home-head"><h2 class="home-title">Skills</h2></header>
+      <ul class="home-tags">
+        <li>Next.js</li><li>Jekyll</li><li>Supabase</li><li>CRM Analytics</li><li>Salesforce</li>
+        <li>Design Systems</li><li>Storytelling</li><li>Video Editing</li>
+      </ul>
+    </article>
+  </div>
+</section>
 
-/* Copy column — intentionally narrower than the image on desktop */
-.home-hero-copy{
-  display:grid; gap: clamp(.75rem, 1.8vw, 1.25rem);
-  max-width: clamp(36ch, 52vw, 54ch);  /* “width wise less width” for readable text */
-  justify-self:start; min-width:0;
-}
-.home-hero-kicker{
-  margin:0; font-size:.875rem; letter-spacing:.04em; text-transform:uppercase; opacity:.85;
-}
-.home-hero-title{
-  margin:0; line-height:1.2; font-weight:700;
-  font-size: clamp(1.75rem, 5.6vw, 2.75rem);
-}
-.home-hero-lead{
-  margin:0; font-size: clamp(1rem, 2.2vw, 1.25rem); opacity:.9;
-}
+<!-- 7) Testimonials -->
+<section class="home-testimonials">
+  <div class="container">
+    <article class="home-island">
+      <header class="home-head"><h2 class="home-title">What people say</h2></header>
+      <ul class="home-quotes">
+        <li>
+          <blockquote>“Ship-fast energy with filmmaker finesse.”</blockquote>
+          <cite>— A Happy Client</cite>
+        </li>
+        <li>
+          <blockquote>“Design system whisperer. Knows when to cut, when to color.”</blockquote>
+          <cite>— Product Lead</cite>
+        </li>
+      </ul>
+    </article>
+  </div>
+</section>
 
-/* “Read my story” text link below image (visually grouped with content) */
-.home-hero-story{
-  display:inline-flex; gap:.5rem; align-items:center; font-weight:600;
-  text-decoration:none; border-bottom:1px dashed currentColor; padding-bottom:2px; width:max-content;
-}
-.home-hero-story i{ font-style:normal; }
+<!-- 8) Timeline -->
+<section class="home-timeline">
+  <div class="container">
+    <article class="home-island">
+      <header class="home-head"><h2 class="home-title">Timeline</h2></header>
+      <ol class="home-steps">
+        <li><span>Now</span><p>Building a lightweight, island-style portfolio.</p></li>
+        <li><span>2024</span><p>Shipped client MVPs & internal design systems.</p></li>
+        <li><span>Earlier</span><p>Documented software + filmmaking journey.</p></li>
+      </ol>
+    </article>
+  </div>
+</section>
 
-/* Mobile actions (desktop hides these because we show on-image CTAs) */
-.home-hero-actions{ display:flex; flex-wrap:wrap; gap:.6rem; }
-.home-hero-actions .btn{ border-radius:999px; padding:.55rem 1rem; line-height:1; }
+<!-- 9) Stats -->
+<section class="home-stats">
+  <div class="container">
+    <article class="home-island">
+      <ul class="home-metrics">
+        <li><strong>17k+</strong><span>YT Subscribers</span></li>
+        <li><strong>50+</strong><span>Projects</span></li>
+        <li><strong>10yrs</strong><span>Across stacks</span></li>
+      </ul>
+    </article>
+  </div>
+</section>
 
-/* Meta strip */
-.home-hero-meta{
-  display:flex; flex-wrap:wrap; gap:.5rem .75rem; align-items:center; margin:0; font-size:.875rem; opacity:.9;
-}
-.home-hero-avatar{ width:28px; height:28px; border-radius:50%; object-fit:cover; }
-.home-hero-dot{ opacity:.5; }
+<!-- 10) Sponsors -->
+<section class="home-sponsors">
+  <div class="container">
+    <article class="home-island">
+      <header class="home-head"><h2 class="home-title">Sponsors</h2></header>
+      <ul class="home-logos">
+        <li><img src="https://dummyimage.com/120x40/000/fff&text=Brand" alt="Brand 1"></li>
+        <li><img src="https://dummyimage.com/120x40/000/fff&text=Brand" alt="Brand 2"></li>
+        <li><img src="https://dummyimage.com/120x40/000/fff&text=Brand" alt="Brand 3"></li>
+      </ul>
+    </article>
+  </div>
+</section>
 
-/* Buttons */
-.btn{
-  display:inline-flex; align-items:center; justify-content:center; gap:.5em;
-  min-height:2.25rem; padding:.5rem 1rem; font-size:.875rem; font-weight:600;
-  border-radius:999px; border:1px solid transparent; transition: transform 180ms cubic-bezier(.25,1,.5,1), box-shadow 180ms cubic-bezier(.25,1,.5,1), background-color 180ms, color 180ms;
-  cursor:pointer; user-select:none;
-}
-.button{ background:#000; color:#fff; }
-.button:hover{ transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,.12); color:#fff; }
-html[data-color-scheme="dark"] .button{ background:#fff; color:#000; }
-html[data-color-scheme="dark"] .button:hover{ color:#000; }
-.button-transparent{
-  background:transparent; border-color: rgba(0,0,0,.20); color:#111;
-}
-.button-transparent:hover{ background: rgba(0,0,0,.06); color:inherit; }
-html[data-color-scheme="dark"] .button-transparent{ border-color: rgba(255,255,255,.18); color:#fff; }
-html[data-color-scheme="dark"] .button-transparent:hover{ background: rgba(255,255,255,.10); color:inherit; }
+<!-- 11) Newsletter -->
+<section class="home-newsletter">
+  <div class="container">
+    <article class="home-island">
+      <header class="home-head"><h2 class="home-title">Newsletter</h2><p class="home-sub">Short, useful, no spam.</p></header>
+      <form class="home-newsletter__form" action="#" method="post">
+        <input type="email" name="email" placeholder="you@domain.com" required>
+        <button class="btn button" type="submit"><i class="ph-bold ph-envelope"></i><span>Subscribe</span></button>
+      </form>
+    </article>
+  </div>
+</section>
 
-/* Desktop adjustments */
-@media (min-width: 992px){
-  .home-hero-card{
-    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); /* narrower copy | wider visual */
-    gap: clamp(1.25rem, 3.5vw, 2rem);
-  }
-  .home-hero-art{ order:0; justify-self:end; max-width: clamp(440px, 48vw, 720px); }
-  .home-hero-copy{ order:-1; }
-  .home-hero-onimage-ctas{ display:flex; }
-  .home-hero-actions{ display:none; } /* hide duplicate CTAs on desktop */
-}
+<!-- 12) Hire me -->
+<section class="home-hire">
+  <div class="container">
+    <article class="home-island">
+      <div class="home-cta">
+        <h2 class="home-title">Available for select projects</h2>
+        <p class="home-sub">Let’s ship something sharp.</p>
+        <div class="home-cta__actions">
+          <a class="btn button" href="{{ '/contact/' | relative_url }}"><i class="ph-bold ph-calendar"></i><span>Book a call</span></a>
+          <a class="btn button-transparent" href="{{ '/services/' | relative_url }}"><i class="ph-bold ph-briefcase"></i><span>View services</span></a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
 
-/* Safety */
-.home-hero :where(img,video,svg,canvas){ max-width:100%; height:auto; display:block; }
-</style>
+<!-- 13) FAQs -->
+<section class="home-faq">
+  <div class="container">
+    <article class="home-island">
+      <header class="home-head"><h2 class="home-title">FAQs</h2></header>
+      <details class="home-qa">
+        <summary>How do we start?</summary>
+        <p>Quick discovery, scope, and a small kickoff sprint.</p>
+      </details>
+      <details class="home-qa">
+        <summary>What’s your turnaround?</summary>
+        <p>Depends on scope; I prefer fast, iterative cycles.</p>
+      </details>
+    </article>
+  </div>
+</section>
+
+<!-- 14) Contact -->
+<section class="home-contact">
+  <div class="container">
+    <article class="home-island">
+      <header class="home-head"><h2 class="home-title">Contact</h2></header>
+      <ul class="home-socials">
+        {% if site.social_links.LinkedIn %}<li><a href="{{ site.social_links.LinkedIn }}" target="_blank" rel="noopener"><i class="ph-bold ph-linkedin-logo"></i> LinkedIn</a></li>{% endif %}
+        {% if site.social_links.GitHub %}<li><a href="{{ site.social_links.GitHub }}" target="_blank" rel="noopener"><i class="ph-bold ph-github-logo"></i> GitHub</a></li>{% endif %}
+        {% if site.social_links.Twitter %}<li><a href="{{ site.social_links.Twitter }}" target="_blank" rel="noopener"><i class="ph-bold ph-twitter-logo"></i> Twitter</a></li>{% endif %}
+        <li><a href="mailto:{{ site.email | default: 'hello@example.com' }}"><i class="ph-bold ph-envelope"></i> Email</a></li>
+      </ul>
+    </article>
+  </div>
+</section>
+
+<!-- 15) Tiny CTA / Footer Bridge -->
+<section class="home-bridge">
+  <div class="container">
+    <article class="home-island home-island--mini">
+      <p class="home-bridge__text">Made with craft in {{ site.location | default: 'Bengaluru' }}.</p>
+      <a class="btn button-transparent" href="{{ site.repo | default: '#' }}"><i class="ph-bold ph-github-logo"></i><span>Star on GitHub</span></a>
+    </article>
+  </div>
+</section>
 
 {% include adsense.html type="horizontal" %}
 
