@@ -1,58 +1,234 @@
-<div class="form  form--search">
-  <form id="contact-form" action="">
-    <label class="label" for="search">Search term:</label>
-    <input class="input" id="search" type="search" name="search" placeholder="e.g. About us" autocomplete="off" />
+<!-- SEARCH PAGE -->
+<section class="search-page">
+  <div class="container">
+    <div class="search-page__head">
+      <h1 class="search-page__title">
+        <i class="ph-bold ph-magnifying-glass"></i>
+        Search
+      </h1>
+      <p class="search-page__sub">Find pages, posts, projects, guides, and more.</p>
+    </div>
 
-    <ul class="list  list--results" id="list">
-        <!-- results go here -->
+    <div class="search-page__bar" role="search">
+      <form class="search-page__form" id="site-search-form" action="." novalidate>
+        <label class="sr-only" for="search">Search term</label>
+        <i class="ph-bold ph-magnifying-glass search-page__form-icon" aria-hidden="true"></i>
+        <input
+          class="search-page__input"
+          id="search"
+          type="search"
+          name="search"
+          placeholder="Type to search…"
+          autocomplete="off"
+          aria-controls="search-results"
+          aria-describedby="search-help"
+        />
+        <button class="search-page__clear" type="button" id="search-clear" aria-label="Clear search">
+          <i class="ph-bold ph-x"></i>
+        </button>
+      </form>
+      <div id="search-help" class="search-page__help">Press Enter to focus results. Use ↑/↓ to navigate.</div>
+    </div>
+
+    <div class="search-page__status" id="search-status" aria-live="polite"></div>
+
+    <ul class="search-page__results" id="search-results" role="listbox" aria-label="Search results">
+      <!-- results injected here -->
     </ul>
-  </form>
-</div>
 
-<script type="text/javascript" src="{{ "/assets/scripts/fetch.js" | relative_url }}"></script>
+    <template id="search-item-tpl">
+      <li class="search-page__result" role="option">
+        <a class="search-page__result-link" href="#">
+          <div class="search-page__thumb" aria-hidden="true">
+            <!-- If image exists, an <img> is injected; else an icon -->
+            <i class="ph-bold ph-file-text search-page__thumb-icon"></i>
+          </div>
+          <div class="search-page__meta">
+            <div class="search-page__eyebrow">
+              <span class="search-page__type"><i class="ph-bold ph-file-text"></i><span class="t">Page</span></span>
+              <span class="search-page__sep">•</span>
+              <span class="search-page__url"></span>
+            </div>
+            <h4 class="search-page__titleline"></h4>
+            <p class="search-page__excerpt"></p>
+          </div>
+          <div class="search-page__cta" aria-hidden="true"><i class="ph-bold ph-arrow-up-right"></i></div>
+        </a>
+      </li>
+    </template>
+  </div>
+</section>
+
 <script type="text/javascript">
-  const endpoint = '{{ "/assets/search.json" | relative_url }}';
+  (function () {
+    const endpoint = '{{ "/assets/search.json" | relative_url }}';
+    const pages = [];
+    const field = document.querySelector('#search');
+    const list  = document.querySelector('#search-results');
+    const tpl   = document.querySelector('#search-item-tpl');
+    const status= document.querySelector('#search-status');
+    const clear = document.querySelector('#search-clear');
+    const form  = document.querySelector('#site-search-form');
 
-  const pages = [];
+    // Fetch index
+    fetch(endpoint)
+      .then(r => r.json())
+      .then(data => pages.push(...data))
+      .catch(() => status.textContent = 'Could not load search index.');
 
-  fetch(endpoint)
-    .then(blob => blob.json())
-    .then(data => pages.push(...data))
+    // Helpers
+    function norm(s){ return (s||'').toString(); }
 
-  function findResults(termToMatch, pages) {
-    return pages.filter(item => {
-      const regex = new RegExp(termToMatch, 'gi');
-      return item.title.match(regex) || item.content.match(regex);
+    function detectType(item){
+      const t = (item.type || item.layout || item.collection || '').toString().toLowerCase();
+      const u = (item.url || '').toLowerCase();
+
+      if (t.includes('project') || u.includes('/projects') || u.includes('/work')) return 'project';
+      if (t.includes('video')   || u.includes('youtube') || t==='videos')       return 'video';
+      if (t.includes('podcast')) return 'podcast';
+      if (t.includes('guide')   || u.includes('/guides')) return 'guide';
+      if (t.includes('trip')    || t.includes('travel')   || u.includes('/travel')) return 'travel';
+      if (t.includes('post')    || u.includes('/blog')    || u.match(/\/\d{4}\//))  return 'blog';
+      if (t.includes('page')    || u.split('/').filter(Boolean).length <= 1)        return 'page';
+      return 'page';
+    }
+
+    function iconFor(type){
+      switch(type){
+        case 'project': return 'squares-four';
+        case 'video':   return 'video-camera';
+        case 'podcast': return 'microphone';
+        case 'guide':   return 'student';
+        case 'travel':  return 'airplane-tilt';
+        case 'blog':    return 'article';
+        default:        return 'file-text';
+      }
+    }
+
+    function hostPath(u){
+      try {
+        const a = document.createElement('a');
+        a.href = u;
+        return (a.pathname || u).replace(/\/+$/, '');
+      } catch(e) { return u; }
+    }
+
+    function findResults(term, items) {
+      const q = term.trim();
+      if (!q) return [];
+      const rx = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+      return items.filter(it => rx.test(norm(it.title)) || rx.test(norm(it.content)) || rx.test(norm(it.excerpt)));
+    }
+
+    function render(items){
+      list.innerHTML = '';
+      const frag = document.createDocumentFragment();
+      items.forEach((it, idx) => {
+        const node = tpl.content.cloneNode(true);
+        const link = node.querySelector('.search-page__result-link');
+        const thumb= node.querySelector('.search-page__thumb');
+        const thumbIcon = node.querySelector('.search-page__thumb-icon');
+        const tBadge = node.querySelector('.search-page__type');
+        const tText  = node.querySelector('.search-page__type .t');
+        const urlEl  = node.querySelector('.search-page__url');
+        const title  = node.querySelector('.search-page__titleline');
+        const excerpt= node.querySelector('.search-page__excerpt');
+
+        const type = detectType(it);
+        const icon = iconFor(type);
+        const url  = it.url || '#';
+
+        // link
+        link.href = url;
+        link.setAttribute('id', 'result-' + idx);
+        link.setAttribute('role', 'option');
+
+        // thumb: image or icon
+        if (it.image) {
+          const img = new Image();
+          img.src = it.image;
+          img.alt = '';
+          img.loading = 'lazy';
+          thumb.innerHTML = '';
+          thumb.appendChild(img);
+        } else {
+          thumbIcon.className = 'ph-bold ph-' + icon + ' search-page__thumb-icon';
+        }
+
+        // type badge + icon
+        tBadge.querySelector('i').className = 'ph-bold ph-' + icon;
+        tText.textContent = (type.charAt(0).toUpperCase() + type.slice(1));
+
+        // url path
+        urlEl.textContent = hostPath(url);
+
+        // title + excerpt
+        title.textContent = it.title || 'Untitled';
+        excerpt.textContent = (it.excerpt || it.content || '').toString().replace(/\s+/g,' ').trim().slice(0, 180);
+
+        frag.appendChild(node);
+      });
+      list.appendChild(frag);
+    }
+
+    function onInput(){
+      const q = field.value;
+      const results = findResults(q, pages);
+      const count = results.length;
+
+      if (!q.trim()) {
+        list.classList.remove('is-visible');
+        status.textContent = '';
+        list.innerHTML = '';
+        return;
+      }
+
+      render(results);
+      list.classList.toggle('is-visible', count > 0);
+      status.textContent = count ? `${count} result${count>1?'s':''}` : 'No results';
+      if (!count) {
+        list.innerHTML = '<li class="search-page__empty" role="option">No results. Try different keywords.</li>';
+      }
+    }
+
+    // Keyboard UX
+    function onKeyDown(e){
+      const items = Array.from(list.querySelectorAll('.search-page__result-link'));
+      if (!items.length) return;
+
+      const active = document.activeElement;
+      const idx = items.indexOf(active);
+
+      if (e.key === 'Enter' && e.target === field && items[0]) {
+        e.preventDefault();
+        items[0].focus();
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        items[Math.min(idx + 1, items.length - 1)]?.focus();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        (idx <= 0 ? field : items[idx - 1]).focus();
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        field.focus();
+        clear.click();
+      }
+    }
+
+    // Clear
+    clear.addEventListener('click', function(){
+      field.value = '';
+      list.innerHTML = '';
+      list.classList.remove('is-visible');
+      status.textContent = '';
+      field.focus();
     });
-  }
 
-  function displayResults() {
-    const resultsArray = findResults(this.value, pages);
-    const html = resultsArray.map(item => {
-      return `
-        <li class="item  item--result">
-          <article class="article  typeset">
-            <h4><a href="${item.url}">${item.title}</a></h4>
-            <p>${item.excerpt}</p>
-          </article>
-        </li>`;
-    }).join('');
-    if ((resultsArray.length == 0) || (this.value == '')) {
-      resultsList.innerHTML = `<p>Sorry, nothing was found</p>`;
-    } else {
-      resultsList.innerHTML = html;
-    }
-  }
-
-  const field = document.querySelector('#search');
-  const resultsList = document.querySelector('#list');
-
-  field.addEventListener('keyup', displayResults);
-
-  field.addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-    }
-  });
+    // Bind
+    field.addEventListener('input', onInput);
+    field.addEventListener('keydown', onKeyDown);
+    list.addEventListener('keydown', onKeyDown);
+    form.addEventListener('submit', (e)=> e.preventDefault());
+  })();
 </script>
 <noscript>Please enable JavaScript to use the search form.</noscript>
