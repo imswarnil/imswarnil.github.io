@@ -1,5 +1,3 @@
-<script defer src="https://unpkg.com/@phosphor-icons/web"></script>
-
 <div class="form  form--search">
   <form id="contact-form" action="">
     <label class="label" for="search">Search term:</label>
@@ -11,217 +9,38 @@
   </form>
 </div>
 
-<style>
-/* ===== Minimal site tokens (fallbacks if not defined elsewhere) ===== */
-:root{
-  --sp-2:.25rem; --sp-3:.5rem; --sp-4:.75rem; --sp-5:1rem; --sp-6:1.25rem; --sp-8:1.75rem; --sp-10:2.25rem;
-  --radius-3:10px; --radius-4:14px; --radius-5:18px; --radius-6:22px; --radius-pill:999px;
-  --fs-2:.9rem; --fs-3:1rem; --fs-4:1.1rem; --fs-5:1.25rem; --fs-6:1.6rem;
-  --c-bg:#ffffff; --c-bg-100:#f5f5f7; --c-bg-200:#ececef;
-  --c-card:#ffffff; --c-ink:#121212; --c-sec:#6b6b6b; --c-border:rgba(0,0,0,.12);
-  --shadow:0 18px 40px -22px rgba(0,0,0,.25);
-}
-:root[data-color-scheme="dark"]{
-  --c-bg:#111113; --c-bg-100:#1a1a1c; --c-bg-200:#232326;
-  --c-card:#17171a; --c-ink:#f0f0f0; --c-sec:#a6a6a8; --c-border:rgba(255,255,255,.14);
-  --shadow:0 28px 60px -26px rgba(0,0,0,.6);
-}
-
-/* ===== Container feel for the block ===== */
-.form--search{
-  width:min(1180px, 100% - 32px);
-  margin: var(--sp-10) auto;
-  position: relative;
-}
-
-/* Label is helpful but keep compact */
-.form--search .label{
-  display:block;
-  margin: 0 0 var(--sp-3);
-  font-size: var(--fs-3);
-  color: var(--c-sec);
-}
-
-/* Search input as an island bar */
-.form--search .input{
-  width:100%;
-  padding: 14px 48px 14px 42px;
-  font-size: var(--fs-4);
-  color: var(--c-ink);
-  border-radius: var(--radius-6);
-  border:1px solid var(--c-border);
-  background: var(--c-card);
-  outline: none;
-  box-shadow: var(--shadow);
-  transition: box-shadow .2s, border-color .2s, background-color .2s;
-}
-
-/* Magnifying icon inside the input (pseudo) */
-.form--search{
-  --icon-size: 20px;
-}
-.form--search #contact-form{
-  position: relative;
-}
-.form--search #contact-form::before{
-  content:"";
-  position:absolute; left: 14px; top: 50%; transform: translateY(-50%);
-  width: var(--icon-size); height: var(--icon-size);
-  mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg"><path d="M232.49,215.51l-39.46-39.45a92.11,92.11,0,1,0-17,17l39.45,39.46a12,12,0,0,0,17-17ZM44,112A68,68,0,1,1,112,180,68.07,68.07,0,0,1,44,112Z"/></svg>') no-repeat 50% 50% / contain;
-  -webkit-mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg"><path d="M232.49,215.51l-39.46-39.45a92.11,92.11,0,1,0-17,17l39.45,39.46a12,12,0,0,0,17-17ZM44,112A68,68,0,1,1,112,180,68.07,68.07,0,0,1,44,112Z"/></svg>') no-repeat 50% 50% / contain;
-  background: var(--c-sec);
-  pointer-events:none;
-}
-
-/* Input focus glow */
-.form--search .input:focus{
-  border-color: transparent;
-  box-shadow: 0 24px 60px -28px rgba(0,0,0,.35);
-}
-
-/* ===== Results container (hidden until query) ===== */
-.list--results{
-  list-style:none;
-  margin: var(--sp-4) 0 0;
-  padding: 0;
-  display: none;                 /* default hidden */
-  border-radius: var(--radius-6);
-  overflow: clip;
-  border: 1px solid var(--c-border);
-  background: var(--c-card);
-  box-shadow: var(--shadow);
-}
-.list--results.is-visible{ display:block; }
-
-/* ===== One result row ===== */
-.item--result{
-  border-top: 1px solid var(--c-border);
-}
-.item--result:first-child{ border-top: 0; }
-
-.item--result .article{
-  display:grid;
-  grid-template-columns: 1fr auto;
-  gap: var(--sp-3);
-  padding: var(--sp-5) var(--sp-6);
-  align-items: start;
-}
-.item--result .article h4{
-  margin:0 0 .25rem;
-  font-size: var(--fs-5);
-  line-height:1.2;
-}
-.item--result .article h4 a{
-  color: var(--c-ink);
-  text-decoration: none;
-  position: relative;
-}
-.item--result .article h4 a::after{
-  content:"";
-  position:absolute; right:-26px; top: 50%; transform: translateY(-50%);
-  width:18px; height:18px; opacity:.55; transition: transform .2s, opacity .2s;
-  mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg"><path d="M216,48V160a8,8,0,0,1-16,0V67.31L69.66,197.66a8,8,0,0,1-11.32-11.32L188.69,56H96a8,8,0,0,1,0-16H208A8,8,0,0,1,216,48Z"/></svg>') no-repeat 50% 50% / contain;
-  -webkit-mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg"><path d="M216,48V160a8,8,0,0,1-16,0V67.31L69.66,197.66a8,8,0,0,1-11.32-11.32L188.69,56H96a8,8,0,0,1,0-16H208A8,8,0,0,1,216,48Z"/></svg>') no-repeat 50% 50% / contain;
-  background: var(--c-sec);
-}
-.item--result .article h4 a:hover::after{ transform: translate(2px, -50%); opacity:1; }
-
-.item--result .article p{
-  margin:0;
-  color: var(--c-sec);
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-  max-width: 85ch;
-}
-
-/* Compact on small screens */
-@media (max-width: 600px){
-  .item--result .article{
-    padding: var(--sp-4) var(--sp-5);
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ===== Empty message styling (from your script fallback) ===== */
-.list--results > p{
-  margin: 0; padding: var(--sp-6);
-  color: var(--c-sec);
-}
-
-/* ===== Ad placeholder card ===== */
-.item--ad .ad-card{
-  padding: var(--sp-4);
-  background: var(--c-bg-100);
-}
-.item--ad + .item--result{ border-top: 1px solid var(--c-border); }
-
-/* Light/dark smoothness */
-@media (prefers-reduced-motion:no-preference){
-  .item--result .article h4 a,
-  .form--search .input { transition: .2s ease; }
-}
-</style>
-
-<script>
+<script type="text/javascript" src="{{ "/assets/scripts/fetch.js" | relative_url }}"></script>
+<script type="text/javascript">
   const endpoint = '{{ "/assets/search.json" | relative_url }}';
+
   const pages = [];
 
   fetch(endpoint)
     .then(blob => blob.json())
-    .then(data => pages.push(...data));
+    .then(data => pages.push(...data))
 
   function findResults(termToMatch, pages) {
-    const q = (termToMatch || '').trim();
-    if (!q) return [];
-    const regex = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
-    return pages.filter(item => regex.test(item.title || '') || regex.test(item.content || '') || regex.test(item.excerpt || ''));
+    return pages.filter(item => {
+      const regex = new RegExp(termToMatch, 'gi');
+      return item.title.match(regex) || item.content.match(regex);
+    });
   }
 
   function displayResults() {
-    const q = this.value || '';
-    const resultsArray = findResults(q, pages);
-    const html = resultsArray.map((item, idx) => {
-      const row = `
+    const resultsArray = findResults(this.value, pages);
+    const html = resultsArray.map(item => {
+      return `
         <li class="item  item--result">
           <article class="article  typeset">
-            <h4><a href="${item.url}">${item.title || 'Untitled'}</a></h4>
-            <p>${(item.excerpt || item.content || '').toString().replace(/\s+/g,' ').trim().slice(0,180)}</p>
+            <h4><a href="${item.url}">${item.title}</a></h4>
+            <p>${item.excerpt}</p>
           </article>
         </li>`;
-
-      /* Inject an AdSense placeholder after the 3rd result (idx === 2) */
-      if (idx === 2) {
-        return row + `
-        <li class="item item--ad">
-          <div class="ad-card">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-1291242080282540"
-                 data-ad-slot="0000000099"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-          </div>
-        </li>`;
-      }
-      return row;
     }).join('');
-
-    if (!q.trim()) {
-      resultsList.innerHTML = '';
-      resultsList.classList.remove('is-visible');
-      return;
-    }
-
-    if (resultsArray.length === 0) {
+    if ((resultsArray.length == 0) || (this.value == '')) {
       resultsList.innerHTML = `<p>Sorry, nothing was found</p>`;
-      resultsList.classList.add('is-visible');
     } else {
       resultsList.innerHTML = html;
-      resultsList.classList.add('is-visible');
-
-      // Try to render ads if the library is present
-      try {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-      } catch(e) { /* ignore */ }
     }
   }
 
@@ -233,19 +52,7 @@
   field.addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
       event.preventDefault();
-      // Focus first result link if exists
-      const a = resultsList.querySelector('.item--result a');
-      if (a) a.focus();
-    }
-    if (event.key === 'Escape') {
-      field.value = '';
-      resultsList.innerHTML = '';
-      resultsList.classList.remove('is-visible');
     }
   });
 </script>
-
-<!-- If AdSense global isn't already on your layout, include it once globally -->
-<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1291242080282540" crossorigin="anonymous"></script> -->
-
 <noscript>Please enable JavaScript to use the search form.</noscript>
