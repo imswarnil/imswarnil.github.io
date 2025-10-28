@@ -4,17 +4,105 @@ layout: default
 
 <div class="container">
   <div class="page">
+    <nav class="page-breadcrumbs" aria-label="Breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+      <ol class="page-breadcrumbs__list">
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a itemprop="item" href="{{ '/' | relative_url }}"><span itemprop="name">Home</span></a>
+          <meta itemprop="position" content="1"/>
+        </li>
+        <li aria-hidden="true" class="sep">/</li>
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="current">
+          <span itemprop="name">{{ page.title }}</span>
+          <meta itemprop="position" content="2"/>
+        </li>
+      </ol>
+    </nav>
+
     <div class="page-layout">
       <!-- Main -->
       <main class="page-main">
-        <article class="page-article typeset">
-          <h1 class="page-title">{{ page.title }}</h1>
-          {{ content }}
+        <article class="page-article typeset" itemscope itemtype="https://schema.org/Article">
+          <header class="page-head">
+            <h1 class="page-title" itemprop="headline">{{ page.title }}</h1>
+
+            <!-- Meta row -->
+            <p class="page-meta">
+              {% assign date_format = site.date_format | default: "%d %b %Y" %}
+              <span class="page-meta__item">
+                <i class="ph-bold ph-calendar-blank" aria-hidden="true"></i>
+                <time class="time" itemprop="datePublished" datetime="{{ page.date | date_to_xmlschema }}">
+                  {{ page.date | date: date_format }}
+                </time>
+              </span>
+              {% if page.author or site.author %}
+              <span class="page-meta__item">
+                <i class="ph-bold ph-user" aria-hidden="true"></i>
+                <span itemprop="author">{{ page.author | default: site.author }}</span>
+              </span>
+              {% endif %}
+              {% if page.reading_time %}
+              <span class="page-meta__item">
+                <i class="ph-bold ph-hourglass" aria-hidden="true"></i>
+                {{ page.reading_time }} min read
+              </span>
+              {% endif %}
+            </p>
+          </header>
+
+          <div class="page-body" itemprop="articleBody">
+            {{ content }}
+          </div>
+
+          <!-- Page footer widgets (inline, no includes) -->
+          <footer class="page-foot">
+            <!-- Tags -->
+            {% if page.tags %}
+            <ul class="page-tags" role="list" aria-label="Tags">
+              {% for t in page.tags %}
+                <li><a class="tag" href="{{ '/tags/#' | append: t | slugify | relative_url }}">#{{ t }}</a></li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+
+            <!-- Share -->
+            <div class="page-share" aria-label="Share this page">
+              <a class="share-btn" href="https://twitter.com/intent/tweet?url={{ site.url }}{{ page.url }}&text={{ page.title | uri_escape }}" target="_blank" rel="noopener">
+                <i class="ph-bold ph-twitter-logo"></i><span>Share</span>
+              </a>
+              <a class="share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url={{ site.url }}{{ page.url }}" target="_blank" rel="noopener">
+                <i class="ph-bold ph-linkedin-logo"></i><span>Share</span>
+              </a>
+              <button class="share-btn" type="button" onclick="navigator.clipboard.writeText('{{ site.url }}{{ page.url }}')">
+                <i class="ph-bold ph-link"></i><span>Copy link</span>
+              </button>
+            </div>
+
+            <!-- Prev/Next -->
+            <nav class="page-nav" aria-label="Page navigation">
+              {% if page.previous %}
+                <a class="page-nav__link prev" href="{{ page.previous.url | relative_url }}"><i class="ph-bold ph-arrow-left"></i><span>{{ page.previous.title }}</span></a>
+              {% endif %}
+              {% if page.next %}
+                <a class="page-nav__link next" href="{{ page.next.url | relative_url }}"><span>{{ page.next.title }}</span><i class="ph-bold ph-arrow-right"></i></a>
+              {% endif %}
+            </nav>
+          </footer>
         </article>
+
+        <!-- Optional: related section (simple list) -->
+        <section class="page-related" aria-label="Related">
+          <h3 class="page-related__title">Related</h3>
+          <ul class="page-related__list" role="list">
+            {% assign rel = site.posts | where_exp: 'p', 'p.tags & page.tags' | slice: 0, 4 %}
+            {% for r in rel %}
+            <li><a class="page-related__item" href="{{ r.url | relative_url }}">{{ r.title }}</a></li>
+            {% endfor %}
+          </ul>
+        </section>
       </main>
 
       {% if page.aside != false %}
-      <!-- Aside (sticky on desktop) -->
+      <!-- Aside (sticky) -->
       <aside class="page-aside" aria-label="Page sidebar">
         <!-- About -->
         <section class="page-card page-card--about">
@@ -22,12 +110,22 @@ layout: default
           <p class="page-card__text">{{ site.description }}</p>
         </section>
 
-        <!-- On this page (auto TOC from h2/h3) -->
+        <!-- On this page (auto TOC) -->
         <section class="page-card page-card--toc" id="page-toc" hidden>
           <h3 class="page-card__title">On this page</h3>
           <nav class="page-toc-nav" aria-label="On this page">
             <ul class="page-toc-list"></ul>
           </nav>
+        </section>
+
+        <!-- Quick links (page-dedicated widget) -->
+        <section class="page-card page-card--quick">
+          <h3 class="page-card__title">Quick links</h3>
+          <ul class="page-quick">
+            <li><a href="{{ '/archive/' | relative_url }}"><i class="ph-bold ph-layout"></i> Archive</a></li>
+            <li><a href="{{ '/categories/' | relative_url }}"><i class="ph-bold ph-folders"></i> Categories</a></li>
+            <li><a href="{{ '/resume/' | relative_url }}"><i class="ph-bold ph-identification-badge"></i> Resume</a></li>
+          </ul>
         </section>
 
         <!-- Social -->
@@ -71,41 +169,29 @@ layout: default
   </div>
 </div>
 
-<!-- Phosphor icons once (if not already loaded globally) -->
+<!-- Icons -->
 <script defer src="https://unpkg.com/@phosphor-icons/web"></script>
 
 <!-- Tiny TOC generator (h2/h3) -->
 <script>
 (function(){
   var article = document.querySelector('.page-article');
-  var toc     = document.getElementById('page-toc');
+  var toc = document.getElementById('page-toc');
   if(!article || !toc) return;
-
   var targets = article.querySelectorAll('h2, h3');
   if(!targets.length) return;
 
   var list = toc.querySelector('.page-toc-list');
   var makeId = function(txt){
-    return String(txt || '')
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g,'-')
-      .replace(/(^-|-$)/g,'');
+    return String(txt||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
   };
-
   Array.prototype.forEach.call(targets, function(h){
-    if(!h.id){
-      h.id = makeId(h.textContent);
-    }
-    var li  = document.createElement('li');
+    if(!h.id){ h.id = makeId(h.textContent); }
+    var li = document.createElement('li');
     li.className = 'page-toc-item ' + (h.tagName === 'H3' ? 'is-sub' : 'is-top');
-    var a   = document.createElement('a');
-    a.className = 'page-toc-link';
-    a.href = '#' + h.id;
-    a.textContent = h.textContent;
-    li.appendChild(a);
-    list.appendChild(li);
+    var a = document.createElement('a'); a.className='page-toc-link'; a.href = '#'+h.id; a.textContent = h.textContent;
+    li.appendChild(a); list.appendChild(li);
   });
-
   toc.hidden = false;
 })();
 </script>
