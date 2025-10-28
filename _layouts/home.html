@@ -1,8 +1,8 @@
 ---
 layout: default
 ---
-<!-- Home Hero -->
-<section class="home-hero" itemscope itemtype="https://schema.org/Person">
+<!-- Section 0: Hero (plain, patterned bg) -->
+<section class="home-section home-hero home-section--plain home-pattern--grid" itemscope itemtype="https://schema.org/Person">
   <div class="container">
     <div class="home-hero-card">
       <figure class="home-hero-art" itemprop="image">
@@ -12,16 +12,11 @@ layout: default
       </figure>
 
       <div class="home-hero-copy">
-        <p class="home-hero-kicker" itemprop="jobTitle">
-          {{ site.work.role | default: 'Software Engineer & Filmmaker' }}
-        </p>
-        <h1 class="home-hero-title" itemprop="name">
-          {{ page.hero_title | default: 'Your go-to engineer for impactful projects' }}
-        </h1>
+        <p class="home-hero-kicker" itemprop="jobTitle">{{ site.work.role | default: 'Software Engineer & Filmmaker' }}</p>
+        <h1 class="home-hero-title" itemprop="name">{{ page.hero_title | default: 'Your go-to engineer for impactful projects' }}</h1>
         <p class="home-hero-lead" itemprop="description">
           {{ page.hero_subtitle | default: "Fast, cinematic, and robust experiences—built right." }}
         </p>
-
         <nav class="home-hero-actions" aria-label="Primary actions">
           <a class="btn button" href="mailto:{{ site.email | default: 'hello@example.com' }}">
             <i class="ph-bold ph-paper-plane-tilt" aria-hidden="true"></i><span>Contact me</span>
@@ -30,7 +25,6 @@ layout: default
             <i class="ph-bold ph-squares-four" aria-hidden="true"></i><span>View projects</span>
           </a>
         </nav>
-
         <p class="home-hero-meta">
           <img class="home-hero-avatar" src="{{ site.avatarurl | default: site.logo | relative_url }}" alt="" width="28" height="28" loading="lazy">
           <span class="home-hero-name">{{ site.social.name | default: site.author | default: site.title }}</span>
@@ -44,253 +38,209 @@ layout: default
   </div>
 </section>
 
-<!-- 1) Story / About -->
-<section class="home-story">
+<!-- Section 1: Story (island) -->
+<section class="home-section home-story home-section--island">
   <div class="container">
-    <article class="home-island">
-      <header class="home-head">
-        <h2 class="home-title">Story</h2>
-        <p class="home-sub">Filmmaker brain. Engineer hands. Chaos with purpose.</p>
-      </header>
-      <div class="home-grid-2">
-        <div class="home-prose">
-          <p>{{ page.story_intro | default: "I design experiences that move—balancing performance, storytelling, and clean systems. From Bangalore to the world." }}</p>
-          <a class="btn button-transparent" href="{{ '/about/' | relative_url }}"><i class="ph-bold ph-user"></i><span>Read my story</span></a>
-        </div>
-        <figure class="home-media">
-          <img src="{{ page.story_image | default: 'https://picsum.photos/800/600?random=1' }}" alt="About visual" loading="lazy">
-        </figure>
+    <header class="home-head">
+      <h2 class="home-title">Story</h2>
+      <p class="home-sub">Filmmaker brain. Engineer hands. Chaos with purpose.</p>
+    </header>
+    <div class="home-grid-2">
+      <div class="home-prose">
+        <p>{{ page.story_intro | default: "I design experiences that move—balancing performance, storytelling, and clean systems." }}</p>
+        <a class="btn button-transparent" href="{{ '/about/' | relative_url }}"><i class="ph-bold ph-user"></i><span>Read my story</span></a>
       </div>
-    </article>
+      <figure class="home-media">
+        <img src="{{ page.story_image | default: 'https://picsum.photos/800/600?random=1' }}" alt="About visual" loading="lazy">
+      </figure>
+    </div>
   </div>
 </section>
 
-<!-- 2) Portfolio / Projects -->
-<section class="home-portfolio">
+<!-- Section 2: Portfolio (band) -->
+<section class="home-section home-portfolio home-section--band home-pattern--dots">
   <div class="container">
-    <article class="home-island">
-      <header class="home-head">
-        <h2 class="home-title">Selected Projects</h2>
-        <a class="home-link" href="{{ '/projects/' | relative_url }}">All projects</a>
-      </header>
-
-      <ul class="home-cards">
-        {% assign projects = site.projects | default: site.posts | slice: 0,6 %}
-        {% for p in projects %}
-        <li class="home-card">
-          <a class="home-card__link" href="{{ p.url | relative_url }}">
-            <figure class="home-card__media">
-              <img src="{{ p.image | default: 'https://picsum.photos/640/420?random=' | append: forloop.index }}" alt="{{ p.title | escape }}">
-            </figure>
-            <div class="home-card__body">
-              <h3 class="home-card__title">{{ p.title | default: 'Untitled Project' }}</h3>
-              <p class="home-card__meta">{{ p.tags | array_to_sentence_string }}</p>
-            </div>
-          </a>
-        </li>
-        {% endfor %}
-      </ul>
-    </article>
+    <header class="home-head">
+      <h2 class="home-title">Selected Projects</h2>
+      <a class="home-link" href="{{ '/projects/' | relative_url }}">All projects</a>
+    </header>
+    <ul class="home-cards">
+      {% assign projects = site.projects | default: site.posts | slice: 0,6 %}
+      {% for p in projects %}
+      <li class="home-card">
+        <a class="home-card__link" href="{{ p.url | relative_url }}">
+          <figure class="home-card__media">
+            <img src="{{ p.image | default: 'https://picsum.photos/640/420?random=' | append: forloop.index }}" alt="{{ p.title | escape }}">
+          </figure>
+          <div class="home-card__body">
+            <h3 class="home-card__title">{{ p.title | default: 'Untitled Project' }}</h3>
+            <p class="home-card__meta">{{ p.tags | array_to_sentence_string }}</p>
+          </div>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
   </div>
 </section>
 
-<!-- 3) Video Reel -->
-<section class="home-video">
+<!-- Section 3: Video (accent split panel) -->
+<section class="home-section home-video home-section--accent">
   <div class="container">
-    <article class="home-island">
-      <header class="home-head">
+    <div class="home-split">
+      <div class="home-split__copy">
         <h2 class="home-title">Latest Video</h2>
         <p class="home-sub">Cinematic, compact, and to the point.</p>
-      </header>
+      </div>
       <div class="home-video__frame">
         <iframe title="YouTube video" loading="lazy" allow="autoplay; encrypted-media"
           src="https://www.youtube.com/embed/{{ page.reel_id | default: '12o3Zgupu_8' }}?rel=0&modestbranding=1&playsinline=1"></iframe>
       </div>
-    </article>
+    </div>
   </div>
 </section>
 
-<!-- 4) Blog -->
-<section class="home-blog">
+<!-- Section 4: Blog (plain) -->
+<section class="home-section home-blog home-section--plain">
   <div class="container">
-    <article class="home-island">
-      <header class="home-head">
-        <h2 class="home-title">Latest Writing</h2>
-        <a class="home-link" href="{{ '/blog/' | relative_url }}">All posts</a>
-      </header>
-      <ul class="home-list home-list--posts">
-        {% for post in site.posts limit:5 %}
-        <li class="home-list__item">
-          <a href="{{ post.url | relative_url }}" class="home-post">
-            <h3 class="home-post__title">{{ post.title }}</h3>
-            <small class="home-post__meta">{{ post.date | date: site.date_format | default: "%d %b %Y" }}</small>
-            <p class="home-post__excerpt">{{ post.excerpt | strip_html | truncatewords: 22 }}</p>
-          </a>
-        </li>
-        {% endfor %}
-      </ul>
-    </article>
+    <header class="home-head">
+      <h2 class="home-title">Latest Writing</h2>
+      <a class="home-link" href="{{ '/blog/' | relative_url }}">All posts</a>
+    </header>
+    <ul class="home-list home-list--posts">
+      {% for post in site.posts limit:5 %}
+      <li class="home-list__item">
+        <a href="{{ post.url | relative_url }}" class="home-post">
+          <h3 class="home-post__title">{{ post.title }}</h3>
+          <small class="home-post__meta">{{ post.date | date: site.date_format | default: "%d %b %Y" }}</small>
+          <p class="home-post__excerpt">{{ post.excerpt | strip_html | truncatewords: 22 }}</p>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
   </div>
 </section>
 
-<!-- 5) Services -->
-<section class="home-services">
+<!-- Section 5: Services (island) -->
+<section class="home-section home-services home-section--island">
   <div class="container">
-    <article class="home-island">
-      <header class="home-head">
-        <h2 class="home-title">Services</h2>
-        <p class="home-sub">Compact scopes. High impact.</p>
-      </header>
-      <ul class="home-features">
-        <li><i class="ph-bold ph-lightning"></i><h3>Rapid Prototypes</h3><p>Clickable concepts in days, not weeks.</p></li>
-        <li><i class="ph-bold ph-rocket-launch"></i><h3>Launch MVP</h3><p>Small surface, solid core, real users.</p></li>
-        <li><i class="ph-bold ph-git-merge"></i><h3>Revamp & Perf</h3><p>Refactors, UX polish, speed wins.</p></li>
-      </ul>
-    </article>
+    <header class="home-head"><h2 class="home-title">Services</h2><p class="home-sub">Compact scopes. High impact.</p></header>
+    <ul class="home-features">
+      <li><i class="ph-bold ph-lightning"></i><h3>Rapid Prototypes</h3><p>Clickable concepts in days, not weeks.</p></li>
+      <li><i class="ph-bold ph-rocket-launch"></i><h3>Launch MVP</h3><p>Small surface, solid core, real users.</p></li>
+      <li><i class="ph-bold ph-git-merge"></i><h3>Revamp & Perf</h3><p>Refactors, UX polish, speed wins.</p></li>
+    </ul>
   </div>
 </section>
 
-<!-- 6) Skills -->
-<section class="home-skills">
+<!-- Section 6: Skills (band) -->
+<section class="home-section home-skills home-section--band">
   <div class="container">
-    <article class="home-island">
-      <header class="home-head"><h2 class="home-title">Skills</h2></header>
-      <ul class="home-tags">
-        <li>Next.js</li><li>Jekyll</li><li>Supabase</li><li>CRM Analytics</li><li>Salesforce</li>
-        <li>Design Systems</li><li>Storytelling</li><li>Video Editing</li>
-      </ul>
-    </article>
+    <header class="home-head"><h2 class="home-title">Skills</h2></header>
+    <ul class="home-tags">
+      <li>Next.js</li><li>Jekyll</li><li>Supabase</li><li>CRM Analytics</li><li>Salesforce</li>
+      <li>Design Systems</li><li>Storytelling</li><li>Video Editing</li>
+    </ul>
   </div>
 </section>
 
-<!-- 7) Testimonials -->
-<section class="home-testimonials">
+<!-- Section 7: Testimonials (plain) -->
+<section class="home-section home-testimonials home-section--plain">
   <div class="container">
-    <article class="home-island">
-      <header class="home-head"><h2 class="home-title">What people say</h2></header>
-      <ul class="home-quotes">
-        <li>
-          <blockquote>“Ship-fast energy with filmmaker finesse.”</blockquote>
-          <cite>— A Happy Client</cite>
-        </li>
-        <li>
-          <blockquote>“Design system whisperer. Knows when to cut, when to color.”</blockquote>
-          <cite>— Product Lead</cite>
-        </li>
-      </ul>
-    </article>
+    <header class="home-head"><h2 class="home-title">What people say</h2></header>
+    <ul class="home-quotes">
+      <li><blockquote>“Ship-fast energy with filmmaker finesse.”</blockquote><cite>— A Happy Client</cite></li>
+      <li><blockquote>“Design system whisperer. Knows when to cut, when to color.”</blockquote><cite>— Product Lead</cite></li>
+    </ul>
   </div>
 </section>
 
-<!-- 8) Timeline -->
-<section class="home-timeline">
+<!-- Section 8: Timeline (island) -->
+<section class="home-section home-timeline home-section--island">
   <div class="container">
-    <article class="home-island">
-      <header class="home-head"><h2 class="home-title">Timeline</h2></header>
-      <ol class="home-steps">
-        <li><span>Now</span><p>Building a lightweight, island-style portfolio.</p></li>
-        <li><span>2024</span><p>Shipped client MVPs & internal design systems.</p></li>
-        <li><span>Earlier</span><p>Documented software + filmmaking journey.</p></li>
-      </ol>
-    </article>
+    <header class="home-head"><h2 class="home-title">Timeline</h2></header>
+    <ol class="home-steps">
+      <li><span>Now</span><p>Building a lightweight, island-style portfolio.</p></li>
+      <li><span>2024</span><p>Shipped client MVPs & internal design systems.</p></li>
+      <li><span>Earlier</span><p>Documented software + filmmaking journey.</p></li>
+    </ol>
   </div>
 </section>
 
-<!-- 9) Stats -->
-<section class="home-stats">
+<!-- Section 9: Stats (accent band) -->
+<section class="home-section home-stats home-section--accent home-pattern--lines">
   <div class="container">
-    <article class="home-island">
-      <ul class="home-metrics">
-        <li><strong>17k+</strong><span>YT Subscribers</span></li>
-        <li><strong>50+</strong><span>Projects</span></li>
-        <li><strong>10yrs</strong><span>Across stacks</span></li>
-      </ul>
-    </article>
+    <ul class="home-metrics">
+      <li><strong>17k+</strong><span>YT Subscribers</span></li>
+      <li><strong>50+</strong><span>Projects</span></li>
+      <li><strong>10yrs</strong><span>Across stacks</span></li>
+    </ul>
   </div>
 </section>
 
-<!-- 10) Sponsors -->
-<section class="home-sponsors">
+<!-- Section 10: Sponsors (plain) -->
+<section class="home-section home-sponsors home-section--plain">
   <div class="container">
-    <article class="home-island">
-      <header class="home-head"><h2 class="home-title">Sponsors</h2></header>
-      <ul class="home-logos">
-        <li><img src="https://dummyimage.com/120x40/000/fff&text=Brand" alt="Brand 1"></li>
-        <li><img src="https://dummyimage.com/120x40/000/fff&text=Brand" alt="Brand 2"></li>
-        <li><img src="https://dummyimage.com/120x40/000/fff&text=Brand" alt="Brand 3"></li>
-      </ul>
-    </article>
+    <header class="home-head"><h2 class="home-title">Sponsors</h2></header>
+    <ul class="home-logos">
+      <li><img src="https://dummyimage.com/120x40/000/fff&text=Brand" alt="Brand 1"></li>
+      <li><img src="https://dummyimage.com/120x40/000/fff&text=Brand" alt="Brand 2"></li>
+      <li><img src="https://dummyimage.com/120x40/000/fff&text=Brand" alt="Brand 3"></li>
+    </ul>
   </div>
 </section>
 
-<!-- 11) Newsletter -->
-<section class="home-newsletter">
+<!-- Section 11: Newsletter (island) -->
+<section class="home-section home-newsletter home-section--island">
   <div class="container">
-    <article class="home-island">
-      <header class="home-head"><h2 class="home-title">Newsletter</h2><p class="home-sub">Short, useful, no spam.</p></header>
-      <form class="home-newsletter__form" action="#" method="post">
-        <input type="email" name="email" placeholder="you@domain.com" required>
-        <button class="btn button" type="submit"><i class="ph-bold ph-envelope"></i><span>Subscribe</span></button>
-      </form>
-    </article>
+    <header class="home-head"><h2 class="home-title">Newsletter</h2><p class="home-sub">Short, useful, no spam.</p></header>
+    <form class="home-newsletter__form" action="#" method="post">
+      <input type="email" name="email" placeholder="you@domain.com" required>
+      <button class="btn button" type="submit"><i class="ph-bold ph-envelope"></i><span>Subscribe</span></button>
+    </form>
   </div>
 </section>
 
-<!-- 12) Hire me -->
-<section class="home-hire">
+<!-- Section 12: Hire me (accent CTA) -->
+<section class="home-section home-hire home-section--accent">
   <div class="container">
-    <article class="home-island">
-      <div class="home-cta">
-        <h2 class="home-title">Available for select projects</h2>
-        <p class="home-sub">Let’s ship something sharp.</p>
-        <div class="home-cta__actions">
-          <a class="btn button" href="{{ '/contact/' | relative_url }}"><i class="ph-bold ph-calendar"></i><span>Book a call</span></a>
-          <a class="btn button-transparent" href="{{ '/services/' | relative_url }}"><i class="ph-bold ph-briefcase"></i><span>View services</span></a>
-        </div>
+    <div class="home-cta">
+      <h2 class="home-title">Available for select projects</h2>
+      <p class="home-sub">Let’s ship something sharp.</p>
+      <div class="home-cta__actions">
+        <a class="btn button" href="{{ '/contact/' | relative_url }}"><i class="ph-bold ph-calendar"></i><span>Book a call</span></a>
+        <a class="btn button-transparent" href="{{ '/services/' | relative_url }}"><i class="ph-bold ph-briefcase"></i><span>View services</span></a>
       </div>
-    </article>
+    </div>
   </div>
 </section>
 
-<!-- 13) FAQs -->
-<section class="home-faq">
+<!-- Section 13: FAQ (band) -->
+<section class="home-section home-faq home-section--band">
   <div class="container">
-    <article class="home-island">
-      <header class="home-head"><h2 class="home-title">FAQs</h2></header>
-      <details class="home-qa">
-        <summary>How do we start?</summary>
-        <p>Quick discovery, scope, and a small kickoff sprint.</p>
-      </details>
-      <details class="home-qa">
-        <summary>What’s your turnaround?</summary>
-        <p>Depends on scope; I prefer fast, iterative cycles.</p>
-      </details>
-    </article>
+    <header class="home-head"><h2 class="home-title">FAQs</h2></header>
+    <details class="home-qa"><summary>How do we start?</summary><p>Quick discovery, scope, and a small kickoff sprint.</p></details>
+    <details class="home-qa"><summary>What’s your turnaround?</summary><p>Depends on scope; I prefer fast, iterative cycles.</p></details>
   </div>
 </section>
 
-<!-- 14) Contact -->
-<section class="home-contact">
+<!-- Section 14: Contact (plain) -->
+<section class="home-section home-contact home-section--plain">
   <div class="container">
-    <article class="home-island">
-      <header class="home-head"><h2 class="home-title">Contact</h2></header>
-      <ul class="home-socials">
-        {% if site.social_links.LinkedIn %}<li><a href="{{ site.social_links.LinkedIn }}" target="_blank" rel="noopener"><i class="ph-bold ph-linkedin-logo"></i> LinkedIn</a></li>{% endif %}
-        {% if site.social_links.GitHub %}<li><a href="{{ site.social_links.GitHub }}" target="_blank" rel="noopener"><i class="ph-bold ph-github-logo"></i> GitHub</a></li>{% endif %}
-        {% if site.social_links.Twitter %}<li><a href="{{ site.social_links.Twitter }}" target="_blank" rel="noopener"><i class="ph-bold ph-twitter-logo"></i> Twitter</a></li>{% endif %}
-        <li><a href="mailto:{{ site.email | default: 'hello@example.com' }}"><i class="ph-bold ph-envelope"></i> Email</a></li>
-      </ul>
-    </article>
+    <header class="home-head"><h2 class="home-title">Contact</h2></header>
+    <ul class="home-socials">
+      {% if site.social_links.LinkedIn %}<li><a href="{{ site.social_links.LinkedIn }}" target="_blank" rel="noopener"><i class="ph-bold ph-linkedin-logo"></i> LinkedIn</a></li>{% endif %}
+      {% if site.social_links.GitHub %}<li><a href="{{ site.social_links.GitHub }}" target="_blank" rel="noopener"><i class="ph-bold ph-github-logo"></i> GitHub</a></li>{% endif %}
+      {% if site.social_links.Twitter %}<li><a href="{{ site.social_links.Twitter }}" target="_blank" rel="noopener"><i class="ph-bold ph-twitter-logo"></i> Twitter</a></li>{% endif %}
+      <li><a href="mailto:{{ site.email | default: 'hello@example.com' }}"><i class="ph-bold ph-envelope"></i> Email</a></li>
+    </ul>
   </div>
 </section>
 
-<!-- 15) Tiny CTA / Footer Bridge -->
-<section class="home-bridge">
+<!-- Section 15: Bridge (mini island) -->
+<section class="home-section home-bridge home-section--island home-section--mini">
   <div class="container">
-    <article class="home-island home-island--mini">
-      <p class="home-bridge__text">Made with craft in {{ site.location | default: 'Bengaluru' }}.</p>
-      <a class="btn button-transparent" href="{{ site.repo | default: '#' }}"><i class="ph-bold ph-github-logo"></i><span>Star on GitHub</span></a>
-    </article>
+    <p class="home-bridge__text">Made with craft in {{ site.location | default: 'Bengaluru' }}.</p>
+    <a class="btn button-transparent" href="{{ site.repo | default: '#' }}"><i class="ph-bold ph-github-logo"></i><span>Star on GitHub</span></a>
   </div>
 </section>
 
