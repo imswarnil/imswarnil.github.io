@@ -1,8 +1,7 @@
 ---
-layout: resume
+layout: default
 title: Resume
 permalink: /resume/
-
 resume:
   name: Raja Swarnil Singhai
   tagline: Software Engineer • Filmmaker • Creator
@@ -146,3 +145,4 @@ resume:
     - Built thumbnail/poster system with consistent gridline fades.
     - Mentors newcomers via Namaste Salesforce Academy.
 ---
+  {% include resume.html %}
