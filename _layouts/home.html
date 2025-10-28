@@ -4,15 +4,46 @@ layout: default
 <section class="home-hero home-hero--grid" itemscope itemtype="https://schema.org/Person">
   <div class="container">
     <div class="home-hero-card">
-      <!-- Image (first on mobile) -->
+      <!-- Visual first on mobile -->
       <figure class="home-hero-art" itemprop="image">
         <img
           src="{{ page.hero_image | default: 'https://images.pexels.com/photos/10570189/pexels-photo-10570189.jpeg' }}"
           alt="{{ page.hero_image_alt | default: 'Portrait of the creator' }}"
-          width="800" height="800" loading="eager" fetchpriority="high" />
+          width="1200" height="1200" loading="eager" fetchpriority="high" />
+
+        <!-- Floating socials (overlay, desktop shows on hover; mobile always visible) -->
+        <ul class="home-hero-socials" aria-label="Social links">
+          {% if site.social_links.Twitter %}<li><a href="{{ site.social_links.Twitter }}" target="_blank" rel="noopener"><i class="ph-bold ph-twitter-logo"></i><span>Twitter</span></a></li>{% endif %}
+          {% if site.social_links.LinkedIn %}<li><a href="{{ site.social_links.LinkedIn }}" target="_blank" rel="noopener"><i class="ph-bold ph-linkedin-logo"></i><span>LinkedIn</span></a></li>{% endif %}
+          {% if site.social_links.GitHub %}<li><a href="{{ site.social_links.GitHub }}" target="_blank" rel="noopener"><i class="ph-bold ph-github-logo"></i><span>GitHub</span></a></li>{% endif %}
+        </ul>
+
+        <!-- CTA group over image on desktop -->
+        <div class="home-hero-onimage-ctas" aria-label="Primary actions on image">
+          <a class="btn button" href="mailto:{{ site.email | default: 'hello@example.com' }}">
+            <i class="ph-bold ph-paper-plane-tilt" aria-hidden="true"></i><span>Contact</span>
+          </a>
+          <a class="btn button-transparent" href="{{ '/projects/' | relative_url }}">
+            <i class="ph-bold ph-squares-four" aria-hidden="true"></i><span>Projects</span>
+          </a>
+        </div>
+
+        <!-- Meta Ticker overlay (role • company • location) -->
+        <div class="home-hero-ticker" aria-hidden="true">
+          <div class="home-hero-ticker__track">
+            <span>{{ site.work.role | default: 'Software Engineer & Filmmaker' }}</span>
+            <em>•</em>
+            <span>@ {{ site.work.company | default: 'Imswarnil Studio' }}</span>
+            <em>•</em>
+            <span>{{ site.location | default: 'Bengaluru, India' }}</span>
+            <em>•</em>
+            <span>{{ site.social.name | default: site.author | default: site.title }}</span>
+            <em>•</em>
+          </div>
+        </div>
       </figure>
 
-      <!-- Copy -->
+      <!-- Copy (narrower column for readability) -->
       <div class="home-hero-copy">
         <p class="home-hero-kicker" itemprop="jobTitle">
           {{ site.work.role | default: 'Software Engineer & Filmmaker' }}
@@ -26,7 +57,14 @@ layout: default
           {{ page.hero_subtitle | default: "I build fast, cinematic, and robust experiences—pairing engineering with storytelling." }}
         </p>
 
-        <nav class="home-hero-actions" aria-label="Primary actions">
+        <!-- Under-image “Read my story” (shows below image on mobile; inline here for markup simplicity) -->
+        <a class="home-hero-story" href="{{ page.story_href | default: '/about/' | relative_url }}">
+          <i class="ph-bold ph-play-circle" aria-hidden="true"></i>
+          <span>Read my story</span>
+        </a>
+
+        <!-- Redundant actions (mobile shows here; desktop uses on-image) -->
+        <nav class="home-hero-actions" aria-label="Primary actions (mobile)">
           <a class="btn button" href="mailto:{{ site.email | default: 'hello@example.com' }}">
             <i class="ph-bold ph-paper-plane-tilt" aria-hidden="true"></i><span>Contact me</span>
           </a>
@@ -47,6 +85,171 @@ layout: default
     </div>
   </div>
 </section>
+
+<style>
+/* ================================================================
+   home-hero — Wider canvas, narrower text column, on-image socials,
+   image-first mobile, meta ticker, and “Read my story” under image.
+   Uses compact, airy sizing; no unit-mix inside calc().
+================================================================ */
+
+/* Section: a bit “wider” feel via increased padding */
+.home-hero{
+  position:relative;
+  padding-block: clamp(1.25rem, 4vw, 3rem);
+}
+.home-hero--grid{
+  background-image:
+    linear-gradient(to right, rgba(0,0,0,.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0,0,0,.05) 1px, transparent 1px);
+  background-size: 24px 24px, 24px 24px;
+}
+html[data-color-scheme="dark"] .home-hero--grid{
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,.06) 1px, transparent 1px);
+}
+
+/* Card layout: make the visual area feel expansive, keep copy narrow */
+.home-hero-card{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1rem, 3vw, 1.75rem);
+  align-items:center;
+}
+
+/* Image first on mobile; generous but height-controlled square */
+.home-hero-art{
+  order:-1;
+  margin:0;
+  position:relative;
+  width:100%;
+  max-width: clamp(300px, 70vw, 640px);  /* “wider” feel */
+  aspect-ratio: 1 / 1;
+  border-radius: 18px;
+  overflow:hidden;
+  justify-self:center;
+  background: #e9e9e9;
+}
+html[data-color-scheme="dark"] .home-hero-art{ background:#1a1a1c; }
+.home-hero-art img{
+  width:100%; height:100%; object-fit:cover; object-position:center; display:block;
+}
+
+/* Overlay socials (top-right) */
+.home-hero-socials{
+  list-style:none; margin:0; padding:0;
+  position:absolute; top:12px; right:12px; display:grid; gap:8px;
+}
+.home-hero-socials li a{
+  display:inline-flex; gap:.4rem; align-items:center;
+  padding:.4rem .6rem; border-radius:999px; font-size:.8125rem; line-height:1;
+  border:1px solid rgba(0,0,0,.15); background: rgba(255,255,255,.85); color:#111;
+  backdrop-filter: blur(8px);
+}
+.home-hero-socials i{ font-style:normal; }
+html[data-color-scheme="dark"] .home-hero-socials li a{
+  border-color: rgba(255,255,255,.18); background: rgba(20,20,22,.72); color:#fff;
+}
+
+/* CTA group over the image (bottom-left on desktop) */
+.home-hero-onimage-ctas{
+  position:absolute; left:12px; bottom:12px; display:none; gap:.5rem; flex-wrap:wrap;
+}
+.home-hero-onimage-ctas .btn{ border-radius:999px; padding:.55rem 1rem; line-height:1; }
+
+/* Meta ticker across the bottom of the image */
+.home-hero-ticker{
+  position:absolute; left:0; right:0; bottom:0; height:36px; overflow:hidden;
+  border-top:1px solid rgba(0,0,0,.10);
+  background: linear-gradient(180deg, rgba(255,255,255,.80), rgba(255,255,255,.60));
+  backdrop-filter: blur(6px);
+}
+.home-hero-ticker__track{
+  position:absolute; white-space:nowrap; will-change: transform;
+  display:inline-flex; gap:.75rem; align-items:center; padding-inline:12px;
+  animation: heroTicker 18s linear infinite;
+  color:#222; font-size:.875rem;
+}
+.home-hero-ticker__track em{ opacity:.5; font-style:normal; }
+html[data-color-scheme="dark"] .home-hero-ticker{
+  border-top:1px solid rgba(255,255,255,.14);
+  background: linear-gradient(180deg, rgba(26,26,28,.75), rgba(26,26,28,.55));
+}
+html[data-color-scheme="dark"] .home-hero-ticker__track{ color:#ddd; }
+@keyframes heroTicker{
+  from{ transform: translateX(0); }
+  to  { transform: translateX(-50%); }
+}
+
+/* Copy column — intentionally narrower than the image on desktop */
+.home-hero-copy{
+  display:grid; gap: clamp(.75rem, 1.8vw, 1.25rem);
+  max-width: clamp(36ch, 52vw, 54ch);  /* “width wise less width” for readable text */
+  justify-self:start; min-width:0;
+}
+.home-hero-kicker{
+  margin:0; font-size:.875rem; letter-spacing:.04em; text-transform:uppercase; opacity:.85;
+}
+.home-hero-title{
+  margin:0; line-height:1.2; font-weight:700;
+  font-size: clamp(1.75rem, 5.6vw, 2.75rem);
+}
+.home-hero-lead{
+  margin:0; font-size: clamp(1rem, 2.2vw, 1.25rem); opacity:.9;
+}
+
+/* “Read my story” text link below image (visually grouped with content) */
+.home-hero-story{
+  display:inline-flex; gap:.5rem; align-items:center; font-weight:600;
+  text-decoration:none; border-bottom:1px dashed currentColor; padding-bottom:2px; width:max-content;
+}
+.home-hero-story i{ font-style:normal; }
+
+/* Mobile actions (desktop hides these because we show on-image CTAs) */
+.home-hero-actions{ display:flex; flex-wrap:wrap; gap:.6rem; }
+.home-hero-actions .btn{ border-radius:999px; padding:.55rem 1rem; line-height:1; }
+
+/* Meta strip */
+.home-hero-meta{
+  display:flex; flex-wrap:wrap; gap:.5rem .75rem; align-items:center; margin:0; font-size:.875rem; opacity:.9;
+}
+.home-hero-avatar{ width:28px; height:28px; border-radius:50%; object-fit:cover; }
+.home-hero-dot{ opacity:.5; }
+
+/* Buttons */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:.5em;
+  min-height:2.25rem; padding:.5rem 1rem; font-size:.875rem; font-weight:600;
+  border-radius:999px; border:1px solid transparent; transition: transform 180ms cubic-bezier(.25,1,.5,1), box-shadow 180ms cubic-bezier(.25,1,.5,1), background-color 180ms, color 180ms;
+  cursor:pointer; user-select:none;
+}
+.button{ background:#000; color:#fff; }
+.button:hover{ transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,.12); color:#fff; }
+html[data-color-scheme="dark"] .button{ background:#fff; color:#000; }
+html[data-color-scheme="dark"] .button:hover{ color:#000; }
+.button-transparent{
+  background:transparent; border-color: rgba(0,0,0,.20); color:#111;
+}
+.button-transparent:hover{ background: rgba(0,0,0,.06); color:inherit; }
+html[data-color-scheme="dark"] .button-transparent{ border-color: rgba(255,255,255,.18); color:#fff; }
+html[data-color-scheme="dark"] .button-transparent:hover{ background: rgba(255,255,255,.10); color:inherit; }
+
+/* Desktop adjustments */
+@media (min-width: 992px){
+  .home-hero-card{
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); /* narrower copy | wider visual */
+    gap: clamp(1.25rem, 3.5vw, 2rem);
+  }
+  .home-hero-art{ order:0; justify-self:end; max-width: clamp(440px, 48vw, 720px); }
+  .home-hero-copy{ order:-1; }
+  .home-hero-onimage-ctas{ display:flex; }
+  .home-hero-actions{ display:none; } /* hide duplicate CTAs on desktop */
+}
+
+/* Safety */
+.home-hero :where(img,video,svg,canvas){ max-width:100%; height:auto; display:block; }
+</style>
 
 {% include adsense.html type="horizontal" %}
 
