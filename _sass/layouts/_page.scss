@@ -192,3 +192,8 @@
     @include theme-block-dark { color: tone(black, dark); }
   }
 }
+.page-related__list { grid-template-columns: 1fr; }
+@media (min-width: $bp-md) {
+  .page-related__list { display: grid; grid-template-columns: 1fr 1fr; gap: $sp-6; }
+}
+

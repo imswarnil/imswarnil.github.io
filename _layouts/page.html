@@ -4,6 +4,7 @@ layout: default
 
 <div class="container">
   <div class="page">
+    <!-- Breadcrumbs -->
     <nav class="page-breadcrumbs" aria-label="Breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
       <ol class="page-breadcrumbs__list">
         <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
@@ -53,9 +54,8 @@ layout: default
             {{ content }}
           </div>
 
-          <!-- Page footer widgets (inline, no includes) -->
+          <!-- Page footer widgets -->
           <footer class="page-foot">
-            <!-- Tags -->
             {% if page.tags %}
             <ul class="page-tags" role="list" aria-label="Tags">
               {% for t in page.tags %}
@@ -89,13 +89,18 @@ layout: default
           </footer>
         </article>
 
-        <!-- Optional: related section (simple list) -->
+        <!-- Related (safe Liquid) -->
         <section class="page-related" aria-label="Related">
           <h3 class="page-related__title">Related</h3>
           <ul class="page-related__list" role="list">
-            {% assign rel = site.posts | where_exp: 'p', 'p.tags & page.tags' | slice: 0, 4 %}
+            {% assign first_tag = page.tags | first %}
+            {% if first_tag %}
+              {% assign rel = site.posts | where_exp: 'p', 'p.tags contains first_tag' | where_exp: 'p', 'p.url != page.url' | slice: 0, 4 %}
+            {% else %}
+              {% assign rel = site.posts | slice: 0, 4 %}
+            {% endif %}
             {% for r in rel %}
-            <li><a class="page-related__item" href="{{ r.url | relative_url }}">{{ r.title }}</a></li>
+              <li><a class="page-related__item" href="{{ r.url | relative_url }}">{{ r.title }}</a></li>
             {% endfor %}
           </ul>
         </section>
@@ -118,7 +123,7 @@ layout: default
           </nav>
         </section>
 
-        <!-- Quick links (page-dedicated widget) -->
+        <!-- Quick links -->
         <section class="page-card page-card--quick">
           <h3 class="page-card__title">Quick links</h3>
           <ul class="page-quick">
