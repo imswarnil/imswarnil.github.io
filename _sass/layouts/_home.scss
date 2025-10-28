@@ -1,60 +1,47 @@
-// ======================================================================
-// home.scss — hero w/ vertical socials + mosaic quick cards
-// Depends on: _variables.scss
-// ======================================================================
+// home-hero.scss — hero only (no bento). Depends on _variables.scss
 @use "variables" as *;
 
-.home-hero { padding-block: clamp($sp-10, 4.5vw, $sp-14); } // tighter than before
+.home-hero { padding-block: clamp($sp-10, 4.5vw, $sp-14); }
 
-/* GRID: copy | art (art first on mobile) */
 .home-hero__grid {
   display: grid; gap: clamp($sp-8, 3vw, $sp-12); grid-template-columns: 1fr;
   align-items: center;
   @include mq-up($bp-lg){ grid-template-columns: 1.1fr .9fr; }
 }
-@media (max-width: $bp-lg) {
-  .home-hero__art { order: -1; } // image first on mobile
-}
 
-/* COPY */
-.home-hero__copy { display: grid; gap: $sp-7; }
+/* Image first on mobile */
+@media (max-width: $bp-lg) { .home-hero__art { order: -1; } }
+
+/* Copy */
+.home-hero__copy { display: grid; gap: $sp-6; }
 .home-hero__hello { margin:0; font-size:$fs-4; font-weight:$fw-medium; }
 .home-hero__name  { margin:0; font-weight:$fw-bold; line-height:$lh-tight; font-size:clamp($fs-7, 6vw, $fs-10); }
-.home-hero__sub   { margin:0; font-size:clamp($fs-4, 2.4vw, $fs-6); opacity:.92; }
-.home-hero__lead  { margin:0; max-width:60ch; font-size:clamp($fs-3, 2.1vw, $fs-5);
-  @include theme-block      { color:tone(foreground, light); }
-  @include theme-block-dark { color:tone(foreground, dark);  }
-}
+.home-hero__sub   { margin:0; font-size:clamp($fs-4, 2.4vw, $fs-6); opacity:.94; }
+.home-hero__lead  { margin:0; max-width:60ch; font-size:clamp($fs-3, 2.1vw, $fs-5); }
 
-/* Chips (CTA pills) */
-.home-hero__chips { display:flex; flex-wrap:wrap; gap:$sp-6; }
-.chip { @include button-base; gap:.5em; }
-.chip--solid {
-  @include theme-block      { background:tone(accent, light); color:tone(white, light); }
-  @include theme-block-dark { background:tone(white, dark);  color:tone(black, dark);  }
-  border-color: transparent;
-  &:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0,0,0,.14);
-    @include theme-block      { color:tone(white, light); }
-    @include theme-block-dark { color:tone(black, dark); }
+/* CTA (reuse your .button styles; keep hover readable) */
+.home-hero__cta { display:flex; flex-wrap:wrap; gap:$sp-6; align-items:center;
+  .button {
+    @include theme-block      { color: tone(white, light); }
+    @include theme-block-dark { color: tone(black, dark); }
+    &:hover {
+      @include theme-block      { color: tone(white, light); }
+      @include theme-block-dark { color: tone(black, dark); }
+    }
   }
-}
-.chip--ghost {
-  background:transparent;
-  @include theme-block      { border-color:tone(border, light); color:tone(contrast, light); }
-  @include theme-block-dark { border-color:tone(border, dark);  color:tone(contrast, dark);  }
-  &:hover { @include theme-block{ background:tone(background-100, light);} @include theme-block-dark{ background:tone(background-200, dark);} }
 }
 
 /* Meta + Stats */
-.home-hero__meta { display:grid; gap:$sp-3; margin-top: $sp-4; }
+.home-hero__meta { display:grid; gap:$sp-3; margin-top:$sp-2; }
 .home-hero__meta-row { display:flex; align-items:center; gap:$sp-5; font-size:$fs-2;
   @include theme-block      { color:tone(secondary, light); }
   @include theme-block-dark { color:tone(secondary, dark); }
 }
+
 .home-hero__stats {
   display:flex; flex-wrap:wrap; gap:$sp-7; margin:$sp-7 0 0; padding:0; list-style:none;
-  li{ display:grid; gap:.15rem; align-items:center; justify-items:start; }
-  i{ font-size:1rem; opacity:.8; }
+  li{ display:grid; gap:.15rem; }
+  i{ font-size:1rem; opacity:.85; }
   span{ font-weight:$fw-semibold; font-size:$fs-4; line-height:$lh-tight; }
   small{ font-size:$fs-1; opacity:.8;
     @include theme-block      { color:tone(secondary, light); }
@@ -62,11 +49,11 @@
   }
 }
 
-/* ART — portrait 3:4, subtle tilt only on desktop */
+/* Art */
 .home-hero__art {
   position: relative;
   margin:0; justify-self:center; width: min(92%, 520px);
-  aspect-ratio: 3 / 4; border-radius: $radius-6; overflow: hidden;
+  aspect-ratio: 3/4; border-radius: $radius-6; overflow: hidden;
   @include theme-block      { background:tone(background-100, light); border:1px solid tone(border, light); box-shadow:$shadow-light; }
   @include theme-block-dark { background:tone(background-200, dark);  border:1px solid tone(border, dark);  box-shadow:$shadow-dark;  }
   img{ width:100%; height:100%; object-fit:cover; object-position:center; display:block; }
@@ -75,9 +62,9 @@
   .home-hero__art { transform: perspective(1200px) rotateY(-4deg); transform-origin:center left; }
   .home-hero__art:hover { transform: perspective(1200px) rotateY(-3deg) translateY(-2px); }
 }
-@media (max-width: $bp-lg) { .home-hero__art { transform: none; } }
+@media (max-width: $bp-lg) { .home-hero__art { transform:none; } }
 
-/* Vertical social rail (sticks to image edge) */
+/* Vertical social rail */
 .home-hero__social {
   position:absolute; top:$sp-8; right:-3rem; display:flex; flex-direction:column; gap:$sp-5;
   margin:0; padding:0; list-style:none;

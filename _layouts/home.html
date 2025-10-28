@@ -1,7 +1,6 @@
 ---
 layout: default
 ---
-<!-- Phosphor icons (only once per page) -->
 <section class="home-hero" itemscope itemtype="https://schema.org/Person">
   <div class="container">
     <div class="home-hero__grid">
@@ -11,20 +10,16 @@ layout: default
         <h1 class="home-hero__name" itemprop="name">I’m Swarnil Singhai</h1>
         <p class="home-hero__sub">Creative Engineer &amp; Filmmaker</p>
 
-        <div class="home-hero__chips" role="list">
-          <a class="chip chip--solid" role="listitem" href="{{ '/about/' | relative_url }}">
-            <i class="ph-bold ph-briefcase"></i><span>Software Engineer</span>
+        <nav class="home-hero__cta" aria-label="Primary actions">
+          <a class="button" href="mailto:{{ site.email | default: 'hello@example.com' }}">
+            <i class="ph-bold ph-paper-plane-tilt" aria-hidden="true"></i><span>Contact me</span>
           </a>
-          <a class="chip chip--ghost" role="listitem" href="{{ '/videos/' | relative_url }}">
-            <i class="ph-bold ph-film-slate"></i><span>Creator</span>
+          <a class="button-transparent" href="{{ '/projects/' | relative_url }}">
+            <i class="ph-bold ph-squares-four" aria-hidden="true"></i><span>View projects</span>
           </a>
-        </div>
+        </nav>
 
-        <p class="home-hero__lead" itemprop="description">
-          I build fast, cinematic web experiences—clear UX, measured performance, and a storyteller’s touch.
-        </p>
-
-        <!-- Meta (company + location) -->
+        <!-- Meta -->
         <div class="home-hero__meta">
           <div class="home-hero__meta-row">
             <i class="ph-bold ph-identification-badge" aria-hidden="true"></i>
@@ -51,7 +46,6 @@ layout: default
           src="{{ page.hero_image | default: 'https://images.pexels.com/photos/10570189/pexels-photo-10570189.jpeg' }}"
           alt="{{ page.hero_image_alt | default: 'Portrait of Swarnil Singhai' }}"
           width="900" height="1200" loading="eager" fetchpriority="high">
-        <!-- Vertical social rail (sticks to image edge) -->
         <ul class="home-hero__social" role="list" aria-label="Social links">
           <li><a href="mailto:{{ site.email | default: 'hello@example.com' }}" aria-label="Email"><i class="ph-bold ph-envelope"></i></a></li>
           <li><a href="{{ site.social_links.GitHub | default: 'https://github.com' }}" aria-label="GitHub"><i class="ph-bold ph-github-logo"></i></a></li>
