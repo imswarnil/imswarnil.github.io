@@ -1,58 +1,336 @@
-<div class="form  form--search">
-  <form id="contact-form" action="">
-    <label class="label" for="search">Search term:</label>
-    <input class="input" id="search" type="search" name="search" placeholder="e.g. About us" autocomplete="off" />
-
-    <ul class="list  list--results" id="list">
-        <!-- results go here -->
-    </ul>
-  </form>
-</div>
-
-<script type="text/javascript" src="{{ "/assets/scripts/fetch.js" | relative_url }}"></script>
-<script type="text/javascript">
-  const endpoint = '{{ "/assets/search.json" | relative_url }}';
-
-  const pages = [];
-
-  fetch(endpoint)
-    .then(blob => blob.json())
-    .then(data => pages.push(...data))
-
-  function findResults(termToMatch, pages) {
-    return pages.filter(item => {
-      const regex = new RegExp(termToMatch, 'gi');
-      return item.title.match(regex) || item.content.match(regex);
+<!-- ICONS (keep in <head> in your layout if you already have it) -->
+  <script defer src="https://unpkg.com/@phosphor-icons/web"></script>
+  
+  <section class="search-page">
+    <div class="container">
+      <div class="search-page__head">
+        <h1 class="search-page__title">
+          <i class="ph-bold ph-magnifying-glass"></i> Search
+        </h1>
+        <p class="search-page__sub">Find pages, posts, projects, guides, videos and more.</p>
+      </div>
+  
+      <!-- Search bar -->
+      <div class="search-page__bar" role="search">
+        <form class="search-page__form" id="site-search-form" action="." novalidate>
+          <label class="sr-only" for="search">Search term</label>
+          <i class="ph-bold ph-magnifying-glass search-page__form-icon" aria-hidden="true"></i>
+          <input
+            class="search-page__input"
+            id="search"
+            type="search"
+            name="search"
+            placeholder="Type to search…"
+            autocomplete="off"
+            aria-controls="search-results"
+            aria-describedby="search-help"
+          />
+          <button class="search-page__clear" type="button" id="search-clear" aria-label="Clear search">
+            <i class="ph-bold ph-x"></i>
+          </button>
+        </form>
+        <div id="search-help" class="search-page__help">Press Enter to focus results. Use ↑/↓ to navigate.</div>
+      </div>
+  
+      <!-- Status line -->
+      <div class="search-page__status" id="search-status" aria-live="polite"></div>
+  
+      <!-- Results -->
+      <ul class="search-page__results" id="search-results" role="listbox" aria-label="Search results"></ul>
+  
+      <!-- Template for one result row -->
+      <template id="search-item-tpl">
+        <li class="search-page__result" role="option">
+          <a class="search-page__result-link" href="#">
+            <div class="search-page__thumb" aria-hidden="true">
+              <i class="ph-bold ph-file-text search-page__thumb-icon"></i>
+            </div>
+            <div class="search-page__meta">
+              <div class="search-page__eyebrow">
+                <span class="search-page__type">
+                  <i class="ph-bold ph-file-text"></i><span class="t">Page</span>
+                </span>
+                <span class="search-page__sep">•</span>
+                <span class="search-page__url"></span>
+              </div>
+              <h4 class="search-page__titleline"></h4>
+              <p class="search-page__excerpt"></p>
+            </div>
+            <div class="search-page__cta" aria-hidden="true"><i class="ph-bold ph-arrow-up-right"></i></div>
+          </a>
+        </li>
+      </template>
+    </div>
+  </section>
+  
+  <style>
+  /* ====== BASIC TOKENS (fallbacks if your theme variables aren't present) ====== */
+  :root{
+    --sp-2:.25rem; --sp-3:.5rem; --sp-4:.75rem; --sp-5:1rem; --sp-6:1.25rem; --sp-8:1.75rem; --sp-10:2.25rem;
+    --radius-3:10px; --radius-4:14px; --radius-5:18px; --radius-6:22px; --radius-pill:999px;
+    --fs-2:.9rem; --fs-3:1rem; --fs-4:1.1rem; --fs-5:1.25rem; --fs-6:1.6rem; --fs-9:2.4rem;
+    --btn-sm:38px;
+    --c-bg:#fff; --c-bg-100:#f3f3f3; --c-bg-200:#ededed; --c-fg:#1f1f1f; --c-sec:#666; --c-border:rgba(0,0,0,.12);
+    --c-ink:#111; --c-card:#fff; --shadow:0 18px 40px -22px rgba(0,0,0,.25);
+  }
+  :root[data-color-scheme="dark"]{
+    --c-bg:#111113; --c-bg-100:#1a1a1c; --c-bg-200:#262629; --c-fg:#e6e6e6; --c-sec:#a9a9a9; --c-border:rgba(255,255,255,.14);
+    --c-ink:#fafafa; --c-card:#1a1a1c; --shadow:0 28px 60px -26px rgba(0,0,0,.6);
+  }
+  .container{ width:min(1180px, 100% - 32px); margin-inline:auto; }
+  
+  /* ====== SEARCH — namespaced ====== */
+  .search-page{ padding: var(--sp-8) 0 var(--sp-10); color: var(--c-fg); }
+  .search-page__head{ margin-bottom: var(--sp-6); }
+  .search-page__title{
+    display:inline-flex; align-items:center; gap:var(--sp-3); margin:0 0 var(--sp-2);
+    font-size:clamp(var(--fs-6), 2.4vw, var(--fs-9)); line-height:1.06; letter-spacing:-.01em; color:var(--c-ink);
+  }
+  .search-page__sub{ margin:0; font-size:clamp(var(--fs-3),1.2vw,var(--fs-5)); color:var(--c-sec); }
+  
+  /* Bar */
+  .search-page__bar{ margin-bottom: var(--sp-4); }
+  .search-page__form{
+    display:flex; align-items:center; gap:var(--sp-3);
+    border-radius: var(--radius-6); padding: var(--sp-3) var(--sp-5);
+    border:1px solid var(--c-border); background: var(--c-card); transition: box-shadow .2s, border-color .2s, background-color .2s;
+    box-shadow: var(--shadow);
+  }
+  .search-page__form:focus-within{ box-shadow: 0 16px 40px -20px rgba(0,0,0,.35); }
+  .search-page__form-icon{ font-size: var(--fs-5); color: var(--c-sec); }
+  .search-page__input{
+    flex:1; min-width:0; font-size: var(--fs-4); color: var(--c-ink);
+    border:0; outline:0; background:transparent;
+  }
+  .search-page__clear{
+    display:inline-grid; place-items:center; width:var(--btn-sm); height:var(--btn-sm);
+    border-radius:50%; border:1px solid transparent; background:transparent; color:var(--c-sec); cursor:pointer; transition:.2s;
+  }
+  .search-page__clear:hover{ transform:translateY(-1px); background:var(--c-bg-200); color:var(--c-ink); }
+  
+  .search-page__help{ margin-top:var(--sp-2); font-size:var(--fs-2); color:var(--c-sec); }
+  .search-page__status{ min-height:1.2em; margin: var(--sp-2) 0; font-size:var(--fs-2); color:var(--c-sec); }
+  
+  /* Results list */
+  .search-page__results{
+    display:none; list-style:none; margin:0; padding:0;
+    border:1px solid var(--c-border); border-radius: var(--radius-6); overflow:clip; background:var(--c-card); box-shadow: var(--shadow);
+  }
+  .search-page__results.is-visible{ display:block; }
+  .search-page__result + .search-page__result{ border-top:1px solid var(--c-border); }
+  
+  /* Row */
+  .search-page__result-link{
+    display:grid; grid-template-columns: 3.25rem 1fr auto; gap: var(--sp-4);
+    padding: var(--sp-4) var(--sp-5); color: var(--c-ink); text-decoration:none; transition:.18s; cursor:pointer;
+  }
+  .search-page__result-link:hover, .search-page__result-link:focus{
+    background: var(--c-bg-100); outline: none; transform: translateY(-1px);
+  }
+  @media (max-width: 480px){
+    .search-page__result-link{ grid-template-columns: 2.75rem 1fr auto; padding: var(--sp-4); }
+  }
+  
+  /* Thumb (image or icon) */
+  .search-page__thumb{
+    width:3.25rem; height:3.25rem; border-radius: var(--radius-3);
+    display:grid; place-items:center; overflow:hidden; border:1px solid var(--c-border); background: var(--c-bg-100);
+  }
+  .search-page__thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .search-page__thumb-icon{ font-size: var(--fs-5); opacity:.9; }
+  
+  /* Text */
+  .search-page__meta{ min-width:0; }
+  .search-page__eyebrow{
+    display:flex; align-items:center; gap:var(--sp-2); flex-wrap:wrap; margin-bottom: .25rem;
+    font-size: var(--fs-2); color: var(--c-sec);
+  }
+  .search-page__type{ display:inline-flex; align-items:center; gap:.4rem; }
+  .search-page__sep{ opacity:.55; }
+  .search-page__url{ max-width:36ch; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  @media (max-width:480px){ .search-page__url{ max-width:24ch; } }
+  
+  .search-page__titleline{ margin:0 0 .1rem; font-size: var(--fs-4); line-height:1.2; }
+  .search-page__excerpt{
+    margin:0; font-size: var(--fs-2); color: var(--c-sec);
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+    max-width:85ch;
+  }
+  
+  /* CTA arrow */
+  .search-page__cta{ display:grid; place-items:center; font-size: var(--fs-5); opacity:.6; transition:.18s; }
+  .search-page__result-link:hover .search-page__cta{ opacity:1; transform:translateX(2px); }
+  
+  /* Empty */
+  .search-page__empty{ padding: var(--sp-5); text-align:center; font-size: var(--fs-3); color: var(--c-sec); }
+  
+  /* A11y */
+  .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+  </style>
+  
+  <script>
+  (function () {
+    // Jekyll path to your index
+    const endpoint = '{{ "/assets/search.json" | relative_url }}';
+  
+    const pages = [];
+    const field  = document.querySelector('#search');
+    const list   = document.querySelector('#search-results');
+    const tpl    = document.querySelector('#search-item-tpl');
+    const status = document.querySelector('#search-status');
+    const clear  = document.querySelector('#search-clear');
+    const form   = document.querySelector('#site-search-form');
+  
+    // Load index
+    fetch(endpoint)
+      .then(r => r.json())
+      .then(data => pages.push(...data))
+      .catch(() => status.textContent = 'Could not load search index.');
+  
+    // Utilities
+    function norm(s){ return (s||'').toString(); }
+  
+    function detectType(item){
+      const t = (item.type || item.layout || item.collection || '').toString().toLowerCase();
+      const u = (item.url || '').toLowerCase();
+      if (t.includes('project') || u.includes('/projects') || u.includes('/work')) return 'project';
+      if (t.includes('video')   || u.includes('youtube') || t==='videos')       return 'video';
+      if (t.includes('podcast')) return 'podcast';
+      if (t.includes('guide')   || u.includes('/guides')) return 'guide';
+      if (t.includes('trip')    || t.includes('travel')   || u.includes('/travel')) return 'travel';
+      if (t.includes('post')    || u.includes('/blog')    || u.match(/\/\d{4}\//))  return 'blog';
+      if (t.includes('page')    || u.split('/').filter(Boolean).length <= 1)        return 'page';
+      return 'page';
+    }
+  
+    function iconFor(type){
+      switch(type){
+        case 'project': return 'squares-four';
+        case 'video':   return 'video-camera';
+        case 'podcast': return 'microphone';
+        case 'guide':   return 'student';
+        case 'travel':  return 'airplane-tilt';
+        case 'blog':    return 'article';
+        default:        return 'file-text';
+      }
+    }
+  
+    function hostPath(u){
+      try { const a = document.createElement('a'); a.href = u; return (a.pathname || u).replace(/\/+$/, ''); }
+      catch(e){ return u; }
+    }
+  
+    function escapeRegex(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+  
+    function findResults(term, items){
+      const q = term.trim();
+      if (!q) return [];
+      const rx = new RegExp(escapeRegex(q), 'i');
+      return items.filter(it => rx.test(norm(it.title)) || rx.test(norm(it.content)) || rx.test(norm(it.excerpt)));
+    }
+  
+    function render(items){
+      list.innerHTML = '';
+      const frag = document.createDocumentFragment();
+  
+      items.forEach((it, i) => {
+        const node = tpl.content.cloneNode(true);
+        const link = node.querySelector('.search-page__result-link');
+        const thumb= node.querySelector('.search-page__thumb');
+        const thumbIcon = node.querySelector('.search-page__thumb-icon');
+        const tBadge = node.querySelector('.search-page__type');
+        const tText  = node.querySelector('.search-page__type .t');
+        const urlEl  = node.querySelector('.search-page__url');
+        const title  = node.querySelector('.search-page__titleline');
+        const excerpt= node.querySelector('.search-page__excerpt');
+  
+        const type = detectType(it);
+        const icon = iconFor(type);
+        const url  = it.url || '#';
+  
+        link.href = url;
+        link.id = 'result-' + i;
+  
+        // Thumbnail: prefer item.image if present
+        if (it.image) {
+          const img = new Image();
+          img.src = it.image; img.alt = ''; img.loading = 'lazy';
+          thumb.innerHTML = ''; thumb.appendChild(img);
+        } else {
+          thumbIcon.className = 'ph-bold ph-' + icon + ' search-page__thumb-icon';
+        }
+  
+        // Badge
+        tBadge.querySelector('i').className = 'ph-bold ph-' + icon;
+        tText.textContent = type.charAt(0).toUpperCase() + type.slice(1);
+  
+        urlEl.textContent = hostPath(url);
+        title.textContent = it.title || 'Untitled';
+        excerpt.textContent = (norm(it.excerpt) || norm(it.content)).replace(/\s+/g,' ').trim().slice(0,180);
+  
+        frag.appendChild(node);
+      });
+  
+      list.appendChild(frag);
+    }
+  
+    // Debounce
+    let t = null;
+    function onInput(){
+      clearTimeout(t);
+      t = setTimeout(() => {
+        const q = field.value;
+        const results = findResults(q, pages);
+        const count = results.length;
+  
+        if (!q.trim()) {
+          list.classList.remove('is-visible');
+          list.innerHTML = '';
+          status.textContent = '';
+          return;
+        }
+  
+        render(results);
+        list.classList.toggle('is-visible', count > 0);
+        status.textContent = count ? `${count} result${count>1?'s':''}` : 'No results';
+        if (!count) list.innerHTML = '<li class="search-page__empty" role="option">No results. Try different keywords.</li>';
+      }, 120);
+    }
+  
+    // Keyboard UX
+    function onKeyDown(e){
+      const items = Array.from(list.querySelectorAll('.search-page__result-link'));
+      if (!items.length) return;
+  
+      const active = document.activeElement;
+      const idx = items.indexOf(active);
+  
+      if (e.key === 'Enter' && e.target === field && items[0]) {
+        e.preventDefault(); items[0].focus();
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault(); items[Math.min(idx + 1, items.length - 1)]?.focus();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault(); (idx <= 0 ? field : items[idx - 1]).focus();
+      } else if (e.key === 'Escape') {
+        e.preventDefault(); clear.click();
+      }
+    }
+  
+    // Clear
+    clear.addEventListener('click', function(){
+      field.value = '';
+      list.innerHTML = '';
+      list.classList.remove('is-visible');
+      status.textContent = '';
+      field.focus();
     });
-  }
-
-  function displayResults() {
-    const resultsArray = findResults(this.value, pages);
-    const html = resultsArray.map(item => {
-      return `
-        <li class="item  item--result">
-          <article class="article  typeset">
-            <h4><a href="${item.url}">${item.title}</a></h4>
-            <p>${item.excerpt}</p>
-          </article>
-        </li>`;
-    }).join('');
-    if ((resultsArray.length == 0) || (this.value == '')) {
-      resultsList.innerHTML = `<p>Sorry, nothing was found</p>`;
-    } else {
-      resultsList.innerHTML = html;
-    }
-  }
-
-  const field = document.querySelector('#search');
-  const resultsList = document.querySelector('#list');
-
-  field.addEventListener('keyup', displayResults);
-
-  field.addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-    }
-  });
-</script>
-<noscript>Please enable JavaScript to use the search form.</noscript>
+  
+    // Bind
+    field.addEventListener('input', onInput);
+    field.addEventListener('keydown', onKeyDown);
+    list.addEventListener('keydown', onKeyDown);
+    form.addEventListener('submit', (e)=> e.preventDefault());
+  })();
+  </script>
+  <noscript>Please enable JavaScript to use the search form.</noscript>
+  
