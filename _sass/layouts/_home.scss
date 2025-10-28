@@ -1,10 +1,11 @@
-// home-hero.scss — hero only (no bento). Depends on _variables.scss
+// home-hero.scss — refined stats + overlapping social islands
 @use "variables" as *;
 
 .home-hero { padding-block: clamp($sp-10, 4.5vw, $sp-14); }
 
 .home-hero__grid {
-  display: grid; gap: clamp($sp-8, 3vw, $sp-12); grid-template-columns: 1fr;
+  display: grid; gap: clamp($sp-8, 3vw, $sp-12);
+  grid-template-columns: 1fr;
   align-items: center;
   @include mq-up($bp-lg){ grid-template-columns: 1.1fr .9fr; }
 }
@@ -17,9 +18,8 @@
 .home-hero__hello { margin:0; font-size:$fs-4; font-weight:$fw-medium; }
 .home-hero__name  { margin:0; font-weight:$fw-bold; line-height:$lh-tight; font-size:clamp($fs-7, 6vw, $fs-10); }
 .home-hero__sub   { margin:0; font-size:clamp($fs-4, 2.4vw, $fs-6); opacity:.94; }
-.home-hero__lead  { margin:0; max-width:60ch; font-size:clamp($fs-3, 2.1vw, $fs-5); }
 
-/* CTA (reuse your .button styles; keep hover readable) */
+/* CTA (ensure readable hover) */
 .home-hero__cta { display:flex; flex-wrap:wrap; gap:$sp-6; align-items:center;
   .button {
     @include theme-block      { color: tone(white, light); }
@@ -31,19 +31,26 @@
   }
 }
 
-/* Meta + Stats */
+/* Meta */
 .home-hero__meta { display:grid; gap:$sp-3; margin-top:$sp-2; }
-.home-hero__meta-row { display:flex; align-items:center; gap:$sp-5; font-size:$fs-2;
+.home-hero__meta-row {
+  display:flex; align-items:center; gap:$sp-5; font-size:$fs-2;
   @include theme-block      { color:tone(secondary, light); }
   @include theme-block-dark { color:tone(secondary, dark); }
 }
 
+/* Compact stats as chips */
 .home-hero__stats {
-  display:flex; flex-wrap:wrap; gap:$sp-7; margin:$sp-7 0 0; padding:0; list-style:none;
-  li{ display:grid; gap:.15rem; }
-  i{ font-size:1rem; opacity:.85; }
-  span{ font-weight:$fw-semibold; font-size:$fs-4; line-height:$lh-tight; }
-  small{ font-size:$fs-1; opacity:.8;
+  display:flex; flex-wrap:wrap; gap:$sp-6; margin:$sp-7 0 0; padding:0; list-style:none;
+}
+.stat {
+  display:grid; gap:.25rem; padding:.5rem .75rem; border-radius:$radius-pill; border:1px solid;
+  @include theme-block      { background:tone(surface, light);  border-color:tone(border, light);  box-shadow:$shadow-light; }
+  @include theme-block-dark { background:tone(surface, dark);   border-color:tone(border, dark);   box-shadow:$shadow-dark;  }
+
+  .stat__val   { font-weight:$fw-semibold; font-size:$fs-4; line-height:$lh-tight; }
+  .stat__label {
+    font-size:$fs-1; letter-spacing:.02em;
     @include theme-block      { color:tone(secondary, light); }
     @include theme-block-dark { color:tone(secondary, dark); }
   }
@@ -51,11 +58,13 @@
 
 /* Art */
 .home-hero__art {
-  position: relative;
-  margin:0; justify-self:center; width: min(92%, 520px);
-  aspect-ratio: 3/4; border-radius: $radius-6; overflow: hidden;
+  position: relative; margin:0; justify-self:center;
+  width: min(92%, 520px); aspect-ratio: 3/4;
+  border-radius: $radius-6; overflow: hidden;
+
   @include theme-block      { background:tone(background-100, light); border:1px solid tone(border, light); box-shadow:$shadow-light; }
   @include theme-block-dark { background:tone(background-200, dark);  border:1px solid tone(border, dark);  box-shadow:$shadow-dark;  }
+
   img{ width:100%; height:100%; object-fit:cover; object-position:center; display:block; }
 }
 @media (min-width: $bp-lg) {
@@ -64,19 +73,31 @@
 }
 @media (max-width: $bp-lg) { .home-hero__art { transform:none; } }
 
-/* Vertical social rail */
+/* Overlapping social rail (square rounded islands) */
 .home-hero__social {
-  position:absolute; top:$sp-8; right:-3rem; display:flex; flex-direction:column; gap:$sp-5;
-  margin:0; padding:0; list-style:none;
-  a{ width:2.25rem; height:2.25rem; display:grid; place-items:center; border-radius:50%; text-decoration:none;
-    @include theme-block      { background:tone(surface, light); border:1px solid tone(border, light); color:tone(contrast, light); box-shadow:$shadow-light; }
-    @include theme-block-dark { background:tone(surface, dark);  border:1px solid tone(border, dark);  color:tone(contrast, dark);  box-shadow:$shadow-dark;  }
+  position:absolute; inset:auto -0.75rem 0 auto; /* default to bottom-right; overridden on desktop */
+  display:flex; gap:$sp-5; list-style:none; margin:0; padding:0;
+
+  /* Mobile: sit on bottom border, centered horizontally */
+  left:50%; right:auto; transform:translateX(-50%); bottom:-0.75rem;
+
+  li { margin:0; padding:0; }
+  a{
+    inline-size:2.4rem; block-size:2.4rem;
+    display:grid; place-items:center;
+    border-radius:$radius-4; text-decoration:none; border:1px solid;
+    @include theme-block      { background:tone(surface, light);  border-color:tone(border, light);  color:tone(contrast, light); box-shadow:$shadow-light; }
+    @include theme-block-dark { background:tone(surface, dark);   border-color:tone(border, dark);   color:tone(contrast, dark);  box-shadow:$shadow-dark;  }
+    transition: transform $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out;
+    &:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,.12); }
   }
 }
-@media (max-width: $bp-lg){
+
+/* Desktop: vertically centered on right border of image */
+@media (min-width: $bp-lg) {
   .home-hero__social{
-    position:static; flex-direction:row; gap:$sp-6; justify-content:center; margin-top:$sp-6;
-    a{ width:2rem; height:2rem; }
+    top:50%; bottom:auto; left:auto; right:-0.9rem; transform:translateY(-50%);
+    flex-direction:column; gap:$sp-5;
   }
 }
 

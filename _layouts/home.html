@@ -31,21 +31,35 @@ layout: default
           </div>
         </div>
 
-        <!-- Stats -->
+        <!-- Compact Stats -->
         <ul class="home-hero__stats" role="list" aria-label="Quick stats">
-          <li><i class="ph ph-youtube-logo"></i><span>{{ page.stats_youtube | default: '17K+' }}</span><small>YT Subs</small></li>
-          <li><i class="ph ph-briefcase"></i><span>{{ page.stats_experience | default: '5+ yrs' }}</span><small>Total Exp</small></li>
-          <li><i class="ph ph-eye"></i><span>{{ page.stats_views | default: '2.4M' }}</span><small>Video Views</small></li>
-          <li><i class="ph ph-article"></i><span>{{ page.stats_blog | default: '180K' }}</span><small>Blog Reads</small></li>
+          <li class="stat">
+            <span class="stat__val">{{ page.stats_youtube | default: '17K+' }}</span>
+            <span class="stat__label">YT Subs</span>
+          </li>
+          <li class="stat">
+            <span class="stat__val">{{ page.stats_experience | default: '5+ yrs' }}</span>
+            <span class="stat__label">Experience</span>
+          </li>
+          <li class="stat">
+            <span class="stat__val">{{ page.stats_views | default: '2.4M' }}</span>
+            <span class="stat__label">Video Views</span>
+          </li>
+          <li class="stat">
+            <span class="stat__val">{{ page.stats_blog | default: '180K' }}</span>
+            <span class="stat__label">Blog Reads</span>
+          </li>
         </ul>
       </div>
 
-      <!-- Art + vertical socials -->
+      <!-- Art + SOCIAL RAIL -->
       <figure class="home-hero__art" itemprop="image">
         <img
           src="{{ page.hero_image | default: 'https://images.pexels.com/photos/10570189/pexels-photo-10570189.jpeg' }}"
           alt="{{ page.hero_image_alt | default: 'Portrait of Swarnil Singhai' }}"
           width="900" height="1200" loading="eager" fetchpriority="high">
+
+        <!-- Overlapping square islands -->
         <ul class="home-hero__social" role="list" aria-label="Social links">
           <li><a href="mailto:{{ site.email | default: 'hello@example.com' }}" aria-label="Email"><i class="ph-bold ph-envelope"></i></a></li>
           <li><a href="{{ site.social_links.GitHub | default: 'https://github.com' }}" aria-label="GitHub"><i class="ph-bold ph-github-logo"></i></a></li>
