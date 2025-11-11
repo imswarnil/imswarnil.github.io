@@ -1,0 +1,113 @@
+/* _sass/_look.scss — modern polish on top of Sassline */
+
+html { color-scheme: light; }
+:root[data-color-scheme="dark"] { color-scheme: dark; }
+
+body {
+  font-family: unquote(map-get($bodytype, font-family));
+  color: $bodyColour;
+  background: $backgroundColour;
+}
+
+/* container */
+.container { width: 90%; max-width: var(--container-wide--width); margin: 0 auto; }
+
+/* headings */
+.typeset h1, .typeset h2, .typeset h3, .typeset h4, .typeset h5, .typeset h6 {
+  color: $headingColour;
+  font-family: unquote(map-get($headingtype, font-family));
+  letter-spacing: -.01em;
+}
+
+/* links → clean underline */
+a {
+  color: $linkColour;
+  text-decoration: underline;
+  text-decoration-thickness: .075em;
+  text-underline-offset: .18em;
+  transition: color .12s ease, text-decoration-color .12s ease;
+}
+a:hover { color: $hoverColour; text-decoration-color: transparent; }
+
+/* buttons (reusing your `.button`) */
+.button, button, input[type="submit"] {
+  --button--bg: var(--ghost-accent-color);
+  --button--fg: var(--color-accent-foreground);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--button--min-height);
+  padding: var(--button--padding-v) var(--button--padding-h);
+  border-radius: var(--button--border-radius);
+  border: 0;
+  background: var(--button--bg);
+  color: var(--button--fg);
+  font-size: var(--button--font-size);
+  font-weight: var(--button--font-weight);
+  line-height: var(--button--line-height);
+  text-decoration: none;
+  transition: opacity .15s, background-color .15s, color .15s;
+}
+.button:hover, button:hover, input[type="submit"]:hover {
+  background: $headingColour; color: var(--color-white);
+}
+
+/* forms */
+input[type="text"], input[type="email"], input[type="search"], input[type="color"],
+textarea, select {
+  width: 100%;
+  background: var(--color-background-100);
+  color: $headingColour;
+  border: 1px solid var(--color-border);
+  border-radius: 1.5rem;
+  padding: var(--spacing-6) var(--spacing-8);
+  line-height: 1.4;
+  transition: border-color .12s, background-color .12s, box-shadow .12s;
+}
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: $linkColour;
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--ghost-accent-color) 25%, transparent);
+}
+
+/* cards */
+.card {
+  background: var(--color-background-100);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-5);
+  box-shadow: var(--shadow);
+  padding: var(--spacing-9);
+}
+
+/* nav tidy */
+.nav a {
+  display: inline-flex; align-items: center;
+  min-height: 2.375rem; padding: .5rem .75rem;
+  border-radius: var(--radius-3);
+  color: $headingColour; text-decoration: none;
+}
+.nav a:hover { background: var(--color-background-200); }
+
+/* tables & code */
+.typeset table {
+  border-collapse: collapse; width: 100%;
+  font-family: unquote(map-get($headingtype, font-family));
+}
+.typeset thead { border-bottom: 1px solid var(--color-border); }
+.typeset td, .typeset th { padding: var(--spacing-5) var(--spacing-7); }
+.typeset tr + tr { border-top: 1px solid var(--color-border); }
+
+code, pre {
+  background: $codeBackgroundColour;
+  color: $headingColour;
+  border-radius: var(--radius-2);
+  box-shadow: inset 0 0 0 1px var(--color-border);
+}
+pre { padding: var(--spacing-6) var(--spacing-7); overflow: auto; }
+
+/* quotes */
+.typeset blockquote {
+  border-left: 2px solid $accentColour;
+  color: $headingColour;
+  padding: .5em 0 .5em var(--spacing-7);
+}
