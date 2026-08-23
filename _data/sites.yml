@@ -1,0 +1,114 @@
+# ═════════════════════════════════════════════════════════════════════════════
+#  THE ONLY FILE YOU EDIT.
+#  Add an entry here → a card appears on the page. Delete it → the card goes.
+#  There is no collection, no generated page: every card links straight out.
+#
+#  FIELDS
+#    title    required  the card's name
+#    url      required  where the card sends you
+#    blurb    required  one line, kept short — the grid is scannable, not read
+#    kind     required  site | theme | project | code | video | social
+#    span     optional  hero (2x2) | wide (2x1) | tall (1x2) | omit for 1x1
+#    meta     optional  the mono line under the title — stack, role, whatever
+#    status   optional  live | building | soon | archived   (default: live)
+#    accent   optional  signal | craft   — signal is the record light. Ration it.
+#    icon     optional  ghost | palette | book | layers | code | play | spark
+#    tags     optional  [a, b, c] — small chips. Best on hero/wide cards only.
+# ═════════════════════════════════════════════════════════════════════════════
+
+# ── The hub ──────────────────────────────────────────────────────────────────
+- title: imswarnil.com
+  url: https://imswarnil.com
+  blurb: Writing, videos, courses, projects and travel. The main desk.
+  kind: site
+  span: hero
+  meta: Ghost 6 · self-hosted
+  status: live
+  accent: signal
+  icon: ghost
+  tags: [Blog, Videos, Courses, Projects, Travel, Web series, Guides, Newsletters]
+
+# ── Design systems ───────────────────────────────────────────────────────────
+- title: Frame & Signal
+  url: https://creator.imswarnil.com/
+  blurb: A token-first, dependency-free CSS design system for creators. Almost
+    monochrome, so one colour can mean something.
+  kind: project
+  span: wide
+  meta: CSS · 144 doc pages · open source
+  status: live
+  icon: palette
+
+- title: NS Design System
+  url: https://github.com/imswarnil/NSDS-Design-System
+  blurb: One set of tokens behind the Namaste Salesforce Ghost theme and its
+    Next.js LMS.
+  kind: project
+  meta: Tokens · Handlebars + React
+  status: building
+  icon: layers
+
+# ── Themes ───────────────────────────────────────────────────────────────────
+- title: Trailblazer
+  url: https://trailblazer.imswarnil.com
+  blurb: An open-source Jekyll theme for Salesforce developers — lesson player,
+    printable resume, certification wall.
+  kind: theme
+  span: wide
+  meta: Jekyll · SCSS · MIT
+  status: live
+  icon: book
+
+- title: dev.imswarnil.com
+  url: https://dev.imswarnil.com/
+  blurb: The Jekyll theme this all started from.
+  kind: theme
+  meta: Jekyll · SCSS
+  status: live
+  icon: code
+
+- title: Swarnil Ghost Theme
+  url: https://github.com/imswarnil/theme.imswarnil.com
+  blurb: A premium Ghost theme for independent creators. Being rebuilt on a
+    two-axis token architecture.
+  kind: theme
+  meta: Ghost 6 · gscan clean
+  status: building
+  accent: craft
+  icon: spark
+
+# ── Learning ─────────────────────────────────────────────────────────────────
+- title: CRM Analytics Academy
+  url: https://crmanalytics.imswarnil.com
+  blurb: A free, open-source curriculum for mastering Salesforce CRM Analytics —
+    data prep, SAQL, dashboards, Einstein Discovery.
+  kind: project
+  span: wide
+  meta: Vue · free forever
+  status: live
+  icon: book
+
+- title: Namaste Salesforce
+  url: https://github.com/imswarnil/Namaste-Salesforce
+  blurb: The Salesforce teaching platform — Ghost theme plus an LMS.
+  kind: project
+  meta: Handlebars · Next.js
+  status: building
+  icon: layers
+
+- title: Job Seekers Guide
+  url: https://github.com/imswarnil/job-seekers-guide
+  blurb: Notes and tooling for people job-hunting in the Salesforce ecosystem.
+  kind: code
+  meta: Vue
+  status: live
+  icon: book
+
+# ── Code ─────────────────────────────────────────────────────────────────────
+- title: GitHub
+  url: https://github.com/imswarnil
+  blurb: Everything above, plus the half-finished things.
+  kind: social
+  meta: "@imswarnil"
+  status: live
+  icon: code

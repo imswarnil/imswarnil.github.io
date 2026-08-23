@@ -1,0 +1,45 @@
+{%- assign s = include.site -%}
+{%- assign status = s.status | default: 'live' -%}
+<a class="card{% if s.span %} card--{{ s.span }}{% endif %}{% if s.accent == 'craft' %} card--craft{% endif %}"
+   href="{{ s.url }}" target="_blank" rel="noopener"
+   style="animation-delay:{{ include.i | times: 45 }}ms">
+
+	{%- comment -%} viewfinder brackets — four corners, easing in on hover {%- endcomment -%}
+	<span class="card__frame" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+
+	{%- if s.span == 'hero' -%}
+	<svg class="card__bars" viewBox="0 0 190 96" aria-hidden="true" preserveAspectRatio="none">
+		<rect x="0"   y="16" width="18" height="80" rx="4"/>
+		<rect x="30"  y="16" width="18" height="80" rx="4"/>
+		<rect x="60"  y="16" width="18" height="80" rx="4"/>
+		<rect x="90"  y="16" width="18" height="80" rx="4"/>
+		<rect x="120" y="16" width="18" height="80" rx="4"/>
+		<rect x="150" y="16" width="18" height="80" rx="4"/>
+	</svg>
+	{%- endif -%}
+
+	<div class="card__top">
+		<span class="card__icon">{% include icon.html name=s.icon %}</span>
+		{%- if status == 'live' -%}
+			<span class="pill pill--live"><span class="pill__dot"></span>live</span>
+		{%- elsif status == 'building' -%}
+			<span class="pill pill--building"><span class="pill__dot"></span>building</span>
+		{%- else -%}
+			<span class="pill"><span class="pill__dot"></span>{{ status }}</span>
+		{%- endif -%}
+	</div>
+
+	<h3 class="card__title">{{ s.title }}</h3>
+	<p class="card__blurb">{{ s.blurb }}</p>
+
+	{%- if s.tags -%}
+	<ul class="chips">
+		{%- for t in s.tags -%}<li class="chips__i">{{ t }}</li>{%- endfor -%}
+	</ul>
+	{%- endif -%}
+
+	<div class="card__foot">
+		<span class="slate">{{ s.meta | default: s.kind }}</span>
+		<span class="card__go">{% include icon.html name='arrow' %}</span>
+	</div>
+</a>

@@ -1,0 +1,23 @@
+# ─────────────────────────────────────────────────────────────────────────────
+#  sites.imswarnil.com — the index of everything Swarnil builds.
+#  A single page. Every card on it comes from _data/. Nothing else to edit.
+# ─────────────────────────────────────────────────────────────────────────────
+title: Swarnil
+tagline: An index of everything I build.
+description: >-
+  Every site, project, theme and video Swarnil Singhai has shipped —
+  one page, one grid, every link.
+url: https://imswarnil.github.io
+author: Swarnil Singhai
+
+# No collections, no posts, no pagination. This site renders one page.
+plugins: []
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - vendor
+  - CNAME.example
+
+sass:
+  style: compressed
