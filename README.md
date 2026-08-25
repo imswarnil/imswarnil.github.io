@@ -7,7 +7,7 @@ One page. One bento grid. Every link out.
 
 [![Live](https://img.shields.io/badge/live-imswarnil.github.io-f04e2e?style=flat-square)](https://imswarnil.github.io)
 [![Built with Jekyll](https://img.shields.io/badge/built%20with-Jekyll-c1872a?style=flat-square)](https://jekyllrb.com)
-[![Design system](https://img.shields.io/badge/design%20system-Frame%20%26%20Signal-55556a?style=flat-square)](https://creator.imswarnil.com/)
+[![Design system](https://img.shields.io/badge/design%20system-Frame%20%26%20Signal-55556a?style=flat-square)](https://design.imswarnil.com/)
 
 </div>
 
@@ -17,7 +17,7 @@ A single static page that collects every site, theme and project I run, and send
 you straight to them. There are **no collections, no post pages, no CMS** — each
 card is a redirect and nothing more. Think linktree, built properly.
 
-It is styled after [Frame & Signal](https://creator.imswarnil.com/), my design
+It is styled after [Frame & Signal](https://design.imswarnil.com/), my design
 system: a near-monochrome ink ramp, vermilion rationed as the record light, and
 Space Grotesk / Inter / IBM Plex Mono. Light and dark come from one token set.
 
@@ -126,5 +126,5 @@ npm dependency and no build step, so it stays deployable on its own.
 ---
 
 <div align="center">
-<sub><a href="https://imswarnil.com">imswarnil.com</a> · <a href="https://creator.imswarnil.com/">Frame &amp; Signal</a> · <a href="https://github.com/imswarnil">@imswarnil</a></sub>
+<sub><a href="https://imswarnil.com">imswarnil.com</a> · <a href="https://design.imswarnil.com/">Frame &amp; Signal</a> · <a href="https://github.com/imswarnil">@imswarnil</a></sub>
 </div>
