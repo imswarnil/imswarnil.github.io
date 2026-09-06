@@ -15,11 +15,12 @@ export type IconName =
 	| "ghost" | "palette" | "book" | "layers" | "code" | "play" | "spark"
 	| "grid" | "briefcase" | "shield" | "badge" | "pen" | "star" | "clock"
 	| "users" | "eye" | "file" | "arrow" | "external" | "expand" | "close"
-	| "search" | "link" | "mail" | "heart" | "calendar" | "pin" | "sun" | "moon";
+	| "search" | "link" | "mail" | "heart" | "calendar" | "pin" | "sun" | "moon"
+	| "comment" | "share" | "bookmark" | "dots" | "send" | "check";
 
 export type BrandName =
 	| "github" | "x" | "youtube" | "instagram" | "facebook" | "linkedin"
-	| "ghost" | "mail" | "rss";
+	| "ghost" | "mail" | "rss" | "spotify";
 
 export interface Card {
 	title: string;
@@ -301,6 +302,23 @@ export const SUPPORT: Give[] = [
 		kind: "hire",
 	},
 ];
+
+/** The résumé rows the LinkedIn card draws. Newest first. */
+export interface Role { when: string; title: string; org: string; where: string; current?: boolean }
+export const ROLES: Role[] = [
+	{ when: "2026 —", title: "Salesforce Engineer", org: "Education First", where: "Budapest", current: true },
+	{ when: "2022 – 26", title: "Salesforce GTM Engineer", org: "Twilio", where: "Bangalore" },
+	{ when: "2021 – 22", title: "CRM Analytics Consultant", org: "Cognizant", where: "Bangalore" },
+	{ when: "2018 – 21", title: "Salesforce Engineer", org: "Accenture", where: "Bangalore" },
+];
+
+export const HANDLES = {
+	github: "imswarnil",
+	x: "imswarnil",
+	instagram: "imswarnil",
+	linkedin: "imswarnil",
+	facebook: "hashtag_swarnil",
+} as const;
 
 export const slugify = (s: string) =>
 	s.toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");

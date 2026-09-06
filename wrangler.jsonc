@@ -33,4 +33,6 @@
   //   GHOST_ADMIN_KEY     member counts
   //   YOUTUBE_API_KEY     channel stats and latest uploads
   //   YOUTUBE_CHANNEL     a UC… id or an @handle
+  //   DATABASE_URL        Neon — the guestbook. `npm run db:init` once after setting.
+  //   GUESTBOOK_SALT      optional; salts the hashed IP used to rate-limit signatures
 }
