@@ -1,6 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { PROFILE } from "@/lib/content";
+/* The design system first — tokens, elements, components, all inside @layer —
+   then this page's own rules, which sit outside every layer and so always win.
+   That is the system's whole customisation contract: no !important, ever. */
+import "./design-system.css";
 import "./globals.css";
 
 const inter = Inter({

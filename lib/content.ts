@@ -312,6 +312,30 @@ export const ROLES: Role[] = [
 	{ when: "2018 – 21", title: "Salesforce Engineer", org: "Accenture", where: "Bangalore" },
 ];
 
+/** The LinkedIn detail: the summary and the receipts. */
+export const SUMMARY =
+	"Seven years turning raw pipeline, funnel, CPQ, product-usage and service data into " +
+	"decision-ready dashboards — used daily across the full go-to-market motion, from " +
+	"top-of-funnel through post-sale expansion.";
+
+export const HIGHLIGHTS = [
+	"Owned GTM analytics for Twilio's Sales Operations team — the single CRM Analytics point of contact for AEs, Sales leadership, CPQ, product-usage and service data.",
+	"Shipped Unified CPQ Insights — configuration and pricing in one view, prioritised and adopted team-wide.",
+	"Built lead and funnel-velocity dashboards that exposed staged drop-off and stalled deals, and forecast/pipeline dashboards that replaced manual prep before forecast calls.",
+	"Migrated Qlik Sense reporting to CRM Analytics at Education First without breaking continuity for Sales, Marketing and Customer Service.",
+];
+
+export const EDUCATION = "B.E. Computer Science · LNCT Group of Colleges (RGPV), Bhopal · 2013 – 2017";
+
+/**
+ * Holdings, as allocation — never amounts. Empty until Swarnil fills it in.
+ * Kite Connect needs a fresh login token every trading day, which is not
+ * something a page can do for itself, so this stays authored: the shape of the
+ * portfolio, refreshed by hand when it changes. Percentages should sum to 100.
+ */
+export interface Holding { name: string; kind: "equity" | "etf" | "mutual fund" | "gold" | "debt" | "cash" | "crypto"; pct: number; note?: string }
+export const PORTFOLIO: Holding[] = [];
+
 export const HANDLES = {
 	github: "imswarnil",
 	x: "imswarnil",
