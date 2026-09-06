@@ -228,8 +228,9 @@ export interface Social {
 	primary?: boolean;
 }
 
+/* The blog is not here: it is the first link on the page, and the Ghost mark
+   at icon size reads as an empty ring rather than as a site. */
 export const SOCIALS: Social[] = [
-	{ label: "imswarnil.com", handle: "the main desk", url: "https://imswarnil.com", icon: "ghost", primary: true },
 	{ label: "GitHub", handle: "@imswarnil", url: "https://github.com/imswarnil", icon: "github" },
 	{ label: "X", handle: "@imswarnil", url: "https://x.com/imswarnil", icon: "x" },
 	{ label: "LinkedIn", handle: "in/imswarnil", url: "https://www.linkedin.com/in/imswarnil/", icon: "linkedin" },

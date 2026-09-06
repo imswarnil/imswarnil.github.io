@@ -3,9 +3,9 @@
 	"private": true,
 	"description": "links.imswarnil.com — the index of everything Swarnil builds. Next.js on Cloudflare Workers.",
 	"scripts": {
-		"dev": "next dev --port 3800",
+		"dev": "next dev --port 3300",
 		"build": "next build",
-		"start": "next start --port 3800",
+		"start": "next start --port 3300",
 		"lint": "next lint",
 		"preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
 		"cf:deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
