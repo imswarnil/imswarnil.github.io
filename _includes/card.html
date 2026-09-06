@@ -1,45 +1,53 @@
 {%- assign s = include.site -%}
+{%- assign i = include.i | default: 0 -%}
 {%- assign status = s.status | default: 'live' -%}
+{%- assign slug = s.title | slugify -%}
+{%- assign d = site.data.live.detail[slug] -%}
+{%- assign r = nil -%}
+{%- if s.repo and site.data.live.github -%}{%- assign r = site.data.live.github.repos | where: 'name', s.repo | first -%}{%- endif -%}
+
+{%- comment -%}
+The card face is always the drawn cover, never a screenshot: twelve different
+photographs at twelve different colour temperatures is the clutter. The real
+screenshot lives one click away, in the sheet, where it has room to be read.
+
+The link is real — middle-click and no-JS both reach the site. JS intercepts a
+plain left click and opens the overview instead.
+{%- endcomment -%}
 <a class="card{% if s.span %} card--{{ s.span }}{% endif %}{% if s.accent == 'craft' %} card--craft{% endif %}"
    href="{{ s.url }}" target="_blank" rel="noopener"
-   style="animation-delay:{{ include.i | times: 45 }}ms">
+   data-sheet="sheet-{{ slug }}"
+   data-kind="{{ s.kind }}"
+   data-find="{{ s.title | append: ' ' | append: s.blurb | append: ' ' | append: s.kind | append: ' ' | append: s.meta | append: ' ' | append: r.language | append: ' ' | append: s.tags | join: ' ' | downcase | escape }}"
+   style="--i:{{ i }}">
 
-	{%- comment -%} viewfinder brackets — four corners, easing in on hover {%- endcomment -%}
-	<span class="card__frame" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+	<span class="card__media frame-hover">
+		{%- include cover.html i=i label=s.title kind=s.kind motif=d.motif -%}
+		<span class="media__scan" aria-hidden="true"></span>
+		<span class="frame__tr" aria-hidden="true"></span><span class="frame__bl" aria-hidden="true"></span>
+		<span class="status status--{{ status }}"><span class="dot"></span>{{ status }}</span>
+	</span>
 
-	{%- if s.span == 'hero' -%}
-	<svg class="card__bars" viewBox="0 0 190 96" aria-hidden="true" preserveAspectRatio="none">
-		<rect x="0"   y="16" width="18" height="80" rx="4"/>
-		<rect x="30"  y="16" width="18" height="80" rx="4"/>
-		<rect x="60"  y="16" width="18" height="80" rx="4"/>
-		<rect x="90"  y="16" width="18" height="80" rx="4"/>
-		<rect x="120" y="16" width="18" height="80" rx="4"/>
-		<rect x="150" y="16" width="18" height="80" rx="4"/>
-	</svg>
-	{%- endif -%}
+	<span class="card__body">
+		<span class="card__kicker t-label-sm">{{ s.kind }}{% if s.meta %} · {{ s.meta }}{% endif %}</span>
+		<span class="card__title">{{ s.title }}</span>
+		<span class="card__excerpt">{{ s.blurb }}</span>
 
-	<div class="card__top">
-		<span class="card__icon">{% include icon.html name=s.icon %}</span>
-		{%- if status == 'live' -%}
-			<span class="pill pill--live"><span class="pill__dot"></span>live</span>
-		{%- elsif status == 'building' -%}
-			<span class="pill pill--building"><span class="pill__dot"></span>building</span>
-		{%- else -%}
-			<span class="pill"><span class="pill__dot"></span>{{ status }}</span>
+		{%- if s.tags -%}
+		<span class="chips">{%- for t in s.tags -%}<span class="chip">{{ t }}</span>{%- endfor -%}</span>
 		{%- endif -%}
-	</div>
 
-	<h3 class="card__title">{{ s.title }}</h3>
-	<p class="card__blurb">{{ s.blurb }}</p>
-
-	{%- if s.tags -%}
-	<ul class="chips">
-		{%- for t in s.tags -%}<li class="chips__i">{{ t }}</li>{%- endfor -%}
-	</ul>
-	{%- endif -%}
-
-	<div class="card__foot">
-		<span class="slate">{{ s.meta | default: s.kind }}</span>
-		<span class="card__go">{% include icon.html name='arrow' %}</span>
-	</div>
+		<span class="card__foot">
+			<span class="t-data card__stats">
+				{%- if r -%}
+					{%- if r.stars > 0 -%}<span>{% include icon.html name='star' %}{{ r.stars }}</span>{%- endif -%}
+					{%- if r.language != '' -%}<span><i class="lang" data-lang="{{ r.language }}"></i>{{ r.language }}</span>{%- endif -%}
+					<span>{{ r.pushed_ago }}</span>
+				{%- else -%}
+					<span>{{ s.url | remove: 'https://' | remove: 'http://' | split: '/' | first }}</span>
+				{%- endif -%}
+			</span>
+			<span class="card__go">{% include icon.html name='expand' %}</span>
+		</span>
+	</span>
 </a>

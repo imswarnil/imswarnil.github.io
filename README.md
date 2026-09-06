@@ -1,36 +1,124 @@
 <div align="center">
 
-# imswarnil.github.io
+# links.imswarnil.com
 
 **The index of everything I build.**
-One page. One bento grid. Every link out.
+One page. Live numbers. Every link out.
 
-[![Live](https://img.shields.io/badge/live-imswarnil.github.io-f04e2e?style=flat-square)](https://imswarnil.github.io)
+[![Live](https://img.shields.io/badge/live-links.imswarnil.com-f04e2e?style=flat-square)](https://links.imswarnil.com)
 [![Built with Jekyll](https://img.shields.io/badge/built%20with-Jekyll-c1872a?style=flat-square)](https://jekyllrb.com)
-[![Design system](https://img.shields.io/badge/design%20system-Frame%20%26%20Signal-55556a?style=flat-square)](https://design.imswarnil.com/)
+[![Design system](https://img.shields.io/badge/design%20system-Swarnil-55556a?style=flat-square)](https://design.imswarnil.com/)
 
 </div>
 
 ---
 
-A single static page that collects every site, theme and project I run, and sends
-you straight to them. There are **no collections, no post pages, no CMS** — each
-card is a redirect and nothing more. Think linktree, built properly.
+A single static page that collects every site, theme, project, post and video I
+run and sends you straight to them. Think linktree, built properly: a bento
+grid where each card opens a real overview, a stats band with receipts, and the
+latest from GitHub, Ghost and YouTube — rebuilt every six hours so nothing on it
+is stale.
 
-It is styled after [Frame & Signal](https://design.imswarnil.com/), my design
-system: a near-monochrome ink ramp, vermilion rationed as the record light, and
-Space Grotesk / Inter / IBM Plex Mono. Light and dark come from one token set.
+It is styled after the [Swarnil Design System](https://design.imswarnil.com/):
+oklch ramps on one lightness ladder, both themes declared once with
+`light-dark()`, Inter worn four ways. Almost monochrome, so one colour can mean
+something — the record light is rationed to what is actually live.
+
+## What is on it
+
+| Section | Where it comes from |
+| :--- | :--- |
+| Hero | `_data/profile.yml` + the Ghost site's title, description and cover |
+| Stats | GitHub, Ghost members and posts, YouTube — whichever have keys |
+| **Now** | Ghost posts tagged `#now`, then the `/now/` page, then `profile.yml` |
+| Sites & projects | `_data/sites.yml`, joined to GitHub for stars and last push |
+| Latest writing | Ghost Content API |
+| Latest videos | YouTube Data API |
+| Elsewhere | `_data/social.yml` |
+| Support the work | `_data/support.yml`, plus real Ghost tier prices |
+| Everything else | every public repo not already a card above |
+
+## How it works
+
+```
+_data/sites.yml        the cards — the file you edit most
+_data/social.yml       the social tiles
+_data/support.yml      the support / monetise band
+_data/profile.yml      name, role, place, and the standing "now"
+_data/live/*.json      every number and every README — gitignored, rebuilt each deploy
+assets/shots/*.jpg     a screenshot per live site — gitignored
+_includes/cover.html   the drawn cover art, one motif per kind of thing
+_includes/sheet.html   the overview a card opens
+```
+
+On every push and every six hours, `.github/workflows/pages.yml`:
+
+1. **`npm run fetch`** — GitHub (repos, stars, followers, and each README's lead
+   line and headings), Ghost (site, posts, `#now`, `/now/`, tiers, member
+   counts) and YouTube (subscribers, views, uploads);
+2. **`npm run covers`** — reads those READMEs and picks each card's cover motif;
+3. **`npm run shots`** — Playwright screenshots each card's live URL;
+4. builds with Jekyll and deploys to GitHub Pages.
+
+Nothing is written back to the repo. Secrets live in the workflow and only
+there. Every source degrades on its own: with no Ghost key the site's title,
+description and cover still come from its public endpoint; with no YouTube
+channel that section stays honestly empty.
+
+### The covers are not decoration
+
+A card's face is a drawn SVG, never a screenshot — twelve photographs at twelve
+colour temperatures is exactly the clutter a grid should avoid. The motif is
+chosen from what the project actually *is*: a token ladder for a design system,
+a page skeleton for a theme, a lesson stack for a curriculum, a nine-mark grid
+for an icon set. `scripts/covers.mjs` picks it from the card's `kind` first and
+the README's own words second.
+
+The real screenshot lives one click away, in the overview sheet, where it has
+room to be looked at.
+
+## Secrets
+
+Set these in **Settings → Secrets and variables → Actions**. All optional.
+
+| Secret | What it unlocks |
+| :--- | :--- |
+| `GHOST_URL` | defaults to `https://www.imswarnil.com` |
+| `GHOST_CONTENT_KEY` | latest posts, post count, `#now` updates, the `/now/` page, tier prices |
+| `GHOST_ADMIN_KEY` | member counts (`id:secret`; used server-side only, never shipped) |
+| `YOUTUBE_API_KEY` | channel stats and the six latest uploads |
+| `YOUTUBE_CHANNEL` | a `UC…` id or an `@handle` |
+
+`GITHUB_TOKEN` is provided by Actions. Pages must be set to deploy from
+**GitHub Actions**, not from a branch.
+
+For a subscriber count that refreshes live in the visitor's browser, put a
+**referrer-restricted** YouTube key in `_config.yml` → `youtube_public_key`.
+That key is public by design; restrict it to this domain first.
+
+## Running it locally
+
+```bash
+npm install                        # Playwright, for screenshots
+cp .env.example .env               # paste keys; every one is optional
+npm run data                       # fetch + covers + shots
+jekyll serve --port 4001           # http://localhost:4001
+```
+
+Without `.env`, `fetch` still pulls GitHub (via `gh auth token` if you are
+logged in) and Ghost's public site info. Port 4001, because 4000 is usually
+already taken by another Jekyll site.
 
 ## Adding a card
 
-Edit **`_data/sites.yml`**. That is the whole workflow — add an entry, get a card;
-delete it, the card goes.
+Edit **`_data/sites.yml`**. Add an entry, get a card; delete it, the card goes.
 
 ```yaml
 - title: My New Thing
   url: https://example.com
   blurb: One line. The grid is scannable, not read.
   kind: project
+  repo: my-new-thing        # joins the card to GitHub: stars, language, last push
   span: wide
   meta: Vue · open source
   status: live
@@ -38,93 +126,30 @@ delete it, the card goes.
   tags: [One, Two]
 ```
 
-| Field    |          | What it does                                                          |
-| :------- | :------- | :-------------------------------------------------------------------- |
-| `title`  | required | The card's name                                                        |
-| `url`    | required | Where the card sends you                                               |
-| `blurb`  | required | One line — the grid is scannable, not read                             |
-| `kind`   | required | `site` · `theme` · `project` · `code` · `video` · `social`             |
-| `span`   | optional | `hero` (2×2) · `wide` (2×1) · `tall` (1×2) — omit for 1×1              |
-| `meta`   | optional | The mono line under the title: stack, role, licence                    |
-| `status` | optional | `live` · `building` · `soon` · `archived` — defaults to `live`         |
-| `accent` | optional | `signal` or `craft`. Swaps the hover brackets to amber                 |
-| `icon`   | optional | `ghost` `palette` `book` `layers` `code` `play` `spark`                |
-| `tags`   | optional | Small chips. Best on `hero` and `wide` cards only                      |
+| Field | | What it does |
+| :--- | :--- | :--- |
+| `title` | required | The card's name |
+| `url` | required | Where the card sends you |
+| `blurb` | required | One line |
+| `kind` | required | `site` · `theme` · `project` · `tool` — also picks the cover motif and the filter chips |
+| `repo` | optional | GitHub repo name — pulls stars, language, last push, README; keeps it out of "everything else" |
+| `span` | optional | `hero` (4×2) · `wide` (3×1) — omit for 2×1 |
+| `meta` | optional | The small line: stack, role, licence |
+| `status` | optional | `live` · `building` · `soon` · `archived` — defaults to `live` |
+| `accent` | optional | `craft` — amber brackets. Means "in progress", never "live" |
+| `icon` | optional | `ghost` `palette` `book` `layers` `code` `play` `spark` `grid` `briefcase` `shield` `badge` `pen` |
+| `tags` | optional | Chips. Best on `hero` and `wide` cards |
 
-`span: hero` also draws the animated signal-meter bars behind the tile.
-`accent: craft` is the rationed one — one per page at most.
+Every public repo that is not already a card appears in **Everything else on
+GitHub**, automatically.
 
-## Video
+## Keeping the Now section current
 
-`_data/videos.yml` ships **empty on purpose**. Add a `channel.url` and entries under
-`items` (each needs a YouTube `id`) and the section switches itself on, pulling
-thumbnails straight from YouTube. Until then the page shows an honest empty state
-rather than placeholder links.
+Tag a short post `#now` on imswarnil.com and it appears at the top of the Now
+section within six hours — no deploy, no edit here. Failing that the `/now/`
+page is used, and failing that the standing lines in `_data/profile.yml`.
 
-```yaml
-channel:
-  url: https://www.youtube.com/@yourhandle
+## Domain
 
-items:
-  - id: dQw4w9WgXcQ
-    title: What the video is called
-    meta: 12:04 · CSS layout
-    span: wide
-```
-
-## Motion
-
-Every animation is on-brand rather than decorative, and all of it sits behind
-`prefers-reduced-motion`:
-
-- a pulsing **record light** in the mark and on every `live` pill
-- an **audio meter** breathing behind the hero tile
-- a **waveform** that draws itself once on load
-- **viewfinder brackets** that ease into each card's corners on hover
-
-## Running it
-
-```bash
-bundle install     # first time only
-jekyll serve       # → http://localhost:4000
-```
-
-## Deploying
-
-Pushing to `main` publishes to **<https://imswarnil.github.io>**. GitHub Pages builds
-Jekyll natively — there is no Actions workflow and no build step to maintain.
-
-<details>
-<summary><strong>Serving it at <code>sites.imswarnil.com</code> instead</strong></summary>
-
-<br>
-
-1. Add a DNS record: `CNAME` · host `sites` · value `imswarnil.github.io`
-2. Wait for it to resolve — `dig +short sites.imswarnil.com`
-3. `mv CNAME.example CNAME`, commit and push
-
-**Do those in that order.** A `CNAME` file committed before the DNS record exists
-takes the site offline until propagation catches up.
-
-</details>
-
-## Layout
-
-```
-_data/sites.yml       every card on the page — the only file you normally edit
-_data/videos.yml      YouTube; empty until a channel is wired up
-_includes/card.html   one YAML entry → one tile
-_includes/icon.html   the inline SVG set
-_layouts/default.html head, fonts, no-flash theme script
-assets/css/style.css  Frame & Signal tokens, copied in so this deploys alone
-index.html            the masthead and the two grids
-```
-
-The design-system tokens are **copied into this repo**, not imported. The page has no
-npm dependency and no build step, so it stays deployable on its own.
-
----
-
-<div align="center">
-<sub><a href="https://imswarnil.com">imswarnil.com</a> · <a href="https://design.imswarnil.com/">Frame &amp; Signal</a> · <a href="https://github.com/imswarnil">@imswarnil</a></sub>
-</div>
+`CNAME` says `links.imswarnil.com`. Point a DNS `CNAME` record for `links` at
+`imswarnil.github.io`, then enable *Enforce HTTPS* in the Pages settings.

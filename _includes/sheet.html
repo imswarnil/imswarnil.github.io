@@ -1,0 +1,84 @@
+{%- assign s = include.site -%}
+{%- assign i = include.i | default: 0 -%}
+{%- assign status = s.status | default: 'live' -%}
+{%- assign slug = s.title | slugify -%}
+{%- assign d = site.data.live.detail[slug] -%}
+{%- assign r = nil -%}
+{%- if s.repo and site.data.live.github -%}{%- assign r = site.data.live.github.repos | where: 'name', s.repo | first -%}{%- endif -%}
+{%- assign shotpath = '/assets/shots/' | append: slug | append: '.jpg' -%}
+{%- assign shot = site.static_files | where: 'path', shotpath | first -%}
+
+{%- comment -%}
+The overview. A native <dialog>, so Escape, focus trapping and the top layer
+come from the platform rather than from a rebuild of it. This is where the real
+screenshot goes: one at a time, at a size where it is worth looking at.
+{%- endcomment -%}
+<dialog class="sheet{% if s.accent == 'craft' %} sheet--craft{% endif %}" id="sheet-{{ slug }}" aria-labelledby="sheet-{{ slug }}-t">
+	<article class="sheet__in">
+
+		<header class="sheet__bar">
+			<span class="rec"><span class="dot dot-live"></span><span class="t-label-sm">{{ status }}</span></span>
+			<span class="t-data-sm sheet__path">{{ s.kind }} / {{ slug }}</span>
+			<form method="dialog"><button class="iconbtn" aria-label="Close overview">{% include icon.html name='close' %}</button></form>
+		</header>
+
+		<div class="sheet__media">
+			{%- if shot -%}
+			<img src="{{ shotpath | relative_url }}" alt="A screenshot of {{ s.title }}" loading="lazy" decoding="async" width="1280" height="800">
+			{%- else -%}
+			{%- include cover.html i=i label=s.title kind=s.kind motif=d.motif -%}
+			{%- endif -%}
+			<span class="media__scan" aria-hidden="true"></span>
+		</div>
+
+		<div class="sheet__body">
+			<p class="t-label-sm">{{ s.meta | default: s.kind }}</p>
+			<h2 class="sheet__title" id="sheet-{{ slug }}-t">{{ s.title }}</h2>
+			<p class="sheet__lead">{{ s.blurb }}</p>
+
+			{%- comment -%} The project's own words, from its README — never a paraphrase. {%- endcomment -%}
+			{%- if d.lead and d.lead != '' -%}
+			<p class="sheet__readme">{{ d.lead }}</p>
+			{%- endif -%}
+
+			{%- if r -%}
+			<dl class="facts">
+				{%- if r.stars > 0 -%}<div><dt class="t-label-sm">Stars</dt><dd class="t-data">{{ r.stars }}</dd></div>{%- endif -%}
+				{%- if r.forks > 0 -%}<div><dt class="t-label-sm">Forks</dt><dd class="t-data">{{ r.forks }}</dd></div>{%- endif -%}
+				{%- if r.language != '' -%}<div><dt class="t-label-sm">Language</dt><dd class="t-data"><i class="lang" data-lang="{{ r.language }}"></i>{{ r.language }}</dd></div>{%- endif -%}
+				{%- if r.licence != '' -%}<div><dt class="t-label-sm">Licence</dt><dd class="t-data">{{ r.licence }}</dd></div>{%- endif -%}
+				<div><dt class="t-label-sm">Started</dt><dd class="t-data">{{ r.created }}</dd></div>
+				<div><dt class="t-label-sm">Last push</dt><dd class="t-data">{{ r.pushed_ago }}</dd></div>
+			</dl>
+			{%- endif -%}
+
+			{%- comment -%} What is actually inside it, taken from the README's own headings. {%- endcomment -%}
+			{%- if d.headings and d.headings != empty -%}
+			<div class="sheet__section">
+				<p class="t-label-sm">Inside</p>
+				<ul class="chips">{%- for h in d.headings -%}<li class="chip">{{ h }}</li>{%- endfor -%}</ul>
+			</div>
+			{%- endif -%}
+
+			{%- if r.topics and r.topics != empty -%}
+			<div class="sheet__section">
+				<p class="t-label-sm">Topics</p>
+				<ul class="chips">{%- for t in r.topics -%}<li class="chip">{{ t }}</li>{%- endfor -%}</ul>
+			</div>
+			{%- endif -%}
+
+			<div class="sheet__cta">
+				<a class="btn btn--solid" href="{{ s.url }}" target="_blank" rel="noopener">
+					{%- if s.url contains 'github.com' -%}Open on GitHub{%- else -%}Visit {{ s.url | remove: 'https://' | remove: 'http://' | split: '/' | first }}{%- endif -%}
+					{% include icon.html name='external' %}
+				</a>
+				{%- if r and s.url contains 'github.com' == false -%}
+				<a class="btn" href="{{ r.url }}" target="_blank" rel="noopener">{% include icon.html name='code' %}Source</a>
+				{%- endif -%}
+				{%- if r.homepage != '' and r.homepage != s.url -%}
+				<a class="btn" href="{{ r.homepage }}" target="_blank" rel="noopener">{% include icon.html name='link' %}Docs</a>
+				{%- endif -%}
+			</div>
+		</div>
+	</article>
+</dialog>

@@ -1,98 +1,367 @@
 ---
 layout: default
 ---
-<div class="wrap">
+{%- assign gh = site.data.live.github -%}
+{%- assign ghost = site.data.live.ghost -%}
+{%- assign yt = site.data.live.youtube -%}
+{%- assign me = site.data.profile -%}
+{%- assign things = site.data.sites | size -%}
+{%- assign kinds = site.data.sites | map: 'kind' | uniq | sort -%}
 
-	<header class="masthead">
-		<div class="masthead__bar">
-			<div class="brand">
-				<svg class="brand__mark" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-					<rect x="1" y="1" width="38" height="38" rx="11" stroke="currentColor" stroke-opacity=".18" stroke-width="1.5"/>
-					<circle cx="20" cy="20" r="6.5" fill="#f04e2e">
-						<animate attributeName="r" values="6.5;5.2;6.5" dur="2.6s" repeatCount="indefinite"/>
-						<animate attributeName="opacity" values="1;.55;1" dur="2.6s" repeatCount="indefinite"/>
-					</circle>
-					<circle cx="20" cy="20" r="11" stroke="#f04e2e" stroke-opacity=".35" stroke-width="1.5" fill="none">
-						<animate attributeName="r" values="9;14;9" dur="2.6s" repeatCount="indefinite"/>
-						<animate attributeName="stroke-opacity" values=".45;0;.45" dur="2.6s" repeatCount="indefinite"/>
-					</circle>
-				</svg>
-				<span class="brand__name">{{ site.author }}</span>
-			</div>
+<header class="topbar">
+	<div class="topbar__in">
+		<a class="brand" href="#main" aria-label="{{ site.author }} — top of page">
+			<svg class="brand__mark" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+				<rect x="1" y="1" width="38" height="38" rx="11" stroke="currentColor" stroke-opacity=".18" stroke-width="1.5"/>
+				<circle cx="20" cy="20" r="6.5" fill="var(--accent)"><animate attributeName="opacity" values="1;.4;1" dur="2s" repeatCount="indefinite"/></circle>
+				<circle cx="20" cy="20" r="11" stroke="var(--accent)" stroke-opacity=".35" stroke-width="1.5"><animate attributeName="r" values="9;14;9" dur="2s" repeatCount="indefinite"/><animate attributeName="stroke-opacity" values=".45;0;.45" dur="2s" repeatCount="indefinite"/></circle>
+			</svg>
+			<span class="brand__name">{{ site.title }}</span>
+		</a>
 
-			<button class="theme-btn" data-theme-toggle type="button" aria-label="Toggle colour theme">
-				<svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8"/></svg>
-				<svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg>
+		<span class="topbar__id">
+			{%- if gh.user.avatar -%}<img class="topbar__avatar" src="{{ gh.user.avatar }}&s=64" alt="" width="26" height="26">{%- endif -%}
+			<span class="t-label-sm">{{ me.role }}</span>
+		</span>
+
+		<nav class="topnav" aria-label="Sections">
+			<a href="#now">Now</a>
+			<a href="#work">Work</a>
+			<a href="#writing">Writing</a>
+			<a href="#social">Elsewhere</a>
+			<a href="#support">Support</a>
+		</nav>
+
+		<div class="strip">
+			<span class="strip__tape rec"><span class="dot dot-live"></span><span class="t-data-sm" data-clock>--:--:--</span></span>
+			<button class="iconbtn themebtn" type="button" data-theme-toggle aria-label="Switch colour theme">
+				<span class="i-sun">{% include icon.html name='sun' %}</span>
+				<span class="i-moon">{% include icon.html name='moon' %}</span>
 			</button>
 		</div>
+	</div>
+</header>
 
-		<p class="rec"><span class="rec__dot"></span><span class="slate">On air · {{ site.data.sites | size }} things</span></p>
+<main id="main">
 
-		<h1>Everything I build, <em>on one page.</em></h1>
-		<p class="masthead__sub">{{ site.description }}</p>
+{%- comment -%} ══ HERO ══ name from profile.yml, the line and the still from Ghost, the avatar from GitHub ══ {%- endcomment -%}
+<section class="hero">
+	<div class="wrap">
+		<div class="hero__grid">
+			<div>
+				<p class="hero__eyebrow t-label-sm">
+					<span class="rec"><span class="dot dot-live"></span>On air</span>
+					<span class="sep">·</span><span>{{ things }} things</span>
+					{%- if gh.fetched_at %}<span class="sep">·</span><span>updated <span data-ago="{{ gh.fetched_at }}">{{ gh.fetched_at | date: '%-d %b' }}</span></span>{% endif %}
+				</p>
 
-		{%- comment -%} An audio-meter waveform: a signal, drawn once, looping. {%- endcomment -%}
-		<svg class="masthead__wave" viewBox="0 0 340 34" fill="none" aria-hidden="true">
-			<path d="M0 17h44l7-11 8 22 7-16 6 9 7-4h33l7-7 8 14 6-10 7 6h40l8-9 7 18 7-13 6 7 8-3h39l7-8 8 16 7-11 6 5h33"
-			      stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"
-			      stroke-dasharray="1200" stroke-dashoffset="1200" opacity=".75">
-				<animate attributeName="stroke-dashoffset" from="1200" to="0" dur="2.4s" fill="freeze" calcMode="spline" keySplines=".2 .7 .3 1"/>
-			</path>
-		</svg>
-	</header>
-
-	{%- comment -%} ══ THE GRID ══ every card below comes from _data/sites.yml ══ {%- endcomment -%}
-	<section class="section" aria-labelledby="sites-h">
-		<div class="section__head"><h2 class="slate" id="sites-h">Sites &amp; projects</h2></div>
-		<div class="bento">
-			{%- for s in site.data.sites -%}
-				{% include card.html site=s i=forloop.index0 %}
-			{%- endfor -%}
-		</div>
-	</section>
-
-	{%- comment -%} ══ VIDEO ══ renders only when _data/videos.yml has real entries ══ {%- endcomment -%}
-	<section class="section" aria-labelledby="video-h">
-		<div class="section__head"><h2 class="slate" id="video-h">Video</h2></div>
-
-		{%- if site.data.videos.items and site.data.videos.items != empty -%}
-		<div class="bento">
-			{%- for v in site.data.videos.items -%}
-			<a class="card card--video{% if v.span %} card--{{ v.span }}{% endif %}"
-			   href="https://www.youtube.com/watch?v={{ v.id }}" target="_blank" rel="noopener"
-			   style="animation-delay:{{ forloop.index0 | times: 45 }}ms">
-				<span class="card__frame" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-				<div class="card__thumb">
-					<img src="https://i.ytimg.com/vi/{{ v.id }}/hqdefault.jpg" alt="" loading="lazy" width="480" height="360">
-					<svg class="card__play" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="20"/><polygon points="27,23 44,32 27,41"/></svg>
+				<div class="hero__role">
+					{%- if gh.user.avatar -%}<img class="avatar" src="{{ gh.user.avatar }}&s=160" alt="" width="48" height="48">{%- endif -%}
+					<p class="t-label">{{ me.role }}</p>
 				</div>
-				<div class="card__vbody">
-					<h3 class="card__title">{{ v.title }}</h3>
-					<div class="card__foot">
-						<span class="slate">{{ v.meta }}</span>
-						<span class="card__go">{% include icon.html name='arrow' %}</span>
-					</div>
+
+				<h1 class="hero__title">{{ me.name | split: ' ' | first }} <em>{{ me.name | split: ' ' | last }}.</em></h1>
+				<p class="hero__lead t-lead">{{ ghost.site.description | default: me.tagline }}</p>
+
+				<p class="hero__facts t-data">
+					<span>{% include icon.html name='pin' %}{{ me.place }}</span>
+					{%- for c in me.chips -%}<span>{{ c }}</span>{%- endfor -%}
+				</p>
+
+				<div class="hero__cta">
+					<a class="btn btn--solid" href="{{ ghost.url | default: 'https://imswarnil.com' }}" target="_blank" rel="noopener">{% include icon.html name='ghost' %}Read the blog</a>
+					<a class="btn" href="{{ ghost.signup | default: 'https://www.imswarnil.com/#/portal/signup' }}" target="_blank" rel="noopener">{% include icon.html name='mail' %}Subscribe</a>
+					<a class="btn btn--ghost" href="#work">{% include icon.html name='grid' %}See the work</a>
 				</div>
-			</a>
-			{%- endfor -%}
+
+				<svg class="wave" viewBox="0 0 340 34" aria-hidden="true">
+					<path d="M0 17h44l7-11 8 22 7-16 6 9 7-4h33l7-7 8 14 6-10 7 6h40l8-9 7 18 7-13 6 7 8-3h39l7-8 8 16 7-11 6 5h33"/>
+				</svg>
+			</div>
+
+			{%- if ghost.site.cover -%}
+			<div class="hero__media">
+				<a class="viewfinder frame" href="{{ ghost.url }}" target="_blank" rel="noopener" aria-label="Open {{ ghost.site.title }}">
+					<img src="{{ ghost.site.cover }}" alt="" width="1024" height="768" fetchpriority="high">
+					<span class="media__scan" aria-hidden="true"></span>
+					<span class="frame__tr" aria-hidden="true"></span><span class="frame__bl" aria-hidden="true"></span>
+					<span class="viewfinder__hud">
+						<span class="viewfinder__tag t-label-sm"><span class="dot dot-live"></span>{{ ghost.site.title }}</span>
+						<span class="viewfinder__tag t-data-sm">Ghost {{ ghost.site.version }}</span>
+					</span>
+				</a>
+			</div>
+			{%- endif -%}
 		</div>
-		{%- else -%}
-		<div class="empty">
-			<h3>No channel wired up yet</h3>
-			<p>Nothing is invented here on purpose. Add your channel URL and a few video
-			   IDs to <code>_data/videos.yml</code> and this section fills itself in —
-			   thumbnails come straight from YouTube.</p>
+	</div>
+</section>
+<span data-hero-end aria-hidden="true"></span>
+
+{%- comment -%} ══ STATS ══ every number came from an API at the last deploy ══ {%- endcomment -%}
+{%- if gh -%}
+<div class="wrap">
+	<section class="stats" aria-label="Numbers" data-reveal>
+		<div class="stat">
+			<span class="t-stat" data-count="{{ gh.stats.repos.value }}">{{ gh.stats.repos.label }}</span>
+			<span class="stat__label">{% include icon.html name='code' %}Public repos</span>
+			<span class="stat__source t-data-sm">GitHub</span>
+		</div>
+		<div class="stat">
+			<span class="t-stat" data-count="{{ gh.stats.stars.value }}">{{ gh.stats.stars.label }}</span>
+			<span class="stat__label">{% include icon.html name='star' %}Stars</span>
+			<span class="stat__source t-data-sm">GitHub</span>
+		</div>
+		<div class="stat">
+			<span class="t-stat" data-count="{{ gh.stats.followers.value }}">{{ gh.stats.followers.label }}</span>
+			<span class="stat__label">{% include icon.html name='users' %}Followers</span>
+			<span class="stat__source t-data-sm">GitHub</span>
+		</div>
+		{%- if ghost.members -%}
+		<div class="stat">
+			<span class="t-stat" data-count="{{ ghost.members.total.value }}">{{ ghost.members.total.label }}</span>
+			<span class="stat__label">{% include icon.html name='users' %}Members</span>
+			<span class="stat__source t-data-sm">{{ ghost.site.title }}{% if ghost.members.paid.value > 0 %} · {{ ghost.members.paid.label }} paid{% endif %}</span>
+		</div>
+		{%- endif -%}
+		{%- if ghost.posts_total -%}
+		<div class="stat stat--quiet">
+			<span class="t-stat" data-count="{{ ghost.posts_total }}">{{ ghost.posts_total }}</span>
+			<span class="stat__label">{% include icon.html name='file' %}Posts</span>
+			<span class="stat__source t-data-sm">{{ ghost.site.title }}</span>
+		</div>
+		{%- endif -%}
+		{%- if yt.channel -%}
+		<div class="stat">
+			<span class="t-stat" data-count="{{ yt.channel.subscribers.value }}" data-live="yt-subs">{{ yt.channel.subscribers.label }}</span>
+			<span class="stat__label">{% include icon.html name='play' %}Subscribers</span>
+			<span class="stat__source t-data-sm">YouTube</span>
+		</div>
+		<div class="stat stat--quiet">
+			<span class="t-stat" data-count="{{ yt.channel.views.value }}">{{ yt.channel.views.label }}</span>
+			<span class="stat__label">{% include icon.html name='eye' %}Views</span>
+			<span class="stat__source t-data-sm">YouTube · {{ yt.channel.videos.label }} videos</span>
 		</div>
 		{%- endif -%}
 	</section>
-
-	<footer class="foot">
-		<span class="slate">© {{ 'now' | date: '%Y' }} {{ site.author }}</span>
-		<span class="slate">
-			<a href="https://github.com/imswarnil" target="_blank" rel="noopener">GitHub</a> ·
-			<a href="https://imswarnil.com" target="_blank" rel="noopener">imswarnil.com</a> ·
-			<a href="https://design.imswarnil.com/" target="_blank" rel="noopener">Frame &amp; Signal</a>
-		</span>
-	</footer>
-
 </div>
+{%- endif -%}
+
+{%- comment -%} ══ NOW ══ #now posts from Ghost when they exist; the standing answer always ══ {%- endcomment -%}
+<section class="section" id="now" aria-labelledby="now-h">
+	<div class="wrap">
+		<div class="section__head">
+			<h2 id="now-h">Now</h2>
+			{%- if ghost.now -%}<a class="section__more" href="{{ ghost.now.url }}" target="_blank" rel="noopener">The full page {% include icon.html name='arrow' %}</a>{%- endif -%}
+		</div>
+
+		<div class="now" data-reveal>
+			<div class="now__side">
+				<p class="rec t-label-sm"><span class="dot dot-live"></span>Currently</p>
+				<h3>{{ me.now.role }}</h3>
+				<p class="t-data">{{ me.now.place }}</p>
+				{%- if ghost.now -%}<p class="t-data">Page updated {{ ghost.now.date }}</p>{%- endif -%}
+			</div>
+
+			<div class="now__main">
+				{%- if ghost.now_updates and ghost.now_updates != empty -%}
+				<div class="now__log">
+					{%- for u in ghost.now_updates -%}
+					<article class="now__entry">
+						<p class="now__when t-data">{{ u.date }}</p>
+						<div class="now__what">
+							<h3>{{ u.title }}</h3>
+							<div class="prose">{% if u.excerpt != '' %}<p>{{ u.excerpt }}</p>{% else %}{{ u.html }}{% endif %}</div>
+						</div>
+					</article>
+					{%- endfor -%}
+				</div>
+				{%- elsif ghost.now -%}
+				<div class="prose">{{ ghost.now.html }}</div>
+				{%- else -%}
+				<p class="prose">{{ me.now.status }}</p>
+				{%- endif -%}
+
+				<dl class="facts">
+					<div><dt class="t-label-sm">Hours</dt><dd class="t-data">{% include icon.html name='clock' %}{{ me.now.hours }}</dd></div>
+					<div><dt class="t-label-sm">Timezone</dt><dd class="t-data">{{ me.now.timezone }}</dd></div>
+					<div><dt class="t-label-sm">Open to</dt><dd class="t-data">{{ me.now.open_to }}</dd></div>
+				</dl>
+			</div>
+		</div>
+	</div>
+</section>
+
+{%- comment -%} ══ WORK ══ every card from _data/sites.yml; clicking one opens its overview ══ {%- endcomment -%}
+<section class="section" id="work" aria-labelledby="work-h">
+	<div class="wrap">
+		<div class="section__head">
+			<h2 id="work-h">Sites &amp; projects</h2>
+			<span class="t-data"><span data-find-count>{{ things }}</span> of {{ things }}</span>
+		</div>
+
+		<div class="finder">
+			<div class="field">
+				<label class="vh" for="find">Search projects</label>
+				{% include icon.html name='search' %}
+				<input id="find" type="search" placeholder="Search projects, stacks, tags…" autocomplete="off" data-find-input>
+				<kbd>/</kbd>
+			</div>
+			<div class="chipbar" role="group" aria-label="Filter by kind">
+				<button class="filter" type="button" data-filter="all" aria-pressed="true">All</button>
+				{%- for k in kinds -%}
+				<button class="filter" type="button" data-filter="{{ k }}" aria-pressed="false">{{ k }}</button>
+				{%- endfor -%}
+			</div>
+		</div>
+
+		<div class="bento">
+			{%- for s in site.data.sites -%}
+				{%- include card.html site=s i=forloop.index0 -%}
+			{%- endfor -%}
+		</div>
+
+		<p class="empty-note" data-find-empty hidden>Nothing matches that. Try a stack, a tag, or part of a name.</p>
+
+		{%- comment -%} The sheets live outside the grid so they are never grid items. {%- endcomment -%}
+		{%- for s in site.data.sites -%}
+			{%- include sheet.html site=s i=forloop.index0 -%}
+		{%- endfor -%}
+	</div>
+</section>
+
+{%- comment -%} ══ WRITING ══ latest posts from the Ghost Content API ══ {%- endcomment -%}
+<section class="section" id="writing" aria-labelledby="posts-h">
+	<div class="wrap">
+		<div class="section__head">
+			<h2 id="posts-h">Latest writing</h2>
+			{%- if ghost.posts_total %}<span class="t-data">{{ ghost.posts_total }}</span>{% endif %}
+			<a class="section__more" href="{{ ghost.url | default: 'https://imswarnil.com' }}" target="_blank" rel="noopener">{{ ghost.site.title | default: 'imswarnil.com' }} {% include icon.html name='arrow' %}</a>
+		</div>
+		{%- if ghost.posts and ghost.posts != empty -%}
+		<div class="deck">
+			{%- for p in ghost.posts -%}{%- include post.html post=p i=forloop.index0 -%}{%- endfor -%}
+		</div>
+		{%- else -%}
+		<div class="empty" data-reveal>
+			<h3>Posts arrive with a Content API key</h3>
+			<p>Add <code>GHOST_CONTENT_KEY</code> to the deploy secrets and the six latest posts from
+			   {{ ghost.site.title | default: 'imswarnil.com' }} appear here — feature image, tag and reading time.</p>
+		</div>
+		{%- endif -%}
+	</div>
+</section>
+
+{%- comment -%} ══ VIDEO ══ latest uploads, once a channel exists ══ {%- endcomment -%}
+<section class="section" id="video" aria-labelledby="video-h">
+	<div class="wrap">
+		<div class="section__head">
+			<h2 id="video-h">Latest videos</h2>
+			{%- if yt.channel -%}<span class="t-data">{{ yt.channel.videos.label }}</span>
+			<a class="section__more" href="{{ yt.channel.url }}" target="_blank" rel="noopener">{{ yt.channel.title }} {% include icon.html name='arrow' %}</a>{%- endif -%}
+		</div>
+		{%- if yt.videos and yt.videos != empty -%}
+		<div class="deck">
+			{%- for v in yt.videos -%}{%- include video.html video=v i=forloop.index0 -%}{%- endfor -%}
+		</div>
+		{%- else -%}
+		<div class="empty" data-reveal>
+			<h3>No channel wired up yet</h3>
+			<p>Nothing is invented here. Add <code>YOUTUBE_API_KEY</code> and <code>YOUTUBE_CHANNEL</code>
+			   to the deploy secrets and this fills itself in — subscribers, views, and the six latest uploads.</p>
+		</div>
+		{%- endif -%}
+	</div>
+</section>
+
+{%- comment -%} ══ ELSEWHERE ══ the socials, given room instead of a row of buttons ══ {%- endcomment -%}
+<section class="section" id="social" aria-labelledby="social-h">
+	<div class="wrap">
+		<div class="section__head"><h2 id="social-h">Elsewhere</h2></div>
+		<p class="section__lead">Same person on all of them. The blog is the one I actually keep up.</p>
+		<div class="socials">
+			{%- for s in site.data.social -%}
+			<a class="social{% if s.primary %} social--primary{% endif %}" href="{{ s.url }}"
+			   {% unless s.url contains 'mailto:' %}target="_blank" rel="noopener me"{% endunless %}
+			   data-reveal style="--i:{{ forloop.index0 }}">
+				<span class="social__mark">{%- include brand.html name=s.icon -%}</span>
+				<span class="social__text">
+					<span class="social__label">{{ s.label }}</span>
+					<span class="social__handle">{{ s.handle }}</span>
+				</span>
+				<span class="social__go">{% include icon.html name='external' %}</span>
+			</a>
+			{%- endfor -%}
+		</div>
+	</div>
+</section>
+
+{%- comment -%} ══ SUPPORT ══ ordered by what is asked of the reader: free first ══ {%- endcomment -%}
+<section class="section" id="support" aria-labelledby="support-h">
+	<div class="wrap">
+		<div class="section__head"><h2 id="support-h">Support the work</h2></div>
+		<p class="section__lead">Most of what is on this page is free and stays free. These are the ways it
+		   keeps being worth the evenings.</p>
+
+		<div class="support">
+			{%- for g in site.data.support -%}
+			{%- assign soon = false -%}{%- if g.status == 'soon' -%}{%- assign soon = true -%}{%- endif -%}
+			<div class="give{% if g.featured %} give--featured{% endif %}{% if soon %} give--soon{% endif %}"
+			     data-reveal style="--i:{{ forloop.index0 }}">
+				<span class="give__mark">{% include icon.html name=g.icon %}</span>
+				<h3>{{ g.title }}</h3>
+				<p>{{ g.blurb }}</p>
+				{%- if soon -%}
+				<span class="give__soon t-label-sm">{{ g.cta }}</span>
+				{%- else -%}
+				<a class="btn{% if g.featured %} btn--accent{% endif %}" href="{{ g.url }}"
+				   {% unless g.url contains 'mailto:' %}target="_blank" rel="noopener"{% endunless %}>
+					{{ g.cta }}{% include icon.html name='arrow' %}
+				</a>
+				{%- endif -%}
+			</div>
+			{%- endfor -%}
+		</div>
+
+		{%- if ghost.tiers and ghost.tiers != empty -%}
+		<div class="tiers">
+			{%- for t in ghost.tiers -%}
+			<span class="tier"><b>{{ t.name }}</b>
+				<span class="t-data">{% if t.monthly %}{{ t.currency | upcase }} {{ t.monthly }}/mo{% else %}Free{% endif %}</span>
+			</span>
+			{%- endfor -%}
+		</div>
+		{%- endif -%}
+	</div>
+</section>
+
+{%- comment -%} ══ CODE ══ every public repo that is not already a card above ══ {%- endcomment -%}
+{%- if gh.repos -%}
+{%- assign listed = site.data.sites | map: 'repo' -%}
+<section class="section" id="code" aria-labelledby="repos-h">
+	<div class="wrap">
+		<div class="section__head">
+			<h2 id="repos-h">Everything else on GitHub</h2>
+			<a class="section__more" href="{{ gh.user.url }}" target="_blank" rel="noopener">@{{ gh.user.login }} {% include icon.html name='arrow' %}</a>
+		</div>
+		<div class="repos">
+			{%- for r in gh.repos -%}
+				{%- unless listed contains r.name -%}{%- include repo.html repo=r -%}{%- endunless -%}
+			{%- endfor -%}
+		</div>
+	</div>
+</section>
+{%- endif -%}
+
+</main>
+
+<footer class="foot">
+	<div class="wrap foot__in">
+		<span>© {{ 'now' | date: '%Y' }} {{ site.author }}</span>
+		<span class="foot__links">
+			<a href="https://github.com/{{ site.github }}/imswarnil.github.io" target="_blank" rel="noopener">Source</a>
+			<a href="https://design.imswarnil.com/" target="_blank" rel="noopener">Design system</a>
+			<a href="mailto:{{ me.email }}">Email</a>
+		</span>
+		<span class="rec t-label-sm"><span class="dot dot-live"></span>Still rolling</span>
+	</div>
+</footer>

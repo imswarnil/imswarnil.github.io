@@ -1,0 +1,22 @@
+{%- assign p = include.post -%}
+{%- assign i = include.i | default: 0 -%}
+<a class="card card--flat" href="{{ p.url }}" target="_blank" rel="noopener" style="--i:{{ i }}">
+	<span class="card__media frame-hover">
+		{%- if p.image -%}
+		<img src="{{ p.image }}" alt="" loading="lazy" decoding="async" width="1200" height="750">
+		{%- else -%}
+		{%- include cover.html i=i label=p.title motif='broadcast' -%}
+		{%- endif -%}
+		<span class="media__scan" aria-hidden="true"></span>
+		<span class="frame__tr" aria-hidden="true"></span><span class="frame__bl" aria-hidden="true"></span>
+	</span>
+	<span class="card__body">
+		<span class="card__kicker t-label-sm">{% if p.tag != '' %}{{ p.tag }} · {% endif %}{{ p.reading_time }} min read</span>
+		<span class="card__title">{{ p.title }}</span>
+		{%- if p.excerpt != '' -%}<span class="card__excerpt t-clamp-2">{{ p.excerpt | strip_html | truncate: 132 }}</span>{%- endif -%}
+		<span class="card__foot">
+			<span class="t-data">{{ p.date }}</span>
+			<span class="card__go">{% include icon.html name='arrow' %}</span>
+		</span>
+	</span>
+</a>

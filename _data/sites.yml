@@ -1,19 +1,25 @@
 # ═════════════════════════════════════════════════════════════════════════════
-#  THE ONLY FILE YOU EDIT.
-#  Add an entry here → a card appears on the page. Delete it → the card goes.
-#  There is no collection, no generated page: every card links straight out.
+#  THE CARDS. Add an entry → a card appears. Delete it → the card goes.
 #
 #  FIELDS
 #    title    required  the card's name
 #    url      required  where the card sends you
 #    blurb    required  one line, kept short — the grid is scannable, not read
-#    kind     required  site | theme | project | code | video | social
+#    kind     required  site | theme | project | code | tool
+#    repo     optional  the GitHub repo name. Joins the card to live data:
+#                       stars, language, last push. Repos listed here are left
+#                       out of the automatic "everything else" section below.
 #    span     optional  hero (2x2) | wide (2x1) | tall (1x2) | omit for 1x1
-#    meta     optional  the mono line under the title — stack, role, whatever
+#    meta     optional  the small line under the blurb — stack, role, licence
 #    status   optional  live | building | soon | archived   (default: live)
-#    accent   optional  signal | craft   — signal is the record light. Ration it.
+#    accent   optional  craft — the amber voice. Means "in progress", never "live".
 #    icon     optional  ghost | palette | book | layers | code | play | spark
-#    tags     optional  [a, b, c] — small chips. Best on hero/wide cards only.
+#                       | grid | briefcase | shield | badge | pen
+#    tags     optional  [a, b, c] — chips. Best on hero and wide cards.
+#
+#  A screenshot appears on the card automatically if scripts/shots.mjs could
+#  capture the url; otherwise the card draws its own cover. GitHub urls use
+#  the repo's social image instead.
 # ═════════════════════════════════════════════════════════════════════════════
 
 # ── The hub ──────────────────────────────────────────────────────────────────
@@ -21,40 +27,65 @@
   url: https://imswarnil.com
   blurb: Writing, videos, courses, projects and travel. The main desk.
   kind: site
+  repo: Imswarnil.com
   span: hero
   meta: Ghost 6 · self-hosted
   status: live
-  accent: signal
   icon: ghost
-  tags: [Blog, Videos, Courses, Projects, Travel, Web series, Guides, Newsletters]
+  tags: [Blog, Videos, Courses, Projects, Travel, Newsletter]
 
-# ── Design systems ───────────────────────────────────────────────────────────
-- title: Frame & Signal
+# ── Design ───────────────────────────────────────────────────────────────────
+- title: Swarnil Design System
   url: https://design.imswarnil.com/
-  blurb: A token-first, dependency-free CSS design system for creators. Almost
-    monochrome, so one colour can mean something.
+  blurb: Token-first, dependency-free CSS. Almost monochrome, so one colour
+    can mean something.
   kind: project
+  repo: Swarnil-Design-System
   span: wide
-  meta: CSS · 144 doc pages · open source
+  meta: CSS · nine layers · MIT
   status: live
   icon: palette
 
+- title: Swarnil Icons
+  url: https://github.com/imswarnil/swarnil-icons
+  blurb: 55 icons on a 24 grid, drawn from scratch. Five weights from one
+    geometry, so bold can never drift from line.
+  kind: project
+  repo: swarnil-icons
+  meta: SVG · MIT
+  status: building
+  icon: grid
+
 - title: NS Design System
   url: https://github.com/imswarnil/NSDS-Design-System
-  blurb: One set of tokens behind the Namaste Salesforce Ghost theme and its
-    Next.js LMS.
+  blurb: One set of tokens behind the Namaste Salesforce theme and its LMS.
   kind: project
+  repo: NSDS-Design-System
   meta: Tokens · Handlebars + React
   status: building
+  accent: craft
   icon: layers
 
 # ── Themes ───────────────────────────────────────────────────────────────────
+- title: Swarnil Ghost Theme
+  url: https://theme.imswarnil.com
+  blurb: An editorial Ghost theme for creators who publish in more than one
+    shape — writing, video and notes.
+  kind: theme
+  repo: Swarnil-Ghost-Theme
+  span: wide
+  meta: Ghost 6 · gscan clean
+  status: building
+  accent: craft
+  icon: spark
+  tags: [Ghost, Editorial, Video]
+
 - title: Trailblazer
   url: https://trailblazer.imswarnil.com
-  blurb: An open-source Jekyll theme for Salesforce developers — lesson player,
-    printable resume, certification wall.
+  blurb: A Jekyll theme for Salesforce developers — lesson player, printable
+    resume, certification wall.
   kind: theme
-  span: wide
+  repo: trailblazer-jekyll-theme
   meta: Jekyll · SCSS · MIT
   status: live
   icon: book
@@ -63,52 +94,69 @@
   url: https://dev.imswarnil.com/
   blurb: The Jekyll theme this all started from.
   kind: theme
+  repo: Personal-Website-Jekyll-Theme
   meta: Jekyll · SCSS
   status: live
   icon: code
 
-- title: Swarnil Ghost Theme
-  url: https://github.com/imswarnil/theme.imswarnil.com
-  blurb: A premium Ghost theme for independent creators. Being rebuilt on a
-    two-axis token architecture.
-  kind: theme
-  meta: Ghost 6 · gscan clean
-  status: building
-  accent: craft
-  icon: spark
-
 # ── Learning ─────────────────────────────────────────────────────────────────
 - title: CRM Analytics Academy
   url: https://crmanalytics.imswarnil.com
-  blurb: A free, open-source curriculum for mastering Salesforce CRM Analytics —
-    data prep, SAQL, dashboards, Einstein Discovery.
+  blurb: A free curriculum for Salesforce CRM Analytics — data prep, SAQL,
+    dashboards, Einstein Discovery.
   kind: project
+  repo: CRM-Analytics-Academy
   span: wide
   meta: Vue · free forever
   status: live
   icon: book
+  tags: [SAQL, Dashboards, Einstein]
 
 - title: Namaste Salesforce
   url: https://github.com/imswarnil/Namaste-Salesforce
-  blurb: The Salesforce teaching platform — Ghost theme plus an LMS.
+  blurb: The Salesforce teaching platform — Ghost theme out front, an LMS
+    behind it.
   kind: project
+  repo: Namaste-Salesforce
   meta: Handlebars · Next.js
   status: building
   icon: layers
 
 - title: Job Seekers Guide
-  url: https://github.com/imswarnil/job-seekers-guide
+  url: https://jobseekers.imswarnil.com
   blurb: Notes and tooling for people job-hunting in the Salesforce ecosystem.
-  kind: code
+  kind: project
+  repo: Job-Seekers-Guide
   meta: Vue
   status: live
-  icon: book
+  icon: briefcase
 
-# ── Code ─────────────────────────────────────────────────────────────────────
-- title: GitHub
-  url: https://github.com/imswarnil
-  blurb: Everything above, plus the half-finished things.
-  kind: social
-  meta: "@imswarnil"
+- title: Passport Seva Kendra
+  url: https://salesforce.imswarnil.com
+  blurb: A public-service workflow, modelled properly on the Salesforce
+    platform.
+  kind: project
+  repo: Passport-Seva-Kendra-Salesforce
+  meta: Salesforce · case study
   status: live
-  icon: code
+  icon: shield
+
+# ── Tools ────────────────────────────────────────────────────────────────────
+- title: No AI Content
+  url: https://nac.imswarnil.com
+  blurb: A badge and a position, for people who still write it themselves.
+  kind: tool
+  repo: No-AI-Content
+  meta: Next.js · Vercel
+  status: live
+  icon: pen
+
+- title: JobOS
+  url: https://github.com/imswarnil/JobOS
+  blurb: A job-search operating system — pipeline, notes and follow-ups in
+    one place instead of five.
+  kind: tool
+  repo: JobOS
+  meta: TypeScript · Drizzle
+  status: building
+  icon: briefcase

@@ -3,3 +3,9 @@ _site/
 .jekyll-metadata
 Gemfile.lock
 .DS_Store
+node_modules/
+.env
+
+# Written by scripts/ on every deploy — never committed, never stale.
+_data/live/
+assets/shots/

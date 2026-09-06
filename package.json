@@ -1,0 +1,18 @@
+{
+	"name": "links.imswarnil.com",
+	"private": true,
+	"description": "The index of everything Swarnil builds — one bento grid, live numbers, every link out.",
+	"type": "module",
+	"engines": { "node": ">=22" },
+	"scripts": {
+		"fetch": "node scripts/fetch.mjs",
+		"covers": "node scripts/covers.mjs",
+		"shots": "node scripts/shots.mjs",
+		"data": "npm run fetch && npm run covers && npm run shots",
+		"build": "bundle exec jekyll build",
+		"dev": "bundle exec jekyll serve --livereload --port 4001"
+	},
+	"devDependencies": {
+		"playwright": "^1.55.0"
+	}
+}

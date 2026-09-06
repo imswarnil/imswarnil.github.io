@@ -1,0 +1,22 @@
+# Who the page is about. The avatar and bio come from GitHub at deploy time and
+# the description from Ghost; these are the lines neither of them carries.
+name: Swarnil Singhai
+handle: imswarnil
+tagline: I slap keyboard & talk to camera.
+role: Salesforce · GTM Engineering · 7 years
+place: Budapest, Hungary
+chips: [Engineer, YouTuber, Creator, Trailblazer]
+email: swarnilsinghaicse@gmail.com
+
+# ── Now ──────────────────────────────────────────────────────────────────────
+# The fallback for the Now section, and the part Ghost cannot know. When posts
+# tagged #now exist on imswarnil.com they are shown above this; this stays as
+# the standing answer to "what are you doing at the moment".
+now:
+  status: Rebuilding the Swarnil Ghost Theme on a two-axis token architecture,
+    and growing the design system underneath it one component at a time.
+  role: Salesforce Engineer at Education First
+  place: Budapest, Hungary
+  timezone: Europe/Budapest
+  hours: Weeknights and weekends, CET
+  open_to: Theme sales, sponsorship, and interesting Salesforce data problems
