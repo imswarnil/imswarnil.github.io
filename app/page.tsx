@@ -32,57 +32,40 @@ export default async function Page() {
 
 	return (
 		<>
-			<TopBar avatar={github?.user.avatar} role={PROFILE.role} name={PROFILE.name} />
+			<TopBar name={PROFILE.name} />
 
 			<main id="main">
 				{/* ══ HERO ══ name authored, the line and the still from Ghost, the avatar from GitHub ══ */}
 				<section className="hero">
 					<div className="wrap">
 						<div className="hero__grid">
+							{/* Four things: who, what, the line, the way in. The avatar/role
+							    row, the chips and the waveform all came out — each was a
+							    fifth thing competing with the name. */}
 							<div>
 								<p className="hero__eyebrow t-label-sm">
 									<span className="rec"><span className="dot dot-live" />On air</span>
-									<span className="sep">·</span><span>{cards.length} things</span>
-									<span className="sep">·</span><span>live data</span>
+									<span className="sep">·</span><span>{PROFILE.role}</span>
 								</p>
-
-								<div className="hero__role">
-									{github?.user.avatar && (
-										<img className="avatar" src={`${github.user.avatar}&s=160`} alt="" width={48} height={48} />
-									)}
-									<p className="t-label">{PROFILE.role}</p>
-								</div>
 
 								<h1 className="hero__title">
 									{PROFILE.name.split(" ")[0]} <em>{PROFILE.name.split(" ").slice(-1)[0]}.</em>
 								</h1>
 								<p className="hero__lead t-lead">{ghost?.site?.description ?? PROFILE.tagline}</p>
 
-								<p className="hero__facts t-data">
-									<span><Icon name="pin" />{PROFILE.place}</span>
-									{PROFILE.chips.map((c) => <span key={c}>{c}</span>)}
-								</p>
-
 								<div className="hero__cta">
-									<a className="btn btn--solid" href={ghostHome} target="_blank" rel="noopener"><Icon name="ghost" />Read the blog</a>
-									<a className="btn" href={signup} target="_blank" rel="noopener"><Icon name="mail" />Subscribe</a>
-									<a className="btn btn--ghost" href="#work"><Icon name="grid" />See the work</a>
+									<a className="btn btn--solid" href={ghostHome} target="_blank" rel="noopener">Read the blog</a>
+									<a className="btn" href={signup} target="_blank" rel="noopener">Subscribe</a>
 								</div>
-
-								<svg className="wave" viewBox="0 0 340 34" aria-hidden="true">
-									<path d="M0 17h44l7-11 8 22 7-16 6 9 7-4h33l7-7 8 14 6-10 7 6h40l8-9 7 18 7-13 6 7 8-3h39l7-8 8 16 7-11 6 5h33" />
-								</svg>
 							</div>
 
 							{ghost?.site?.cover && (
 								<div className="hero__media">
 									<a className="viewfinder frame" href={ghostHome} target="_blank" rel="noopener" aria-label={`Open ${siteTitle}`}>
 										<img src={ghost.site.cover} alt="" width={1024} height={768} />
-										<span className="media__scan" aria-hidden="true" />
 										<span className="frame__tr" aria-hidden="true" /><span className="frame__bl" aria-hidden="true" />
 										<span className="viewfinder__hud">
 											<span className="viewfinder__tag t-label-sm"><span className="dot dot-live" />{siteTitle}</span>
-											<span className="viewfinder__tag t-data-sm">Ghost {ghost.site.version}</span>
 										</span>
 									</a>
 								</div>
@@ -225,8 +208,7 @@ export default async function Page() {
 											{p.image
 												? <img src={p.image} alt="" loading="lazy" width={1200} height={750} />
 												: <span className="cover-fallback" />}
-											<span className="media__scan" aria-hidden="true" />
-											<span className="frame__tr" aria-hidden="true" /><span className="frame__bl" aria-hidden="true" />
+												<span className="frame__tr" aria-hidden="true" /><span className="frame__bl" aria-hidden="true" />
 										</span>
 										<span className="card__body">
 											<span className="card__kicker t-label-sm">{p.tag && `${p.tag} · `}{p.readingTime} min read</span>
@@ -273,8 +255,7 @@ export default async function Page() {
 									<a className="card card--flat card--video" key={v.id} href={v.url} target="_blank" rel="noopener" style={{ ["--i" as string]: i }}>
 										<span className="card__media frame-hover">
 											<img src={v.thumbnail} alt="" loading="lazy" width={1280} height={720} />
-											<span className="media__scan" aria-hidden="true" />
-											<span className="frame__tr" aria-hidden="true" /><span className="frame__bl" aria-hidden="true" />
+												<span className="frame__tr" aria-hidden="true" /><span className="frame__bl" aria-hidden="true" />
 											<span className="card__play" aria-hidden="true">
 												<svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5-11-6.5Z" /></svg>
 											</span>

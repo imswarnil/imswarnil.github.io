@@ -34,10 +34,10 @@ something — the record light is rationed to what is actually live.
 ```bash
 npm install
 cp .env.example .env.local     # every key optional
-npm run dev                    # http://localhost:3400
+npm run dev                    # http://localhost:3800
 ```
 
-**Port 3400 is pinned deliberately.** Port 3000 is taken by
+**Port 3800 is pinned deliberately.** Port 3000 is taken by
 `salesforce.imswarnil.com`, 3111 by Amantrika and 3300 by
 `sponsor.imswarnil.com` — without a fixed port Next silently picks a free one
 and you end up looking at somebody else's app.

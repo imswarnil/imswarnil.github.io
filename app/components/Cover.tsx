@@ -20,9 +20,13 @@ export function Cover({ motif, i = 0, label }: { motif: Motif; i?: number; label
 			aria-label={`${motif} cover for ${label}`}
 		>
 			<rect className="cover__bg" width="480" height="300" />
-			<g className="cover__grid">
-				<path d="M60 0v300M120 0v300M180 0v300M240 0v300M300 0v300M360 0v300M420 0v300M0 60h480M0 120h480M0 180h480M0 240h480" />
-			</g>
+			{/* One group, scaled down and centred. The motif used to be drawn at
+			    full bleed over a ruled grid with corner ticks and an index
+			    number — four things competing inside a thumbnail, thirteen
+			    times down the page. It is a quiet mark now: the card's job is
+			    the title, and the cover's job is only to say what kind of thing
+			    this is at a glance. */}
+			<g transform="translate(108 67.5) scale(0.55)">
 
 			{motif === "broadcast" && (
 				<>
@@ -195,8 +199,7 @@ export function Cover({ motif, i = 0, label }: { motif: Motif; i?: number; label
 				</>
 			)}
 
-			<g className="cover__ticks"><path d="M24 24h20M24 24v20M456 276h-20M456 276v-20" /></g>
-			<text className="cover__n" x="24" y="285">{String(i + 1).padStart(2, "0")}</text>
+			</g>
 		</svg>
 	);
 }

@@ -119,35 +119,29 @@ function Card({ card: c, onOpen }: { card: CardView; onOpen: () => void }) {
 		>
 			<span className="card__media frame-hover">
 				<Cover motif={c.motif} i={c.i} label={c.title} />
-				<span className="media__scan" aria-hidden="true" />
 				<span className="frame__tr" aria-hidden="true" /><span className="frame__bl" aria-hidden="true" />
-				<span className={`status status--${c.status}`}><span className="dot" />{c.status}</span>
+				{/* Only when it is NOT live. A badge on every card says nothing;
+				    a badge on the two that are still being built says something. */}
+				{c.status !== "live" && (
+					<span className={`status status--${c.status}`}><span className="dot" />{c.status}</span>
+				)}
 			</span>
 
 			<span className="card__body">
-				<span className="card__kicker t-label-sm">{c.kind}{c.meta && ` · ${c.meta}`}</span>
 				<span className="card__title">{c.title}</span>
 				<span className="card__excerpt">{c.blurb}</span>
 
-				{c.tags.length > 0 && (
-					<span className="chips">
-						{c.tags.map((t) => <span className="chip" key={t}>{t}</span>)}
+				{/* One quiet line, not three. The tag chips and the expand icon
+				    moved into the overview, where there is room to read them.
+				    The language becomes a coloured dot in front of the meta
+				    rather than a word of its own — "TypeScript · TypeScript ·
+				    Drizzle" was the card saying the same thing twice. */}
+				<span className="card__foot t-data">
+					<span>
+						{c.repo?.language && <i className="lang" data-lang={c.repo.language} />}
+						{c.meta || c.host}
 					</span>
-				)}
-
-				<span className="card__foot">
-					<span className="t-data card__stats">
-						{c.repo ? (
-							<>
-								{c.repo.stars > 0 && <span><Icon name="star" />{c.repo.stars}</span>}
-								{c.repo.language && <span><i className="lang" data-lang={c.repo.language} />{c.repo.language}</span>}
-								<span>{c.repo.pushedAgo}</span>
-							</>
-						) : (
-							<span>{c.host}</span>
-						)}
-					</span>
-					<span className="card__go"><Icon name="expand" /></span>
+					{c.repo && c.repo.stars > 0 && <span><Icon name="star" />{c.repo.stars}</span>}
 				</span>
 			</span>
 		</a>
@@ -169,7 +163,6 @@ function Sheet({ card: c, onClose }: { card: CardView; onClose: () => void }) {
 
 			<div className="sheet__media">
 				<Cover motif={c.motif} i={c.i} label={c.title} />
-				<span className="media__scan" aria-hidden="true" />
 			</div>
 
 			<div className="sheet__body">
