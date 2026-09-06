@@ -1,0 +1,40 @@
+name: Deploy to Cloudflare Workers
+
+# Push to main deploys. There is no scheduled run any more and no data step:
+# the page fetches GitHub, Ghost and YouTube at request time, so it stays
+# current between deploys on its own.
+on:
+  push: { branches: [main] }
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+
+      - run: npm ci
+
+      # opennextjs-cloudflare runs `next build` itself, then adapts the output
+      # for workerd and uploads it.
+      - name: Build and deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npm run cf:deploy
+
+# The API token needs the "Edit Cloudflare Workers" template, plus Zone → DNS →
+# Read on imswarnil.com so the Worker Route in wrangler.jsonc can be attached.
+#
+# Runtime secrets (GH_TOKEN, GHOST_*, YOUTUBE_*) are NOT set here. They live on
+# the Worker itself — `wrangler secret put NAME` — so they are read at request
+# time and adding one does not need a redeploy.

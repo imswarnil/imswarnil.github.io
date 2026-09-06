@@ -1,18 +1,27 @@
 {
-	"name": "links.imswarnil.com",
+	"name": "swarnil-links",
 	"private": true,
-	"description": "The index of everything Swarnil builds — one bento grid, live numbers, every link out.",
-	"type": "module",
-	"engines": { "node": ">=22" },
+	"description": "links.imswarnil.com — the index of everything Swarnil builds. Next.js on Cloudflare Workers.",
 	"scripts": {
-		"fetch": "node scripts/fetch.mjs",
-		"covers": "node scripts/covers.mjs",
-		"shots": "node scripts/shots.mjs",
-		"data": "npm run fetch && npm run covers && npm run shots",
-		"build": "bundle exec jekyll build",
-		"dev": "bundle exec jekyll serve --livereload --port 4001"
+		"dev": "next dev --port 3400",
+		"build": "next build",
+		"start": "next start --port 3400",
+		"lint": "next lint",
+		"preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+		"cf:deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+		"cf:typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
+	},
+	"dependencies": {
+		"next": "14.2.35",
+		"react": "^18.3.1",
+		"react-dom": "^18.3.1"
 	},
 	"devDependencies": {
-		"playwright": "^1.55.0"
+		"@opennextjs/cloudflare": "~1.15",
+		"@types/node": "^20",
+		"@types/react": "^18",
+		"@types/react-dom": "^18",
+		"typescript": "^5",
+		"wrangler": "^4.125.0"
 	}
 }

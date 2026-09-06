@@ -1,15 +1,11 @@
-_site/
-.jekyll-cache/
-.jekyll-metadata
-Gemfile.lock
-.DS_Store
 node_modules/
+.next/
+.open-next/
+out/
+next-env.d.ts
+tsconfig.tsbuildinfo
+cloudflare-env.d.ts
+.wrangler/
 .env
-
-# Written by scripts/ on every deploy — never committed, never stale.
-_data/live/
-assets/shots/
-
-# Held back until DNS for links.imswarnil.com exists. Rename to CNAME and
-# commit once the record resolves — see README "Domain".
-CNAME.pending
+.env.local
+.DS_Store

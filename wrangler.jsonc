@@ -1,0 +1,36 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "swarnil-links",
+  "main": ".open-next/worker.js",
+
+  // nodejs_compat is required by the OpenNext adapter, and the compatibility
+  // date must be 2024-09-23 or later for Next.js to work on workerd.
+  "compatibility_date": "2026-09-06",
+  "compatibility_flags": ["nodejs_compat"],
+
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+
+  "observability": {
+    "enabled": true
+  },
+
+  // A Worker Route rather than a Custom Domain, matching nac.imswarnil.com:
+  // it attaches to whatever DNS record already exists for the hostname, as
+  // long as that record is proxied through Cloudflare, so the Worker never has
+  // to own the DNS entry. Add a proxied record for `links` in the imswarnil.com
+  // zone and this route picks it up.
+  "routes": [
+    { "pattern": "links.imswarnil.com/*", "zone_name": "imswarnil.com" }
+  ]
+
+  // Secrets are NOT set here. Upload them with `wrangler secret put NAME` so
+  // they never enter the repository:
+  //   GH_TOKEN            raises the GitHub API rate limit (essential in prod)
+  //   GHOST_CONTENT_KEY   posts, #now updates, the /now/ page, tier prices
+  //   GHOST_ADMIN_KEY     member counts
+  //   YOUTUBE_API_KEY     channel stats and latest uploads
+  //   YOUTUBE_CHANNEL     a UC… id or an @handle
+}

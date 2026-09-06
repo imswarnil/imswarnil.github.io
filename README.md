@@ -3,153 +3,165 @@
 # links.imswarnil.com
 
 **The index of everything I build.**
-One page. Live numbers. Every link out.
+One page. Live data. Every link out.
 
 [![Live](https://img.shields.io/badge/live-links.imswarnil.com-f04e2e?style=flat-square)](https://links.imswarnil.com)
-[![Built with Jekyll](https://img.shields.io/badge/built%20with-Jekyll-c1872a?style=flat-square)](https://jekyllrb.com)
+[![Next.js](https://img.shields.io/badge/Next.js-14-000?style=flat-square)](https://nextjs.org)
+[![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-f38020?style=flat-square)](https://workers.cloudflare.com)
 [![Design system](https://img.shields.io/badge/design%20system-Swarnil-55556a?style=flat-square)](https://design.imswarnil.com/)
 
 </div>
 
 ---
 
-A single static page that collects every site, theme, project, post and video I
-run and sends you straight to them. Think linktree, built properly: a bento
-grid where each card opens a real overview, a stats band with receipts, and the
-latest from GitHub, Ghost and YouTube — rebuilt every six hours so nothing on it
-is stale.
+A single page that collects every site, theme, project, post and video I run and
+sends you straight to them. Think linktree, built properly: a bento grid where
+each card opens a real overview, a stats band with receipts, and the latest from
+GitHub, Ghost and YouTube.
+
+**There is no build step that bakes in data and no script to run.** The page is
+server-rendered per request on Cloudflare Workers and fetches everything live,
+so starring a repo, publishing a post, or adding an API key changes what
+visitors see without a deploy.
 
 It is styled after the [Swarnil Design System](https://design.imswarnil.com/):
 oklch ramps on one lightness ladder, both themes declared once with
 `light-dark()`, Inter worn four ways. Almost monochrome, so one colour can mean
 something — the record light is rationed to what is actually live.
 
+## Running it
+
+```bash
+npm install
+cp .env.example .env.local     # every key optional
+npm run dev                    # http://localhost:3400
+```
+
+**Port 3400 is pinned deliberately.** Port 3000 is taken by
+`salesforce.imswarnil.com`, 3111 by Amantrika and 3300 by
+`sponsor.imswarnil.com` — without a fixed port Next silently picks a free one
+and you end up looking at somebody else's app.
+
+Without `.env.local` the page still renders: it pulls GitHub anonymously and
+Ghost's public site endpoint, and the Writing and Videos sections show their
+empty states. Nothing is invented to fill a gap.
+
 ## What is on it
 
 | Section | Where it comes from |
 | :--- | :--- |
-| Hero | `_data/profile.yml` + the Ghost site's title, description and cover |
+| Hero | `lib/content.ts` + the Ghost site's title, description and cover |
 | Stats | GitHub, Ghost members and posts, YouTube — whichever have keys |
-| **Now** | Ghost posts tagged `#now`, then the `/now/` page, then `profile.yml` |
-| Sites & projects | `_data/sites.yml`, joined to GitHub for stars and last push |
+| **Now** | Ghost posts tagged `#now`, then the `/now/` page, then `content.ts` |
+| Sites & projects | `lib/content.ts`, joined to GitHub for stars, language and last push |
 | Latest writing | Ghost Content API |
 | Latest videos | YouTube Data API |
-| Elsewhere | `_data/social.yml` |
-| Support the work | `_data/support.yml`, plus real Ghost tier prices |
+| Elsewhere | `lib/content.ts` |
+| Support the work | `lib/content.ts`, plus real Ghost tier prices |
 | Everything else | every public repo not already a card above |
 
-## How it works
+## How it is put together
 
 ```
-_data/sites.yml        the cards — the file you edit most
-_data/social.yml       the social tiles
-_data/support.yml      the support / monetise band
-_data/profile.yml      name, role, place, and the standing "now"
-_data/live/*.json      every number and every README — gitignored, rebuilt each deploy
-assets/shots/*.jpg     a screenshot per live site — gitignored
-_includes/cover.html   the drawn cover art, one motif per kind of thing
-_includes/sheet.html   the overview a card opens
+app/page.tsx            the page — one server component, one data call
+app/layout.tsx          shell, metadata, the pre-paint theme/boot script
+app/globals.css         the whole design system, as tokens
+app/components/
+  TopBar.tsx            client: theme, stuck state, timecode
+  Work.tsx              client: the grid, its search, and the overview dialog
+  Motion.tsx            client: scroll reveals and the counting numbers
+  Cover.tsx             the drawn cover art, eight motifs
+  icons.tsx             the UI icon set and the brand marks
+lib/
+  content.ts            everything authored — cards, socials, support, profile
+  data.ts               everything fetched — GitHub, Ghost, YouTube
+  view.ts               server → client view models
+  motif.ts              which cover a card gets
+  format.ts             number and date shapes
 ```
 
-On every push and every six hours, `.github/workflows/pages.yml`:
-
-1. **`npm run fetch`** — GitHub (repos, stars, followers, and each README's lead
-   line and headings), Ghost (site, posts, `#now`, `/now/`, tiers, member
-   counts) and YouTube (subscribers, views, uploads);
-2. **`npm run covers`** — reads those READMEs and picks each card's cover motif;
-3. **`npm run shots`** — Playwright screenshots each card's live URL;
-4. builds with Jekyll and deploys to GitHub Pages.
-
-Nothing is written back to the repo. Secrets live in the workflow and only
-there. Every source degrades on its own: with no Ghost key the site's title,
-description and cover still come from its public endpoint; with no YouTube
-channel that section stays honestly empty.
+Every fetch is cached for fifteen minutes (`REVALIDATE` in `lib/data.ts`), so
+the page costs three API round-trips a quarter of an hour rather than three per
+visitor. Each source fails alone: a GitHub rate-limit cannot take the Ghost
+section down with it.
 
 ### The covers are not decoration
 
-A card's face is a drawn SVG, never a screenshot — twelve photographs at twelve
-colour temperatures is exactly the clutter a grid should avoid. The motif is
-chosen from what the project actually *is*: a token ladder for a design system,
-a page skeleton for a theme, a lesson stack for a curriculum, a nine-mark grid
-for an icon set. `scripts/covers.mjs` picks it from the card's `kind` first and
-the README's own words second.
+A card's face is a drawn SVG whose motif says what the thing actually *is* — a
+token ladder for a design system, a page skeleton for a theme, a lesson stack
+for a curriculum, a nine-mark grid for an icon set. `lib/motif.ts` picks it from
+the card's `kind` first and the README's own words second, and each motif has
+two arrangements so neighbours are never the same picture.
 
-The real screenshot lives one click away, in the overview sheet, where it has
-room to be looked at.
+They are drawn inline rather than linked so they paint in the page's own tokens
+and flip with the theme. Nothing in them is a fixed hex.
 
 ## Secrets
 
-Set these in **Settings → Secrets and variables → Actions**. All optional.
-
-| Secret | What it unlocks |
-| :--- | :--- |
-| `GHOST_URL` | defaults to `https://www.imswarnil.com` |
-| `GHOST_CONTENT_KEY` | latest posts, post count, `#now` updates, the `/now/` page, tier prices |
-| `GHOST_ADMIN_KEY` | member counts (`id:secret`; used server-side only, never shipped) |
-| `YOUTUBE_API_KEY` | channel stats and the six latest uploads |
-| `YOUTUBE_CHANNEL` | a `UC…` id or an `@handle` |
-
-`GITHUB_TOKEN` is provided by Actions. Pages must be set to deploy from
-**GitHub Actions**, not from a branch.
-
-For a subscriber count that refreshes live in the visitor's browser, put a
-**referrer-restricted** YouTube key in `_config.yml` → `youtube_public_key`.
-That key is public by design; restrict it to this domain first.
-
-## Running it locally
+Runtime secrets live on the Worker, not in the build:
 
 ```bash
-npm install                        # Playwright, for screenshots
-cp .env.example .env               # paste keys; every one is optional
-npm run data                       # fetch + covers + shots
-jekyll serve --port 4001           # http://localhost:4001
+npx wrangler secret put GH_TOKEN            # essential in prod: 60 req/hr → 5000
+npx wrangler secret put GHOST_CONTENT_KEY   # posts, #now, /now/, tier prices
+npx wrangler secret put GHOST_ADMIN_KEY     # member counts (id:secret)
+npx wrangler secret put YOUTUBE_API_KEY
+npx wrangler secret put YOUTUBE_CHANNEL     # a UC… id or an @handle
 ```
 
-Without `.env`, `fetch` still pulls GitHub (via `gh auth token` if you are
-logged in) and Ghost's public site info. Port 4001, because 4000 is usually
-already taken by another Jekyll site.
+Because they are read at request time, adding one takes effect on the next page
+view — no redeploy.
+
+CI needs two repository secrets instead: `CLOUDFLARE_API_TOKEN` (the "Edit
+Cloudflare Workers" template, plus Zone → DNS → Read on `imswarnil.com`) and
+`CLOUDFLARE_ACCOUNT_ID`.
+
+## Deploying
+
+```bash
+npm run preview      # build + run it on workerd locally
+npm run cf:deploy    # build + ship it
+```
+
+Pushing to `main` does the same thing through `.github/workflows/deploy.yml`.
+
+`wrangler.jsonc` attaches a **Worker Route** — `links.imswarnil.com/*` on the
+`imswarnil.com` zone — which is the same pattern `nac.imswarnil.com` uses. It
+binds to whatever DNS record already exists, so add a **proxied** record for
+`links` in Cloudflare first; the Worker never owns the DNS entry itself.
 
 ## Adding a card
 
-Edit **`_data/sites.yml`**. Add an entry, get a card; delete it, the card goes.
+Edit **`lib/content.ts`**. Add an entry to `CARDS` and a card appears; delete it
+and it goes. It is TypeScript rather than YAML for one reason that matters: a
+typo in a `kind` is a build error instead of a card that silently renders wrong.
 
-```yaml
-- title: My New Thing
-  url: https://example.com
-  blurb: One line. The grid is scannable, not read.
-  kind: project
-  repo: my-new-thing        # joins the card to GitHub: stars, language, last push
-  span: wide
-  meta: Vue · open source
-  status: live
-  icon: layers
-  tags: [One, Two]
+```ts
+{
+  title: "My New Thing",
+  url: "https://example.com",
+  blurb: "One line. The grid is scannable, not read.",
+  kind: "project",
+  repo: "my-new-thing",   // joins the card to GitHub: stars, language, README
+  span: "wide",
+  meta: "Vue · open source",
+  status: "live",
+  icon: "layers",
+  tags: ["One", "Two"],
+}
 ```
 
 | Field | | What it does |
 | :--- | :--- | :--- |
-| `title` | required | The card's name |
-| `url` | required | Where the card sends you |
-| `blurb` | required | One line |
-| `kind` | required | `site` · `theme` · `project` · `tool` — also picks the cover motif and the filter chips |
+| `title` `url` `blurb` `kind` | required | `kind` also picks the cover motif and the filter chips |
 | `repo` | optional | GitHub repo name — pulls stars, language, last push, README; keeps it out of "everything else" |
 | `span` | optional | `hero` (4×2) · `wide` (3×1) — omit for 2×1 |
 | `meta` | optional | The small line: stack, role, licence |
-| `status` | optional | `live` · `building` · `soon` · `archived` — defaults to `live` |
+| `status` | optional | `live` · `building` · `soon` · `archived` |
 | `accent` | optional | `craft` — amber brackets. Means "in progress", never "live" |
-| `icon` | optional | `ghost` `palette` `book` `layers` `code` `play` `spark` `grid` `briefcase` `shield` `badge` `pen` |
-| `tags` | optional | Chips. Best on `hero` and `wide` cards |
-
-Every public repo that is not already a card appears in **Everything else on
-GitHub**, automatically.
+| `icon` `tags` | optional | Chips are best on `hero` and `wide` cards |
 
 ## Keeping the Now section current
 
 Tag a short post `#now` on imswarnil.com and it appears at the top of the Now
-section within six hours — no deploy, no edit here. Failing that the `/now/`
-page is used, and failing that the standing lines in `_data/profile.yml`.
-
-## Domain
-
-`CNAME` says `links.imswarnil.com`. Point a DNS `CNAME` record for `links` at
-`imswarnil.github.io`, then enable *Enforce HTTPS* in the Pages settings.
+section within fifteen minutes — no deploy, no edit here. Failing that the
+`/now/` page is used, and failing that the standing lines in `lib/content.ts`.

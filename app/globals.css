@@ -2,7 +2,7 @@
    links.imswarnil.com
 
    Tokens lifted from the Swarnil Design System (design.imswarnil.com) so this
-   page speaks the same language without a build step: oklch ramps on one
+   app speaks the same language without importing it: oklch ramps on one
    lightness ladder, both themes declared once with light-dark(), Inter worn
    four ways. Almost monochrome, so one colour can mean something.
 
@@ -46,9 +46,7 @@
 	--craft-600: oklch(58.0% 0.100 78);
 	--craft-800: oklch(38.0% 0.068 78);
 
-	--mint-300: oklch(82.0% 0.105 155);
-	--mint-500: oklch(64.0% 0.130 155);
-	--mint-700: oklch(46.0% 0.100 155);
+	--mint-500:  oklch(64.0% 0.130 155);
 	--azure-500: oklch(62.0% 0.145 240);
 	--iris-500:  oklch(62.0% 0.170 285);
 	--teal-500:  oklch(65.0% 0.105 195);
@@ -94,7 +92,6 @@
 	--img-dim: light-dark(none, brightness(0.86));
 
 	/* Dark lifts, light drops. */
-	--elevation-1: light-dark(0 1px 2px oklch(12.5% 0.012 275 / 0.05), 0 0 0 1px oklch(100% 0 0 / 0.05));
 	--elevation-3: light-dark(
 		0 2px 4px oklch(12.5% 0.012 275 / 0.05), 0 16px 32px -12px oklch(12.5% 0.012 275 / 0.14),
 		0 0 0 1px oklch(100% 0 0 / 0.1));
@@ -104,7 +101,7 @@
 	--focus-ring: 0 0 0 2px var(--bg-canvas), 0 0 0 4px var(--accent);
 
 	/* ── Type · one face, four voices ───────────────────────────────────── */
-	--font-body: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+	--font-body: var(--font-inter), 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
 	--font-display: var(--font-body);
 	--font-label: var(--font-body);
 	--font-data: var(--font-body);
@@ -169,7 +166,6 @@ body {
 	color: var(--fg-default);
 	background: var(--bg-canvas);
 	font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
-	font-optical-sizing: auto;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	overflow-x: hidden;
@@ -233,8 +229,8 @@ button { font: inherit; color: inherit; }
 
 /* ═══ Boot — a camcorder waking up ══════════════════════════════════════════
    Entirely CSS. The inline head script only decides WHETHER to run it (once a
-   session, motion allowed); the animation itself never depends on JS finishing,
-   so a script error can never leave the page behind a black screen. */
+   session, motion allowed); the animation itself never depends on JS, so a
+   script error can never leave the page behind a black screen. */
 .boot { display: none; }
 :root[data-boot] .boot {
 	display: grid; place-items: center;
@@ -250,7 +246,6 @@ button { font: inherit; color: inherit; }
 /* The CRT open: a line of light that becomes a screen. */
 .boot__crt {
 	width: 100%; height: 2px; background: var(--signal-500); border-radius: 2px;
-	transform-origin: center;
 	animation: boot-line 0.42s var(--ease-out) both, boot-open 0.36s var(--ease-out) 0.42s both;
 }
 @keyframes boot-line { from { scale: 0 1; opacity: 0; } to { scale: 1 1; opacity: 1; } }
@@ -280,23 +275,20 @@ button { font: inherit; color: inherit; }
 .brand__mark { width: 1.75rem; height: 1.75rem; flex: none; }
 .brand__name { font-weight: var(--weight-semibold); letter-spacing: var(--tracking-tight); }
 
-/* The identity only appears once the hero has gone — until then the hero is
-   saying it, and saying it twice is the clutter. */
 .topbar__id { display: flex; align-items: center; gap: var(--space-3); min-width: 0; opacity: 0; translate: 0 6px; pointer-events: none; transition: opacity var(--dur-3) var(--ease-out), translate var(--dur-3) var(--ease-out); }
 .topbar[data-stuck] .topbar__id { opacity: 1; translate: 0 0; pointer-events: auto; }
 .topbar__avatar { width: 1.625rem; height: 1.625rem; border-radius: var(--radius-full); flex: none; }
+@media (width < 48rem) { .topbar__id { display: none; } }
 
 .topnav { display: flex; align-items: center; gap: var(--space-1); margin-inline-start: auto; }
-.topnav a {
-	padding: var(--space-2) var(--space-3); border-radius: var(--radius-md);
-	font-size: var(--text-sm); color: var(--fg-subtle); transition: var(--t-colors);
-}
+.topnav a { padding: var(--space-2) var(--space-3); border-radius: var(--radius-md); font-size: var(--text-sm); color: var(--fg-subtle); transition: var(--t-colors); }
 .topnav a:hover { color: var(--fg-default); background: var(--hover-wash); }
-@media (width < 60rem) { .topnav { display: none; } }
+@media (width < 62rem) { .topnav { display: none; } }
 
-.strip { display: flex; align-items: center; gap: var(--space-3); flex: none; }
+.strip { display: flex; align-items: center; gap: var(--space-3); flex: none; margin-inline-start: auto; }
+.topnav ~ .strip { margin-inline-start: 0; }
 .strip__tape { display: inline-flex; align-items: center; gap: var(--space-2); }
-@media (width < 46rem) { .strip__tape { display: none; } }
+@media (width < 30rem) { .strip__tape { display: none; } }
 
 .iconbtn {
 	display: grid; place-items: center; width: 2.25rem; height: 2.25rem; flex: none;
@@ -373,7 +365,6 @@ button { font: inherit; color: inherit; }
 .stat__label { display: flex; align-items: center; gap: var(--space-2); font-size: var(--text-sm); color: var(--fg-muted); }
 .stat__label .icon { --icon-size: 0.9375rem; color: var(--fg-faint); }
 .stat__source { margin-top: auto; }
-.stat[data-live-on] .stat__source::before { content: ''; display: inline-block; width: var(--dot-sm); height: var(--dot-sm); border-radius: 50%; background: var(--accent); margin-inline-end: var(--space-2); animation: fx-pulse 2s var(--ease-inout) infinite; }
 
 /* ═══ Section chrome ════════════════════════════════════════════════════════ */
 .section { padding-block: var(--space-24) 0; }
@@ -396,13 +387,14 @@ button { font: inherit; color: inherit; }
 .now { display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); gap: var(--space-10); align-items: start; }
 @media (width < 52rem) { .now { grid-template-columns: minmax(0, 1fr); gap: var(--space-6); } }
 .now__side { display: flex; flex-direction: column; gap: var(--space-3); }
-.now__side h2 { font-size: var(--text-xl); }
+.now__side h3 { font-size: var(--text-xl); }
 .now__log { display: grid; gap: var(--space-5); }
 .now__entry { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: var(--space-5); padding-block: var(--space-5); border-top: var(--border-hair) solid var(--line-subtle); }
 .now__entry:first-child { border-top: 0; padding-top: 0; }
 @media (width < 40rem) { .now__entry { grid-template-columns: minmax(0, 1fr); gap: var(--space-2); } }
 .now__when { padding-top: 3px; }
 .now__what h3 { font-size: var(--text-lg); margin-bottom: var(--space-2); }
+
 .prose { color: var(--fg-muted); font-size: var(--text-md); max-width: 66ch; text-wrap: pretty; }
 .prose > * + * { margin-top: 1em; }
 .prose :is(h2, h3, h4) { color: var(--fg-default); font-size: var(--text-lg); margin-top: 1.6em; }
@@ -427,7 +419,6 @@ button { font: inherit; color: inherit; }
 .field input::placeholder { color: var(--fg-faint); }
 .field input:hover { border-color: var(--line-strong); }
 .field kbd { position: absolute; inset-inline-end: var(--space-3); inset-block-start: 50%; translate: 0 -50%; padding: 2px 7px; font: inherit; font-size: var(--text-2xs); color: var(--fg-faint); background: var(--bg-muted); border-radius: var(--radius-sm); }
-.field input:not(:placeholder-shown) ~ kbd { opacity: 0; }
 
 .chipbar { display: flex; flex-wrap: wrap; gap: var(--space-2); }
 .filter {
@@ -439,19 +430,21 @@ button { font: inherit; color: inherit; }
 .filter:hover { color: var(--fg-default); border-color: var(--line-strong); }
 /* State is an attribute, never a class — a class can disagree with the a11y tree. */
 .filter[aria-pressed='true'] { background: var(--bg-inverse); color: var(--fg-on-inverse); border-color: transparent; }
-.finder__count { margin-inline-start: auto; }
 .empty-note { padding: var(--space-16) var(--space-6); text-align: center; color: var(--fg-muted); }
 
 /* ═══ The bento ═════════════════════════════════════════════════════════════
    Six columns, so a normal card is a third of the row rather than a quarter.
-   The extra width is the difference between a card you scan and one you read. */
-/* Cards size to their content rather than stretching to the tallest in the
-   row. Stretching pins every foot to the same line, which looks tidy in a
-   wireframe and leaves a hand-sized hole inside any card with a short blurb. */
-.bento { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--space-5); align-items: start; }
+   The extra width is the difference between a card you scan and one you read.
+   Cards size to their content: stretching pins every foot to the same line,
+   which looks tidy in a wireframe and leaves a hole in any card with a short
+   blurb. */
+/* `dense` matters here: the hero spans four of six columns, so the next card
+   — a wide one needing three — cannot fit beside it and would wrap, leaving a
+   two-column hole down the side of the hero. Dense packing backfills that hole
+   with the next card that does fit. */
+.bento { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--space-5); align-items: start; grid-auto-flow: row dense; }
 .bento > .card { grid-column: span 2; }
-.bento > .card--hero { align-self: stretch; }
-.bento > .card--hero { grid-column: span 4; grid-row: span 2; }
+.bento > .card--hero { grid-column: span 4; grid-row: span 2; align-self: stretch; }
 .bento > .card--wide { grid-column: span 3; }
 @media (width < 64rem) {
 	.bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -472,18 +465,20 @@ button { font: inherit; color: inherit; }
 	background: var(--bg-surface); border: var(--border-hair) solid var(--line-default);
 	border-radius: var(--radius-xl); overflow: hidden;
 	transition: var(--t-colors), box-shadow var(--dur-3) var(--ease-out), translate var(--dur-3) var(--ease-out);
+	animation: fx-rise var(--dur-4) var(--ease-out) both;
+	animation-delay: calc(var(--i, 0) * 35ms);
 }
 .card:hover { border-color: var(--line-strong); box-shadow: var(--elevation-3); translate: 0 -2px; }
 .card:focus-visible { box-shadow: var(--focus-ring); }
-.card[hidden] { display: none; }
 
 .card__media { position: relative; display: block; aspect-ratio: 16 / 10; background: var(--bg-media); overflow: hidden; flex: none; border-bottom: var(--border-hair) solid var(--line-subtle); }
 .card__media > img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; transition: scale var(--dur-5) var(--ease-out); }
 .card:hover .card__media > img { scale: 1.03; }
 /* The hero card keeps a fixed ratio rather than stretching to fill its two
    grid rows: the cover art is a composition, and slice-cropping it to an
-   arbitrary height throws the composition away. The body takes the slack. */
+   arbitrary height throws the composition away. */
 .card--hero .card__media { aspect-ratio: 16 / 9; }
+.cover-fallback { display: block; width: 100%; height: 100%; background: var(--bg-sunken); }
 
 .card__body { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-6); flex: 1; }
 .card__kicker { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -600,12 +595,10 @@ button { font: inherit; color: inherit; }
 	border-bottom: var(--border-hair) solid var(--line-subtle);
 }
 .sheet__path { margin-inline-start: auto; }
-.sheet__bar form { display: contents; }
 .sheet--craft .rec { color: var(--craft); }
 .sheet--craft .rec .dot { background: var(--craft); }
 
 .sheet__media { position: relative; aspect-ratio: 16 / 9; background: var(--bg-media); overflow: hidden; flex: none; }
-.sheet__media img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
 .sheet__body { padding: var(--space-8); display: flex; flex-direction: column; gap: var(--space-4); }
 .sheet__title { font-size: var(--text-3xl); letter-spacing: var(--tracking-tighter); }
 .sheet__lead { font-size: var(--text-lg); color: var(--fg-muted); max-width: 60ch; text-wrap: pretty; }
@@ -620,6 +613,10 @@ button { font: inherit; color: inherit; }
 
 /* ═══ Social — a section, not a row of buttons ══════════════════════════════ */
 .socials { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr)); gap: var(--space-4); }
+/* The reveal wrapper is the grid item; the tile fills it. */
+.socials > [data-reveal], .support > [data-reveal] { display: flex; }
+.socials > [data-reveal] > .social, .support > [data-reveal] > .give { flex: 1; }
+
 .social {
 	position: relative; display: flex; align-items: center; gap: var(--space-4);
 	padding: var(--space-6); min-width: 0;
@@ -674,7 +671,6 @@ button { font: inherit; color: inherit; }
 	transition: var(--t-colors);
 }
 .repo:hover { border-color: var(--line-strong); background: var(--bg-raised); }
-.repo[hidden] { display: none; }
 .repo__main { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .repo__name { font-weight: var(--weight-semibold); font-size: var(--text-sm); display: inline-flex; align-items: center; gap: var(--space-2); }
 .repo__desc { color: var(--fg-muted); font-size: var(--text-sm); line-height: var(--leading-normal); overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
@@ -697,10 +693,10 @@ button { font: inherit; color: inherit; }
 
 /* ═══ Reveal on scroll ══════════════════════════════════════════════════════
    The finished state is the resting state: [data-reveal] only ever ADDS the
-   starting offset, and a browser that never fires the observer shows the page
+   starting offset, so a browser that never fires the observer shows the page
    exactly as it should look. */
 @media (prefers-reduced-motion: no-preference) {
 	[data-reveal] { opacity: 0; translate: 0 18px; transition: opacity var(--dur-5) var(--ease-out), translate var(--dur-5) var(--ease-out); }
 	[data-reveal][data-in] { opacity: 1; translate: 0 0; }
-	.bento [data-reveal], .deck [data-reveal], .socials [data-reveal], .support [data-reveal] { transition-delay: calc(var(--i, 0) * 55ms); }
+	.socials > [data-reveal], .support > [data-reveal] { transition-delay: calc(var(--i, 0) * 55ms); }
 }
